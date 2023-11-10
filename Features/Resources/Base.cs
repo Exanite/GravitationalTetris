@@ -5,6 +5,8 @@ namespace Exanite.WarGames.Features.Resources;
 
 public static class Base
 {
+    public static PropertyDefinition<Texture2D> White = new("Base:White.png");
+
     public static PropertyDefinition<Texture2D> Tile1 = new("Base:Tile1.png");
     public static PropertyDefinition<Texture2D> Tile2 = new("Base:Tile2.png");
     public static PropertyDefinition<Texture2D> Tile3 = new("Base:Tile3.png");
