@@ -34,7 +34,13 @@ public class ResourcesModule : Module
                 var resourceManager = e.Instance;
                 var graphicsDeviceManager = e.Context.Resolve<GraphicsDeviceManager>();
 
-                resourceManager.Mount("Base:", new DirectoryFileSystem("Content"), true);
+#if DEBUG
+                var contentPath = "../../../Content";
+#else
+                var contentPath = "Content";
+#endif
+
+                resourceManager.Mount("Base:", new DirectoryFileSystem(contentPath), true);
 
                 resourceManager.RegisterLoader<Texture2D>(loadOperation =>
                 {
