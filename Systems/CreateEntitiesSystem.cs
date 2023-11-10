@@ -7,6 +7,7 @@ using Exanite.WarGames.Features.Resources;
 using Exanite.WarGames.Features.Sprites.Components;
 using Exanite.WarGames.Features.Transforms.Components;
 using Microsoft.Xna.Framework;
+using nkast.Aether.Physics2D.Common.TextureTools;
 using nkast.Aether.Physics2D.Dynamics;
 
 namespace Exanite.WarGames.Systems;
@@ -38,7 +39,9 @@ public class CreateEntitiesSystem : EcsSystem, IStartSystem
         playerBody.LinearDamping = 5;
         playerBody.AngularDamping = 5;
 
-        playerBody.CreateRectangle(8f / 16f, 11f / 16f, 1, new Vector2(0, 2.4f / 16f));
+        playerBody.CreateRectangle(8f / 16f, 5f / 16f, 1, new Vector2(0, -0.5f / 16f)); // Head
+        playerBody.CreateRectangle(4f / 16f, 11f / 16f, 1, new Vector2(0, 2.3f / 16f)); // Body
+        playerBody.CreateCircle(2f / 16f, 1, new Vector2(0, 6f / 16f));
 
         World.Create(
             new PlayerComponent(),
