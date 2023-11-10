@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Exanite.WarGames.Features.Tiles.Systems;
 
-public partial class TilemapDrawSystem : EcsSystem, IDrawSystem
+public partial class TilemapDrawSystem : EcsSystem, IDrawSystem, ICallbackSystem
 {
     private readonly GameSpriteBatch gameSpriteBatch;
     private readonly GameTilemapData tilemap;
@@ -22,6 +22,11 @@ public partial class TilemapDrawSystem : EcsSystem, IDrawSystem
         this.resourceManager = resourceManager;
     }
 
+    public void RegisterCallbacks()
+    {
+        tilemap.Load();
+    }
+
     public void Draw()
     {
         DrawQuery(World);
@@ -30,12 +35,6 @@ public partial class TilemapDrawSystem : EcsSystem, IDrawSystem
     [Query]
     private void Draw(ref CameraComponent camera, ref CameraProjectionComponent cameraProjection)
     {
-        var sprite = resourceManager.GetResource(Base.Tile1).Value;
-        if (sprite == null)
-        {
-            return;
-        }
-
         var spriteBatch = gameSpriteBatch.SpriteBatch;
 
         spriteBatch.Begin(
@@ -52,8 +51,11 @@ public partial class TilemapDrawSystem : EcsSystem, IDrawSystem
             {
                 for (var y = 0; y < tilemap.Tiles.GetLength(1); y++)
                 {
-                    if (tilemap.Tiles[x, y].IsWall)
+                    ref var tile = ref tilemap.Tiles[x, y];
+
+                    if (tile.IsWall)
                     {
+                        var sprite = tile.Texture.Value;
                         var sourceRect = new Rectangle(0, 0, sprite.Width, sprite.Height);
                         var origin = new Vector2(0.5f * sprite.Width, 0.5f * sprite.Height);
                         var scale = new Vector2(1f / sprite.Width, 1f / sprite.Height);

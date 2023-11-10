@@ -66,7 +66,7 @@ public class ExtractionGame : Game, IAsyncDisposable
         time.Time = (float)gameTime.TotalGameTime.TotalSeconds;
         time.DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-        GraphicsDevice.Clear(new Color(0x31, 0x4D, 0x79));
+        GraphicsDevice.Clear(Color.Black);
         systemScheduler.Draw();
 
         base.Draw(gameTime);
@@ -127,6 +127,7 @@ public class ExtractionGame : Game, IAsyncDisposable
 
         // Callbacks
         config.RegisterCallbackSystem<PhysicsContactSystem>();
+        config.RegisterCallbackSystem<TilemapDrawSystem>(); // Todo Loads tilemap, should be its own system
 
         // Start
         config.RegisterStartSystem<PhysicsSimulationSystem>();
@@ -143,9 +144,6 @@ public class ExtractionGame : Game, IAsyncDisposable
         config.RegisterUpdateSystem<SmoothDampMovementSystem>();
         config.RegisterUpdateSystem<PhysicsSimulationSystem>();
 
-        // config.RegisterUpdateSystem<CameraRotationSystem>();
-        config.RegisterUpdateSystem<CameraZoomSystem>();
-        config.RegisterUpdateSystem<CameraFollowTargetSystem>();
         config.RegisterUpdateSystem<CameraProjectionSystem>();
 
         config.RegisterUpdateSystem<RemoveDestroyedSystem>();

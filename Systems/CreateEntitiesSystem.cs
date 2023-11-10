@@ -24,8 +24,11 @@ public class CreateEntitiesSystem : EcsSystem, IStartSystem
     {
         // Camera
         World.Create(
-            new CameraComponent(12),
-            new TransformComponent(),
+            new CameraComponent(20),
+            new TransformComponent()
+            {
+                Position = new Vector2(5f - 0.5f, 10f - 0.5f),
+            },
             new CameraProjectionComponent());
 
         // Player

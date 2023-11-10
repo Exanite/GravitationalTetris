@@ -1,8 +1,10 @@
-using System.IO;
+using System;
+using System.Collections.Generic;
 using System.Linq;
-using Exanite.WarGames.Features.Json;
-using Exanite.WarGames.Features.Tiles.Tiled.Models;
-using Newtonsoft.Json;
+using Exanite.Core.Properties;
+using Exanite.ResourceManagement;
+using Exanite.WarGames.Features.Resources;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Exanite.WarGames.Features.Tiles;
 
@@ -10,48 +12,42 @@ public class GameTilemapData
 {
     public readonly Tile[,] Tiles;
 
-    private readonly ProjectJsonSerializer serializer;
+    private readonly ResourceManager resourceManager;
 
-    public GameTilemapData(ProjectJsonSerializer serializer)
+    private readonly List<IResourceHandle<Texture2D>> possibleTileTextures = new();
+
+    public GameTilemapData(ResourceManager resourceManager)
     {
-        this.serializer = serializer;
+        this.resourceManager = resourceManager;
 
-        var map = LoadMap();
-        var layer = map.Layers.First();
-        Tiles = new Tile[layer.Width, layer.Height];
+        Tiles = new Tile[10, 20];
+    }
 
-        foreach (var chunk in layer.Chunks)
+    public void Load()
+    {
+        possibleTileTextures.Clear();
+        possibleTileTextures.AddRange(new List<PropertyDefinition<Texture2D>>
         {
-            for (var x = 0; x < chunk.Width; x++)
+            Base.Tile1,
+            Base.Tile2,
+            Base.Tile3,
+            Base.Tile4,
+            Base.Tile5,
+        }.Select(def => resourceManager.GetResource(def)));
+
+        var random = new Random();
+        for (var x = 0; x < Tiles.GetLength(0); x++)
+        {
+            for (var y = 0; y < Tiles.GetLength(1); y++)
             {
-                for (var y = 0; y < chunk.Height; y++)
+                ref var tile = ref Tiles[x, y];
+
+                tile.IsWall = random.NextSingle() > 0.5f;
+                if (tile.IsWall)
                 {
-                    Tiles[chunk.X - layer.StartX + x, chunk.Y - layer.StartY + y] = new Tile()
-                    {
-                        IsWall = chunk.Data[y * chunk.Width + x] != 0,
-                    };
+                    tile.Texture = possibleTileTextures[random.Next(0, possibleTileTextures.Count)];
                 }
             }
-        }
-    }
-
-    private TiledMap LoadMap()
-    {
-        using (var fileStream = File.Open(Path.Join("Content", "Map_0.tmj"), FileMode.Open))
-        using (var streamReader = new StreamReader(fileStream))
-        using (var jsonReader = new JsonTextReader(streamReader))
-        {
-            return serializer.Deserialize<TiledMap>(jsonReader)!;
-        }
-    }
-
-    private TiledTileset LoadTileset()
-    {
-        using (var fileStream = File.Open(Path.Join("Content", "Map_Tileset"), FileMode.Open))
-        using (var streamReader = new StreamReader(fileStream))
-        using (var jsonReader = new JsonTextReader(streamReader))
-        {
-            return serializer.Deserialize<TiledTileset>(jsonReader)!;
         }
     }
 }
