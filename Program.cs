@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Exanite.Extraction;
+namespace Exanite.WarGames;
 
 public class Program
 {

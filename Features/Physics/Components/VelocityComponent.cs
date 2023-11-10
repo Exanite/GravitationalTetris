@@ -1,6 +1,6 @@
 using Microsoft.Xna.Framework;
 
-namespace Exanite.Extraction.Features.Physics.Components;
+namespace Exanite.WarGames.Features.Physics.Components;
 
 public struct VelocityComponent
 {

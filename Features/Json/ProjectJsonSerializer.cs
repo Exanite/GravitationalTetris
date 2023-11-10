@@ -4,7 +4,7 @@ using System.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Exanite.Extraction.Features.Json;
+namespace Exanite.WarGames.Features.Json;
 
 public class ProjectJsonSerializer : JsonSerializer
 {

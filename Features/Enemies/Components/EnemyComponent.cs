@@ -1,3 +1,3 @@
-namespace Exanite.Extraction.Features.Enemies.Components;
+namespace Exanite.WarGames.Features.Enemies.Components;
 
 public struct EnemyComponent {}

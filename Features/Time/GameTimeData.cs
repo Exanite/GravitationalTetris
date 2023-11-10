@@ -1,4 +1,4 @@
-namespace Exanite.Extraction.Features.Time;
+namespace Exanite.WarGames.Features.Time;
 
 public class GameTimeData
 {

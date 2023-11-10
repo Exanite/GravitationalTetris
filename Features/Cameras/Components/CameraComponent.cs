@@ -1,4 +1,4 @@
-namespace Exanite.Extraction.Features.Cameras.Components;
+namespace Exanite.WarGames.Features.Cameras.Components;
 
 public struct CameraComponent
 {

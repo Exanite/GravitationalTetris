@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Autofac;
 
-namespace Exanite.Extraction.Systems;
+namespace Exanite.WarGames.Systems;
 
 public class SystemScheduler
 {

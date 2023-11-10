@@ -2,28 +2,28 @@
 using System.Threading.Tasks;
 using Arch.CommandBuffer;
 using Autofac;
-using Exanite.Extraction.Features.Cameras.Systems;
-using Exanite.Extraction.Features.Characters.Systems;
-using Exanite.Extraction.Features.Enemies.Systems;
-using Exanite.Extraction.Features.Json;
-using Exanite.Extraction.Features.Lifecycles.Systems;
-using Exanite.Extraction.Features.Physics.Systems;
-using Exanite.Extraction.Features.Players;
-using Exanite.Extraction.Features.Players.Systems;
-using Exanite.Extraction.Features.Resources;
-using Exanite.Extraction.Features.Resources.Systems;
-using Exanite.Extraction.Features.Sprites;
-using Exanite.Extraction.Features.Sprites.Systems;
-using Exanite.Extraction.Features.Tiles;
-using Exanite.Extraction.Features.Tiles.Systems;
-using Exanite.Extraction.Features.Time;
-using Exanite.Extraction.Features.Weapons.Systems;
-using Exanite.Extraction.Systems;
+using Exanite.WarGames.Features.Cameras.Systems;
+using Exanite.WarGames.Features.Characters.Systems;
+using Exanite.WarGames.Features.Enemies.Systems;
+using Exanite.WarGames.Features.Json;
+using Exanite.WarGames.Features.Lifecycles.Systems;
+using Exanite.WarGames.Features.Physics.Systems;
+using Exanite.WarGames.Features.Players;
+using Exanite.WarGames.Features.Players.Systems;
+using Exanite.WarGames.Features.Resources;
+using Exanite.WarGames.Features.Resources.Systems;
+using Exanite.WarGames.Features.Sprites;
+using Exanite.WarGames.Features.Sprites.Systems;
+using Exanite.WarGames.Features.Tiles;
+using Exanite.WarGames.Features.Tiles.Systems;
+using Exanite.WarGames.Features.Time;
+using Exanite.WarGames.Features.Weapons.Systems;
+using Exanite.WarGames.Systems;
 using Microsoft.Xna.Framework;
 using EcsWorld = Arch.Core.World;
 using PhysicsWorld = nkast.Aether.Physics2D.Dynamics.World;
 
-namespace Exanite.Extraction;
+namespace Exanite.WarGames;
 
 public class ExtractionGame : Game, IAsyncDisposable
 {

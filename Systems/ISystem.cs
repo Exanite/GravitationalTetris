@@ -1,3 +1,3 @@
-namespace Exanite.Extraction.Systems;
+namespace Exanite.WarGames.Systems;
 
 public interface ISystem {}

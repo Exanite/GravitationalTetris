@@ -1,4 +1,4 @@
-namespace Exanite.Extraction.Features.Tiles;
+namespace Exanite.WarGames.Features.Tiles;
 
 public struct Tile
 {

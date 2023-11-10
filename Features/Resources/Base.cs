@@ -1,7 +1,7 @@
 using Exanite.Core.Properties;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Exanite.Extraction.Features.Resources;
+namespace Exanite.WarGames.Features.Resources;
 
 public static class Base
 {

@@ -1,7 +1,7 @@
-using Exanite.Extraction.Systems;
+using Exanite.WarGames.Systems;
 using nkast.Aether.Physics2D.Dynamics;
 
-namespace Exanite.Extraction.Features.Physics.Systems;
+namespace Exanite.WarGames.Features.Physics.Systems;
 
 public class PhysicsContactSystem : ICallbackSystem
 {

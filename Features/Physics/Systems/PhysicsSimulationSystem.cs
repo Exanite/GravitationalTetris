@@ -2,14 +2,14 @@ using Arch.Core;
 using Arch.Core.Extensions;
 using Arch.System;
 using CommunityToolkit.HighPerformance;
-using Exanite.Extraction.Features.Physics.Components;
-using Exanite.Extraction.Features.Time;
-using Exanite.Extraction.Features.Transforms.Components;
-using Exanite.Extraction.Systems;
+using Exanite.WarGames.Features.Physics.Components;
+using Exanite.WarGames.Features.Time;
+using Exanite.WarGames.Features.Transforms.Components;
+using Exanite.WarGames.Systems;
 using Microsoft.Xna.Framework;
 using World = nkast.Aether.Physics2D.Dynamics.World;
 
-namespace Exanite.Extraction.Features.Physics.Systems;
+namespace Exanite.WarGames.Features.Physics.Systems;
 
 public partial class PhysicsSimulationSystem : EcsSystem, IStartSystem, IUpdateSystem
 {

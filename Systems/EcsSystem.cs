@@ -1,6 +1,6 @@
 using Arch.Core;
 
-namespace Exanite.Extraction.Systems;
+namespace Exanite.WarGames.Systems;
 
 public abstract class EcsSystem
 {

@@ -1,13 +1,13 @@
 using Arch.System;
-using Exanite.Extraction.Features.Cameras.Components;
-using Exanite.Extraction.Features.Resources;
-using Exanite.Extraction.Features.Sprites;
-using Exanite.Extraction.Systems;
 using Exanite.ResourceManagement;
+using Exanite.WarGames.Features.Cameras.Components;
+using Exanite.WarGames.Features.Resources;
+using Exanite.WarGames.Features.Sprites;
+using Exanite.WarGames.Systems;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Exanite.Extraction.Features.Tiles.Systems;
+namespace Exanite.WarGames.Features.Tiles.Systems;
 
 public partial class TilemapDrawSystem : EcsSystem, IDrawSystem
 {
@@ -30,7 +30,7 @@ public partial class TilemapDrawSystem : EcsSystem, IDrawSystem
     [Query]
     private void Draw(ref CameraComponent camera, ref CameraProjectionComponent cameraProjection)
     {
-        var sprite = resourceManager.GetResource(Base.Wall).Value;
+        var sprite = resourceManager.GetResource<>(Base.Wall).Value;
         if (sprite == null)
         {
             return;

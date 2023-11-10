@@ -1,6 +1,6 @@
 using nkast.Aether.Physics2D.Dynamics;
 
-namespace Exanite.Extraction.Features.Physics.Components;
+namespace Exanite.WarGames.Features.Physics.Components;
 
 public struct RigidbodyComponent
 {

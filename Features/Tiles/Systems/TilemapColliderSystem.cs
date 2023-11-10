@@ -1,12 +1,12 @@
 using System.Collections.Generic;
-using Exanite.Extraction.Features.Physics.Components;
-using Exanite.Extraction.Features.Transforms.Components;
-using Exanite.Extraction.Systems;
+using Exanite.WarGames.Features.Physics.Components;
+using Exanite.WarGames.Features.Transforms.Components;
+using Exanite.WarGames.Systems;
 using Microsoft.Xna.Framework;
 using nkast.Aether.Physics2D.Common;
 using nkast.Aether.Physics2D.Dynamics;
 
-namespace Exanite.Extraction.Features.Tiles.Systems;
+namespace Exanite.WarGames.Features.Tiles.Systems;
 
 public class TilemapColliderSystem : EcsSystem, IStartSystem
 {

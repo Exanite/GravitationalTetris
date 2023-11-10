@@ -1,10 +1,10 @@
 using Arch.System;
-using Exanite.Extraction.Features.Cameras.Components;
-using Exanite.Extraction.Features.Transforms.Components;
-using Exanite.Extraction.Systems;
+using Exanite.WarGames.Features.Cameras.Components;
+using Exanite.WarGames.Features.Transforms.Components;
+using Exanite.WarGames.Systems;
 using Microsoft.Xna.Framework;
 
-namespace Exanite.Extraction.Features.Cameras.Systems;
+namespace Exanite.WarGames.Features.Cameras.Systems;
 
 public partial class CameraProjectionSystem : EcsSystem, IUpdateSystem
 {

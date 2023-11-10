@@ -1,7 +1,7 @@
-using Exanite.Extraction.Systems;
 using Exanite.ResourceManagement;
+using Exanite.WarGames.Systems;
 
-namespace Exanite.Extraction.Features.Resources.Systems;
+namespace Exanite.WarGames.Features.Resources.Systems;
 
 public class RunResourceManagerSystem : IUpdateSystem
 {

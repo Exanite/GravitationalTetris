@@ -1,7 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Exanite.Extraction.Features.Sprites;
+namespace Exanite.WarGames.Features.Sprites;
 
 public class GameSpriteBatch
 {

@@ -1,11 +1,11 @@
 using Arch.System;
-using Exanite.Extraction.Features.Cameras.Components;
-using Exanite.Extraction.Features.Time;
-using Exanite.Extraction.Features.Transforms.Components;
-using Exanite.Extraction.Systems;
+using Exanite.WarGames.Features.Cameras.Components;
+using Exanite.WarGames.Features.Time;
+using Exanite.WarGames.Features.Transforms.Components;
+using Exanite.WarGames.Systems;
 using Microsoft.Xna.Framework.Input;
 
-namespace Exanite.Extraction.Features.Players.Systems;
+namespace Exanite.WarGames.Features.Players.Systems;
 
 public partial class CameraRotationSystem : EcsSystem, IUpdateSystem
 {

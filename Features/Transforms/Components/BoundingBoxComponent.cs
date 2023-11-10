@@ -1,6 +1,6 @@
 using System.Numerics;
 
-namespace Exanite.Extraction.Features.Transforms.Components;
+namespace Exanite.WarGames.Features.Transforms.Components;
 
 public struct BoundingBoxComponent
 {

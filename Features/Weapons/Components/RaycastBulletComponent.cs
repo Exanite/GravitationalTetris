@@ -1,3 +1,3 @@
-namespace Exanite.Extraction.Features.Weapons.Components;
+namespace Exanite.WarGames.Features.Weapons.Components;
 
 public struct RaycastBulletComponent {}

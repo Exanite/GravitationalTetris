@@ -1,7 +1,7 @@
-using Exanite.Extraction.Systems;
+using Exanite.WarGames.Systems;
 using Microsoft.Xna.Framework.Input;
 
-namespace Exanite.Extraction.Features.Players.Systems;
+namespace Exanite.WarGames.Features.Players.Systems;
 
 public class InputSystem : IUpdateSystem
 {

@@ -1,7 +1,7 @@
 using Exanite.ResourceManagement;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Exanite.Extraction.Features.Sprites.Components;
+namespace Exanite.WarGames.Features.Sprites.Components;
 
 public struct SpriteComponent
 {

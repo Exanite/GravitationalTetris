@@ -1,16 +1,15 @@
 using System;
 using Arch.System;
-using Arch.System.SourceGenerator;
 using Exanite.Core.Utilities;
-using Exanite.Extraction.Features.Cameras.Components;
-using Exanite.Extraction.Features.Characters.Components;
-using Exanite.Extraction.Features.Players.Components;
-using Exanite.Extraction.Features.Transforms.Components;
-using Exanite.Extraction.Systems;
+using Exanite.WarGames.Features.Cameras.Components;
+using Exanite.WarGames.Features.Characters.Components;
+using Exanite.WarGames.Features.Players.Components;
+using Exanite.WarGames.Features.Transforms.Components;
+using Exanite.WarGames.Systems;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-namespace Exanite.Extraction.Features.Players.Systems;
+namespace Exanite.WarGames.Features.Players.Systems;
 
 public partial class PlayerControllerSystem : EcsSystem, IUpdateSystem
 {

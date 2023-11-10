@@ -1,11 +1,11 @@
 using Arch.System;
 using Exanite.Core.Utilities;
-using Exanite.Extraction.Features.Characters.Components;
-using Exanite.Extraction.Features.Physics.Components;
-using Exanite.Extraction.Features.Time;
-using Exanite.Extraction.Systems;
+using Exanite.WarGames.Features.Characters.Components;
+using Exanite.WarGames.Features.Physics.Components;
+using Exanite.WarGames.Features.Time;
+using Exanite.WarGames.Systems;
 
-namespace Exanite.Extraction.Features.Characters.Systems;
+namespace Exanite.WarGames.Features.Characters.Systems;
 
 public partial class SmoothDampMovementSystem : EcsSystem, IUpdateSystem
 {

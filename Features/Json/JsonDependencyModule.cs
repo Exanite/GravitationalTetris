@@ -8,7 +8,7 @@ using Newtonsoft.Json.Serialization;
 using Module = Autofac.Module;
 using VersionConverter = Newtonsoft.Json.Converters.VersionConverter;
 
-namespace Exanite.Extraction.Features.Json;
+namespace Exanite.WarGames.Features.Json;
 
 public class JsonDependencyModule : Module
 {

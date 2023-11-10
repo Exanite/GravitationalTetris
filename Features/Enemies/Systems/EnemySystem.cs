@@ -1,13 +1,13 @@
 using System;
 using Arch.System;
 using Exanite.Core.Utilities;
-using Exanite.Extraction.Features.Characters.Components;
-using Exanite.Extraction.Features.Enemies.Components;
-using Exanite.Extraction.Features.Players.Components;
-using Exanite.Extraction.Features.Transforms.Components;
-using Exanite.Extraction.Systems;
+using Exanite.WarGames.Features.Characters.Components;
+using Exanite.WarGames.Features.Enemies.Components;
+using Exanite.WarGames.Features.Players.Components;
+using Exanite.WarGames.Features.Transforms.Components;
+using Exanite.WarGames.Systems;
 
-namespace Exanite.Extraction.Features.Enemies.Systems;
+namespace Exanite.WarGames.Features.Enemies.Systems;
 
 public partial class EnemySystem : EcsSystem, IUpdateSystem
 {

@@ -1,12 +1,12 @@
 using Arch.System;
-using Exanite.Extraction.Features.Cameras.Components;
-using Exanite.Extraction.Features.Sprites.Components;
-using Exanite.Extraction.Features.Transforms.Components;
-using Exanite.Extraction.Systems;
+using Exanite.WarGames.Features.Cameras.Components;
+using Exanite.WarGames.Features.Sprites.Components;
+using Exanite.WarGames.Features.Transforms.Components;
+using Exanite.WarGames.Systems;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Exanite.Extraction.Features.Sprites.Systems;
+namespace Exanite.WarGames.Features.Sprites.Systems;
 
 public partial class SpriteDrawSystem : EcsSystem, IDrawSystem
 {

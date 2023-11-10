@@ -1,3 +1,3 @@
-namespace Exanite.Extraction.Features.Lifecycles.Components;
+namespace Exanite.WarGames.Features.Lifecycles.Components;
 
 public struct DestroyedComponent {}

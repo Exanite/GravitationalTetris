@@ -1,6 +1,6 @@
 using Microsoft.Xna.Framework.Input;
 
-namespace Exanite.Extraction.Features.Players;
+namespace Exanite.WarGames.Features.Players;
 
 public class InputState
 {

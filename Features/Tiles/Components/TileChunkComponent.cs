@@ -1,6 +1,6 @@
 using System.Numerics;
 
-namespace Exanite.Extraction.Features.Tiles.Components;
+namespace Exanite.WarGames.Features.Tiles.Components;
 
 public struct TileChunkComponent
 {

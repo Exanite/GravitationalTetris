@@ -1,20 +1,19 @@
 using System;
 using Arch.System;
-using Arch.System.SourceGenerator;
-using Exanite.Extraction.Features.Players;
-using Exanite.Extraction.Features.Players.Components;
-using Exanite.Extraction.Features.Resources;
-using Exanite.Extraction.Features.Sprites.Components;
-using Exanite.Extraction.Features.Time;
-using Exanite.Extraction.Features.Transforms.Components;
-using Exanite.Extraction.Features.Weapons.Components;
-using Exanite.Extraction.Systems;
 using Exanite.ResourceManagement;
+using Exanite.WarGames.Features.Players;
+using Exanite.WarGames.Features.Players.Components;
+using Exanite.WarGames.Features.Resources;
+using Exanite.WarGames.Features.Sprites.Components;
+using Exanite.WarGames.Features.Time;
+using Exanite.WarGames.Features.Transforms.Components;
+using Exanite.WarGames.Features.Weapons.Components;
+using Exanite.WarGames.Systems;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using World = nkast.Aether.Physics2D.Dynamics.World;
 
-namespace Exanite.Extraction.Features.Weapons.Systems;
+namespace Exanite.WarGames.Features.Weapons.Systems;
 
 public partial class PlayerGunSystem : EcsSystem, IUpdateSystem
 {
@@ -69,7 +68,7 @@ public partial class PlayerGunSystem : EcsSystem, IUpdateSystem
                     Size = new Vector2((hitPoint - transform.Position).Length(), 0.1f),
                 },
                 new RaycastBulletComponent(),
-                new SpriteComponent(resourceManager.GetResource(Base.Wall)));
+                new SpriteComponent(resourceManager.GetResource<>(Base.Wall)));
         }
     }
 }

@@ -1,6 +1,6 @@
 using Microsoft.Xna.Framework;
 
-namespace Exanite.Extraction.Features.Transforms.Components;
+namespace Exanite.WarGames.Features.Transforms.Components;
 
 public struct TransformComponent
 {

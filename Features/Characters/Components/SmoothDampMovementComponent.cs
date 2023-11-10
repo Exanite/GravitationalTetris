@@ -1,6 +1,6 @@
 using Microsoft.Xna.Framework;
 
-namespace Exanite.Extraction.Features.Characters.Components;
+namespace Exanite.WarGames.Features.Characters.Components;
 
 public struct SmoothDampMovementComponent
 {

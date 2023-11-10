@@ -1,17 +1,17 @@
-using Exanite.Extraction.Features.Cameras.Components;
-using Exanite.Extraction.Features.Characters.Components;
-using Exanite.Extraction.Features.Enemies.Components;
-using Exanite.Extraction.Features.Physics.Components;
-using Exanite.Extraction.Features.Players.Components;
-using Exanite.Extraction.Features.Resources;
-using Exanite.Extraction.Features.Sprites.Components;
-using Exanite.Extraction.Features.Transforms.Components;
-using Exanite.Extraction.Features.Weapons.Components;
 using Exanite.ResourceManagement;
+using Exanite.WarGames.Features.Cameras.Components;
+using Exanite.WarGames.Features.Characters.Components;
+using Exanite.WarGames.Features.Enemies.Components;
+using Exanite.WarGames.Features.Physics.Components;
+using Exanite.WarGames.Features.Players.Components;
+using Exanite.WarGames.Features.Resources;
+using Exanite.WarGames.Features.Sprites.Components;
+using Exanite.WarGames.Features.Transforms.Components;
+using Exanite.WarGames.Features.Weapons.Components;
 using Microsoft.Xna.Framework;
 using nkast.Aether.Physics2D.Dynamics;
 
-namespace Exanite.Extraction.Systems;
+namespace Exanite.WarGames.Systems;
 
 public class CreateEntitiesSystem : EcsSystem, IStartSystem
 {
@@ -44,7 +44,7 @@ public class CreateEntitiesSystem : EcsSystem, IStartSystem
                 Position = new Vector2(1, 1),
             },
             new CameraTargetComponent(),
-            new SpriteComponent(resourceManager.GetResource(Base.Player)),
+            new SpriteComponent(resourceManager.GetResource<>(Base.Player)),
             new RigidbodyComponent(playerBody),
             new VelocityComponent(),
             new SmoothDampMovementComponent(0.05f),
@@ -69,7 +69,7 @@ public class CreateEntitiesSystem : EcsSystem, IStartSystem
 
                 World.Create(
                     new EnemyComponent(),
-                    new SpriteComponent(resourceManager.GetResource(Base.Player)),
+                    new SpriteComponent(resourceManager.GetResource<>(Base.Player)),
                     new RigidbodyComponent(body),
                     new TransformComponent
                     {
@@ -92,7 +92,7 @@ public class CreateEntitiesSystem : EcsSystem, IStartSystem
             body.AngularDamping = 5;
 
             World.Create(
-                new SpriteComponent(resourceManager.GetResource(Base.Player)),
+                new SpriteComponent(resourceManager.GetResource<>(Base.Player)),
                 new RigidbodyComponent(body),
                 new TransformComponent
                 {

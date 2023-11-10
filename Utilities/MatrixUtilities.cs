@@ -1,4 +1,4 @@
-namespace Exanite.Extraction.Utilities;
+namespace Exanite.WarGames.Utilities;
 
 public static class MatrixUtilities
 {

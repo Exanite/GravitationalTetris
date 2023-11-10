@@ -1,10 +1,10 @@
 using System.IO;
 using System.Linq;
-using Exanite.Extraction.Features.Json;
-using Exanite.Extraction.Features.Tiles.Tiled.Models;
+using Exanite.WarGames.Features.Json;
+using Exanite.WarGames.Features.Tiles.Tiled.Models;
 using Newtonsoft.Json;
 
-namespace Exanite.Extraction.Features.Tiles;
+namespace Exanite.WarGames.Features.Tiles;
 
 public class GameTilemapData
 {

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace Exanite.Extraction.Features.Tiles.Tiled.Models;
+namespace Exanite.WarGames.Features.Tiles.Tiled.Models;
 
 public class TiledTileset
 {

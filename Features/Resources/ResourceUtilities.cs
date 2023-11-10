@@ -1,7 +1,7 @@
 using Exanite.Core.Properties;
 using Exanite.ResourceManagement;
 
-namespace Exanite.Extraction.Features.Resources;
+namespace Exanite.WarGames.Features.Resources;
 
 public static class ResourceUtilities
 {
