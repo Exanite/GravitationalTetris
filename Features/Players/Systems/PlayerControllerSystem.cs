@@ -23,7 +23,6 @@ public partial class PlayerControllerSystem : EcsSystem, IUpdateSystem
 
     public void Update()
     {
-        UpdateAim1Query(World);
         UpdateMovementQuery(World);
     }
 

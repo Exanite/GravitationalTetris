@@ -6,6 +6,7 @@ using Exanite.WarGames.Features.Physics.Components;
 using Exanite.WarGames.Features.Time;
 using Exanite.WarGames.Features.Transforms.Components;
 using Exanite.WarGames.Systems;
+using Microsoft.Xna.Framework;
 using World = nkast.Aether.Physics2D.Dynamics.World;
 
 namespace Exanite.WarGames.Features.Physics.Systems;
@@ -23,7 +24,7 @@ public partial class PhysicsSimulationSystem : EcsSystem, IStartSystem, IUpdateS
 
     public void Start()
     {
-        // physicsWorld.Gravity = Vector2.Zero;
+        physicsWorld.Gravity = Vector2.UnitY * 9.81f;
     }
 
     public void Update()

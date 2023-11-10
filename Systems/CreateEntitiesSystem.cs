@@ -33,16 +33,19 @@ public class CreateEntitiesSystem : EcsSystem, IStartSystem
 
         // Player
         var playerBody = new Body();
-        playerBody.CreateCircle(0.5f, 1);
+        playerBody.FixedRotation = true;
         playerBody.BodyType = BodyType.Dynamic;
         playerBody.LinearDamping = 5;
         playerBody.AngularDamping = 5;
+
+        playerBody.CreateRectangle(0.8f, 0.8f, 1, Vector2.Zero);
 
         World.Create(
             new PlayerComponent(),
             new TransformComponent()
             {
                 Position = new Vector2(1, 1),
+                Size = new Vector2(0.8f, 0.8f)
             },
             new CameraTargetComponent(),
             new SpriteComponent(resourceManager.GetResource(Base.White)),
