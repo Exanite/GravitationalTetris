@@ -39,8 +39,12 @@ public class CreateEntitiesSystem : EcsSystem, IStartSystem
         playerBody.LinearDamping = 5;
         playerBody.AngularDamping = 5;
 
-        playerBody.CreateRectangle(8f / 16f, 5f / 16f, 1, new Vector2(0, -0.5f / 16f)); // Head
-        playerBody.CreateRectangle(4f / 16f, 11f / 16f, 1, new Vector2(0, 2.3f / 16f)); // Body
+        var head = playerBody.CreateRectangle(8f / 16f, 5f / 16f, 1, new Vector2(0, -0.5f / 16f));
+        head.Friction = 0;
+
+        var body = playerBody.CreateRectangle(4f / 16f, 10f / 16f, 1, new Vector2(0, 2f / 16f));
+        body.Friction = 0;
+
         playerBody.CreateCircle(2f / 16f, 1, new Vector2(0, 6f / 16f));
 
         World.Create(
