@@ -1,0 +1,69 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net7.0</TargetFramework>
+    <RollForward>Major</RollForward>
+
+    <!-- Recommended settings from: https://docs.monogame.net/articles/packaging_games.html -->
+    <PublishReadyToRun>false</PublishReadyToRun>
+    <TieredCompilation>false</TieredCompilation>
+    <SingleFilePublish>false</SingleFilePublish>
+
+    <!-- Enable nullables -->
+    <Nullable>enable</Nullable>
+
+    <!-- Fix error when FNA tries to copy FNA.dll.config and app.config to the same location -->
+    <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
+
+    <!-- Always generate debug symbols -->
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>embedded</DebugType>
+
+    <!-- Allow unsafe code -->
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Arch" Version="1.2.7" />
+    <PackageReference Include="Arch.EventBus" Version="1.0.2"/>
+    <PackageReference Include="Arch.LowLevel" Version="1.0.9" />
+    <PackageReference Include="Arch.Persistence" Version="1.0.3" />
+    <PackageReference Include="Arch.Relationships" Version="1.0.1"/>
+    <PackageReference Include="Arch.System" Version="1.0.2"/>
+    <PackageReference Include="Arch.System.SourceGenerator" Version="1.1.2"/>
+    <PackageReference Include="Autofac" Version="7.1.0"/>
+    <PackageReference Include="LiteNetLib" Version="1.1.0"/>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3"/>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Exanite.Core\Exanite.Core.FNA.csproj"/>
+    <ProjectReference Include="..\Exanite.ResourceManagement\Exanite.ResourceManagement.csproj" />
+    <ProjectReference Include="..\FNA\FNA.Core.csproj"/>
+    <ProjectReference Include="..\FontStashSharp\src\XNA\FontStashSharp.FNA.Core.csproj" />
+    <ProjectReference Include="..\Myra\src\Myra\Myra.FNA.Core.csproj" />
+    <ProjectReference Include="..\Physics2D\Aether.Physics2D.FNA.csproj"/>
+  </ItemGroup>
+
+  <PropertyGroup>
+    <DefaultItemExcludes>
+      $(DefaultItemExcludes);
+    </DefaultItemExcludes>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Icon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Icon.ico"/>
+    <None Remove="Icon.bmp"/>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Icon.ico"/>
+    <EmbeddedResource Include="Icon.bmp"/>
+  </ItemGroup>
+
+  <Target Name="RestoreDotnetTools" BeforeTargets="Restore">
+    <Message Text="Restoring dotnet tools" Importance="High"/>
+    <Exec Command="dotnet tool restore"/>
+  </Target>
+</Project>
