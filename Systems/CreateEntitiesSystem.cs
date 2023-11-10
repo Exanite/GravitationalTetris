@@ -38,17 +38,17 @@ public class CreateEntitiesSystem : EcsSystem, IStartSystem
         playerBody.LinearDamping = 5;
         playerBody.AngularDamping = 5;
 
-        playerBody.CreateRectangle(0.8f, 0.8f, 1, Vector2.Zero);
+        playerBody.CreateRectangle(8f / 16f, 11f / 16f, 1, new Vector2(0, 2.4f / 16f));
 
         World.Create(
             new PlayerComponent(),
             new TransformComponent()
             {
-                Position = new Vector2(1, 1),
-                Size = new Vector2(0.8f, 0.8f)
+                Position = new Vector2(-3, 0),
+                Size = new Vector2(1, 1),
             },
             new CameraTargetComponent(),
-            new SpriteComponent(resourceManager.GetResource(Base.White)),
+            new SpriteComponent(resourceManager.GetResource(Base.Player)),
             new RigidbodyComponent(playerBody),
             new VelocityComponent(),
             new SmoothDampMovementComponent(0.05f),
