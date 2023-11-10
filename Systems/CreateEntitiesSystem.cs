@@ -58,8 +58,10 @@ public class CreateEntitiesSystem : EcsSystem, IStartSystem
             new SpriteComponent(resourceManager.GetResource(Base.Player)),
             new RigidbodyComponent(playerBody),
             new VelocityComponent(),
-            new SmoothDampMovementComponent(0.05f),
             new MovementSpeedComponent(5),
-            new MovementDirectionComponent());
+            new PlayerMovement()
+            {
+                SmoothTime = 0.05f,
+            });
     }
 }

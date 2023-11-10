@@ -3,9 +3,6 @@ using System.Threading.Tasks;
 using Arch.CommandBuffer;
 using Autofac;
 using Exanite.WarGames.Features.Cameras.Systems;
-using Exanite.WarGames.Features.Characters.Systems;
-using Exanite.WarGames.Features.Enemies.Systems;
-using Exanite.WarGames.Features.Json;
 using Exanite.WarGames.Features.Lifecycles.Systems;
 using Exanite.WarGames.Features.Physics.Systems;
 using Exanite.WarGames.Features.Players;
@@ -92,9 +89,6 @@ public class Game1 : Game, IAsyncDisposable
         // Resources
         builder.RegisterModule<ResourcesModule>();
 
-        // Json.Net
-        builder.RegisterModule<JsonDependencyModule>();
-
         // FNA
         builder.RegisterInstance(this).AsSelf().As<Game>().SingleInstance();
         builder.RegisterInstance(new GraphicsDeviceManager(this)).SingleInstance();
@@ -138,10 +132,7 @@ public class Game1 : Game, IAsyncDisposable
         config.RegisterUpdateSystem<InputSystem>();
 
         config.RegisterUpdateSystem<PlayerControllerSystem>();
-        config.RegisterUpdateSystem<EnemySystem>();
 
-        config.RegisterUpdateSystem<SimpleMovementSystem>();
-        config.RegisterUpdateSystem<SmoothDampMovementSystem>();
         config.RegisterUpdateSystem<PhysicsSimulationSystem>();
 
         config.RegisterUpdateSystem<CameraProjectionSystem>();
