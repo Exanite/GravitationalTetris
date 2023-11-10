@@ -17,7 +17,6 @@ using Exanite.WarGames.Features.Sprites.Systems;
 using Exanite.WarGames.Features.Tiles;
 using Exanite.WarGames.Features.Tiles.Systems;
 using Exanite.WarGames.Features.Time;
-using Exanite.WarGames.Features.Weapons.Systems;
 using Exanite.WarGames.Systems;
 using Microsoft.Xna.Framework;
 using EcsWorld = Arch.Core.World;
@@ -138,7 +137,6 @@ public class ExtractionGame : Game, IAsyncDisposable
         config.RegisterUpdateSystem<InputSystem>();
 
         config.RegisterUpdateSystem<PlayerControllerSystem>();
-        config.RegisterUpdateSystem<PlayerGunSystem>();
         config.RegisterUpdateSystem<EnemySystem>();
 
         config.RegisterUpdateSystem<SimpleMovementSystem>();

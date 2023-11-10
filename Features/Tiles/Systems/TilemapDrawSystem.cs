@@ -30,7 +30,7 @@ public partial class TilemapDrawSystem : EcsSystem, IDrawSystem
     [Query]
     private void Draw(ref CameraComponent camera, ref CameraProjectionComponent cameraProjection)
     {
-        var sprite = resourceManager.GetResource<>(Base.Wall).Value;
+        var sprite = resourceManager.GetResource(Base.Tile1).Value;
         if (sprite == null)
         {
             return;

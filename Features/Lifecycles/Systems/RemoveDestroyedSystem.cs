@@ -1,5 +1,6 @@
 using Arch.Core;
 using Arch.System;
+using Arch.System.SourceGenerator;
 using Exanite.WarGames.Features.Lifecycles.Components;
 using Exanite.WarGames.Systems;
 

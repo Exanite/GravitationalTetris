@@ -1,4 +1,5 @@
 using Arch.System;
+using Arch.System.SourceGenerator;
 using Exanite.WarGames.Features.Characters.Components;
 using Exanite.WarGames.Features.Physics.Components;
 using Exanite.WarGames.Systems;

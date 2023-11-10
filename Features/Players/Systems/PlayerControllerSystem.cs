@@ -1,5 +1,6 @@
 using System;
 using Arch.System;
+using Arch.System.SourceGenerator;
 using Exanite.Core.Utilities;
 using Exanite.WarGames.Features.Cameras.Components;
 using Exanite.WarGames.Features.Characters.Components;
