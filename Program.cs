@@ -11,7 +11,7 @@ public class Program
     {
         Thread.CurrentThread.Name = "Main";
 
-        await using (var game = new ExtractionGame())
+        await using (var game = new Game1())
         {
             game.Run();
         }

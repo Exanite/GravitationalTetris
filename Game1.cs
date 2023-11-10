@@ -24,14 +24,14 @@ using PhysicsWorld = nkast.Aether.Physics2D.Dynamics.World;
 
 namespace Exanite.WarGames;
 
-public class ExtractionGame : Game, IAsyncDisposable
+public class Game1 : Game, IAsyncDisposable
 {
     private readonly IContainer container;
 
     private readonly SystemScheduler systemScheduler;
     private readonly GameTimeData time;
 
-    public ExtractionGame()
+    public Game1()
     {
         container = BuildContainer();
         systemScheduler = container.Resolve<SystemScheduler>();
