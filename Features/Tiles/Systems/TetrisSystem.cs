@@ -9,6 +9,7 @@ using Exanite.WarGames.Features.Lifecycles.Components;
 using Exanite.WarGames.Features.Physics.Components;
 using Exanite.WarGames.Features.Players;
 using Exanite.WarGames.Features.Players.Components;
+using Exanite.WarGames.Features.Players.Systems;
 using Exanite.WarGames.Features.Resources;
 using Exanite.WarGames.Features.Sprites.Components;
 using Exanite.WarGames.Features.Time;
@@ -54,8 +55,8 @@ public struct TetrisRootComponent
 
 public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
 {
-    private float blockVerticalSpeed = 0.5f;
-    private float blockHorizontalSpeed = 2f;
+    private readonly float blockVerticalSpeed = 0.5f;
+    private readonly float blockHorizontalSpeed = 2f;
     private EntityReference currentShapeRoot;
 
     private readonly List<TetrisShapeDefinition> shapes = new();
@@ -64,13 +65,15 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
     private readonly Random random;
     private readonly GameTimeData time;
     private readonly GameInputData input;
+    private readonly PlayerControllerSystem playerControllerSystem; // Todo Don't do this
 
-    public TetrisSystem(ResourceManager resourceManager, Random random, GameTimeData time, GameInputData input)
+    public TetrisSystem(ResourceManager resourceManager, Random random, GameTimeData time, GameInputData input, PlayerControllerSystem playerControllerSystem)
     {
         this.resourceManager = resourceManager;
         this.random = random;
         this.time = time;
         this.input = input;
+        this.playerControllerSystem = playerControllerSystem;
     }
 
     public void RegisterCallbacks()
@@ -192,12 +195,12 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
             var shape = shapes[random.Next(0, shapes.Count)];
 
             var currentShapeRootEntity = World.Create(
-                new TetrisRootComponent()
+                new TetrisRootComponent
                 {
                     Definition = shape,
                     Rotation = (Rotation)random.Next(0, 4),
                 },
-                new TransformComponent()
+                new TransformComponent
                 {
                     Position = new Vector2(5, 20),
                 });
@@ -302,6 +305,7 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
     {
         playerTransform.Position = new Vector2(4f, 0);
         velocity.Velocity = Vector2.Zero;
+        playerControllerSystem.SetIsGravityDown(true);;
 
         RemoveAllTetrisBlocksQuery(World);
     }

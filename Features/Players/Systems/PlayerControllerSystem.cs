@@ -35,17 +35,22 @@ public partial class PlayerControllerSystem : EcsSystem, IUpdateSystem
 
         if (input.Current.Keyboard.IsKeyDown(Keys.Space) && !input.Previous.Keyboard.IsKeyDown(Keys.Space))
         {
-            isGravityDown = !isGravityDown;
-
-            var gravity = physicsWorld.Gravity;
-            gravity.Y = Math.Abs(gravity.Y) * (isGravityDown ? 1 : -1);
-            physicsWorld.Gravity = gravity;
-
-            ZeroVelocityYQuery(World);
-            SetPlayerRotationQuery(World);
+            SetIsGravityDown(!isGravityDown);
         }
 
         ClampPlayerVelocityQuery(World);
+    }
+
+    public void SetIsGravityDown(bool isGravityDown)
+    {
+        this.isGravityDown = isGravityDown;
+
+        var gravity = physicsWorld.Gravity;
+        gravity.Y = Math.Abs(gravity.Y) * (isGravityDown ? 1 : -1);
+        physicsWorld.Gravity = gravity;
+
+        ZeroVelocityYQuery(World);
+        SetPlayerRotationQuery(World);
     }
 
     [Query]

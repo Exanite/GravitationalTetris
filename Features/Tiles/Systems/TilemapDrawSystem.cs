@@ -15,7 +15,7 @@ public partial class TilemapDrawSystem : EcsSystem, IDrawSystem, ICallbackSystem
     private readonly GameTilemapData tilemap;
     private readonly ResourceManager resourceManager;
 
-    private IResourceHandle<Texture2D> emptyTileTexture;
+    private IResourceHandle<Texture2D> emptyTileTexture = null!;
 
     public TilemapDrawSystem(GameSpriteBatch gameSpriteBatch, GameTilemapData tilemap, ResourceManager resourceManager)
     {
