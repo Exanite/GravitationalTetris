@@ -1,7 +1,9 @@
 using Arch.Core;
 using Arch.Core.Extensions;
 using Arch.System;
+using Arch.System.SourceGenerator;
 using Exanite.Core.HighPerformance;
+using Exanite.WarGames.Features.Lifecycles.Components;
 using Exanite.WarGames.Features.Physics.Components;
 using Exanite.WarGames.Features.Time;
 using Exanite.WarGames.Features.Transforms.Components;
@@ -11,7 +13,7 @@ using World = nkast.Aether.Physics2D.Dynamics.World;
 
 namespace Exanite.WarGames.Features.Physics.Systems;
 
-public partial class PhysicsSimulationSystem : EcsSystem, IStartSystem, IUpdateSystem
+public partial class PhysicsSimulationSystem : EcsSystem, IStartSystem, IUpdateSystem, ICleanupSystem
 {
     private readonly World physicsWorld;
     private readonly GameTimeData time;
@@ -38,6 +40,11 @@ public partial class PhysicsSimulationSystem : EcsSystem, IStartSystem, IUpdateS
         }
         SyncTransformsFromPhysicsQuery(World);
         SyncVelocitiesFromPhysicsQuery(World);
+    }
+
+    public void Cleanup()
+    {
+        RemoveRigidbodiesQuery(World);
     }
 
     private void SimulatePhysicsWorld()
@@ -91,5 +98,12 @@ public partial class PhysicsSimulationSystem : EcsSystem, IStartSystem, IUpdateS
     private void SyncAngularVelocitiesFromPhysics(ref AngularVelocityComponent angularVelocity, ref RigidbodyComponent rigidbody)
     {
         angularVelocity.AngularVelocity = rigidbody.Body.AngularVelocity;
+    }
+
+    [Query]
+    [All<DestroyedComponent>]
+    private void RemoveRigidbodies(ref RigidbodyComponent rigidbody)
+    {
+        physicsWorld.Remove(rigidbody.Body);
     }
 }

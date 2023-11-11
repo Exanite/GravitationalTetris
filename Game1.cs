@@ -141,8 +141,11 @@ public class Game1 : Game, IAsyncDisposable
         config.RegisterUpdateSystem<PhysicsSimulationSystem>();
         config.RegisterUpdateSystem<CameraProjectionSystem>();
 
-        config.RegisterUpdateSystem<RemoveDestroyedSystem>();
         config.RegisterUpdateSystem<RunResourceManagerSystem>();
+
+        // Cleanup
+        config.RegisterCleanupSystem<PhysicsSimulationSystem>();
+        config.RegisterCleanupSystem<RemoveDestroyedSystem>();
 
         // Draw
         config.RegisterDrawSystem<TilemapDrawSystem>();

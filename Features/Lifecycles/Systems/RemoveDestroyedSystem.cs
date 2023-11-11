@@ -6,16 +6,16 @@ using Exanite.WarGames.Systems;
 
 namespace Exanite.WarGames.Features.Lifecycles.Systems;
 
-public partial class RemoveDestroyedSystem : EcsSystem, IUpdateSystem
+public partial class RemoveDestroyedSystem : EcsSystem, ICleanupSystem
 {
-    public void Update()
+    public void Cleanup()
     {
-        UpdateQuery(World);
+        RemoveDestroyedQuery(World);
     }
 
     [Query]
     [All<DestroyedComponent>]
-    private void Update(Entity entity)
+    private void RemoveDestroyed(Entity entity)
     {
         World.Destroy(entity);
     }
