@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Arch.CommandBuffer;
 using Autofac;
+using Exanite.WarGames.Features;
 using Exanite.WarGames.Features.Cameras.Systems;
 using Exanite.WarGames.Features.Lifecycles.Systems;
 using Exanite.WarGames.Features.Physics.Systems;

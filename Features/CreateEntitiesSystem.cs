@@ -6,10 +6,11 @@ using Exanite.WarGames.Features.Players.Components;
 using Exanite.WarGames.Features.Resources;
 using Exanite.WarGames.Features.Sprites.Components;
 using Exanite.WarGames.Features.Transforms.Components;
+using Exanite.WarGames.Systems;
 using Microsoft.Xna.Framework;
 using nkast.Aether.Physics2D.Dynamics;
 
-namespace Exanite.WarGames.Systems;
+namespace Exanite.WarGames.Features;
 
 public class CreateEntitiesSystem : EcsSystem, IStartSystem
 {
