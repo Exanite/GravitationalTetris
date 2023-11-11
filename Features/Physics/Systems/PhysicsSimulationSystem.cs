@@ -1,7 +1,6 @@
 using Arch.Core;
 using Arch.Core.Extensions;
 using Arch.System;
-using CommunityToolkit.HighPerformance;
 using Exanite.Core.HighPerformance;
 using Exanite.WarGames.Features.Physics.Components;
 using Exanite.WarGames.Features.Time;

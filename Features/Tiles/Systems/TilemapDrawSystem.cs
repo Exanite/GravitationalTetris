@@ -15,6 +15,8 @@ public partial class TilemapDrawSystem : EcsSystem, IDrawSystem, ICallbackSystem
     private readonly GameTilemapData tilemap;
     private readonly ResourceManager resourceManager;
 
+    private IResourceHandle<Texture2D> emptyTileTexture;
+
     public TilemapDrawSystem(GameSpriteBatch gameSpriteBatch, GameTilemapData tilemap, ResourceManager resourceManager)
     {
         this.gameSpriteBatch = gameSpriteBatch;
@@ -24,7 +26,7 @@ public partial class TilemapDrawSystem : EcsSystem, IDrawSystem, ICallbackSystem
 
     public void RegisterCallbacks()
     {
-        tilemap.Load();
+        emptyTileTexture = resourceManager.GetResource(Base.TileNone);
     }
 
     public void Draw()
@@ -52,25 +54,22 @@ public partial class TilemapDrawSystem : EcsSystem, IDrawSystem, ICallbackSystem
                 for (var y = 0; y < tilemap.Tiles.GetLength(1); y++)
                 {
                     ref var tile = ref tilemap.Tiles[x, y];
+                    var sprite = (tile.Texture ?? emptyTileTexture).Value;
 
-                    if (tile.IsWall)
-                    {
-                        var sprite = tile.Texture.Value;
-                        var sourceRect = new Rectangle(0, 0, sprite.Width, sprite.Height);
-                        var origin = new Vector2(0.5f * sprite.Width, 0.5f * sprite.Height);
-                        var scale = new Vector2(1f / sprite.Width, 1f / sprite.Height);
+                    var sourceRect = new Rectangle(0, 0, sprite.Width, sprite.Height);
+                    var origin = new Vector2(0.5f * sprite.Width, 0.5f * sprite.Height);
+                    var scale = new Vector2(1f / sprite.Width, 1f / sprite.Height);
 
-                        spriteBatch.Draw(
-                            sprite, // Texture
-                            new Vector2(x, y), // Position
-                            sourceRect, // Source Rect
-                            Color.White, // Color
-                            0, // Rotation
-                            origin, // Origin
-                            scale, // Scale
-                            SpriteEffects.None, // Effects
-                            0); // Depth
-                    }
+                    spriteBatch.Draw(
+                        sprite, // Texture
+                        new Vector2(x, y), // Position
+                        sourceRect, // Source Rect
+                        Color.White, // Color
+                        0, // Rotation
+                        origin, // Origin
+                        scale, // Scale
+                        SpriteEffects.None, // Effects
+                        0); // Depth
                 }
             }
         }

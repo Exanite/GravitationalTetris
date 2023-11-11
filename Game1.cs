@@ -124,8 +124,8 @@ public class Game1 : Game, IAsyncDisposable
 
         // Callbacks
         config.RegisterCallbackSystem<PhysicsContactSystem>();
-        config.RegisterCallbackSystem<TilemapDrawSystem>(); // Todo Loads tilemap, should be its own system
         config.RegisterCallbackSystem<TetrisSystem>();
+        config.RegisterCallbackSystem<TilemapDrawSystem>();
 
         // Start
         config.RegisterStartSystem<PhysicsSimulationSystem>();

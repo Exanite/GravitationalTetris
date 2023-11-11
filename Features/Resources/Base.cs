@@ -9,6 +9,8 @@ public static class Base
 
     public static PropertyDefinition<Texture2D> Player = new("Base:Player.png");
 
+    public static PropertyDefinition<Texture2D> TileNone = new("Base:TileNone.png");
+
     public static PropertyDefinition<Texture2D> TileBlue = new("Base:TileBlue.png");
     public static PropertyDefinition<Texture2D> TileCyan = new("Base:TileCyan.png");
     public static PropertyDefinition<Texture2D> TileGreen = new("Base:TileGreen.png");

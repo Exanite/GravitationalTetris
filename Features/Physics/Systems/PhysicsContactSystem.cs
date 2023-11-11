@@ -1,11 +1,4 @@
-using System;
-using Arch.Core;
-using Arch.Core.Extensions;
-using Exanite.Core.HighPerformance;
-using Exanite.WarGames.Features.Players.Components;
-using Exanite.WarGames.Features.Tiles.Systems;
 using Exanite.WarGames.Systems;
-using Microsoft.Xna.Framework;
 using World = nkast.Aether.Physics2D.Dynamics.World;
 
 namespace Exanite.WarGames.Features.Physics.Systems;
