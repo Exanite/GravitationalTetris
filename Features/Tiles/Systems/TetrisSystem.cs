@@ -293,6 +293,13 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
             return;
         }
 
+        ResetGameQuery(World);
+    }
+
+    [Query]
+    [All<PlayerComponent>]
+    public void ResetGame(ref TransformComponent playerTransform, ref VelocityComponent velocity)
+    {
         playerTransform.Position = new Vector2(4f, 0);
         velocity.Velocity = Vector2.Zero;
 
