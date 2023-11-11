@@ -49,7 +49,7 @@ public class ResourcesModule : Module
                     loadOperation.Fulfill(Texture2D.FromStream(graphicsDeviceManager.GraphicsDevice, stream));
 
                     return Task.CompletedTask;
-                });
+                }, false);
 
                 // Myra
                 resourceManager.RegisterLoader<TextureRegionAtlas>(loadOperation =>

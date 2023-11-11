@@ -86,6 +86,9 @@ public class Game1 : Game, IAsyncDisposable
     {
         var builder = new ContainerBuilder();
 
+        // Misc
+        builder.RegisterType<Random>().InstancePerDependency();
+
         // Resources
         builder.RegisterModule<ResourcesModule>();
 
@@ -122,6 +125,7 @@ public class Game1 : Game, IAsyncDisposable
         // Callbacks
         config.RegisterCallbackSystem<PhysicsContactSystem>();
         config.RegisterCallbackSystem<TilemapDrawSystem>(); // Todo Loads tilemap, should be its own system
+        config.RegisterCallbackSystem<TetrisSystem>();
 
         // Start
         config.RegisterStartSystem<PhysicsSimulationSystem>();
@@ -130,15 +134,13 @@ public class Game1 : Game, IAsyncDisposable
 
         // Update
         config.RegisterUpdateSystem<InputSystem>();
-
         config.RegisterUpdateSystem<PlayerControllerSystem>();
+        config.RegisterUpdateSystem<TetrisSystem>();
 
         config.RegisterUpdateSystem<PhysicsSimulationSystem>();
-
         config.RegisterUpdateSystem<CameraProjectionSystem>();
 
         config.RegisterUpdateSystem<RemoveDestroyedSystem>();
-
         config.RegisterUpdateSystem<RunResourceManagerSystem>();
 
         // Draw

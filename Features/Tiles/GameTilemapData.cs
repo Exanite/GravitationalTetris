@@ -28,26 +28,28 @@ public class GameTilemapData
         possibleTileTextures.Clear();
         possibleTileTextures.AddRange(new List<PropertyDefinition<Texture2D>>
         {
-            Base.Tile1,
-            Base.Tile2,
-            Base.Tile3,
-            Base.Tile4,
-            Base.Tile5,
+            Base.TileBlue,
+            Base.TileCyan,
+            Base.TileGreen,
+            Base.TileOrange,
+            Base.TilePurple,
+            Base.TileRed,
+            Base.TileYellow,
         }.Select(def => resourceManager.GetResource(def)));
 
-        var random = new Random();
-        for (var x = 0; x < Tiles.GetLength(0); x++)
-        {
-            for (var y = 0; y < Tiles.GetLength(1); y++)
-            {
-                ref var tile = ref Tiles[x, y];
-
-                tile.IsWall = random.NextSingle() > 0.5f;
-                if (tile.IsWall)
-                {
-                    tile.Texture = possibleTileTextures[random.Next(0, possibleTileTextures.Count)];
-                }
-            }
-        }
+        // var random = new Random();
+        // for (var x = 0; x < Tiles.GetLength(0); x++)
+        // {
+        //     for (var y = 0; y < Tiles.GetLength(1); y++)
+        //     {
+        //         ref var tile = ref Tiles[x, y];
+        //
+        //         tile.IsWall = random.NextSingle() > 0.5f;
+        //         if (tile.IsWall)
+        //         {
+        //             tile.Texture = possibleTileTextures[random.Next(0, possibleTileTextures.Count)];
+        //         }
+        //     }
+        // }
     }
 }
