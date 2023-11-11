@@ -51,6 +51,14 @@ public class SystemScheduler
         }
     }
 
+    public void Cleanup()
+    {
+        foreach (var system in CleanupSystems)
+        {
+            system.Cleanup();
+        }
+    }
+
     public void Draw()
     {
         foreach (var system in DrawSystems)

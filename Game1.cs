@@ -55,6 +55,7 @@ public class Game1 : Game, IAsyncDisposable
         time.DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
         systemScheduler.Update();
+        systemScheduler.Cleanup();
 
         base.Update(gameTime);
     }
