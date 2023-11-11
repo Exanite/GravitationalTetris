@@ -13,13 +13,18 @@ public class SystemScheduler
         CallbackSystems = config.CallbackSystems.Select(system => (ICallbackSystem)container.Resolve(system)).ToList();
         StartSystems = config.StartSystems.Select(system => (IStartSystem)container.Resolve(system)).ToList();
         UpdateSystems = config.UpdateSystems.Select(system => (IUpdateSystem)container.Resolve(system)).ToList();
+        CleanupSystems = config.CleanupSystems.Select(system => (ICleanupSystem)container.Resolve(system)).ToList();
         DrawSystems = config.DrawSystems.Select(system => (IDrawSystem)container.Resolve(system)).ToList();
     }
 
     public List<ISystem> AllSystems { get; }
+
     public List<ICallbackSystem> CallbackSystems { get; set; }
     public List<IStartSystem> StartSystems { get; }
+
     public List<IUpdateSystem> UpdateSystems { get; }
+    public List<ICleanupSystem> CleanupSystems { get; }
+
     public List<IDrawSystem> DrawSystems { get; }
 
     public void RegisterCallbacks()
@@ -59,9 +64,13 @@ public class SystemScheduler
         private readonly HashSet<Type> registeredSystemTypeSet = new();
 
         public List<Type> AllSystems { get; } = new();
+
         public List<Type> CallbackSystems { get; } = new();
         public List<Type> StartSystems { get; } = new();
+
         public List<Type> UpdateSystems { get; } = new();
+        public List<Type> CleanupSystems { get; } = new();
+
         public List<Type> DrawSystems { get; } = new();
 
         public void RegisterCallbackSystem<T>() where T : ICallbackSystem
@@ -80,6 +89,12 @@ public class SystemScheduler
         {
             RegisterSystem<T>();
             UpdateSystems.Add(typeof(T));
+        }
+
+        public void RegisterCleanupSystem<T>() where T : ICleanupSystem
+        {
+            RegisterSystem<T>();
+            CleanupSystems.Add(typeof(T));
         }
 
         public void RegisterDrawSystem<T>() where T : IDrawSystem
