@@ -10,6 +10,7 @@ public static class BaseMod
     public static PropertyDefinition<Texture2D> Player = new("Base:Player.png");
 
     public static PropertyDefinition<Texture2D> TileNone = new("Base:TileNone.png");
+    public static PropertyDefinition<Texture2D> TilePlaceholder = new("Base:TilePlaceholder.png");
 
     public static PropertyDefinition<Texture2D> TileBlue = new("Base:TileBlue.png");
     public static PropertyDefinition<Texture2D> TileCyan = new("Base:TileCyan.png");
