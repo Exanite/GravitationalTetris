@@ -58,7 +58,7 @@ public class CreateEntitiesSystem : EcsSystem, IStartSystem
                 Size = new Vector2(1, 1),
             },
             new CameraTargetComponent(),
-            new SpriteComponent(resourceManager.GetResource(Base.Player)),
+            new SpriteComponent(resourceManager.GetResource(BaseMod.Player)),
             new RigidbodyComponent(playerBody),
             new VelocityComponent(),
             new MovementSpeedComponent(5),

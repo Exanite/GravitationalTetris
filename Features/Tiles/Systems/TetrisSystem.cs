@@ -88,7 +88,7 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
             PivotX = 0,
             PivotY = 1,
 
-            Texture = resourceManager.GetResource(Base.TileCyan),
+            Texture = resourceManager.GetResource(BaseMod.TileCyan),
         });
 
         shapes.Add(new TetrisShapeDefinition
@@ -102,7 +102,7 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
             PivotX = 1,
             PivotY = 1,
 
-            Texture = resourceManager.GetResource(Base.TileBlue),
+            Texture = resourceManager.GetResource(BaseMod.TileBlue),
         });
 
         shapes.Add(new TetrisShapeDefinition
@@ -116,7 +116,7 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
             PivotX = 1,
             PivotY = 1,
 
-            Texture = resourceManager.GetResource(Base.TileOrange),
+            Texture = resourceManager.GetResource(BaseMod.TileOrange),
         });
 
         shapes.Add(new TetrisShapeDefinition
@@ -130,7 +130,7 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
             PivotX = 0,
             PivotY = 0,
 
-            Texture = resourceManager.GetResource(Base.TileYellow),
+            Texture = resourceManager.GetResource(BaseMod.TileYellow),
         });
 
         shapes.Add(new TetrisShapeDefinition
@@ -144,7 +144,7 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
             PivotX = 1,
             PivotY = 1,
 
-            Texture = resourceManager.GetResource(Base.TileGreen),
+            Texture = resourceManager.GetResource(BaseMod.TileGreen),
         });
 
         shapes.Add(new TetrisShapeDefinition
@@ -158,7 +158,7 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
             PivotX = 1,
             PivotY = 1,
 
-            Texture = resourceManager.GetResource(Base.TilePurple),
+            Texture = resourceManager.GetResource(BaseMod.TilePurple),
         });
 
         shapes.Add(new TetrisShapeDefinition
@@ -172,7 +172,7 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
             PivotX = 1,
             PivotY = 1,
 
-            Texture = resourceManager.GetResource(Base.TileRed),
+            Texture = resourceManager.GetResource(BaseMod.TileRed),
         });
     }
 

@@ -1,9 +1,9 @@
 using Exanite.Core.Properties;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Exanite.WarGames.Features.Resources;
+namespace Exanite.WarGames;
 
-public static class Base
+public static class BaseMod
 {
     public static PropertyDefinition<Texture2D> White = new("Base:White.png");
 
