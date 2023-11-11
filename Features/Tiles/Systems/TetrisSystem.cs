@@ -198,7 +198,7 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
                     }
 
                     var body = new Body();
-                    body.BodyType = BodyType.Dynamic;
+                    body.BodyType = BodyType.Kinematic;
                     body.FixedRotation = true;
 
                     body.CreateRectangle(1, 1, 1, Vector2.Zero);
