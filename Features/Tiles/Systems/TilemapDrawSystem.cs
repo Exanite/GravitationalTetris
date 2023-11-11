@@ -133,9 +133,35 @@ public partial class TilemapDrawSystem : EcsSystem, IDrawSystem, ICallbackSystem
         // Calculate predictedY
         while (true)
         {
-            // tetrisRoot.Definition
+            var hasFoundPredictedPosition = false;
+            for (var i = 0; i < blockPositions.Count; i++)
+            {
+                var (x, y) = blockPositions[i];
+                y--;
 
-            break;
+                if (y >= tilemap.Tiles.GetLength(1))
+                {
+                    continue;
+                }
+
+                if (y < 0 || tilemap.Tiles[x, y].IsWall)
+                {
+                    hasFoundPredictedPosition = true;
+
+                    break;
+                }
+            }
+
+            if (hasFoundPredictedPosition)
+            {
+                break;
+            }
+
+            for (var i = 0; i < blockPositions.Count; i++)
+            {
+                blockPositions[i] = new Position(blockPositions[i].X, blockPositions[i].Y - 1);
+                predictedY--;
+            }
         }
 
         spriteBatch.Begin(
