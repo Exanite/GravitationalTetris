@@ -24,7 +24,7 @@ public partial class PhysicsSimulationSystem : EcsSystem, IStartSystem, IUpdateS
 
     public void Start()
     {
-        physicsWorld.Gravity = Vector2.UnitY * 9.81f;
+        physicsWorld.Gravity = Vector2.UnitY * 4f;
     }
 
     public void Update()

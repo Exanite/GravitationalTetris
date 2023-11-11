@@ -7,7 +7,6 @@ using Exanite.WarGames.Features.Resources;
 using Exanite.WarGames.Features.Sprites.Components;
 using Exanite.WarGames.Features.Transforms.Components;
 using Microsoft.Xna.Framework;
-using nkast.Aether.Physics2D.Common.TextureTools;
 using nkast.Aether.Physics2D.Dynamics;
 
 namespace Exanite.WarGames.Systems;
@@ -36,8 +35,6 @@ public class CreateEntitiesSystem : EcsSystem, IStartSystem
         var playerBody = new Body();
         playerBody.FixedRotation = true;
         playerBody.BodyType = BodyType.Dynamic;
-        playerBody.LinearDamping = 5;
-        playerBody.AngularDamping = 5;
 
         var head = playerBody.CreateRectangle(8f / 16f, 5f / 16f, 1, new Vector2(0, -0.5f / 16f));
         head.Friction = 0;
