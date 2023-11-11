@@ -272,8 +272,8 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
             }
             case Rotation.R90:
             {
-                minX = minX + root.Definition.PivotY - root.Definition.Shape.GetLength(1) - 1;
-                maxX = maxX + root.Definition.PivotY;
+                minX = minX - root.Definition.PivotY + root.Definition.Shape.GetLength(1) - 1;
+                maxX = maxX - root.Definition.PivotY;
 
                 break;
             }
@@ -286,8 +286,8 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
             }
             case Rotation.R270:
             {
-                minX = minX - root.Definition.PivotY;
-                maxX = maxX - root.Definition.PivotY;
+                minX = minX + root.Definition.PivotY;
+                maxX = maxX + root.Definition.PivotY - root.Definition.Shape.GetLength(1) + 1;
 
                 break;
             }
