@@ -35,14 +35,19 @@ public class CreateEntitiesSystem : EcsSystem, IStartSystem
         var playerBody = new Body();
         playerBody.FixedRotation = true;
         playerBody.BodyType = BodyType.Dynamic;
+        playerBody.IsBullet = true;
+        playerBody.SleepingAllowed = false;
 
         var head = playerBody.CreateRectangle(8f / 16f, 5f / 16f, 1, new Vector2(0, -0.5f / 16f));
         head.Friction = 0;
+        head.Restitution = 0;
 
         var body = playerBody.CreateRectangle(4f / 16f, 10f / 16f, 1, new Vector2(0, 2f / 16f));
         body.Friction = 0;
+        body.Restitution = 0;
 
-        playerBody.CreateCircle(2f / 16f, 1, new Vector2(0, 6f / 16f));
+        var feet = playerBody.CreateCircle(2f / 16f, 1, new Vector2(0, 6f / 16f));
+        feet.Restitution = 0;
 
         World.Create(
             new PlayerComponent(),

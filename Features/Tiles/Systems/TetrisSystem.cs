@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using Arch.Core;
 using Arch.Core.Extensions;
 using Arch.System;
+using Arch.System.SourceGenerator;
 using Exanite.ResourceManagement;
 using Exanite.WarGames.Features.Physics.Components;
 using Exanite.WarGames.Features.Players;
+using Exanite.WarGames.Features.Players.Components;
 using Exanite.WarGames.Features.Resources;
 using Exanite.WarGames.Features.Sprites.Components;
 using Exanite.WarGames.Features.Time;
@@ -51,7 +53,8 @@ public struct TetrisRootComponent
 
 public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
 {
-    private float blockSpeed = 1f;
+    private float blockVerticalSpeed = 0.5f;
+    private float blockHorizontalSpeed = 2f;
     private EntityReference currentShapeRoot;
 
     private readonly List<TetrisShapeDefinition> shapes = new();
@@ -171,7 +174,19 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
 
     public void Update()
     {
-        if (!currentShapeRoot.IsAlive() || (input.Current.Keyboard.IsKeyDown(Keys.Enter) && !input.Previous.Keyboard.IsKeyDown(Keys.Enter)))
+        if (currentShapeRoot.IsAlive() && currentShapeRoot.Entity.Has<TetrisRootComponent>() && input.Current.Keyboard.IsKeyDown(Keys.Q) && !input.Previous.Keyboard.IsKeyDown(Keys.Q))
+        {
+            ref var tetrisRootComponent = ref currentShapeRoot.Entity.Get<TetrisRootComponent>();
+            tetrisRootComponent.Rotation = (Rotation)(((int)tetrisRootComponent.Rotation + 1) % 4);
+        }
+
+        if (currentShapeRoot.IsAlive() && currentShapeRoot.Entity.Has<TetrisRootComponent>() && input.Current.Keyboard.IsKeyDown(Keys.E) && !input.Previous.Keyboard.IsKeyDown(Keys.E))
+        {
+            ref var tetrisRootComponent = ref currentShapeRoot.Entity.Get<TetrisRootComponent>();
+            tetrisRootComponent.Rotation = (Rotation)(((int)tetrisRootComponent.Rotation + 1) % 4);
+        }
+
+        if (!currentShapeRoot.IsAlive() || (input.Current.Keyboard.IsKeyDown(Keys.Space) && !input.Previous.Keyboard.IsKeyDown(Keys.Space)))
         {
             var shape = shapes[random.Next(0, shapes.Count)];
 
@@ -201,7 +216,8 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
                     body.BodyType = BodyType.Kinematic;
                     body.FixedRotation = true;
 
-                    body.CreateRectangle(1, 1, 1, Vector2.Zero);
+                    var fixture = body.CreateRectangle(1, 1, 1, Vector2.Zero);
+                    fixture.Restitution = 0;
 
                     World.Create(
                         new TetrisBlockComponent
@@ -227,9 +243,21 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
     }
 
     [Query]
-    public void UpdateRootPositions(ref TetrisRootComponent root, ref TransformComponent transform)
+    [All<PlayerComponent>]
+    public void UpdateRootPositions(ref TransformComponent playerTransform)
     {
-        transform.Position.Y -= blockSpeed * time.DeltaTime;
+        UpdateRootPositions_1Query(World, ref playerTransform);
+    }
+
+    [Query]
+    public void UpdateRootPositions_1([Data] ref TransformComponent playerTransform, ref TetrisRootComponent root, ref TransformComponent transform)
+    {
+        var distanceToPlayerX = playerTransform.Position.X - transform.Position.X;
+        var distanceToTravel = Math.Sign(distanceToPlayerX) * blockHorizontalSpeed * time.DeltaTime;
+        distanceToTravel = Math.Clamp(distanceToTravel, -Math.Abs(distanceToPlayerX), Math.Abs(distanceToPlayerX));
+
+        transform.Position.Y -= blockVerticalSpeed * time.DeltaTime;
+        transform.Position.X += distanceToTravel;
     }
 
     [Query]
@@ -250,6 +278,6 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
         ref var rootTransform = ref rootEntity.Get<TransformComponent>();
 
         var localPosition = new Vector2(block.LocalX, block.LocalY);
-        transform.Position = Vector2.Transform(localPosition, Matrix.CreateRotationZ(float.Pi * (int)root.Rotation) * Matrix.CreateTranslation(rootTransform.Position.X, rootTransform.Position.Y, 0));
+        transform.Position = Vector2.Transform(localPosition, Matrix.CreateRotationZ(float.Pi / 2 * (int)root.Rotation) * Matrix.CreateTranslation(rootTransform.Position.X, rootTransform.Position.Y, 0));
     }
 }
