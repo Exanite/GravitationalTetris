@@ -1,13 +1,11 @@
 using System;
 using Arch.Core;
 using Arch.Core.Extensions;
-using CommunityToolkit.HighPerformance;
+using Exanite.Core.HighPerformance;
 using Exanite.WarGames.Features.Players.Components;
 using Exanite.WarGames.Features.Tiles.Systems;
 using Exanite.WarGames.Systems;
 using Microsoft.Xna.Framework;
-using nkast.Aether.Physics2D.Collision;
-using nkast.Aether.Physics2D.Dynamics.Contacts;
 using World = nkast.Aether.Physics2D.Dynamics.World;
 
 namespace Exanite.WarGames.Features.Physics.Systems;
@@ -28,21 +26,19 @@ public class PhysicsContactSystem : ICallbackSystem
         //     var bodyA = contact.FixtureA.Body;
         //     var bodyB = contact.FixtureB.Body;
         //
-        //     if (bodyA.Tag is not Box<EntityReference> refA || bodyB.Tag is not Box<EntityReference> refB)
+        //     if (bodyA.Tag is not BoxedObject<EntityReference> refA || bodyB.Tag is not BoxedObject<EntityReference> refB)
         //     {
         //         return contact.Enabled;
         //     }
         //
-        //     if (!((EntityReference)refA).Entity.IsAlive() || !((EntityReference)refB).Entity.IsAlive())
+        //     if (!refA.Value.Entity.IsAlive() || !refB.Value.Entity.IsAlive())
         //     {
         //         return contact.Enabled;
         //     }
         //
-        //     if (((EntityReference)refA).Entity.Has<PlayerComponent>() || !((EntityReference)refB).Entity.Has<TetrisBlockComponent>())
+        //     if (refA.Value.Entity.Has<PlayerComponent>() || !refB.Value.Entity.Has<TetrisBlockComponent>())
         //     {
-        //         if (Math.Abs(Vector2.Dot(contact.Manifold.LocalNormal, Vector2.UnitY)) > 0.9f)
-        //         {
-        //         }
+        //         contact.FixtureB.Body.LinearVelocity = Vector2.UnitY * 0.5f;
         //
         //         return contact.Enabled;
         //     }

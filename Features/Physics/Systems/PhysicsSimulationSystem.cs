@@ -2,6 +2,7 @@ using Arch.Core;
 using Arch.Core.Extensions;
 using Arch.System;
 using CommunityToolkit.HighPerformance;
+using Exanite.Core.HighPerformance;
 using Exanite.WarGames.Features.Physics.Components;
 using Exanite.WarGames.Features.Time;
 using Exanite.WarGames.Features.Transforms.Components;
@@ -51,7 +52,7 @@ public partial class PhysicsSimulationSystem : EcsSystem, IStartSystem, IUpdateS
         if (rigidbody.Body.World == null)
         {
             physicsWorld.Add(rigidbody.Body);
-            rigidbody.Body.Tag = (Box<EntityReference>)entity.Reference();
+            rigidbody.Body.Tag = new BoxedValue<EntityReference>(entity.Reference());
         }
     }
 
