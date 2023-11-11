@@ -53,7 +53,7 @@ public class CreateEntitiesSystem : EcsSystem, IStartSystem
             new PlayerComponent(),
             new TransformComponent()
             {
-                Position = new Vector2(-3, 0),
+                Position = new Vector2(4f, 0),
                 Size = new Vector2(1, 1),
             },
             new CameraTargetComponent(),
@@ -65,5 +65,14 @@ public class CreateEntitiesSystem : EcsSystem, IStartSystem
             {
                 SmoothTime = 0.05f,
             });
+
+        // Walls on side
+        var wallBody = new Body();
+        wallBody.BodyType = BodyType.Static;
+
+        wallBody.CreateRectangle(1, 60, 1, new Vector2(-2, 15));
+        wallBody.CreateRectangle(1, 60, 1, new Vector2(11, 15));
+
+        World.Create(new RigidbodyComponent(wallBody));
     }
 }
