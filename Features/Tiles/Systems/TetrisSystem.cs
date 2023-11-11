@@ -5,6 +5,7 @@ using Arch.Core.Extensions;
 using Arch.System;
 using Arch.System.SourceGenerator;
 using Exanite.ResourceManagement;
+using Exanite.WarGames.Features.Lifecycles.Components;
 using Exanite.WarGames.Features.Physics.Components;
 using Exanite.WarGames.Features.Players;
 using Exanite.WarGames.Features.Players.Components;
@@ -240,6 +241,8 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
 
         UpdateRootPositionsQuery(World);
         UpdateBlockPositionsQuery(World);
+
+        ResetIfPlayerOutOfBoundsQuery(World);
     }
 
     [Query]
@@ -279,5 +282,27 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
 
         var localPosition = new Vector2(block.LocalX, block.LocalY);
         transform.Position = Vector2.Transform(localPosition, Matrix.CreateRotationZ(float.Pi / 2 * (int)root.Rotation) * Matrix.CreateTranslation(rootTransform.Position.X, rootTransform.Position.Y, 0));
+    }
+
+    [Query]
+    [All<PlayerComponent>]
+    public void ResetIfPlayerOutOfBounds(ref TransformComponent playerTransform, ref VelocityComponent velocity)
+    {
+        if (!(playerTransform.Position.Y < -1.5f) && !(playerTransform.Position.Y > 20.5f))
+        {
+            return;
+        }
+
+        playerTransform.Position = new Vector2(4f, 0);
+        velocity.Velocity = Vector2.Zero;
+
+        RemoveAllTetrisBlocksQuery(World);
+    }
+
+    [Query]
+    [Any<TetrisRootComponent, TetrisBlockComponent>]
+    public void RemoveAllTetrisBlocks(Entity entity)
+    {
+        entity.Add(new DestroyedComponent());
     }
 }
