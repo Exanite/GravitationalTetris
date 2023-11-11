@@ -258,12 +258,49 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
     [Query]
     public void UpdateRootPositions_1([Data] ref TransformComponent playerTransform, ref TetrisRootComponent root, ref TransformComponent transform)
     {
+        var minX = 0;
+        var maxX = 9;
+
+        switch (root.Rotation)
+        {
+            case Rotation.R0:
+            {
+                minX = minX + root.Definition.PivotX;
+                maxX = maxX + root.Definition.PivotX - root.Definition.Shape.GetLength(0) + 1;
+
+                break;
+            }
+            case Rotation.R90:
+            {
+                minX = minX + root.Definition.PivotY - root.Definition.Shape.GetLength(1) - 1;
+                maxX = maxX + root.Definition.PivotY;
+
+                break;
+            }
+            case Rotation.R180:
+            {
+                minX = minX - root.Definition.PivotX + root.Definition.Shape.GetLength(0) - 1;
+                maxX = maxX - root.Definition.PivotX;
+
+                break;
+            }
+            case Rotation.R270:
+            {
+                minX = minX - root.Definition.PivotY;
+                maxX = maxX - root.Definition.PivotY;
+
+                break;
+            }
+        }
+
         var distanceToPlayerX = playerTransform.Position.X - transform.Position.X;
         var distanceToTravel = Math.Sign(distanceToPlayerX) * blockHorizontalSpeed * time.DeltaTime;
         distanceToTravel = Math.Clamp(distanceToTravel, -Math.Abs(distanceToPlayerX), Math.Abs(distanceToPlayerX));
 
         transform.Position.Y -= blockVerticalSpeed * time.DeltaTime;
         transform.Position.X += distanceToTravel;
+
+        transform.Position.X = Math.Clamp(transform.Position.X, minX, maxX);
     }
 
     [Query]
