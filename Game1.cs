@@ -178,7 +178,7 @@ public class Game1 : Game, IAsyncDisposable
 
     private void LogException(Exception e)
     {
-        using (var stream = File.OpenWrite("Game.log"))
+        using (var stream = File.Open("Game.log", FileMode.Append))
         using (var streamWriter = new StreamWriter(stream))
         {
             streamWriter.WriteLine(e);
