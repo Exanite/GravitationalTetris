@@ -449,6 +449,14 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
         playerControllerSystem.SetIsGravityDown(true);
 
         RemoveAllTetrisBlocksQuery(World);
+
+        for (var x = 0; x < tilemap.Tiles.GetLength(0); x++)
+        {
+            for (var y = 0; y < tilemap.Tiles.GetLength(1); y++)
+            {
+                tilemap.Tiles[x, y] = default;
+            }
+        }
     }
 
     [Query]

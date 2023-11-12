@@ -10,13 +10,10 @@ public partial class RemoveDestroyedSystem : EcsSystem, ICleanupSystem
 {
     public void Cleanup()
     {
-        RemoveDestroyedQuery(World);
+        World.Destroy(RemoveDestroyed_QueryDescription);
     }
 
     [Query]
     [All<DestroyedComponent>]
-    private void RemoveDestroyed(Entity entity)
-    {
-        World.Destroy(entity);
-    }
+    private void RemoveDestroyed(Entity entity) {}
 }
