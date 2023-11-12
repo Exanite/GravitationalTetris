@@ -388,6 +388,8 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
                 predictedY--;
             }
         }
+
+        root.PredictedBlockPositions.RemoveAll(position => position.Y >= tilemap.Tiles.GetLength(1));
     }
 
     [Query]
