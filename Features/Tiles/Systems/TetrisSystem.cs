@@ -629,7 +629,7 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
     [All<PlayerComponent>]
     private void ResetIfPlayerOutOfBounds(ref TransformComponent transform)
     {
-        if (!(transform.Position.Y < -1.5f) && !(transform.Position.Y > 20.5f))
+        if (!(transform.Position.Y < -1f) && !(transform.Position.Y > 20.5f))
         {
             return;
         }
