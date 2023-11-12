@@ -414,7 +414,7 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
     }
 
     [Query]
-    public void PlaceBlocks(ref TetrisRootComponent root)
+    public void PlaceBlocks(Entity entity, ref TetrisRootComponent root)
     {
         foreach (var (x, y) in root.PredictedBlockPositions)
         {
@@ -424,6 +424,8 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
         }
 
         World.Create(new UpdateTilemapCollidersEventComponent());
+
+        RemoveAllTetrisBlocksQuery(World);
     }
 
     [Query]
