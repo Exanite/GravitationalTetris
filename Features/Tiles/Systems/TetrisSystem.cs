@@ -71,7 +71,7 @@ public struct ShouldPlaceTetrisEventComponent {}
 public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
 {
     public float SpeedMultiplier = 1;
-    public float ScoreMultiplier => 1 + (SpeedMultiplier - 1) * 2;
+    public float ScoreMultiplier => SpeedMultiplier * 2;
 
     public float DifficultyIncreaseCooldown = 15;
     public float DifficultyIncreaseTimer = 0;
