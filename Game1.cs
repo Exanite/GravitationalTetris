@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using Arch.CommandBuffer;
 using Autofac;
@@ -53,24 +54,38 @@ public class Game1 : Game, IAsyncDisposable
 
     protected override void Update(GameTime gameTime)
     {
-        time.Time = (float)gameTime.TotalGameTime.TotalSeconds;
-        time.DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+        try
+        {
+            time.Time = (float)gameTime.TotalGameTime.TotalSeconds;
+            time.DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-        systemScheduler.Update();
-        systemScheduler.Cleanup();
+            systemScheduler.Update();
+            systemScheduler.Cleanup();
 
-        base.Update(gameTime);
+            base.Update(gameTime);
+        }
+        catch (Exception e)
+        {
+            LogException(e);
+        }
     }
 
     protected override void Draw(GameTime gameTime)
     {
-        time.Time = (float)gameTime.TotalGameTime.TotalSeconds;
-        time.DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+        try
+        {
+            time.Time = (float)gameTime.TotalGameTime.TotalSeconds;
+            time.DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-        GraphicsDevice.Clear(Color.Black);
-        systemScheduler.Draw();
+            GraphicsDevice.Clear(Color.Black);
+            systemScheduler.Draw();
 
-        base.Draw(gameTime);
+            base.Draw(gameTime);
+        }
+        catch (Exception e)
+        {
+            LogException(e);
+        }
     }
 
     protected virtual async ValueTask DisposeAsyncCore()
@@ -159,5 +174,14 @@ public class Game1 : Game, IAsyncDisposable
         config.RegisterDrawSystem<TetrisUiSystem>();
 
         return config;
+    }
+
+    private void LogException(Exception e)
+    {
+        using (var stream = File.OpenWrite("Game.log"))
+        using (var streamWriter = new StreamWriter(stream))
+        {
+            streamWriter.WriteLine(e);
+        }
     }
 }
