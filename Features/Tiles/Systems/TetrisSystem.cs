@@ -445,6 +445,8 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
         new Vector2Int(0, -1),
     };
 
+    private bool[,]? IsBlockRooted;
+
     private void RemoveMatchingBlockTiles(ref TetrisRootComponent root)
     {
         foreach (var position in root.PredictedBlockPositions)
@@ -456,6 +458,8 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
                 {
                     RecursiveRemove(targetPosition, root.Definition.Texture);
                     World.Create(new UpdateTilemapCollidersEventComponent());
+
+                    while (TryApplyBlockGravity()) {}
 
                     return;
                 }
@@ -506,6 +510,79 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
             {
                 var targetPosition = new Vector2Int(position.X + direction.X, position.Y + direction.Y);
                 RecursiveRemove(targetPosition, texture);
+            }
+        }
+
+        // Blocks can be floating after blocks are removed
+        // This is different from normal tetris because tetris removes an entire row and everything always goes down by one row
+        // This first marks all first row blocks and all of the connected blocks as rooted
+        // Un-rooted blocks are then moved one position down
+        // If there were any movements, this will return true, meaning that this function should be ran again
+        bool TryApplyBlockGravity()
+        {
+            if (IsBlockRooted == null || IsBlockRooted.GetLength(0) != tilemap.Tiles.GetLength(0) || IsBlockRooted.GetLength(1) != tilemap.Tiles.GetLength(1))
+            {
+                IsBlockRooted = new bool[tilemap.Tiles.GetLength(0), tilemap.Tiles.GetLength(1)];
+            }
+
+            Array.Clear(IsBlockRooted);
+
+            // Mark first row
+            for (var x = 0; x < tilemap.Tiles.GetLength(0); x++)
+            {
+                if (tilemap.Tiles[x, 0].IsWall)
+                {
+                    RecursiveMarkRooted(new Vector2Int(x, 0));
+                }
+            }
+
+            // Move un-rooted blocks downwards
+            var wereAnyBlocksMoved = false;
+            for (var x = 0; x < tilemap.Tiles.GetLength(0); x++)
+            {
+                for (var y = 1; y < tilemap.Tiles.GetLength(1); y++)
+                {
+                    if (IsBlockRooted[x, y] || !tilemap.Tiles[x, y].IsWall)
+                    {
+                        continue;
+                    }
+
+                    tilemap.Tiles[x, y - 1] = tilemap.Tiles[x, y];
+                    tilemap.Tiles[x, y] = default;
+
+                    wereAnyBlocksMoved = true;
+                }
+            }
+
+            return wereAnyBlocksMoved;
+        }
+
+        void RecursiveMarkRooted(Vector2Int position)
+        {
+            if (position.X < 0
+                || position.Y < 0
+                || position.X >= tilemap.Tiles.GetLength(0)
+                || position.Y >= tilemap.Tiles.GetLength(1))
+            {
+                return;
+            }
+
+            if (IsBlockRooted[position.X, position.Y])
+            {
+                return;
+            }
+
+            if (!tilemap.Tiles[position.X, position.Y].IsWall)
+            {
+                return;
+            }
+
+            IsBlockRooted[position.X, position.Y] = true;
+
+            foreach (var direction in Directions)
+            {
+                var targetPosition = new Vector2Int(position.X + direction.X, position.Y + direction.Y);
+                RecursiveMarkRooted(targetPosition);
             }
         }
     }
