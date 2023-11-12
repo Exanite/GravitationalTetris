@@ -276,13 +276,13 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
 
     [Query]
     [All<PlayerComponent>]
-    public void UpdateRootPositions(ref TransformComponent playerTransform)
+    private void UpdateRootPositions(ref TransformComponent playerTransform)
     {
         UpdateRootPositions_1Query(World, ref playerTransform);
     }
 
     [Query]
-    public void UpdateRootPositions_1([Data] ref TransformComponent playerTransform, ref TetrisRootComponent root, ref TransformComponent transform)
+    private void UpdateRootPositions_1([Data] ref TransformComponent playerTransform, ref TetrisRootComponent root, ref TransformComponent transform)
     {
         var minX = 0;
         var maxX = 9;
@@ -401,7 +401,7 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
     }
 
     [Query]
-    public void UpdateBlockPositions(ref TetrisBlockComponent block, ref TransformComponent transform)
+    private void UpdateBlockPositions(ref TetrisBlockComponent block, ref TransformComponent transform)
     {
         if (!block.Root.IsAlive())
         {
@@ -422,7 +422,7 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
     }
 
     [Query]
-    public void PlaceBlocks(Entity entity, ref TetrisRootComponent root)
+    private void PlaceBlocks(Entity entity, ref TetrisRootComponent root)
     {
         foreach (var (x, y) in root.PredictedBlockPositions)
         {
@@ -434,11 +434,85 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
         World.Create(new UpdateTilemapCollidersEventComponent());
 
         RemoveAllTetrisBlocksQuery(World);
+        RemoveMatchingBlockTiles(ref root);
+    }
+
+    private static Vector2Int[] Directions = new Vector2Int[]
+    {
+        new Vector2Int(1, 0),
+        new Vector2Int(-1, 0),
+        new Vector2Int(0, 1),
+        new Vector2Int(0, -1),
+    };
+
+    private void RemoveMatchingBlockTiles(ref TetrisRootComponent root)
+    {
+        foreach (var position in root.PredictedBlockPositions)
+        {
+            foreach (var direction in Directions)
+            {
+                var targetPosition = new Vector2Int(position.X + direction.X, position.Y + direction.Y);
+                if (IsMatchingTileAndNotPartOfSelf(targetPosition, ref root))
+                {
+                    RecursiveRemove(targetPosition, root.Definition.Texture);
+                    World.Create(new UpdateTilemapCollidersEventComponent());
+
+                    return;
+                }
+            }
+        }
+
+        bool IsMatchingTileAndNotPartOfSelf(Vector2Int position, ref TetrisRootComponent root)
+        {
+            if (root.PredictedBlockPositions.Contains(position))
+            {
+                return false;
+            }
+
+            if (position.X < 0
+                || position.Y < 0
+                || position.X >= tilemap.Tiles.GetLength(0)
+                || position.Y >= tilemap.Tiles.GetLength(1))
+            {
+                return false;
+            }
+
+            if (tilemap.Tiles[position.X, position.Y].Texture != root.Definition.Texture)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        void RecursiveRemove(Vector2Int position, IResourceHandle<Texture2D> texture)
+        {
+            if (position.X < 0
+                || position.Y < 0
+                || position.X >= tilemap.Tiles.GetLength(0)
+                || position.Y >= tilemap.Tiles.GetLength(1))
+            {
+                return;
+            }
+
+            if (tilemap.Tiles[position.X, position.Y].Texture != texture)
+            {
+                return;
+            }
+
+            tilemap.Tiles[position.X, position.Y] = default;
+
+            foreach (var direction in Directions)
+            {
+                var targetPosition = new Vector2Int(position.X + direction.X, position.Y + direction.Y);
+                RecursiveRemove(targetPosition, texture);
+            }
+        }
     }
 
     [Query]
     [All<PlayerComponent>]
-    public void ResetIfPlayerOutOfBounds(ref TransformComponent playerTransform, ref VelocityComponent velocity)
+    private void ResetIfPlayerOutOfBounds(ref TransformComponent playerTransform, ref VelocityComponent velocity)
     {
         if (!(playerTransform.Position.Y < -1.5f) && !(playerTransform.Position.Y > 20.5f))
         {
@@ -450,7 +524,7 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
 
     [Query]
     [All<PlayerComponent>]
-    public void ResetGame(ref TransformComponent playerTransform, ref VelocityComponent velocity)
+    private void ResetGame(ref TransformComponent playerTransform, ref VelocityComponent velocity)
     {
         playerTransform.Position = new Vector2(4f, 0);
         velocity.Velocity = Vector2.Zero;
@@ -465,11 +539,13 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
                 tilemap.Tiles[x, y] = default;
             }
         }
+
+        World.Create(new UpdateTilemapCollidersEventComponent());
     }
 
     [Query]
     [Any<TetrisRootComponent, TetrisBlockComponent>]
-    public void RemoveAllTetrisBlocks(Entity entity)
+    private void RemoveAllTetrisBlocks(Entity entity)
     {
         entity.Add(new DestroyedComponent());
     }
