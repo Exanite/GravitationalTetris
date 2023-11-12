@@ -707,6 +707,9 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
     [Any<TetrisRootComponent, TetrisBlockComponent>]
     private void RemoveAllTetrisBlocks(Entity entity)
     {
-        entity.Add(new DestroyedComponent());
+        if (!entity.Has<DestroyedComponent>())
+        {
+            entity.Add(new DestroyedComponent());
+        }
     }
 }
