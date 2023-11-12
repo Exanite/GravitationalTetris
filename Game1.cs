@@ -66,7 +66,7 @@ public class Game1 : Game, IAsyncDisposable
         }
         catch (Exception e)
         {
-            LogException(e);
+            HandleException(e);
         }
     }
 
@@ -84,7 +84,7 @@ public class Game1 : Game, IAsyncDisposable
         }
         catch (Exception e)
         {
-            LogException(e);
+            HandleException(e);
         }
     }
 
@@ -176,7 +176,7 @@ public class Game1 : Game, IAsyncDisposable
         return config;
     }
 
-    private void LogException(Exception e)
+    private void HandleException(Exception e)
     {
         using (var stream = File.Open("Game.log", FileMode.Append))
         using (var streamWriter = new StreamWriter(stream))
@@ -185,5 +185,7 @@ public class Game1 : Game, IAsyncDisposable
         }
 
         Console.Error.WriteLine(e);
+
+        Environment.Exit(-1);
     }
 }
