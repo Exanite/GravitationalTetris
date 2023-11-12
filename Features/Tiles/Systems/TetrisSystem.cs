@@ -74,7 +74,7 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
     public float PreviousScore;
     public List<float> HighScores = new();
 
-    public float TimeScoreMultiplier = 10f;
+    public float TimeScoreMultiplier = 20f;
 
     private readonly float blockVerticalSpeed = 0.5f;
     private readonly float blockHorizontalSpeed = 2f;
