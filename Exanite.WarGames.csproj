@@ -19,7 +19,7 @@
 
     <!-- Always generate debug symbols -->
     <DebugSymbols>true</DebugSymbols>
-    <DebugType>embedded</DebugType>
+    <DebugType>full</DebugType>
 
     <!-- Allow unsafe code -->
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
