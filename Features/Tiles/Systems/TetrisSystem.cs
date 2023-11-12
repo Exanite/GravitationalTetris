@@ -65,6 +65,8 @@ public struct TetrisRootComponent
     }
 }
 
+public struct ShouldPlaceTetrisEventComponent {}
+
 public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
 {
     private readonly float blockVerticalSpeed = 0.5f;
@@ -204,7 +206,7 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
             tetrisRootComponent.Rotation = (Rotation)(((int)tetrisRootComponent.Rotation + 1) % 4);
         }
 
-        if (!currentShapeRoot.IsAlive() || (input.Current.Keyboard.IsKeyDown(Keys.Space) && !input.Previous.Keyboard.IsKeyDown(Keys.Space)))
+        if (!currentShapeRoot.IsAlive() || (input.Current.Keyboard.IsKeyDown(Keys.Space) && !input.Previous.Keyboard.IsKeyDown(Keys.Space)) || World.CountEntities(ShouldShouldPlaceTetris_QueryDescription) > 0)
         {
             PlaceBlocksQuery(World);
 
@@ -276,6 +278,10 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
     }
 
     [Query]
+    [All<ShouldPlaceTetrisEventComponent>]
+    private void ShouldShouldPlaceTetris() {}
+
+    [Query]
     [All<PlayerComponent>]
     private void UpdateRootPositions(ref TransformComponent playerTransform)
     {
@@ -331,11 +337,12 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
     }
 
     [Query]
-    private void UpdateRootBlockPositions(ref TetrisRootComponent root, ref TransformComponent transform)
+    private void UpdateRootBlockPositions(Entity entity, ref TetrisRootComponent root, ref TransformComponent transform)
     {
         // Update logical world position of blocks
+        var actualY = (int)MathF.Ceiling(transform.Position.Y);
         var predictedX = (int)MathF.Round(transform.Position.X);
-        var predictedY = (int)MathF.Ceiling(transform.Position.Y);
+        var predictedY = actualY;
 
         root.BlockPositions.Clear();
 
@@ -396,6 +403,11 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
                 root.PredictedBlockPositions[i] = new Vector2Int(root.PredictedBlockPositions[i].X, root.PredictedBlockPositions[i].Y - 1);
                 predictedY--;
             }
+        }
+
+        if (actualY == predictedY)
+        {
+            entity.Add(new ShouldPlaceTetrisEventComponent());
         }
 
         root.PredictedBlockPositions.RemoveAll(position => position.Y >= tilemap.Tiles.GetLength(1));
