@@ -11,6 +11,7 @@ using Exanite.ResourceManagement.FileSystems;
 using FontStashSharp;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Myra;
 using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
@@ -41,6 +42,8 @@ public class ResourcesModule : Module
 #endif
 
                 resourceManager.Mount("Base:", new DirectoryFileSystem(contentPath), true);
+
+                resourceManager.Mount("Myra:", new DllResourceFileSystem(typeof(MyraEnvironment).Assembly, "Myra.Resources."));
 
                 resourceManager.RegisterLoader<Texture2D>(loadOperation =>
                 {
