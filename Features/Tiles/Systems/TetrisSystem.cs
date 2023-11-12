@@ -70,11 +70,19 @@ public struct ShouldPlaceTetrisEventComponent {}
 
 public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
 {
+    public float SpeedMultiplier = 1;
+    public float ScoreMultiplier => 1 + (SpeedMultiplier - 1) * 2;
+
+    public float DifficultyIncreaseCooldown = 15;
+    public float DifficultyIncreaseTimer = 0;
+    public float DifficultyIncreaseSpeedIncrement = 0.5f;
+
     public float Score;
     public float PreviousScore;
     public List<float> HighScores = new();
 
-    public float TimeScoreMultiplier = 20f;
+    public float ScorePerSecond = 20f;
+    public float ScorePerTile = 100f;
 
     private readonly float blockVerticalSpeed = 0.5f;
     private readonly float blockHorizontalSpeed = 2f;
@@ -218,7 +226,14 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
 
     public void Update()
     {
-        Score += time.DeltaTime * TimeScoreMultiplier;
+        DifficultyIncreaseTimer += time.DeltaTime;
+        if (DifficultyIncreaseTimer > DifficultyIncreaseCooldown)
+        {
+            SpeedMultiplier += DifficultyIncreaseSpeedIncrement;
+            DifficultyIncreaseTimer = 0;
+        }
+
+        Score += ScorePerSecond * ScoreMultiplier * time.DeltaTime;
 
         if (currentShapeRoot.IsAlive() && currentShapeRoot.Entity.Has<TetrisRootComponent>() && input.Current.Keyboard.IsKeyDown(Keys.Q) && !input.Previous.Keyboard.IsKeyDown(Keys.Q))
         {
@@ -356,7 +371,7 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
         var distanceToTravel = Math.Sign(distanceToPlayerX) * blockHorizontalSpeed * time.DeltaTime;
         distanceToTravel = Math.Clamp(distanceToTravel, -Math.Abs(distanceToPlayerX), Math.Abs(distanceToPlayerX));
 
-        transform.Position.Y -= blockVerticalSpeed * time.DeltaTime;
+        transform.Position.Y -= blockVerticalSpeed * SpeedMultiplier * time.DeltaTime;
         transform.Position.X += distanceToTravel;
 
         transform.Position.X = Math.Clamp(transform.Position.X, minX, maxX);
@@ -543,7 +558,7 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
                 return;
             }
 
-            Score += 100;
+            Score += ScorePerTile * ScoreMultiplier;
 
             tilemap.Tiles[position.X, position.Y] = default;
 
@@ -688,6 +703,8 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
 
         PreviousScore = Score;
         Score = 0;
+        SpeedMultiplier = 1;
+        DifficultyIncreaseTimer = 0;
 
         World.Create(new UpdateTilemapCollidersEventComponent());
 

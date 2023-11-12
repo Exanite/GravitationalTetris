@@ -42,9 +42,12 @@ public class TetrisUiSystem : EcsSystem, IStartSystem, IUpdateSystem, IDrawSyste
         };
 
         mainGrid.ColumnsProportions.Add(new Proportion(ProportionType.Auto));
-        mainGrid.RowsProportions.Add(new Proportion(ProportionType.Auto));
-        mainGrid.RowsProportions.Add(new Proportion(ProportionType.Auto));
-        mainGrid.RowsProportions.Add(new Proportion(ProportionType.Auto));
+        mainGrid.RowsProportions.Add(new Proportion(ProportionType.Auto)); // 0
+        mainGrid.RowsProportions.Add(new Proportion(ProportionType.Auto)); // 1
+        mainGrid.RowsProportions.Add(new Proportion(ProportionType.Auto)); // 2
+        mainGrid.RowsProportions.Add(new Proportion(ProportionType.Fill)); // 3
+        mainGrid.RowsProportions.Add(new Proportion(ProportionType.Auto)); // 4
+        mainGrid.RowsProportions.Add(new Proportion(ProportionType.Auto)); // 5
 
         // Todo Hack for now, need to research how to get screen scaling / DPI
         var fontScaling = 1f;
@@ -117,6 +120,30 @@ public class TetrisUiSystem : EcsSystem, IStartSystem, IUpdateSystem, IDrawSyste
             mainGrid.Widgets.Add(leaderboardEntries);
             Grid.SetRow(leaderboardEntries, 3);
             Grid.SetColumn(leaderboardEntries, 0);
+        }
+
+        {
+            var speed = new Label
+            {
+                Text = $"Speed: {tetrisSystem.SpeedMultiplier:F2}x",
+                Font = resourceManager.GetResource<FontSystem>("Base:FieryTurk.ttf").Value.GetFont(24 * fontScaling),
+            };
+
+            mainGrid.Widgets.Add(speed);
+            Grid.SetRow(speed, 4);
+            Grid.SetColumn(speed, 0);
+        }
+
+        {
+            var speed = new Label
+            {
+                Text = $"Score multiplier: {tetrisSystem.ScoreMultiplier:F1}x",
+                Font = resourceManager.GetResource<FontSystem>("Base:FieryTurk.ttf").Value.GetFont(28 * fontScaling),
+            };
+
+            mainGrid.Widgets.Add(speed);
+            Grid.SetRow(speed, 5);
+            Grid.SetColumn(speed, 0);
         }
 
         desktop.Root = mainGrid;
