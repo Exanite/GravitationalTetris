@@ -44,12 +44,25 @@ public class TetrisUiSystem : EcsSystem, IStartSystem, IUpdateSystem, IDrawSyste
         mainGrid.ColumnsProportions.Add(new Proportion(ProportionType.Auto));
         mainGrid.RowsProportions.Add(new Proportion(ProportionType.Auto));
         mainGrid.RowsProportions.Add(new Proportion(ProportionType.Auto));
+        mainGrid.RowsProportions.Add(new Proportion(ProportionType.Auto));
+
+        // Todo Hack for now, need to research how to get screen scaling / DPI
+        var fontScaling = 1f;
+        if (game.Window.ClientBounds.Width > 1920)
+        {
+            fontScaling = 1.5f;
+        }
+
+        if (game.Window.ClientBounds.Width > 2560)
+        {
+            fontScaling = 2f;
+        }
 
         {
             var score = new Label
             {
-                Text = $"Score: {tetrisSystem.Score}\n",
-                Font = resourceManager.GetResource<FontSystem>("Base:FieryTurk.ttf").Value.GetFont(32),
+                Text = $"Score: {tetrisSystem.Score}",
+                Font = resourceManager.GetResource<FontSystem>("Base:FieryTurk.ttf").Value.GetFont(32 * fontScaling),
             };
 
             mainGrid.Widgets.Add(score);
@@ -58,14 +71,26 @@ public class TetrisUiSystem : EcsSystem, IStartSystem, IUpdateSystem, IDrawSyste
         }
 
         {
+            var previousScore = new Label
+            {
+                Text = $"Previous score: {tetrisSystem.PreviousScore}\n",
+                Font = resourceManager.GetResource<FontSystem>("Base:FieryTurk.ttf").Value.GetFont(20 * fontScaling),
+            };
+
+            mainGrid.Widgets.Add(previousScore);
+            Grid.SetRow(previousScore, 1);
+            Grid.SetColumn(previousScore, 0);
+        }
+
+        {
             var leaderboardTitle = new Label
             {
                 Text = $"Leaderboard:",
-                Font = resourceManager.GetResource<FontSystem>("Base:FieryTurk.ttf").Value.GetFont(28),
+                Font = resourceManager.GetResource<FontSystem>("Base:FieryTurk.ttf").Value.GetFont(28 * fontScaling),
             };
 
             mainGrid.Widgets.Add(leaderboardTitle);
-            Grid.SetRow(leaderboardTitle, 1);
+            Grid.SetRow(leaderboardTitle, 2);
             Grid.SetColumn(leaderboardTitle, 0);
         }
 
@@ -86,11 +111,11 @@ public class TetrisUiSystem : EcsSystem, IStartSystem, IUpdateSystem, IDrawSyste
             var leaderboardEntries = new Label
             {
                 Text = text,
-                Font = resourceManager.GetResource<FontSystem>("Base:FieryTurk.ttf").Value.GetFont(20),
+                Font = resourceManager.GetResource<FontSystem>("Base:FieryTurk.ttf").Value.GetFont(20 * fontScaling),
             };
 
             mainGrid.Widgets.Add(leaderboardEntries);
-            Grid.SetRow(leaderboardEntries, 2);
+            Grid.SetRow(leaderboardEntries, 3);
             Grid.SetColumn(leaderboardEntries, 0);
         }
 

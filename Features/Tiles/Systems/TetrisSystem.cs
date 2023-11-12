@@ -70,6 +70,7 @@ public struct ShouldPlaceTetrisEventComponent {}
 public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
 {
     public int Score;
+    public int PreviousScore;
     public List<int> HighScores = new();
 
     private readonly float blockVerticalSpeed = 0.5f;
