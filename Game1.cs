@@ -183,5 +183,7 @@ public class Game1 : Game, IAsyncDisposable
         {
             streamWriter.WriteLine(e);
         }
+
+        Console.Error.WriteLine(e);
     }
 }
