@@ -25,4 +25,6 @@ Arch ECS: https://github.com/genaray/Arch
 
 Aether.Physics2D: https://github.com/nkast/Aether.Physics2D
 
+Myra UI: https://github.com/rds1983/Myra
+
 Fiery Turk - Font: https://www.dafont.com/fiery-turk.font
