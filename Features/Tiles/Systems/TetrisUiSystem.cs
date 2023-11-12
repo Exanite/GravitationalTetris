@@ -3,6 +3,7 @@ using Exanite.WarGames.Systems;
 using FontStashSharp;
 using Microsoft.Xna.Framework;
 using Myra;
+using Myra.Graphics2D;
 using Myra.Graphics2D.UI;
 
 namespace Exanite.WarGames.Features.Tiles.Systems;
@@ -39,6 +40,7 @@ public class TetrisUiSystem : EcsSystem, IStartSystem, IUpdateSystem, IDrawSyste
         {
             RowSpacing = 8,
             ColumnSpacing = 8,
+            Padding = new Thickness(16),
         };
 
         mainGrid.ColumnsProportions.Add(new Proportion(ProportionType.Auto));
