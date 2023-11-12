@@ -264,6 +264,14 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
         UpdateBlockPositionsQuery(World);
 
         ResetIfPlayerOutOfBoundsQuery(World);
+
+        for (var x = 0; x < tilemap.Tiles.GetLength(0); x++)
+        {
+            if (tilemap.Tiles[x, tilemap.Tiles.GetLength(1) - 1].IsWall)
+            {
+                ResetGameQuery(World);
+            }
+        }
     }
 
     [Query]
