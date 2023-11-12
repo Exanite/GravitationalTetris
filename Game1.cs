@@ -138,6 +138,7 @@ public class Game1 : Game, IAsyncDisposable
         config.RegisterUpdateSystem<InputSystem>();
         config.RegisterUpdateSystem<PlayerControllerSystem>();
         config.RegisterUpdateSystem<TetrisSystem>();
+        config.RegisterUpdateSystem<TilemapColliderSystem>();
 
         config.RegisterUpdateSystem<PhysicsSimulationSystem>();
         config.RegisterUpdateSystem<CameraProjectionSystem>();

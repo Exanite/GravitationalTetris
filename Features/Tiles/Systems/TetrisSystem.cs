@@ -12,6 +12,7 @@ using Exanite.WarGames.Features.Players.Components;
 using Exanite.WarGames.Features.Players.Systems;
 using Exanite.WarGames.Features.Resources;
 using Exanite.WarGames.Features.Sprites.Components;
+using Exanite.WarGames.Features.Tiles.Components;
 using Exanite.WarGames.Features.Time;
 using Exanite.WarGames.Features.Transforms.Components;
 using Exanite.WarGames.Systems;
@@ -205,6 +206,8 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
 
         if (!currentShapeRoot.IsAlive() || (input.Current.Keyboard.IsKeyDown(Keys.Space) && !input.Previous.Keyboard.IsKeyDown(Keys.Space)))
         {
+            PlaceBlocksQuery(World);
+
             var shape = shapes[random.Next(0, shapes.Count)];
 
             var currentShapeRootEntity = World.Create(
@@ -409,6 +412,19 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
     }
 
     [Query]
+    public void PlaceBlocks(ref TetrisRootComponent root)
+    {
+        foreach (var (x, y) in root.PredictedBlockPositions)
+        {
+            ref var tile = ref tilemap.Tiles[x, y];
+            tile.IsWall = true;
+            tile.Texture = root.Definition.Texture;
+        }
+
+        World.Create(new UpdateTilemapCollidersEventComponent());
+    }
+
+    [Query]
     [All<PlayerComponent>]
     public void ResetIfPlayerOutOfBounds(ref TransformComponent playerTransform, ref VelocityComponent velocity)
     {
@@ -426,7 +442,7 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
     {
         playerTransform.Position = new Vector2(4f, 0);
         velocity.Velocity = Vector2.Zero;
-        playerControllerSystem.SetIsGravityDown(true);;
+        playerControllerSystem.SetIsGravityDown(true);
 
         RemoveAllTetrisBlocksQuery(World);
     }

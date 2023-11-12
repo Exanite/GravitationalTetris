@@ -1,5 +1,11 @@
 using System.Collections.Generic;
+using Arch.Core;
+using Arch.Core.Extensions;
+using Arch.System;
+using Arch.System.SourceGenerator;
+using Exanite.WarGames.Features.Lifecycles.Components;
 using Exanite.WarGames.Features.Physics.Components;
+using Exanite.WarGames.Features.Tiles.Components;
 using Exanite.WarGames.Features.Transforms.Components;
 using Exanite.WarGames.Systems;
 using Microsoft.Xna.Framework;
@@ -8,7 +14,7 @@ using nkast.Aether.Physics2D.Dynamics;
 
 namespace Exanite.WarGames.Features.Tiles.Systems;
 
-public class TilemapColliderSystem : EcsSystem, IStartSystem
+public partial class TilemapColliderSystem : EcsSystem, IStartSystem, IUpdateSystem
 {
     private readonly GameTilemapData tilemap;
 
@@ -18,6 +24,36 @@ public class TilemapColliderSystem : EcsSystem, IStartSystem
     }
 
     public void Start()
+    {
+        World.Create(new UpdateTilemapCollidersEventComponent());
+    }
+
+    public void Update()
+    {
+        if (World.CountEntities(RemoveUpdateTilemapCollidersEvent_QueryDescription) > 0)
+        {
+            RemoveUpdateTilemapCollidersEventQuery(World);
+            RemoveTilemapCollidersQuery(World);
+
+            UpdateTilemapColliders();
+        }
+    }
+
+    [Query]
+    [All<UpdateTilemapCollidersEventComponent>]
+    private void RemoveUpdateTilemapCollidersEvent(Entity entity)
+    {
+        entity.Add(new DestroyedComponent());
+    }
+
+    [Query]
+    [All<TilemapColliderComponent>]
+    private void RemoveTilemapColliders(Entity entity)
+    {
+        entity.Add(new DestroyedComponent());
+    }
+
+    private void UpdateTilemapColliders()
     {
         var polygons = new List<Vertices>();
         for (var x = 0; x < tilemap.Tiles.GetLength(0); x++)
@@ -47,6 +83,6 @@ public class TilemapColliderSystem : EcsSystem, IStartSystem
         body.BodyType = BodyType.Static;
         body.CreateCompoundPolygon(polygons, 1);
 
-        World.Create(new TransformComponent(), new RigidbodyComponent(body));
+        World.Create(new TransformComponent(), new RigidbodyComponent(body), new TilemapColliderComponent());
     }
 }
