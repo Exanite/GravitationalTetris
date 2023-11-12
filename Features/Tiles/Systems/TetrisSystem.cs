@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Arch.Core;
 using Arch.Core.Extensions;
 using Arch.System;
@@ -100,6 +101,23 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
 
     public void RegisterCallbacks()
     {
+        if (File.Exists("Scores.txt"))
+        {
+            using (var streamReader = File.OpenText("Scores.txt"))
+            {
+                while (!streamReader.EndOfStream)
+                {
+                    var line = streamReader.ReadLine()!;
+                    if (float.TryParse(line, out var score))
+                    {
+                        HighScores.Add(score);
+                    }
+                }
+            }
+
+            HighScores.Sort((a, b) => -a.CompareTo(b));
+        }
+
         shapes.Add(new TetrisShapeDefinition
         {
             Shape = new bool[,]
@@ -672,6 +690,17 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
         Score = 0;
 
         World.Create(new UpdateTilemapCollidersEventComponent());
+
+        using (var stream = File.OpenWrite("Scores.txt"))
+        using (var streamWriter = new StreamWriter(stream))
+        {
+            foreach (var highScore in HighScores)
+            {
+                streamWriter.WriteLine(highScore);
+            }
+        }
+
+        HighScores.Sort((a, b) => -a.CompareTo(b));
     }
 
     [Query]
