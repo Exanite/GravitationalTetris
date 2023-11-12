@@ -135,11 +135,13 @@ public class Game1 : Game, IAsyncDisposable
         config.RegisterStartSystem<PhysicsSimulationSystem>();
         config.RegisterStartSystem<CreateEntitiesSystem>();
         config.RegisterStartSystem<TilemapColliderSystem>();
+        config.RegisterStartSystem<TetrisUiSystem>();
 
         // Update
         config.RegisterUpdateSystem<InputSystem>();
         config.RegisterUpdateSystem<PlayerControllerSystem>();
         config.RegisterUpdateSystem<TetrisSystem>();
+        config.RegisterUpdateSystem<TetrisUiSystem>();
         config.RegisterUpdateSystem<TilemapColliderSystem>();
 
         config.RegisterUpdateSystem<PhysicsSimulationSystem>();
@@ -154,6 +156,7 @@ public class Game1 : Game, IAsyncDisposable
         // Draw
         config.RegisterDrawSystem<TilemapDrawSystem>();
         config.RegisterDrawSystem<SpriteDrawSystem>();
+        config.RegisterDrawSystem<TetrisUiSystem>();
 
         return config;
     }
