@@ -1,10 +1,10 @@
 # Gravitational Tetris
 
-This game was made for the [DevLUp 2023 Wargames game jam](https://itch.io/jam/devlup-fall-23-wargames).
+This game was made for the [DevLUp 2023 Wargames game jam](https://itch.io/jam/devlup-fall-23-wargames) and can be found here on [Itch.io](https://exanite.itch.io/gravitational-tetris)!
 
 The theme was **Upside-Down**.
 
-The game can be found on [Itch.io](https://exanite.itch.io/gravitational-tetris)!
+![image](https://github.com/Exanite/GravitationalTetris/assets/42710136/407e4860-7a90-4bf4-a3a5-243797ff57c2)
 
 ## Controls
 
