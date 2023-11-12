@@ -89,80 +89,16 @@ public partial class TilemapDrawSystem : EcsSystem, IDrawSystem, ICallbackSystem
     }
 
     [Query]
-    private void DrawPlaceholders(ref TetrisRootComponent root, ref TransformComponent transform)
+    private void DrawPlaceholders(ref TetrisRootComponent root)
     {
-        DrawPlaceholders_1Query(World, ref root, ref transform);
+        DrawPlaceholders_1Query(World, ref root);
     }
-
-    public record struct Position(int X, int Y);
-
-    private readonly List<Position> blockPositions = new();
 
     [Query]
     [All<CameraComponent>]
-    private void DrawPlaceholders_1([Data] ref TetrisRootComponent tetrisRoot, [Data] ref TransformComponent tetrisTransform, ref CameraProjectionComponent cameraProjection)
+    private void DrawPlaceholders_1([Data] ref TetrisRootComponent tetrisRoot, ref CameraProjectionComponent cameraProjection)
     {
         var spriteBatch = gameSpriteBatch.SpriteBatch;
-
-        var predictedX = (int)MathF.Round(tetrisTransform.Position.X);
-        var predictedY = (int)MathF.Ceiling(tetrisTransform.Position.Y);
-
-        blockPositions.Clear();
-        for (var x = 0; x < tetrisRoot.Definition.Shape.GetLength(0); x++)
-        {
-            for (var y = 0; y < tetrisRoot.Definition.Shape.GetLength(1); y++)
-            {
-                if (!tetrisRoot.Definition.Shape[x, y])
-                {
-                    continue;
-                }
-
-                var position = new Position(x - tetrisRoot.Definition.PivotX, y - tetrisRoot.Definition.PivotY);
-                for (var i = 0; i < (int)tetrisRoot.Rotation; i++)
-                {
-                    position = new Position(-position.Y, position.X);
-                }
-
-                position.X += predictedX;
-                position.Y += predictedY;
-
-                blockPositions.Add(position);
-            }
-        }
-
-        // Calculate predictedY
-        while (true)
-        {
-            var hasFoundPredictedPosition = false;
-            for (var i = 0; i < blockPositions.Count; i++)
-            {
-                var (x, y) = blockPositions[i];
-                y--;
-
-                if (y >= tilemap.Tiles.GetLength(1))
-                {
-                    continue;
-                }
-
-                if (y < 0 || tilemap.Tiles[x, y].IsWall)
-                {
-                    hasFoundPredictedPosition = true;
-
-                    break;
-                }
-            }
-
-            if (hasFoundPredictedPosition)
-            {
-                break;
-            }
-
-            for (var i = 0; i < blockPositions.Count; i++)
-            {
-                blockPositions[i] = new Position(blockPositions[i].X, blockPositions[i].Y - 1);
-                predictedY--;
-            }
-        }
 
         spriteBatch.Begin(
             SpriteSortMode.Deferred,
@@ -174,7 +110,7 @@ public partial class TilemapDrawSystem : EcsSystem, IDrawSystem, ICallbackSystem
             cameraProjection.WorldToScreen
         );
         {
-            foreach (var blockPosition in blockPositions)
+            foreach (var blockPosition in tetrisRoot.PredictedBlockPositions)
             {
                 var sprite = placeholderTileTexture.Value;
 

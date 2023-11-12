@@ -38,6 +38,8 @@ public record TetrisShapeDefinition
     public required int PivotY;
 }
 
+public record struct Vector2Int(int X, int Y);
+
 public struct TetrisBlockComponent
 {
     public required EntityReference Root;
@@ -51,6 +53,15 @@ public struct TetrisRootComponent
 {
     public required TetrisShapeDefinition Definition;
     public required Rotation Rotation;
+
+    public readonly List<Vector2Int> BlockPositions;
+    public readonly List<Vector2Int> PredictedBlockPositions;
+
+    public TetrisRootComponent()
+    {
+        BlockPositions = new List<Vector2Int>();
+        PredictedBlockPositions = new List<Vector2Int>();
+    }
 }
 
 public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
@@ -65,15 +76,17 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
     private readonly Random random;
     private readonly GameTimeData time;
     private readonly GameInputData input;
+    private readonly GameTilemapData tilemap;
     private readonly PlayerControllerSystem playerControllerSystem; // Todo Don't do this
 
-    public TetrisSystem(ResourceManager resourceManager, Random random, GameTimeData time, GameInputData input, PlayerControllerSystem playerControllerSystem)
+    public TetrisSystem(ResourceManager resourceManager, Random random, GameTimeData time, GameInputData input, PlayerControllerSystem playerControllerSystem, GameTilemapData tilemap)
     {
         this.resourceManager = resourceManager;
         this.random = random;
         this.time = time;
         this.input = input;
         this.playerControllerSystem = playerControllerSystem;
+        this.tilemap = tilemap;
     }
 
     public void RegisterCallbacks()
@@ -243,6 +256,8 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
         }
 
         UpdateRootPositionsQuery(World);
+        UpdateRootBlockPositionsQuery(World);
+
         UpdateBlockPositionsQuery(World);
 
         ResetIfPlayerOutOfBoundsQuery(World);
@@ -301,6 +316,75 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
         transform.Position.X += distanceToTravel;
 
         transform.Position.X = Math.Clamp(transform.Position.X, minX, maxX);
+    }
+
+    [Query]
+    private void UpdateRootBlockPositions(ref TetrisRootComponent root, ref TransformComponent transform)
+    {
+        // Update logical world position of blocks
+        var predictedX = (int)MathF.Round(transform.Position.X);
+        var predictedY = (int)MathF.Ceiling(transform.Position.Y);
+
+        root.BlockPositions.Clear();
+
+        for (var x = 0; x < root.Definition.Shape.GetLength(0); x++)
+        {
+            for (var y = 0; y < root.Definition.Shape.GetLength(1); y++)
+            {
+                if (!root.Definition.Shape[x, y])
+                {
+                    continue;
+                }
+
+                var position = new Vector2Int(x - root.Definition.PivotX, y - root.Definition.PivotY);
+                for (var i = 0; i < (int)root.Rotation; i++)
+                {
+                    position = new Vector2Int(-position.Y, position.X);
+                }
+
+                position.X += predictedX;
+                position.Y += predictedY;
+
+                root.BlockPositions.Add(position);
+            }
+        }
+
+        // Update predicted logical world position of blocks
+        root.PredictedBlockPositions.Clear();
+        root.PredictedBlockPositions.AddRange(root.BlockPositions);
+
+        while (true)
+        {
+            var hasFoundPredictedPosition = false;
+            for (var i = 0; i < root.PredictedBlockPositions.Count; i++)
+            {
+                var (x, y) = root.PredictedBlockPositions[i];
+                y--;
+
+                if (y >= tilemap.Tiles.GetLength(1))
+                {
+                    continue;
+                }
+
+                if (y < 0 || tilemap.Tiles[x, y].IsWall)
+                {
+                    hasFoundPredictedPosition = true;
+
+                    break;
+                }
+            }
+
+            if (hasFoundPredictedPosition)
+            {
+                break;
+            }
+
+            for (var i = 0; i < root.PredictedBlockPositions.Count; i++)
+            {
+                root.PredictedBlockPositions[i] = new Vector2Int(root.PredictedBlockPositions[i].X, root.PredictedBlockPositions[i].Y - 1);
+                predictedY--;
+            }
+        }
     }
 
     [Query]
