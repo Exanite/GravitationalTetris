@@ -69,9 +69,11 @@ public struct ShouldPlaceTetrisEventComponent {}
 
 public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
 {
-    public int Score;
-    public int PreviousScore;
-    public List<int> HighScores = new();
+    public float Score;
+    public float PreviousScore;
+    public List<float> HighScores = new();
+
+    public float TimeScoreMultiplier = 10f;
 
     private readonly float blockVerticalSpeed = 0.5f;
     private readonly float blockHorizontalSpeed = 2f;
@@ -198,6 +200,8 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
 
     public void Update()
     {
+        Score += time.DeltaTime * TimeScoreMultiplier;
+
         if (currentShapeRoot.IsAlive() && currentShapeRoot.Entity.Has<TetrisRootComponent>() && input.Current.Keyboard.IsKeyDown(Keys.Q) && !input.Previous.Keyboard.IsKeyDown(Keys.Q))
         {
             ref var tetrisRootComponent = ref currentShapeRoot.Entity.Get<TetrisRootComponent>();
@@ -521,6 +525,8 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
                 return;
             }
 
+            Score += 100;
+
             tilemap.Tiles[position.X, position.Y] = default;
 
             foreach (var direction in Directions)
@@ -658,6 +664,12 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
                 tilemap.Tiles[x, y] = default;
             }
         }
+
+        HighScores.Add(Score);
+        HighScores.Sort((a, b) => -a.CompareTo(b));
+
+        PreviousScore = Score;
+        Score = 0;
 
         World.Create(new UpdateTilemapCollidersEventComponent());
     }

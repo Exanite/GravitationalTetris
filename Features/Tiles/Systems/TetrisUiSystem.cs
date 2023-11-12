@@ -61,7 +61,7 @@ public class TetrisUiSystem : EcsSystem, IStartSystem, IUpdateSystem, IDrawSyste
         {
             var score = new Label
             {
-                Text = $"Score: {tetrisSystem.Score}",
+                Text = $"Score: {(int)tetrisSystem.Score}",
                 Font = resourceManager.GetResource<FontSystem>("Base:FieryTurk.ttf").Value.GetFont(32 * fontScaling),
             };
 
@@ -73,7 +73,7 @@ public class TetrisUiSystem : EcsSystem, IStartSystem, IUpdateSystem, IDrawSyste
         {
             var previousScore = new Label
             {
-                Text = $"Previous score: {tetrisSystem.PreviousScore}\n",
+                Text = $"Previous score: {(int)tetrisSystem.PreviousScore}\n",
                 Font = resourceManager.GetResource<FontSystem>("Base:FieryTurk.ttf").Value.GetFont(20 * fontScaling),
             };
 
@@ -105,7 +105,7 @@ public class TetrisUiSystem : EcsSystem, IStartSystem, IUpdateSystem, IDrawSyste
 
                 var score = tetrisSystem.HighScores.Count > i ? tetrisSystem.HighScores[i] : 0;
 
-                text += $"{i + 1}. {score}";
+                text += $"{i + 1}. {(int)score}";
             }
 
             var leaderboardEntries = new Label
