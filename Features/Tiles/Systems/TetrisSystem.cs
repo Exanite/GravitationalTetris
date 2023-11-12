@@ -263,8 +263,9 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
 
         UpdateBlockPositionsQuery(World);
 
-        ResetIfPlayerOutOfBoundsQuery(World);
+        MovePlayerOutOfTileQuery(World);
 
+        ResetIfPlayerOutOfBoundsQuery(World);
         for (var x = 0; x < tilemap.Tiles.GetLength(0); x++)
         {
             if (tilemap.Tiles[x, tilemap.Tiles.GetLength(1) - 1].IsWall)
@@ -589,9 +590,34 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
 
     [Query]
     [All<PlayerComponent>]
-    private void ResetIfPlayerOutOfBounds(ref TransformComponent playerTransform, ref VelocityComponent velocity)
+    private void MovePlayerOutOfTile(ref TransformComponent transform)
     {
-        if (!(playerTransform.Position.Y < -1.5f) && !(playerTransform.Position.Y > 20.5f))
+        var position = new Vector2Int((int)MathF.Round(transform.Position.X), (int)MathF.Round(transform.Position.Y));
+        if (position.X < 0
+            || position.Y < 0
+            || position.X >= tilemap.Tiles.GetLength(0)
+            || position.Y >= tilemap.Tiles.GetLength(1))
+        {
+            return;
+        }
+
+        if (tilemap.Tiles[position.X, position.Y].IsWall)
+        {
+            var safeY = position.Y;
+            while (safeY < tilemap.Tiles.GetLength(1) && tilemap.Tiles[position.X, safeY].IsWall)
+            {
+                safeY++;
+            }
+
+            transform.Position.Y = safeY;
+        }
+    }
+
+    [Query]
+    [All<PlayerComponent>]
+    private void ResetIfPlayerOutOfBounds(ref TransformComponent transform, ref VelocityComponent velocity)
+    {
+        if (!(transform.Position.Y < -1.5f) && !(transform.Position.Y > 20.5f))
         {
             return;
         }
