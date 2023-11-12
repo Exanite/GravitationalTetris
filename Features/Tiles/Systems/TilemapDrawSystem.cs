@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Arch.System;
 using Arch.System.SourceGenerator;
 using Exanite.Core.Utilities;
@@ -8,7 +7,6 @@ using Exanite.WarGames.Features.Cameras.Components;
 using Exanite.WarGames.Features.Resources;
 using Exanite.WarGames.Features.Sprites;
 using Exanite.WarGames.Features.Time;
-using Exanite.WarGames.Features.Transforms.Components;
 using Exanite.WarGames.Systems;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
