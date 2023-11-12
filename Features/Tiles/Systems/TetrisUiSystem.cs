@@ -1,10 +1,8 @@
 using Exanite.ResourceManagement;
 using Exanite.WarGames.Systems;
-using FontStashSharp.RichText;
+using FontStashSharp;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Myra;
-using Myra.Graphics2D.Brushes;
 using Myra.Graphics2D.UI;
 
 namespace Exanite.WarGames.Features.Tiles.Systems;
@@ -15,11 +13,13 @@ public class TetrisUiSystem : EcsSystem, IStartSystem, IUpdateSystem, IDrawSyste
 
     private readonly Game game;
     private readonly ResourceManager resourceManager;
+    private readonly TetrisSystem tetrisSystem;
 
-    public TetrisUiSystem(Game game, ResourceManager resourceManager)
+    public TetrisUiSystem(Game game, ResourceManager resourceManager, TetrisSystem tetrisSystem)
     {
         this.game = game;
         this.resourceManager = resourceManager;
+        this.tetrisSystem = tetrisSystem;
     }
 
     public void Start()
@@ -48,7 +48,8 @@ public class TetrisUiSystem : EcsSystem, IStartSystem, IUpdateSystem, IDrawSyste
         {
             var score = new Label
             {
-                Text = $"Score: {12345}\n",
+                Text = $"Score: {tetrisSystem.Score}\n",
+                Font = resourceManager.GetResource<FontSystem>("Base:FieryTurk.ttf").Value.GetFont(32),
             };
 
             mainGrid.Widgets.Add(score);
@@ -60,6 +61,7 @@ public class TetrisUiSystem : EcsSystem, IStartSystem, IUpdateSystem, IDrawSyste
             var leaderboardTitle = new Label
             {
                 Text = $"Leaderboard:",
+                Font = resourceManager.GetResource<FontSystem>("Base:FieryTurk.ttf").Value.GetFont(28),
             };
 
             mainGrid.Widgets.Add(leaderboardTitle);
@@ -68,9 +70,23 @@ public class TetrisUiSystem : EcsSystem, IStartSystem, IUpdateSystem, IDrawSyste
         }
 
         {
+            var text = string.Empty;
+            for (var i = 0; i < 10; i++)
+            {
+                if (i != 0)
+                {
+                    text += "\n";
+                }
+
+                var score = tetrisSystem.HighScores.Count > i ? tetrisSystem.HighScores[i] : 0;
+
+                text += $"{i + 1}. {score}";
+            }
+
             var leaderboardEntries = new Label
             {
-                Text = $"1. 34534534\n1. 34534534\n1. 34534534\n1. 34534534",
+                Text = text,
+                Font = resourceManager.GetResource<FontSystem>("Base:FieryTurk.ttf").Value.GetFont(20),
             };
 
             mainGrid.Widgets.Add(leaderboardEntries);

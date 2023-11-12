@@ -69,6 +69,9 @@ public struct ShouldPlaceTetrisEventComponent {}
 
 public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
 {
+    public int Score;
+    public List<int> HighScores = new();
+
     private readonly float blockVerticalSpeed = 0.5f;
     private readonly float blockHorizontalSpeed = 2f;
     private EntityReference currentShapeRoot;
