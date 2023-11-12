@@ -43,7 +43,7 @@ public class ResourcesModule : Module
 
                 resourceManager.Mount("Base:", new DirectoryFileSystem(contentPath), true);
 
-                resourceManager.Mount("Myra:", new DllResourceFileSystem(typeof(MyraEnvironment).Assembly, "Myra.Resources."));
+                resourceManager.Mount("Myra:", new DirectoryFileSystem(Path.Join(contentPath, "Myra")));
 
                 resourceManager.RegisterLoader<Texture2D>(loadOperation =>
                 {
