@@ -31,6 +31,8 @@ public class Game1 : Game, IAsyncDisposable
 
     public Game1()
     {
+        Window.Title = "Gravitational Tetris";
+
         container = BuildContainer();
         systemScheduler = container.Resolve<SystemScheduler>();
         time = container.Resolve<GameTimeData>();
