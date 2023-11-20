@@ -6,7 +6,7 @@ using Myra;
 using Myra.Graphics2D;
 using Myra.Graphics2D.UI;
 
-namespace Exanite.WarGames.Features.Tiles.Systems;
+namespace Exanite.WarGames.Features.Tetris.Systems;
 
 public class TetrisUiSystem : EcsSystem, IStartSystem, IUpdateSystem, IDrawSystem
 {

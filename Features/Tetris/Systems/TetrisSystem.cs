@@ -13,6 +13,8 @@ using Exanite.WarGames.Features.Players.Components;
 using Exanite.WarGames.Features.Players.Systems;
 using Exanite.WarGames.Features.Resources;
 using Exanite.WarGames.Features.Sprites.Components;
+using Exanite.WarGames.Features.Tetris.Components;
+using Exanite.WarGames.Features.Tiles;
 using Exanite.WarGames.Features.Tiles.Components;
 using Exanite.WarGames.Features.Time;
 using Exanite.WarGames.Features.Transforms.Components;
@@ -22,51 +24,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using nkast.Aether.Physics2D.Dynamics;
 
-namespace Exanite.WarGames.Features.Tiles.Systems;
-
-public enum Rotation
-{
-    R0 = 0,
-    R90 = 1,
-    R180 = 2,
-    R270 = 3,
-}
-
-public record TetrisShapeDefinition
-{
-    public required bool[,] Shape;
-    public required IResourceHandle<Texture2D> Texture;
-    public required int PivotX;
-    public required int PivotY;
-}
-
-public record struct Vector2Int(int X, int Y);
-
-public struct TetrisBlockComponent
-{
-    public required EntityReference Root;
-
-    public required TetrisShapeDefinition Definition;
-    public required int LocalX;
-    public required int LocalY;
-}
-
-public struct TetrisRootComponent
-{
-    public required TetrisShapeDefinition Definition;
-    public required Rotation Rotation;
-
-    public readonly List<Vector2Int> BlockPositions;
-    public readonly List<Vector2Int> PredictedBlockPositions;
-
-    public TetrisRootComponent()
-    {
-        BlockPositions = new List<Vector2Int>();
-        PredictedBlockPositions = new List<Vector2Int>();
-    }
-}
-
-public struct ShouldPlaceTetrisEventComponent {}
+namespace Exanite.WarGames.Features.Tetris.Systems;
 
 public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
 {
@@ -238,13 +196,13 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
         if (currentShapeRoot.IsAlive() && currentShapeRoot.Entity.Has<TetrisRootComponent>() && input.Current.Keyboard.IsKeyDown(Keys.Q) && !input.Previous.Keyboard.IsKeyDown(Keys.Q))
         {
             ref var tetrisRootComponent = ref currentShapeRoot.Entity.Get<TetrisRootComponent>();
-            tetrisRootComponent.Rotation = (Rotation)(((int)tetrisRootComponent.Rotation + 1) % 4);
+            tetrisRootComponent.Rotation = (TetrisRotation)(((int)tetrisRootComponent.Rotation + 1) % 4);
         }
 
         if (currentShapeRoot.IsAlive() && currentShapeRoot.Entity.Has<TetrisRootComponent>() && input.Current.Keyboard.IsKeyDown(Keys.E) && !input.Previous.Keyboard.IsKeyDown(Keys.E))
         {
             ref var tetrisRootComponent = ref currentShapeRoot.Entity.Get<TetrisRootComponent>();
-            tetrisRootComponent.Rotation = (Rotation)(((int)tetrisRootComponent.Rotation + 1) % 4);
+            tetrisRootComponent.Rotation = (TetrisRotation)(((int)tetrisRootComponent.Rotation + 1) % 4);
         }
 
         if (!currentShapeRoot.IsAlive() || (input.Current.Keyboard.IsKeyDown(Keys.Space) && !input.Previous.Keyboard.IsKeyDown(Keys.Space)) || World.CountEntities(ShouldShouldPlaceTetris_QueryDescription) > 0)
@@ -257,7 +215,7 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
                 new TetrisRootComponent
                 {
                     Definition = shape,
-                    Rotation = (Rotation)random.Next(0, 4),
+                    Rotation = (TetrisRotation)random.Next(0, 4),
                 },
                 new TransformComponent
                 {
@@ -337,28 +295,28 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
 
         switch (root.Rotation)
         {
-            case Rotation.R0:
+            case TetrisRotation.R0:
             {
                 minX = minX + root.Definition.PivotX;
                 maxX = maxX + root.Definition.PivotX - root.Definition.Shape.GetLength(0) + 1;
 
                 break;
             }
-            case Rotation.R90:
+            case TetrisRotation.R90:
             {
                 minX = minX - root.Definition.PivotY + root.Definition.Shape.GetLength(1) - 1;
                 maxX = maxX - root.Definition.PivotY;
 
                 break;
             }
-            case Rotation.R180:
+            case TetrisRotation.R180:
             {
                 minX = minX - root.Definition.PivotX + root.Definition.Shape.GetLength(0) - 1;
                 maxX = maxX - root.Definition.PivotX;
 
                 break;
             }
-            case Rotation.R270:
+            case TetrisRotation.R270:
             {
                 minX = minX + root.Definition.PivotY;
                 maxX = maxX + root.Definition.PivotY - root.Definition.Shape.GetLength(1) + 1;
@@ -396,10 +354,10 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
                     continue;
                 }
 
-                var position = new Vector2Int(x - root.Definition.PivotX, y - root.Definition.PivotY);
+                var position = new TetrisVector2Int(x - root.Definition.PivotX, y - root.Definition.PivotY);
                 for (var i = 0; i < (int)root.Rotation; i++)
                 {
-                    position = new Vector2Int(-position.Y, position.X);
+                    position = new TetrisVector2Int(-position.Y, position.X);
                 }
 
                 position.X += predictedX;
@@ -441,7 +399,7 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
 
             for (var i = 0; i < root.PredictedBlockPositions.Count; i++)
             {
-                root.PredictedBlockPositions[i] = new Vector2Int(root.PredictedBlockPositions[i].X, root.PredictedBlockPositions[i].Y - 1);
+                root.PredictedBlockPositions[i] = new TetrisVector2Int(root.PredictedBlockPositions[i].X, root.PredictedBlockPositions[i].Y - 1);
                 predictedY--;
             }
         }
@@ -491,7 +449,7 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
         RemoveMatchingBlockTiles(ref root);
     }
 
-    private static readonly Vector2Int[] Directions =
+    private static readonly TetrisVector2Int[] Directions =
     {
         new(1, 0),
         new(-1, 0),
@@ -507,7 +465,7 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
         {
             foreach (var direction in Directions)
             {
-                var targetPosition = new Vector2Int(position.X + direction.X, position.Y + direction.Y);
+                var targetPosition = new TetrisVector2Int(position.X + direction.X, position.Y + direction.Y);
                 if (IsMatchingTileAndNotPartOfSelf(targetPosition, ref root))
                 {
                     RecursiveRemove(targetPosition, root.Definition.Texture);
@@ -520,7 +478,7 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
             }
         }
 
-        bool IsMatchingTileAndNotPartOfSelf(Vector2Int position, ref TetrisRootComponent root)
+        bool IsMatchingTileAndNotPartOfSelf(TetrisVector2Int position, ref TetrisRootComponent root)
         {
             if (root.PredictedBlockPositions.Contains(position))
             {
@@ -543,7 +501,7 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
             return true;
         }
 
-        void RecursiveRemove(Vector2Int position, IResourceHandle<Texture2D> texture)
+        void RecursiveRemove(TetrisVector2Int position, IResourceHandle<Texture2D> texture)
         {
             if (position.X < 0
                 || position.Y < 0
@@ -564,7 +522,7 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
 
             foreach (var direction in Directions)
             {
-                var targetPosition = new Vector2Int(position.X + direction.X, position.Y + direction.Y);
+                var targetPosition = new TetrisVector2Int(position.X + direction.X, position.Y + direction.Y);
                 RecursiveRemove(targetPosition, texture);
             }
         }
@@ -588,7 +546,7 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
             {
                 if (tilemap.Tiles[x, 0].IsWall)
                 {
-                    RecursiveMarkRooted(new Vector2Int(x, 0));
+                    RecursiveMarkRooted(new TetrisVector2Int(x, 0));
                 }
             }
 
@@ -613,7 +571,7 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
             return wereAnyBlocksMoved;
         }
 
-        void RecursiveMarkRooted(Vector2Int position)
+        void RecursiveMarkRooted(TetrisVector2Int position)
         {
             if (position.X < 0
                 || position.Y < 0
@@ -637,7 +595,7 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
 
             foreach (var direction in Directions)
             {
-                var targetPosition = new Vector2Int(position.X + direction.X, position.Y + direction.Y);
+                var targetPosition = new TetrisVector2Int(position.X + direction.X, position.Y + direction.Y);
                 RecursiveMarkRooted(targetPosition);
             }
         }
@@ -647,7 +605,7 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
     [All<PlayerComponent>]
     private void MovePlayerOutOfTile(ref TransformComponent transform)
     {
-        var position = new Vector2Int((int)MathF.Round(transform.Position.X), (int)MathF.Round(transform.Position.Y));
+        var position = new TetrisVector2Int((int)MathF.Round(transform.Position.X), (int)MathF.Round(transform.Position.Y));
         if (position.X < 0
             || position.Y < 0
             || position.X >= tilemap.Tiles.GetLength(0)

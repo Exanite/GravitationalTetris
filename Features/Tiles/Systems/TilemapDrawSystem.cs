@@ -6,6 +6,7 @@ using Exanite.ResourceManagement;
 using Exanite.WarGames.Features.Cameras.Components;
 using Exanite.WarGames.Features.Resources;
 using Exanite.WarGames.Features.Sprites;
+using Exanite.WarGames.Features.Tetris.Components;
 using Exanite.WarGames.Features.Time;
 using Exanite.WarGames.Systems;
 using Microsoft.Xna.Framework;
