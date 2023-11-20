@@ -1,6 +1,5 @@
 using Exanite.ResourceManagement;
 using Exanite.WarGames.Features.Cameras.Components;
-using Exanite.WarGames.Features.Characters.Components;
 using Exanite.WarGames.Features.Physics.Components;
 using Exanite.WarGames.Features.Players.Components;
 using Exanite.WarGames.Features.Resources;

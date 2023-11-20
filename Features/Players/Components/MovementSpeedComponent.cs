@@ -1,4 +1,4 @@
-namespace Exanite.WarGames.Features.Characters.Components;
+namespace Exanite.WarGames.Features.Players.Components;
 
 public struct MovementSpeedComponent
 {

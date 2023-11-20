@@ -2,7 +2,6 @@ using System;
 using Arch.System;
 using Arch.System.SourceGenerator;
 using Exanite.Core.Utilities;
-using Exanite.WarGames.Features.Characters.Components;
 using Exanite.WarGames.Features.Physics.Components;
 using Exanite.WarGames.Features.Players.Components;
 using Exanite.WarGames.Features.Time;
