@@ -34,11 +34,9 @@ public class ResourcesModule : Module
                 var resourceManager = e.Instance;
                 var graphicsDeviceManager = e.Context.Resolve<GraphicsDeviceManager>();
 
-                var contentPath = GetContentPath();
+                resourceManager.Mount("Base:", new DirectoryFileSystem(GameDirectories.ContentDirectory), true);
 
-                resourceManager.Mount("Base:", new DirectoryFileSystem(contentPath), true);
-
-                resourceManager.Mount("Myra:", new DirectoryFileSystem(Path.Join(contentPath, "Myra")));
+                resourceManager.Mount("Myra:", new DirectoryFileSystem(Path.Join(GameDirectories.ContentDirectory, "Myra")));
 
                 resourceManager.RegisterLoader<Texture2D>(loadOperation =>
                 {
@@ -246,14 +244,5 @@ public class ResourcesModule : Module
                     return Task.CompletedTask;
                 });
             });
-    }
-
-    private string GetContentPath()
-    {
-#if DEBUG
-        return Path.Join(AppContext.BaseDirectory, "../../../Content");
-#else
-        return Path.Join(AppContext.BaseDirectory, "Content");
-#endif
     }
 }
