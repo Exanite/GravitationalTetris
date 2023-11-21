@@ -34,11 +34,7 @@ public class ResourcesModule : Module
                 var resourceManager = e.Instance;
                 var graphicsDeviceManager = e.Context.Resolve<GraphicsDeviceManager>();
 
-#if DEBUG
-                var contentPath = "../../../Content";
-#else
-                var contentPath = "Content";
-#endif
+                var contentPath = GetContentPath();
 
                 resourceManager.Mount("Base:", new DirectoryFileSystem(contentPath), true);
 
@@ -250,5 +246,14 @@ public class ResourcesModule : Module
                     return Task.CompletedTask;
                 });
             });
+    }
+
+    private string GetContentPath()
+    {
+#if DEBUG
+        return Path.Join(AppContext.BaseDirectory, "../../../Content");
+#else
+        return Path.Join(AppContext.BaseDirectory, "Content");
+#endif
     }
 }
