@@ -19,5 +19,5 @@ public static class GameDirectories
         }
     }
 
-    public static string SaveDirectory => Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Exanite", "Exanite.Extraction");
+    public static string SaveDirectory => Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Exanite", "GravitationalTetris");
 }
