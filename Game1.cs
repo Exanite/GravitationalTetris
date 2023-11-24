@@ -179,8 +179,8 @@ public class Game1 : Game, IAsyncDisposable
 
     private void HandleException(Exception e)
     {
-        Directory.CreateDirectory(GameDirectories.SaveDirectory);
-        using (var stream = File.Open(Path.Join(GameDirectories.SaveDirectory, "Game.log"), FileMode.Append))
+        Directory.CreateDirectory(GameDirectories.PersistentDataDirectory);
+        using (var stream = File.Open(Path.Join(GameDirectories.PersistentDataDirectory, "Game.log"), FileMode.Append))
         using (var streamWriter = new StreamWriter(stream))
         {
             streamWriter.WriteLine(e);
