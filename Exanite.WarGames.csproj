@@ -28,10 +28,7 @@
     <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Arch.EventBus" Version="1.0.2"/>
     <PackageReference Include="Arch.LowLevel" Version="1.0.9"/>
-    <PackageReference Include="Arch.Persistence" Version="1.0.3"/>
-    <PackageReference Include="Arch.Relationships" Version="1.0.1"/>
     <PackageReference Include="Arch.System" Version="1.0.2"/>
     <PackageReference Include="Arch.System.SourceGenerator" Version="1.1.2"/>
     <PackageReference Include="Autofac" Version="7.1.0"/>
