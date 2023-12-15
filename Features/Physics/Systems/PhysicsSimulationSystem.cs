@@ -3,11 +3,11 @@ using Arch.Core.Extensions;
 using Arch.System;
 using Arch.System.SourceGenerator;
 using Exanite.Core.HighPerformance;
+using Exanite.Ecs.Systems;
 using Exanite.WarGames.Features.Lifecycles.Components;
 using Exanite.WarGames.Features.Physics.Components;
 using Exanite.WarGames.Features.Time;
 using Exanite.WarGames.Features.Transforms.Components;
-using Exanite.WarGames.Systems;
 using Microsoft.Xna.Framework;
 using World = nkast.Aether.Physics2D.Dynamics.World;
 

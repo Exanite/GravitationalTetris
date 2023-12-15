@@ -1,7 +1,7 @@
 using Arch.System;
+using Exanite.Ecs.Systems;
 using Exanite.WarGames.Features.Cameras.Components;
 using Exanite.WarGames.Features.Transforms.Components;
-using Exanite.WarGames.Systems;
 using Microsoft.Xna.Framework;
 
 namespace Exanite.WarGames.Features.Cameras.Systems;

@@ -1,5 +1,5 @@
+using Exanite.Ecs.Systems;
 using Exanite.ResourceManagement;
-using Exanite.WarGames.Systems;
 
 namespace Exanite.WarGames.Features.Resources.Systems;
 

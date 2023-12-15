@@ -1,3 +1,4 @@
+using Exanite.Ecs.Systems;
 using Exanite.ResourceManagement;
 using Exanite.WarGames.Features.Cameras.Components;
 using Exanite.WarGames.Features.Physics.Components;
@@ -5,7 +6,6 @@ using Exanite.WarGames.Features.Players.Components;
 using Exanite.WarGames.Features.Resources;
 using Exanite.WarGames.Features.Sprites.Components;
 using Exanite.WarGames.Features.Transforms.Components;
-using Exanite.WarGames.Systems;
 using Microsoft.Xna.Framework;
 using nkast.Aether.Physics2D.Dynamics;
 
@@ -25,7 +25,7 @@ public class CreateEntitiesSystem : EcsSystem, IStartSystem
         // Camera
         World.Create(
             new CameraComponent(20),
-            new TransformComponent()
+            new TransformComponent
             {
                 Position = new Vector2(5f - 0.5f, 10f - 0.5f),
             },
@@ -51,7 +51,7 @@ public class CreateEntitiesSystem : EcsSystem, IStartSystem
 
         World.Create(
             new PlayerComponent(),
-            new TransformComponent()
+            new TransformComponent
             {
                 Position = new Vector2(4f, 0),
                 Size = new Vector2(1, 1),
@@ -61,7 +61,7 @@ public class CreateEntitiesSystem : EcsSystem, IStartSystem
             new RigidbodyComponent(playerBody),
             new VelocityComponent(),
             new MovementSpeedComponent(5),
-            new PlayerMovement()
+            new PlayerMovement
             {
                 SmoothTime = 0.05f,
             });

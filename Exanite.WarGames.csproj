@@ -29,8 +29,8 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Arch.EventBus" Version="1.0.2"/>
-    <PackageReference Include="Arch.LowLevel" Version="1.0.9" />
-    <PackageReference Include="Arch.Persistence" Version="1.0.3" />
+    <PackageReference Include="Arch.LowLevel" Version="1.0.9"/>
+    <PackageReference Include="Arch.Persistence" Version="1.0.3"/>
     <PackageReference Include="Arch.Relationships" Version="1.0.1"/>
     <PackageReference Include="Arch.System" Version="1.0.2"/>
     <PackageReference Include="Arch.System.SourceGenerator" Version="1.1.2"/>
@@ -39,12 +39,13 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3"/>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Arch\src\Arch\Arch.csproj" />
+    <ProjectReference Include="..\Arch\src\Arch\Arch.csproj"/>
     <ProjectReference Include="..\Exanite.Core\Exanite.Core.FNA.csproj"/>
-    <ProjectReference Include="..\Exanite.ResourceManagement\Exanite.ResourceManagement.FNA.csproj" />
+    <ProjectReference Include="..\Exanite.Ecs\Exanite.Ecs.csproj"/>
+    <ProjectReference Include="..\Exanite.ResourceManagement\Exanite.ResourceManagement.FNA.csproj"/>
     <ProjectReference Include="..\FNA\FNA.Core.csproj"/>
-    <ProjectReference Include="..\FontStashSharp\src\XNA\FontStashSharp.FNA.Core.csproj" />
-    <ProjectReference Include="..\Myra\src\Myra\Myra.FNA.Core.csproj" />
+    <ProjectReference Include="..\FontStashSharp\src\XNA\FontStashSharp.FNA.Core.csproj"/>
+    <ProjectReference Include="..\Myra\src\Myra\Myra.FNA.Core.csproj"/>
     <ProjectReference Include="..\Physics2D\Aether.Physics2D.FNA.csproj"/>
   </ItemGroup>
 

@@ -1,5 +1,5 @@
+using Exanite.Ecs.Systems;
 using Exanite.ResourceManagement;
-using Exanite.WarGames.Systems;
 using FontStashSharp;
 using Microsoft.Xna.Framework;
 using Myra;
@@ -90,7 +90,7 @@ public class TetrisUiSystem : EcsSystem, IStartSystem, IUpdateSystem, IDrawSyste
         {
             var leaderboardTitle = new Label
             {
-                Text = $"Leaderboard:",
+                Text = "Leaderboard:",
                 Font = resourceManager.GetResource<FontSystem>("Base:FieryTurk.ttf").Value.GetFont(28 * fontScaling),
             };
 

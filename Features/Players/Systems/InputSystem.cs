@@ -1,4 +1,4 @@
-using Exanite.WarGames.Systems;
+using Exanite.Ecs.Systems;
 using Microsoft.Xna.Framework.Input;
 
 namespace Exanite.WarGames.Features.Players.Systems;
