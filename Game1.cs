@@ -142,37 +142,23 @@ public class Game1 : Game, IAsyncDisposable
     {
         var config = new SystemScheduler.Config();
 
-        // Callbacks
-        config.RegisterCallbackSystem<PhysicsContactSystem>();
-        config.RegisterCallbackSystem<TetrisSystem>();
-        config.RegisterCallbackSystem<TilemapDrawSystem>();
+        config.SimpleRegisterSystem<CreateEntitiesSystem>();
 
-        // Start
-        config.RegisterStartSystem<PhysicsSimulationSystem>();
-        config.RegisterStartSystem<CreateEntitiesSystem>();
-        config.RegisterStartSystem<TilemapColliderSystem>();
-        config.RegisterStartSystem<TetrisUiSystem>();
+        config.SimpleRegisterSystem<PhysicsSimulationSystem>();
+        config.SimpleRegisterSystem<PhysicsContactSystem>();
 
-        // Update
-        config.RegisterUpdateSystem<InputSystem>();
-        config.RegisterUpdateSystem<PlayerControllerSystem>();
-        config.RegisterUpdateSystem<TetrisSystem>();
-        config.RegisterUpdateSystem<TetrisUiSystem>();
-        config.RegisterUpdateSystem<TilemapColliderSystem>();
+        config.SimpleRegisterSystem<InputSystem>();
+        config.SimpleRegisterSystem<PlayerControllerSystem>();
+        config.SimpleRegisterSystem<TetrisSystem>();
+        config.SimpleRegisterSystem<TilemapColliderSystem>();
+        config.SimpleRegisterSystem<CameraProjectionSystem>();
 
-        config.RegisterUpdateSystem<PhysicsSimulationSystem>();
-        config.RegisterUpdateSystem<CameraProjectionSystem>();
+        config.SimpleRegisterSystem<TilemapDrawSystem>();
+        config.SimpleRegisterSystem<SpriteDrawSystem>();
+        config.SimpleRegisterSystem<TetrisUiSystem>();
 
-        config.RegisterUpdateSystem<RunResourceManagerSystem>();
-
-        // Cleanup
-        config.RegisterCleanupSystem<PhysicsSimulationSystem>();
-        config.RegisterCleanupSystem<RemoveDestroyedSystem>();
-
-        // Draw
-        config.RegisterDrawSystem<TilemapDrawSystem>();
-        config.RegisterDrawSystem<SpriteDrawSystem>();
-        config.RegisterDrawSystem<TetrisUiSystem>();
+        config.SimpleRegisterSystem<RemoveDestroyedSystem>();
+        config.SimpleRegisterSystem<RunResourceManagerSystem>();
 
         return config;
     }
