@@ -28,6 +28,8 @@ namespace Exanite.WarGames.Features.Tetris.Systems;
 
 public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
 {
+    public static readonly string ScoresFilePath = Path.Join(GameDirectories.PersistentDataDirectory, "Scores.txt");
+
     public float SpeedMultiplier = 1;
     public float ScoreMultiplier => SpeedMultiplier * 2;
 
@@ -67,9 +69,9 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
 
     public void RegisterCallbacks()
     {
-        if (File.Exists("Scores.txt"))
+        if (File.Exists(ScoresFilePath))
         {
-            using (var streamReader = File.OpenText("Scores.txt"))
+            using (var streamReader = File.OpenText(ScoresFilePath))
             {
                 while (!streamReader.EndOfStream)
                 {
@@ -667,7 +669,7 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
         World.Create(new UpdateTilemapCollidersEventComponent());
 
         Directory.CreateDirectory(GameDirectories.PersistentDataDirectory);
-        using (var stream = new FileStream(Path.Join(GameDirectories.PersistentDataDirectory, "Scores.txt"), FileMode.Append))
+        using (var stream = new FileStream(ScoresFilePath, FileMode.Append))
         using (var streamWriter = new StreamWriter(stream))
         {
             streamWriter.WriteLine(PreviousScore);
