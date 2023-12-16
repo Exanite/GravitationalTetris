@@ -14,7 +14,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Exanite.WarGames.Features.Tiles.Systems;
 
-public partial class TilemapDrawSystem : EcsSystem, IDrawSystem, IInitializeSystem
+public partial class TilemapRenderSystem : EcsSystem, IRenderSystem, IInitializeSystem
 {
     private readonly GameSpriteBatch gameSpriteBatch;
     private readonly GameTilemapData tilemap;
@@ -24,7 +24,7 @@ public partial class TilemapDrawSystem : EcsSystem, IDrawSystem, IInitializeSyst
     private IResourceHandle<Texture2D> emptyTileTexture = null!;
     private IResourceHandle<Texture2D> placeholderTileTexture = null!;
 
-    public TilemapDrawSystem(GameSpriteBatch gameSpriteBatch, GameTilemapData tilemap, ResourceManager resourceManager, GameTimeData time)
+    public TilemapRenderSystem(GameSpriteBatch gameSpriteBatch, GameTilemapData tilemap, ResourceManager resourceManager, GameTimeData time)
     {
         this.gameSpriteBatch = gameSpriteBatch;
         this.tilemap = tilemap;
@@ -38,7 +38,7 @@ public partial class TilemapDrawSystem : EcsSystem, IDrawSystem, IInitializeSyst
         placeholderTileTexture = resourceManager.GetResource(BaseMod.TilePlaceholder);
     }
 
-    public void Draw()
+    public void Render()
     {
         DrawTilesQuery(World);
         DrawPlaceholdersQuery(World);

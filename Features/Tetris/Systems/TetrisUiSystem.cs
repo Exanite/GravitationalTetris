@@ -8,7 +8,7 @@ using Myra.Graphics2D.UI;
 
 namespace Exanite.WarGames.Features.Tetris.Systems;
 
-public class TetrisUiSystem : EcsSystem, IStartSystem, IUpdateSystem, IDrawSystem
+public class TetrisUiSystem : EcsSystem, IStartSystem, IUpdateSystem, IRenderSystem
 {
     private Desktop desktop = null!;
 
@@ -151,7 +151,7 @@ public class TetrisUiSystem : EcsSystem, IStartSystem, IUpdateSystem, IDrawSyste
         desktop.Root = mainGrid;
     }
 
-    public void Draw()
+    public void Render()
     {
         desktop.Render();
     }

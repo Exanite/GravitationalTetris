@@ -8,16 +8,16 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Exanite.WarGames.Features.Sprites.Systems;
 
-public partial class SpriteDrawSystem : EcsSystem, IDrawSystem
+public partial class SpriteRenderSystem : EcsSystem, IRenderSystem
 {
     private readonly GameSpriteBatch gameSpriteBatch;
 
-    public SpriteDrawSystem(GameSpriteBatch gameSpriteBatch)
+    public SpriteRenderSystem(GameSpriteBatch gameSpriteBatch)
     {
         this.gameSpriteBatch = gameSpriteBatch;
     }
 
-    public void Draw()
+    public void Render()
     {
         DrawQuery(World);
     }

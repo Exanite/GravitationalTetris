@@ -79,7 +79,7 @@ public class Game1 : Game, IAsyncDisposable
             time.DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             GraphicsDevice.Clear(Color.Black);
-            systemScheduler.Draw();
+            systemScheduler.Render();
 
             base.Draw(gameTime);
         }
@@ -150,8 +150,8 @@ public class Game1 : Game, IAsyncDisposable
         config.SimpleRegisterSystem<TilemapColliderSystem>();
         config.SimpleRegisterSystem<CameraProjectionSystem>();
 
-        config.SimpleRegisterSystem<TilemapDrawSystem>();
-        config.SimpleRegisterSystem<SpriteDrawSystem>();
+        config.SimpleRegisterSystem<TilemapRenderSystem>();
+        config.SimpleRegisterSystem<SpriteRenderSystem>();
         config.SimpleRegisterSystem<TetrisUiSystem>();
 
         config.SimpleRegisterSystem<RemoveDestroyedSystem>();
