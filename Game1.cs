@@ -130,10 +130,7 @@ public class Game1 : Game, IAsyncDisposable
         builder.Register(ctx => new CommandBuffer(ctx.Resolve<EcsWorld>())).InstancePerDependency();
 
         // Systems
-        var schedulerConfig = CreateSystemSchedulerConfig();
-        builder.RegisterInstance(schedulerConfig).SingleInstance();
-        builder.RegisterModule(schedulerConfig);
-        builder.RegisterType<SystemScheduler>().SingleInstance();
+        builder.RegisterModule(CreateSystemSchedulerConfig());
 
         return builder.Build();
     }
