@@ -14,7 +14,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Exanite.WarGames.Features.Tiles.Systems;
 
-public partial class TilemapDrawSystem : EcsSystem, IDrawSystem, ICallbackSystem
+public partial class TilemapDrawSystem : EcsSystem, IDrawSystem, IInitializeSystem
 {
     private readonly GameSpriteBatch gameSpriteBatch;
     private readonly GameTilemapData tilemap;
@@ -32,7 +32,7 @@ public partial class TilemapDrawSystem : EcsSystem, IDrawSystem, ICallbackSystem
         this.time = time;
     }
 
-    public void RegisterCallbacks()
+    public void Initialize()
     {
         emptyTileTexture = resourceManager.GetResource(BaseMod.TileNone);
         placeholderTileTexture = resourceManager.GetResource(BaseMod.TilePlaceholder);

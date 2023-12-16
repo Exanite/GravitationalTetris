@@ -26,7 +26,7 @@ using nkast.Aether.Physics2D.Dynamics;
 
 namespace Exanite.WarGames.Features.Tetris.Systems;
 
-public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
+public partial class TetrisSystem : EcsSystem, IInitializeSystem, IUpdateSystem
 {
     public static readonly string ScoresFilePath = Path.Join(GameDirectories.PersistentDataDirectory, "Scores.txt");
 
@@ -67,7 +67,7 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
         this.tilemap = tilemap;
     }
 
-    public void RegisterCallbacks()
+    public void Initialize()
     {
         if (File.Exists(ScoresFilePath))
         {

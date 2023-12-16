@@ -3,7 +3,7 @@ using World = nkast.Aether.Physics2D.Dynamics.World;
 
 namespace Exanite.WarGames.Features.Physics.Systems;
 
-public class PhysicsContactSystem : ICallbackSystem
+public class PhysicsContactSystem : IInitializeSystem
 {
     private readonly World physicsWorld;
 
@@ -12,7 +12,7 @@ public class PhysicsContactSystem : ICallbackSystem
         this.physicsWorld = physicsWorld;
     }
 
-    public void RegisterCallbacks()
+    public void Initialize()
     {
         // physicsWorld.ContactManager.BeginContact = (contact) =>
         // {

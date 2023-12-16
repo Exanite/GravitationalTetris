@@ -47,7 +47,7 @@ public class Game1 : Game, IAsyncDisposable
         IsMouseVisible = true;
         Window.AllowUserResizing = true;
 
-        systemScheduler.RegisterCallbacks();
+        systemScheduler.Initialize();
         systemScheduler.Start();
 
         base.Initialize();
