@@ -104,6 +104,10 @@ public partial class PhysicsSimulationSystem : EcsSystem, IStartSystem, IUpdateS
     [All<DestroyedComponent>]
     private void RemoveRigidbodies(ref RigidbodyComponent rigidbody)
     {
-        physicsWorld.Remove(rigidbody.Body);
+        var body = rigidbody.Body;
+        if (body.World != null)
+        {
+            body.World.Remove(body);
+        }
     }
 }
