@@ -667,13 +667,10 @@ public partial class TetrisSystem : EcsSystem, ICallbackSystem, IUpdateSystem
         World.Create(new UpdateTilemapCollidersEventComponent());
 
         Directory.CreateDirectory(GameDirectories.PersistentDataDirectory);
-        using (var stream = File.OpenWrite(Path.Join(GameDirectories.PersistentDataDirectory, "Scores.txt")))
+        using (var stream = new FileStream(Path.Join(GameDirectories.PersistentDataDirectory, "Scores.txt"), FileMode.Append))
         using (var streamWriter = new StreamWriter(stream))
         {
-            foreach (var highScore in HighScores)
-            {
-                streamWriter.WriteLine(highScore);
-            }
+            streamWriter.WriteLine(PreviousScore);
         }
 
         HighScores.Sort((a, b) => -a.CompareTo(b));
