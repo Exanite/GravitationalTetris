@@ -139,23 +139,23 @@ public class Game1 : Game, IAsyncDisposable
     {
         var config = new SystemScheduler.Config();
 
-        config.SimpleRegisterSystem<CreateEntitiesSystem>();
+        config.RegisterAllCallbacks<CreateEntitiesSystem>();
 
-        config.SimpleRegisterSystem<PhysicsSimulationSystem>();
-        config.SimpleRegisterSystem<PhysicsContactSystem>();
+        config.RegisterAllCallbacks<PhysicsSimulationSystem>();
+        config.RegisterAllCallbacks<PhysicsContactSystem>();
 
-        config.SimpleRegisterSystem<InputSystem>();
-        config.SimpleRegisterSystem<PlayerControllerSystem>();
-        config.SimpleRegisterSystem<TetrisSystem>();
-        config.SimpleRegisterSystem<TilemapColliderSystem>();
-        config.SimpleRegisterSystem<CameraProjectionSystem>();
+        config.RegisterAllCallbacks<InputSystem>();
+        config.RegisterAllCallbacks<PlayerControllerSystem>();
+        config.RegisterAllCallbacks<TetrisSystem>();
+        config.RegisterAllCallbacks<TilemapColliderSystem>();
+        config.RegisterAllCallbacks<CameraProjectionSystem>();
 
-        config.SimpleRegisterSystem<TilemapRenderSystem>();
-        config.SimpleRegisterSystem<SpriteRenderSystem>();
-        config.SimpleRegisterSystem<TetrisUiSystem>();
+        config.RegisterAllCallbacks<TilemapRenderSystem>();
+        config.RegisterAllCallbacks<SpriteRenderSystem>();
+        config.RegisterAllCallbacks<TetrisUiSystem>();
 
-        config.SimpleRegisterSystem<RemoveDestroyedSystem>();
-        config.SimpleRegisterSystem<RunResourceManagerSystem>();
+        config.RegisterAllCallbacks<RemoveDestroyedSystem>();
+        config.RegisterAllCallbacks<RunResourceManagerSystem>();
 
         return config;
     }
