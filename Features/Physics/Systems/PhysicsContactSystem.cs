@@ -1,7 +1,7 @@
 using Exanite.Ecs.Systems;
 using World = nkast.Aether.Physics2D.Dynamics.World;
 
-namespace Exanite.WarGames.Features.Physics.Systems;
+namespace Exanite.GravitationalTetris.Features.Physics.Systems;
 
 public class PhysicsContactSystem : IInitializeSystem
 {

@@ -6,25 +6,25 @@ using Arch.Core.Extensions;
 using Arch.System;
 using Arch.System.SourceGenerator;
 using Exanite.Ecs.Systems;
+using Exanite.GravitationalTetris.Features.Lifecycles.Components;
+using Exanite.GravitationalTetris.Features.Physics.Components;
+using Exanite.GravitationalTetris.Features.Players;
+using Exanite.GravitationalTetris.Features.Players.Components;
+using Exanite.GravitationalTetris.Features.Players.Systems;
+using Exanite.GravitationalTetris.Features.Resources;
+using Exanite.GravitationalTetris.Features.Sprites.Components;
+using Exanite.GravitationalTetris.Features.Tetris.Components;
+using Exanite.GravitationalTetris.Features.Tiles;
+using Exanite.GravitationalTetris.Features.Tiles.Components;
+using Exanite.GravitationalTetris.Features.Time;
+using Exanite.GravitationalTetris.Features.Transforms.Components;
 using Exanite.ResourceManagement;
-using Exanite.WarGames.Features.Lifecycles.Components;
-using Exanite.WarGames.Features.Physics.Components;
-using Exanite.WarGames.Features.Players;
-using Exanite.WarGames.Features.Players.Components;
-using Exanite.WarGames.Features.Players.Systems;
-using Exanite.WarGames.Features.Resources;
-using Exanite.WarGames.Features.Sprites.Components;
-using Exanite.WarGames.Features.Tetris.Components;
-using Exanite.WarGames.Features.Tiles;
-using Exanite.WarGames.Features.Tiles.Components;
-using Exanite.WarGames.Features.Time;
-using Exanite.WarGames.Features.Transforms.Components;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using nkast.Aether.Physics2D.Dynamics;
 
-namespace Exanite.WarGames.Features.Tetris.Systems;
+namespace Exanite.GravitationalTetris.Features.Tetris.Systems;
 
 public partial class TetrisSystem : EcsSystem, IInitializeSystem, IUpdateSystem
 {

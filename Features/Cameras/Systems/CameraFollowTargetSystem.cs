@@ -1,9 +1,9 @@
 using Arch.System;
 using Exanite.Ecs.Systems;
-using Exanite.WarGames.Features.Cameras.Components;
-using Exanite.WarGames.Features.Transforms.Components;
+using Exanite.GravitationalTetris.Features.Cameras.Components;
+using Exanite.GravitationalTetris.Features.Transforms.Components;
 
-namespace Exanite.WarGames.Features.Cameras.Systems;
+namespace Exanite.GravitationalTetris.Features.Cameras.Systems;
 
 public partial class CameraFollowTargetSystem : EcsSystem, IUpdateSystem
 {

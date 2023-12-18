@@ -1,4 +1,4 @@
-namespace Exanite.WarGames.Features.Physics.Components;
+namespace Exanite.GravitationalTetris.Features.Physics.Components;
 
 public struct AngularVelocityComponent
 {

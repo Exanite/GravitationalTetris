@@ -1,7 +1,7 @@
 using Exanite.Ecs.Systems;
 using Microsoft.Xna.Framework.Input;
 
-namespace Exanite.WarGames.Features.Players.Systems;
+namespace Exanite.GravitationalTetris.Features.Players.Systems;
 
 public class InputSystem : IUpdateSystem
 {

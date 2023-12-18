@@ -1,3 +1,3 @@
-namespace Exanite.WarGames.Features.Players.Components;
+namespace Exanite.GravitationalTetris.Features.Players.Components;
 
 public struct PlayerComponent {}

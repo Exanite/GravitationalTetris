@@ -1,7 +1,7 @@
 using Exanite.Ecs.Systems;
 using Exanite.ResourceManagement;
 
-namespace Exanite.WarGames.Features.Resources.Systems;
+namespace Exanite.GravitationalTetris.Features.Resources.Systems;
 
 public class RunResourceManagerSystem : IUpdateSystem
 {

@@ -1,4 +1,4 @@
-namespace Exanite.WarGames.Features.Players;
+namespace Exanite.GravitationalTetris.Features.Players;
 
 public class GameInputData
 {

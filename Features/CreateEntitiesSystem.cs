@@ -1,15 +1,15 @@
 using Exanite.Ecs.Systems;
+using Exanite.GravitationalTetris.Features.Cameras.Components;
+using Exanite.GravitationalTetris.Features.Physics.Components;
+using Exanite.GravitationalTetris.Features.Players.Components;
+using Exanite.GravitationalTetris.Features.Resources;
+using Exanite.GravitationalTetris.Features.Sprites.Components;
+using Exanite.GravitationalTetris.Features.Transforms.Components;
 using Exanite.ResourceManagement;
-using Exanite.WarGames.Features.Cameras.Components;
-using Exanite.WarGames.Features.Physics.Components;
-using Exanite.WarGames.Features.Players.Components;
-using Exanite.WarGames.Features.Resources;
-using Exanite.WarGames.Features.Sprites.Components;
-using Exanite.WarGames.Features.Transforms.Components;
 using Microsoft.Xna.Framework;
 using nkast.Aether.Physics2D.Dynamics;
 
-namespace Exanite.WarGames.Features;
+namespace Exanite.GravitationalTetris.Features;
 
 public class CreateEntitiesSystem : EcsSystem, IStartSystem
 {

@@ -1,7 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Exanite.WarGames.Features.Resources;
+namespace Exanite.GravitationalTetris.Features.Resources;
 
 public record class FontSystemLoadingSettings
 {

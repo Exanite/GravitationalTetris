@@ -1,6 +1,6 @@
 using Microsoft.Xna.Framework;
 
-namespace Exanite.WarGames.Features.Transforms.Components;
+namespace Exanite.GravitationalTetris.Features.Transforms.Components;
 
 public struct TransformComponent
 {

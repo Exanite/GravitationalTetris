@@ -1,7 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Exanite.WarGames.Features.Sprites;
+namespace Exanite.GravitationalTetris.Features.Sprites;
 
 public class GameSpriteBatch
 {

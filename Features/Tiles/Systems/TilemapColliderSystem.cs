@@ -4,15 +4,15 @@ using Arch.Core.Extensions;
 using Arch.System;
 using Arch.System.SourceGenerator;
 using Exanite.Ecs.Systems;
-using Exanite.WarGames.Features.Lifecycles.Components;
-using Exanite.WarGames.Features.Physics.Components;
-using Exanite.WarGames.Features.Tiles.Components;
-using Exanite.WarGames.Features.Transforms.Components;
+using Exanite.GravitationalTetris.Features.Lifecycles.Components;
+using Exanite.GravitationalTetris.Features.Physics.Components;
+using Exanite.GravitationalTetris.Features.Tiles.Components;
+using Exanite.GravitationalTetris.Features.Transforms.Components;
 using Microsoft.Xna.Framework;
 using nkast.Aether.Physics2D.Common;
 using nkast.Aether.Physics2D.Dynamics;
 
-namespace Exanite.WarGames.Features.Tiles.Systems;
+namespace Exanite.GravitationalTetris.Features.Tiles.Systems;
 
 public partial class TilemapColliderSystem : EcsSystem, IStartSystem, IUpdateSystem
 {

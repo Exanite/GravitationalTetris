@@ -1,7 +1,7 @@
 using Exanite.Core.Properties;
 using Exanite.ResourceManagement;
 
-namespace Exanite.WarGames.Features.Resources;
+namespace Exanite.GravitationalTetris.Features.Resources;
 
 public static class ResourceUtilities
 {

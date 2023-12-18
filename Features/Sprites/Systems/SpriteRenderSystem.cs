@@ -1,12 +1,12 @@
 using Arch.System;
 using Exanite.Ecs.Systems;
-using Exanite.WarGames.Features.Cameras.Components;
-using Exanite.WarGames.Features.Sprites.Components;
-using Exanite.WarGames.Features.Transforms.Components;
+using Exanite.GravitationalTetris.Features.Cameras.Components;
+using Exanite.GravitationalTetris.Features.Sprites.Components;
+using Exanite.GravitationalTetris.Features.Transforms.Components;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Exanite.WarGames.Features.Sprites.Systems;
+namespace Exanite.GravitationalTetris.Features.Sprites.Systems;
 
 public partial class SpriteRenderSystem : EcsSystem, IRenderSystem
 {

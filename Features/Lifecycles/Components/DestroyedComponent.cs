@@ -1,3 +1,3 @@
-namespace Exanite.WarGames.Features.Lifecycles.Components;
+namespace Exanite.GravitationalTetris.Features.Lifecycles.Components;
 
 public struct DestroyedComponent {}

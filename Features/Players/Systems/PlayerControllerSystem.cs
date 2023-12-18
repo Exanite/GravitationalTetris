@@ -3,15 +3,15 @@ using Arch.System;
 using Arch.System.SourceGenerator;
 using Exanite.Core.Utilities;
 using Exanite.Ecs.Systems;
-using Exanite.WarGames.Features.Physics.Components;
-using Exanite.WarGames.Features.Players.Components;
-using Exanite.WarGames.Features.Time;
-using Exanite.WarGames.Features.Transforms.Components;
+using Exanite.GravitationalTetris.Features.Physics.Components;
+using Exanite.GravitationalTetris.Features.Players.Components;
+using Exanite.GravitationalTetris.Features.Time;
+using Exanite.GravitationalTetris.Features.Transforms.Components;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using PhysicsWorld = nkast.Aether.Physics2D.Dynamics.World;
 
-namespace Exanite.WarGames.Features.Players.Systems;
+namespace Exanite.GravitationalTetris.Features.Players.Systems;
 
 public partial class PlayerControllerSystem : EcsSystem, IUpdateSystem
 {

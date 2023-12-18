@@ -1,3 +1,3 @@
-namespace Exanite.WarGames.Features.Cameras.Components;
+namespace Exanite.GravitationalTetris.Features.Cameras.Components;
 
 public struct CameraTargetComponent {}

@@ -1,6 +1,6 @@
 using System.Numerics;
 
-namespace Exanite.WarGames.Features.Transforms.Components;
+namespace Exanite.GravitationalTetris.Features.Transforms.Components;
 
 public struct BoundingBoxComponent
 {

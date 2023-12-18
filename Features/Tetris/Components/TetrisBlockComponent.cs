@@ -1,6 +1,6 @@
 using Arch.Core;
 
-namespace Exanite.WarGames.Features.Tetris.Components;
+namespace Exanite.GravitationalTetris.Features.Tetris.Components;
 
 public struct TetrisBlockComponent
 {

@@ -1,7 +1,7 @@
 using Exanite.ResourceManagement;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Exanite.WarGames.Features.Tiles;
+namespace Exanite.GravitationalTetris.Features.Tiles;
 
 public struct Tile
 {

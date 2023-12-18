@@ -15,7 +15,7 @@ using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 
-namespace Exanite.WarGames.Features.Resources;
+namespace Exanite.GravitationalTetris.Features.Resources;
 
 public class ResourcesModule : Module
 {

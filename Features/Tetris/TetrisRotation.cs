@@ -1,4 +1,4 @@
-namespace Exanite.WarGames.Features.Tetris;
+namespace Exanite.GravitationalTetris.Features.Tetris;
 
 public enum TetrisRotation
 {

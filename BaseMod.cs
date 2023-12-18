@@ -1,7 +1,7 @@
 using Exanite.Core.Properties;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Exanite.WarGames;
+namespace Exanite.GravitationalTetris;
 
 public static class BaseMod
 {

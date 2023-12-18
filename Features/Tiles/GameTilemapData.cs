@@ -1,6 +1,6 @@
 using Exanite.ResourceManagement;
 
-namespace Exanite.WarGames.Features.Tiles;
+namespace Exanite.GravitationalTetris.Features.Tiles;
 
 public class GameTilemapData
 {

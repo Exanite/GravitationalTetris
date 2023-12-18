@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Exanite.WarGames;
+namespace Exanite.GravitationalTetris;
 
 public class Program
 {

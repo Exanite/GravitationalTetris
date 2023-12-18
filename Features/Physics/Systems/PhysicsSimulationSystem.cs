@@ -4,14 +4,14 @@ using Arch.System;
 using Arch.System.SourceGenerator;
 using Exanite.Core.HighPerformance;
 using Exanite.Ecs.Systems;
-using Exanite.WarGames.Features.Lifecycles.Components;
-using Exanite.WarGames.Features.Physics.Components;
-using Exanite.WarGames.Features.Time;
-using Exanite.WarGames.Features.Transforms.Components;
+using Exanite.GravitationalTetris.Features.Lifecycles.Components;
+using Exanite.GravitationalTetris.Features.Physics.Components;
+using Exanite.GravitationalTetris.Features.Time;
+using Exanite.GravitationalTetris.Features.Transforms.Components;
 using Microsoft.Xna.Framework;
 using World = nkast.Aether.Physics2D.Dynamics.World;
 
-namespace Exanite.WarGames.Features.Physics.Systems;
+namespace Exanite.GravitationalTetris.Features.Physics.Systems;
 
 public partial class PhysicsSimulationSystem : EcsSystem, IStartSystem, IUpdateSystem, ICleanupSystem
 {

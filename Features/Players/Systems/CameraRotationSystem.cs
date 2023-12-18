@@ -1,11 +1,11 @@
 using Arch.System;
 using Exanite.Ecs.Systems;
-using Exanite.WarGames.Features.Cameras.Components;
-using Exanite.WarGames.Features.Time;
-using Exanite.WarGames.Features.Transforms.Components;
+using Exanite.GravitationalTetris.Features.Cameras.Components;
+using Exanite.GravitationalTetris.Features.Time;
+using Exanite.GravitationalTetris.Features.Transforms.Components;
 using Microsoft.Xna.Framework.Input;
 
-namespace Exanite.WarGames.Features.Players.Systems;
+namespace Exanite.GravitationalTetris.Features.Players.Systems;
 
 public partial class CameraRotationSystem : EcsSystem, IUpdateSystem
 {

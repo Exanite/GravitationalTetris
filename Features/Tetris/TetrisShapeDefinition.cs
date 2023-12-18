@@ -1,7 +1,7 @@
 using Exanite.ResourceManagement;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Exanite.WarGames.Features.Tetris;
+namespace Exanite.GravitationalTetris.Features.Tetris;
 
 public record TetrisShapeDefinition
 {

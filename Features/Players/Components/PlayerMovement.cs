@@ -1,6 +1,6 @@
 using Microsoft.Xna.Framework;
 
-namespace Exanite.WarGames.Features.Players.Components;
+namespace Exanite.GravitationalTetris.Features.Players.Components;
 
 public struct PlayerMovement
 {

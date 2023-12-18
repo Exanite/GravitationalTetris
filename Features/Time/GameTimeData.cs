@@ -1,4 +1,4 @@
-namespace Exanite.WarGames.Features.Time;
+namespace Exanite.GravitationalTetris.Features.Time;
 
 public class GameTimeData
 {

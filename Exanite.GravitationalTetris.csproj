@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <AssemblyName>GravitationalTetris</AssemblyName>
+    <RootNamespace>Exanite.GravitationalTetris</RootNamespace>
 
     <OutputType>WinExe</OutputType>
     <TargetFramework>net7.0</TargetFramework>

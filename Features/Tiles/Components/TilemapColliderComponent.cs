@@ -1,3 +1,3 @@
-namespace Exanite.WarGames.Features.Tiles.Components;
+namespace Exanite.GravitationalTetris.Features.Tiles.Components;
 
 public struct TilemapColliderComponent {}

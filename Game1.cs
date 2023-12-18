@@ -4,25 +4,25 @@ using System.Threading.Tasks;
 using Arch.CommandBuffer;
 using Autofac;
 using Exanite.Ecs.Systems;
-using Exanite.WarGames.Features;
-using Exanite.WarGames.Features.Cameras.Systems;
-using Exanite.WarGames.Features.Lifecycles.Systems;
-using Exanite.WarGames.Features.Physics.Systems;
-using Exanite.WarGames.Features.Players;
-using Exanite.WarGames.Features.Players.Systems;
-using Exanite.WarGames.Features.Resources;
-using Exanite.WarGames.Features.Resources.Systems;
-using Exanite.WarGames.Features.Sprites;
-using Exanite.WarGames.Features.Sprites.Systems;
-using Exanite.WarGames.Features.Tetris.Systems;
-using Exanite.WarGames.Features.Tiles;
-using Exanite.WarGames.Features.Tiles.Systems;
-using Exanite.WarGames.Features.Time;
+using Exanite.GravitationalTetris.Features;
+using Exanite.GravitationalTetris.Features.Cameras.Systems;
+using Exanite.GravitationalTetris.Features.Lifecycles.Systems;
+using Exanite.GravitationalTetris.Features.Physics.Systems;
+using Exanite.GravitationalTetris.Features.Players;
+using Exanite.GravitationalTetris.Features.Players.Systems;
+using Exanite.GravitationalTetris.Features.Resources;
+using Exanite.GravitationalTetris.Features.Resources.Systems;
+using Exanite.GravitationalTetris.Features.Sprites;
+using Exanite.GravitationalTetris.Features.Sprites.Systems;
+using Exanite.GravitationalTetris.Features.Tetris.Systems;
+using Exanite.GravitationalTetris.Features.Tiles;
+using Exanite.GravitationalTetris.Features.Tiles.Systems;
+using Exanite.GravitationalTetris.Features.Time;
 using Microsoft.Xna.Framework;
 using EcsWorld = Arch.Core.World;
 using PhysicsWorld = nkast.Aether.Physics2D.Dynamics.World;
 
-namespace Exanite.WarGames;
+namespace Exanite.GravitationalTetris;
 
 public class Game1 : Game, IAsyncDisposable
 {
