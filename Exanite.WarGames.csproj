@@ -4,7 +4,6 @@
 
     <OutputType>WinExe</OutputType>
     <TargetFramework>net7.0</TargetFramework>
-    <RollForward>Major</RollForward>
 
     <!-- Recommended settings from: https://docs.monogame.net/articles/packaging_games.html -->
     <PublishReadyToRun>false</PublishReadyToRun>
