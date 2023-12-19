@@ -38,7 +38,7 @@
     <ProjectReference Include="..\Exanite.Core\Exanite.Core.csproj"/>
     <ProjectReference Include="..\Exanite.Ecs\Exanite.Ecs.csproj"/>
     <ProjectReference Include="..\Exanite.ResourceManagement\Exanite.ResourceManagement.csproj"/>
-    <ProjectReference Include="..\Physics2D\Aether.Physics2D.csproj"/>
+    <ProjectReference Include="..\Aether.Physics2D\Aether.Physics2D.csproj"/>
   </ItemGroup>
 
   <PropertyGroup>
