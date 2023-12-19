@@ -40,7 +40,7 @@
     <ProjectReference Include="..\FNA\FNA.Core.csproj"/>
     <ProjectReference Include="..\FontStashSharp\src\XNA\FontStashSharp.FNA.Core.csproj"/>
     <ProjectReference Include="..\Myra\src\Myra\Myra.FNA.Core.csproj"/>
-    <ProjectReference Include="..\Physics2D\Aether.Physics2D.FNA.csproj"/>
+    <ProjectReference Include="..\Aether.Physics2D\Aether.Physics2D.FNA.csproj"/>
   </ItemGroup>
 
   <PropertyGroup>
