@@ -14,9 +14,6 @@
     <!-- Enable nullables -->
     <Nullable>enable</Nullable>
 
-    <!-- Fix error when FNA tries to copy FNA.dll.config and app.config to the same location -->
-    <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
-
     <!-- Always generate debug symbols -->
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
