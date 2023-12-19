@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -11,9 +12,28 @@ public static class Program
     {
         Thread.CurrentThread.Name = "Main";
 
-        await using (var game = new Game1())
+        try
         {
+            await using var game = new Game1();
             game.Run();
         }
+        catch (Exception e)
+        {
+            HandleException(e);
+        }
+    }
+
+    private static void HandleException(Exception e)
+    {
+        Directory.CreateDirectory(GameDirectories.PersistentDataDirectory);
+        using (var stream = File.Open(Path.Join(GameDirectories.PersistentDataDirectory, "Game.log"), FileMode.Append))
+        using (var streamWriter = new StreamWriter(stream))
+        {
+            streamWriter.WriteLine(e);
+        }
+
+        Console.Error.WriteLine(e);
+
+        Environment.Exit(-1);
     }
 }
