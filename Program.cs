@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Exanite.GravitationalTetris;
 
-public class Program
+public static class Program
 {
     [STAThread]
     public static async Task Main(string[] args)
