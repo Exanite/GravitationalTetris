@@ -1,13 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 using Autofac;
+using Diligent;
 using Exanite.Engine.Rendering;
 using Exanite.ResourceManagement;
-using Exanite.ResourceManagement.Exceptions;
 using Exanite.ResourceManagement.FileSystems;
 // using FontStashSharp;
 // using Myra.Graphics2D.TextureAtlases;
@@ -37,15 +35,41 @@ public class ResourcesModule : Module
 
                 resourceManager.Mount("Myra:", new DirectoryFileSystem(Path.Join(GameDirectories.ContentDirectory, "Myra")));
 
-                // resourceManager.RegisterLoader<Texture2D>(loadOperation =>
-                // {
-                //     using var stream = resourceManager.Open(loadOperation.Key);
-                //
-                //     loadOperation.Fulfill(Texture2D.FromStream(graphicsDeviceManager.GraphicsDevice, stream));
-                //
-                //     return Task.CompletedTask;
-                // }, false);
-                //
+                resourceManager.RegisterLoader<Shader>(loadOperation =>
+                {
+                    using var stream = resourceManager.Open(loadOperation.Key);
+                    using var reader = new StreamReader(stream);
+
+                    ShaderType type;
+                    if (loadOperation.Key.EndsWith(".v.hlsl"))
+                    {
+                        type = ShaderType.Vertex;
+                    }
+                    else if (loadOperation.Key.EndsWith(".p.hlsl"))
+                    {
+                        type = ShaderType.Pixel;
+                    }
+                    else
+                    {
+                        throw new NotSupportedException($"Failed to load {loadOperation.Key} as a shader. The key does not end in a valid extension.");
+                    }
+
+                    var shader = new Shader(loadOperation.Key, reader.ReadToEnd(), type, rendererContext);
+                    loadOperation.Fulfill(shader);
+
+                    return Task.CompletedTask;
+                }, false);
+
+                resourceManager.RegisterLoader<Texture2D>(loadOperation =>
+                {
+                    using var stream = resourceManager.Open(loadOperation.Key);
+
+                    var texture = new Texture2D(loadOperation.Key, stream, rendererContext);
+                    loadOperation.Fulfill(texture);
+
+                    return Task.CompletedTask;
+                });
+
                 // // Myra
                 // resourceManager.RegisterLoader<TextureRegionAtlas>(loadOperation =>
                 // {

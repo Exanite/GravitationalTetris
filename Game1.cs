@@ -63,7 +63,6 @@ public class Game1 : Game
         builder.RegisterType<Input>().SingleInstance();
 
         // Shared data
-        builder.RegisterType<GameSpriteBatch>().SingleInstance();
         builder.RegisterType<GameTilemapData>().SingleInstance();
 
         // Physics
