@@ -8,6 +8,7 @@ using Exanite.Ecs.Systems;
 using Exanite.Engine.Rendering;
 using Exanite.Engine.Time;
 using Exanite.GravitationalTetris.Features.Cameras.Components;
+using Exanite.GravitationalTetris.Features.Rendering;
 using Exanite.GravitationalTetris.Features.Resources;
 using Exanite.GravitationalTetris.Features.Tetris.Components;
 using Exanite.ResourceManagement;

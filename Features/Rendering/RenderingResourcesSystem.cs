@@ -4,9 +4,10 @@ using System.Runtime.CompilerServices;
 using Diligent;
 using Exanite.Ecs.Systems;
 using Exanite.Engine.Rendering;
+using Exanite.GravitationalTetris.Features.Resources;
 using Exanite.ResourceManagement;
 
-namespace Exanite.GravitationalTetris.Features.Resources;
+namespace Exanite.GravitationalTetris.Features.Rendering;
 
 public class RenderingResourcesSystem : IInitializeSystem, IDisposable
 {
