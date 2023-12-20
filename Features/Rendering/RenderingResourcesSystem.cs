@@ -12,7 +12,7 @@ namespace Exanite.GravitationalTetris.Features.Rendering;
 public class RenderingResourcesSystem : IInitializeSystem, IDisposable
 {
     public Mesh Mesh = null!;
-    public IBuffer UniformBuffer = null!;
+    public UniformBuffer<Matrix4x4> UniformBuffer = null!;
     public IPipelineState Pipeline = null!;
     public IShaderResourceBinding ShaderResourceBinding = null!;
 
@@ -42,10 +42,8 @@ public class RenderingResourcesSystem : IInitializeSystem, IDisposable
             3, 2, 0,
         });
 
-        UniformBuffer = rendererContext.RenderDevice.CreateBuffer(new BufferDesc
+        UniformBuffer = new UniformBuffer<Matrix4x4>("Sprite uniform buffer", rendererContext, new BufferDesc
         {
-            Name = "Uniform buffer",
-            Size = (ulong)Unsafe.SizeOf<Matrix4x4>(),
             Usage = Usage.Dynamic,
             BindFlags = BindFlags.UniformBuffer,
             CPUAccessFlags = CpuAccessFlags.Write,
@@ -111,7 +109,7 @@ public class RenderingResourcesSystem : IInitializeSystem, IDisposable
                 DSVFormat = swapChain.GetDesc().DepthBufferFormat,
             },
         });
-        Pipeline.GetStaticVariableByName(ShaderType.Vertex, "Constants").Set(UniformBuffer, SetShaderResourceFlags.None);
+        Pipeline.GetStaticVariableByName(ShaderType.Vertex, "Constants").Set(UniformBuffer.Buffer, SetShaderResourceFlags.None);
 
         ShaderResourceBinding = Pipeline.CreateShaderResourceBinding(true);
     }

@@ -60,11 +60,11 @@ public partial class SpriteRenderSystem : EcsSystem, IInitializeSystem, IRenderS
         var view = cameraProjection.View;
         var projection = cameraProjection.Projection;
 
-        var worldViewProjection = world * view * projection;
-
-        var mapUniformBuffer = deviceContext.MapBuffer<Matrix4x4>(uniformBuffer, MapType.Write, MapFlags.Discard);
-        mapUniformBuffer[0] = worldViewProjection;
-        deviceContext.UnmapBuffer(uniformBuffer, MapType.Write);
+        var mapUniformBuffer = uniformBuffer.Map(MapType.Write);
+        {
+            mapUniformBuffer[0] = world * view * projection;
+        }
+        uniformBuffer.Unmap(MapType.Write);
 
         deviceContext.SetPipelineState(pipeline);
         deviceContext.SetVertexBuffers(0, new[] { mesh.VertexBuffer }, new[] { 0ul }, ResourceStateTransitionMode.Transition);
