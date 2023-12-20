@@ -1,16 +1,22 @@
+using System.Numerics;
 using Arch.System;
 using Exanite.Ecs.Systems;
+using Exanite.Engine.Rendering;
 using Exanite.GravitationalTetris.Features.Cameras.Components;
 using Exanite.GravitationalTetris.Features.Transforms.Components;
-using Microsoft.Xna.Framework;
 
 namespace Exanite.GravitationalTetris.Features.Cameras.Systems;
 
-public partial class CameraProjectionSystem : EcsSystem, IUpdateSystem
+public partial class CameraProjectionSystem : EcsSystem, IRenderSystem
 {
-    public required Game Game { get; init; }
+    private readonly RendererContext rendererContext;
 
-    public void Update()
+    public CameraProjectionSystem(RendererContext rendererContext)
+    {
+        this.rendererContext = rendererContext;
+    }
+
+    public void Render()
     {
         UpdateQuery(World);
     }
@@ -18,17 +24,10 @@ public partial class CameraProjectionSystem : EcsSystem, IUpdateSystem
     [Query]
     private void Update(ref CameraComponent camera, ref TransformComponent transform, ref CameraProjectionComponent cameraProjection)
     {
-        var worldToLocalTranslation = Matrix.CreateTranslation(-transform.Position.X, -transform.Position.Y, 0);
-        var worldToLocalRotation = Matrix.CreateRotationZ(transform.Rotation);
-        cameraProjection.WorldToLocal = worldToLocalTranslation * worldToLocalRotation;
+        var swapChain = rendererContext.SwapChain;
+        var aspectRatio = swapChain.GetDesc().Width / (float)swapChain.GetDesc().Height;
 
-        var scaleFactor = Game.Window.ClientBounds.Height / camera.VerticalHeight;
-        var localToScreenScale = Matrix.CreateScale(scaleFactor, scaleFactor, 1);
-        var offsetBackOnScreen = Matrix.CreateTranslation(0, Game.Window.ClientBounds.Height, 0);
-        var offsetToCenterOfScreen = Matrix.CreateTranslation(Game.Window.ClientBounds.Width / 2f, -Game.Window.ClientBounds.Height / 2f, 0);
-        cameraProjection.LocalToScreen = localToScreenScale * offsetBackOnScreen * offsetToCenterOfScreen;
-
-        cameraProjection.MetersToPixels = scaleFactor;
-        cameraProjection.Rotation = -transform.Rotation;
+        cameraProjection.View = Matrix4x4.CreateRotationZ(transform.Rotation) * Matrix4x4.CreateTranslation(transform.Position.X, transform.Position.Y, 0);
+        cameraProjection.Projection = Matrix4x4.CreateOrthographic(camera.VerticalHeight * aspectRatio, camera.VerticalHeight, 0.001f, 1000f);
     }
 }

@@ -1,14 +1,15 @@
 using System;
+using System.Numerics;
 using Arch.System;
 using Arch.System.SourceGenerator;
 using Exanite.Core.Utilities;
 using Exanite.Ecs.Systems;
+using Exanite.Engine.Inputs;
+using Exanite.Engine.Time;
 using Exanite.GravitationalTetris.Features.Physics.Components;
 using Exanite.GravitationalTetris.Features.Players.Components;
-using Exanite.GravitationalTetris.Features.Time;
 using Exanite.GravitationalTetris.Features.Transforms.Components;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
+using SDL2;
 using PhysicsWorld = nkast.Aether.Physics2D.Dynamics.World;
 
 namespace Exanite.GravitationalTetris.Features.Players.Systems;
@@ -17,22 +18,22 @@ public partial class PlayerControllerSystem : EcsSystem, IUpdateSystem
 {
     private bool isGravityDown = true;
 
-    private readonly GameInputData input;
-    private readonly GameTimeData time;
     private readonly PhysicsWorld physicsWorld;
+    private readonly Input input;
+    private readonly SimulationTime time;
 
-    public PlayerControllerSystem(GameInputData input, GameTimeData time, PhysicsWorld physicsWorld)
+    public PlayerControllerSystem(PhysicsWorld physicsWorld, Input input, SimulationTime time)
     {
+        this.physicsWorld = physicsWorld;
         this.input = input;
         this.time = time;
-        this.physicsWorld = physicsWorld;
     }
 
     public void Update()
     {
         UpdateMovementQuery(World);
 
-        if (input.Current.Keyboard.IsKeyDown(Keys.Space) && !input.Previous.Keyboard.IsKeyDown(Keys.Space))
+        if (input.GetKeyDown(SDL.SDL_Scancode.SDL_SCANCODE_SPACE))
         {
             SetIsGravityDown(!isGravityDown);
         }
@@ -57,10 +58,10 @@ public partial class PlayerControllerSystem : EcsSystem, IUpdateSystem
     private void UpdateMovement(ref VelocityComponent velocity, ref PlayerMovement movement, ref MovementSpeedComponent movementSpeed)
     {
         var movementInput = Vector2.Zero;
-        movementInput.X -= input.Current.Keyboard.IsKeyDown(Keys.A) ? 1 : 0;
-        movementInput.X += input.Current.Keyboard.IsKeyDown(Keys.D) ? 1 : 0;
-        movementInput.Y -= input.Current.Keyboard.IsKeyDown(Keys.W) ? 1 : 0;
-        movementInput.Y += input.Current.Keyboard.IsKeyDown(Keys.S) ? 1 : 0;
+        movementInput.X -= input.GetKey(SDL.SDL_Scancode.SDL_SCANCODE_A) ? 1 : 0;
+        movementInput.X += input.GetKey(SDL.SDL_Scancode.SDL_SCANCODE_D) ? 1 : 0;
+        movementInput.Y -= input.GetKey(SDL.SDL_Scancode.SDL_SCANCODE_W) ? 1 : 0;
+        movementInput.Y += input.GetKey(SDL.SDL_Scancode.SDL_SCANCODE_S) ? 1 : 0;
         movementInput = movementInput.AsNormalizedSafe();
 
         velocity.Velocity.X = MathUtility.SmoothDamp(velocity.Velocity.X, movementInput.X * movementSpeed.MovementSpeed, movement.SmoothTime, time.DeltaTime, ref movement.SmoothVelocity.X);

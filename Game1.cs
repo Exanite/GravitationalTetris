@@ -4,6 +4,7 @@ using Exanite.Ecs.Systems;
 using Exanite.Engine;
 using Exanite.Engine.GameLoops;
 using Exanite.Engine.Inputs;
+using Exanite.Engine.Inputs.Systems;
 using Exanite.Engine.Rendering;
 using Exanite.Engine.Rendering.Systems;
 using Exanite.Engine.Time;
@@ -23,7 +24,6 @@ using Exanite.GravitationalTetris.Features.Sprites.Systems;
 using Exanite.GravitationalTetris.Features.Tetris.Systems;
 using Exanite.GravitationalTetris.Features.Tiles;
 using Exanite.GravitationalTetris.Features.Tiles.Systems;
-using Exanite.GravitationalTetris.Features.Time;
 using EcsWorld = Arch.Core.World;
 using PhysicsWorld = nkast.Aether.Physics2D.Dynamics.World;
 
@@ -63,8 +63,6 @@ public class Game1 : Game
         builder.RegisterType<Input>().SingleInstance();
 
         // Shared data
-        builder.RegisterType<GameInputData>().SingleInstance();
-        builder.RegisterType<GameTimeData>().SingleInstance();
         builder.RegisterType<GameSpriteBatch>().SingleInstance();
         builder.RegisterType<GameTilemapData>().SingleInstance();
 
@@ -102,10 +100,10 @@ public class Game1 : Game
         config.RegisterAllCallbacks<PlayerControllerSystem>();
         config.RegisterAllCallbacks<TetrisSystem>();
         config.RegisterAllCallbacks<TilemapColliderSystem>();
-        config.RegisterAllCallbacks<CameraProjectionSystem>();
 
         config.RegisterAllCallbacks<ClearRenderTargetRenderSystem>();
         {
+            config.RegisterAllCallbacks<CameraProjectionSystem>();
             config.RegisterAllCallbacks<TilemapRenderSystem>();
             config.RegisterAllCallbacks<SpriteRenderSystem>();
             config.RegisterAllCallbacks<TetrisUiSystem>();

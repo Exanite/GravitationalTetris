@@ -1,14 +1,14 @@
+using System.Numerics;
 using Arch.Core;
 using Arch.Core.Extensions;
 using Arch.System;
 using Arch.System.SourceGenerator;
 using Exanite.Core.HighPerformance;
 using Exanite.Ecs.Systems;
+using Exanite.Engine.Time;
 using Exanite.GravitationalTetris.Features.Lifecycles.Components;
 using Exanite.GravitationalTetris.Features.Physics.Components;
-using Exanite.GravitationalTetris.Features.Time;
 using Exanite.GravitationalTetris.Features.Transforms.Components;
-using Microsoft.Xna.Framework;
 using World = nkast.Aether.Physics2D.Dynamics.World;
 
 namespace Exanite.GravitationalTetris.Features.Physics.Systems;
@@ -16,9 +16,9 @@ namespace Exanite.GravitationalTetris.Features.Physics.Systems;
 public partial class PhysicsSimulationSystem : EcsSystem, IStartSystem, IUpdateSystem, ICleanupSystem
 {
     private readonly World physicsWorld;
-    private readonly GameTimeData time;
+    private readonly SimulationTime time;
 
-    public PhysicsSimulationSystem(World physicsWorld, GameTimeData time)
+    public PhysicsSimulationSystem(World physicsWorld, SimulationTime time)
     {
         this.physicsWorld = physicsWorld;
         this.time = time;

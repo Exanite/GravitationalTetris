@@ -1,3 +1,4 @@
+using System.Numerics;
 using Exanite.Ecs.Systems;
 using Exanite.GravitationalTetris.Features.Cameras.Components;
 using Exanite.GravitationalTetris.Features.Physics.Components;
@@ -6,7 +7,6 @@ using Exanite.GravitationalTetris.Features.Resources;
 using Exanite.GravitationalTetris.Features.Sprites.Components;
 using Exanite.GravitationalTetris.Features.Transforms.Components;
 using Exanite.ResourceManagement;
-using Microsoft.Xna.Framework;
 using nkast.Aether.Physics2D.Dynamics;
 
 namespace Exanite.GravitationalTetris.Features;
