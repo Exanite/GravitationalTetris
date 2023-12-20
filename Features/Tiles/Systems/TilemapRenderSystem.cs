@@ -1,18 +1,18 @@
-using Arch.System;
-using Exanite.Ecs.Systems;
-using Exanite.Engine.Rendering;
-using Exanite.GravitationalTetris.Features.Cameras.Components;
-using Exanite.ResourceManagement;
 using System;
 using System.Numerics;
 using System.Runtime.CompilerServices;
+using Arch.System;
 using Arch.System.SourceGenerator;
 using Diligent;
 using Exanite.Core.Utilities;
+using Exanite.Ecs.Systems;
+using Exanite.Engine.Rendering;
 using Exanite.Engine.Time;
-using ValueType = Diligent.ValueType;
+using Exanite.GravitationalTetris.Features.Cameras.Components;
 using Exanite.GravitationalTetris.Features.Resources;
 using Exanite.GravitationalTetris.Features.Tetris.Components;
+using Exanite.ResourceManagement;
+using ValueType = Diligent.ValueType;
 
 namespace Exanite.GravitationalTetris.Features.Tiles.Systems;
 
@@ -44,7 +44,7 @@ public partial class TilemapRenderSystem : EcsSystem, IRenderSystem, IInitialize
         emptyTileTexture = resourceManager.GetResource(BaseMod.TileNone);
         placeholderTileTexture = resourceManager.GetResource(BaseMod.TilePlaceholder);
 
-                var renderDevice = rendererContext.RenderDevice;
+        var renderDevice = rendererContext.RenderDevice;
         var swapChain = rendererContext.SwapChain;
 
         mesh = Mesh.Create<VertexPositionUv>("Square mesh", rendererContext, new VertexPositionUv[]
@@ -111,11 +111,11 @@ public partial class TilemapRenderSystem : EcsSystem, IRenderSystem, IInitialize
                 PrimitiveTopology = PrimitiveTopology.TriangleList,
                 RasterizerDesc = new RasterizerStateDesc { CullMode = CullMode.Back },
                 DepthStencilDesc = new DepthStencilStateDesc { DepthEnable = true },
-                BlendDesc = new BlendStateDesc()
+                BlendDesc = new BlendStateDesc
                 {
                     RenderTargets = new RenderTargetBlendDesc[]
                     {
-                        new RenderTargetBlendDesc()
+                        new()
                         {
                             BlendEnable = true,
                             SrcBlend = BlendFactor.SrcAlpha,
@@ -198,37 +198,37 @@ public partial class TilemapRenderSystem : EcsSystem, IRenderSystem, IInitialize
     {
         var deviceContext = rendererContext.DeviceContext;
 
-            foreach (var blockPosition in tetrisRoot.PredictedBlockPositions)
+        foreach (var blockPosition in tetrisRoot.PredictedBlockPositions)
+        {
+            var texture = placeholderTileTexture.Value;
+
+            var maxAlpha = 0.8f;
+            var minAlpha = 0.1f;
+            var alpha = MathUtility.Remap(EaseInOutCubic(time.Time / 1.5f), 0, 1, minAlpha, maxAlpha);
+
+            shaderResourceBinding.GetVariableByName(ShaderType.Pixel, "Texture").Set(texture.View, SetShaderResourceFlags.AllowOverwrite);
+
+            var world = Matrix4x4.CreateTranslation(blockPosition.X, blockPosition.Y, -0.5f);
+            var view = cameraProjection.View;
+            var projection = cameraProjection.Projection;
+
+            var worldViewProjection = world * view * projection;
+
+            var mapUniformBuffer = deviceContext.MapBuffer<Matrix4x4>(uniformBuffer, MapType.Write, MapFlags.Discard);
+            mapUniformBuffer[0] = worldViewProjection;
+            deviceContext.UnmapBuffer(uniformBuffer, MapType.Write);
+
+            deviceContext.SetPipelineState(pipeline);
+            deviceContext.SetVertexBuffers(0, new[] { mesh.VertexBuffer }, new[] { 0ul }, ResourceStateTransitionMode.Transition);
+            deviceContext.SetIndexBuffer(mesh.IndexBuffer, 0, ResourceStateTransitionMode.Transition);
+            deviceContext.CommitShaderResources(shaderResourceBinding, ResourceStateTransitionMode.Transition);
+            deviceContext.DrawIndexed(new DrawIndexedAttribs
             {
-                var texture = placeholderTileTexture.Value;
-
-                var maxAlpha = 0.8f;
-                var minAlpha = 0.1f;
-                var alpha = MathUtility.Remap(EaseInOutCubic(time.Time / 1.5f), 0, 1, minAlpha, maxAlpha);
-
-                shaderResourceBinding.GetVariableByName(ShaderType.Pixel, "Texture").Set(texture.View, SetShaderResourceFlags.AllowOverwrite);
-
-                var world = Matrix4x4.CreateTranslation(blockPosition.X, blockPosition.Y, -0.5f);
-                var view = cameraProjection.View;
-                var projection = cameraProjection.Projection;
-
-                var worldViewProjection = world * view * projection;
-
-                var mapUniformBuffer = deviceContext.MapBuffer<Matrix4x4>(uniformBuffer, MapType.Write, MapFlags.Discard);
-                mapUniformBuffer[0] = worldViewProjection;
-                deviceContext.UnmapBuffer(uniformBuffer, MapType.Write);
-
-                deviceContext.SetPipelineState(pipeline);
-                deviceContext.SetVertexBuffers(0, new[] { mesh.VertexBuffer }, new[] { 0ul }, ResourceStateTransitionMode.Transition);
-                deviceContext.SetIndexBuffer(mesh.IndexBuffer, 0, ResourceStateTransitionMode.Transition);
-                deviceContext.CommitShaderResources(shaderResourceBinding, ResourceStateTransitionMode.Transition);
-                deviceContext.DrawIndexed(new DrawIndexedAttribs
-                {
-                    IndexType = ValueType.UInt32,
-                    NumIndices = 36,
-                    Flags = DrawFlags.VerifyAll,
-                });
-            }
+                IndexType = ValueType.UInt32,
+                NumIndices = 36,
+                Flags = DrawFlags.VerifyAll,
+            });
+        }
     }
 
     private float EaseInOutCubic(float t)
