@@ -49,10 +49,10 @@ public partial class TilemapRenderSystem : EcsSystem, IRenderSystem, IInitialize
 
         mesh = Mesh.Create<VertexPositionUv>("Square mesh", rendererContext, new VertexPositionUv[]
         {
-            new VertexPositionUv(new Vector3(-0.5f, -0.5f, 0), new Vector2(1, 1)),
-            new VertexPositionUv(new Vector3(0.5f, -0.5f, 0), new Vector2(0, 1)),
-            new VertexPositionUv(new Vector3(0.5f, 0.5f, 0), new Vector2(0, 0)),
-            new VertexPositionUv(new Vector3(-0.5f, 0.5f, 0), new Vector2(1, 0)),
+            new(new Vector3(-0.5f, -0.5f, 0), new Vector2(0, 0)),
+            new(new Vector3(0.5f, -0.5f, 0), new Vector2(1, 0)),
+            new(new Vector3(0.5f, 0.5f, 0), new Vector2(1, 1)),
+            new(new Vector3(-0.5f, 0.5f, 0), new Vector2(0, 1)),
         }, new uint[]
         {
             2, 1, 0,
@@ -109,7 +109,7 @@ public partial class TilemapRenderSystem : EcsSystem, IRenderSystem, IInitialize
             {
                 InputLayout = VertexPositionUv.Layout,
                 PrimitiveTopology = PrimitiveTopology.TriangleList,
-                RasterizerDesc = new RasterizerStateDesc { CullMode = CullMode.Back },
+                RasterizerDesc = new RasterizerStateDesc { CullMode = CullMode.Front },
                 DepthStencilDesc = new DepthStencilStateDesc { DepthEnable = true },
                 BlendDesc = new BlendStateDesc
                 {

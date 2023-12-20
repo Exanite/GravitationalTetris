@@ -1,18 +1,18 @@
-using Arch.System;
-using Exanite.Ecs.Systems;
-using Exanite.Engine.Rendering;
-using Exanite.GravitationalTetris.Features.Cameras.Components;
-using Exanite.GravitationalTetris.Features.Sprites.Components;
-using Exanite.GravitationalTetris.Features.Transforms.Components;
-using Exanite.ResourceManagement;
 using System;
 using System.Numerics;
 using System.Runtime.CompilerServices;
+using Arch.System;
 using Arch.System.SourceGenerator;
 using Diligent;
+using Exanite.Ecs.Systems;
+using Exanite.Engine.Rendering;
 using Exanite.Engine.Rendering.Systems;
-using ValueType = Diligent.ValueType;
+using Exanite.GravitationalTetris.Features.Cameras.Components;
 using Exanite.GravitationalTetris.Features.Resources;
+using Exanite.GravitationalTetris.Features.Sprites.Components;
+using Exanite.GravitationalTetris.Features.Transforms.Components;
+using Exanite.ResourceManagement;
+using ValueType = Diligent.ValueType;
 
 namespace Exanite.GravitationalTetris.Features.Sprites.Systems;
 
@@ -43,10 +43,10 @@ public partial class SpriteRenderSystem : EcsSystem, IInitializeSystem, IRenderS
 
         mesh = Mesh.Create<VertexPositionUv>("Square mesh", rendererContext, new VertexPositionUv[]
         {
-            new VertexPositionUv(new Vector3(-0.5f, -0.5f, 0), new Vector2(1, 1)),
-            new VertexPositionUv(new Vector3(0.5f, -0.5f, 0), new Vector2(0, 1)),
-            new VertexPositionUv(new Vector3(0.5f, 0.5f, 0), new Vector2(0, 0)),
-            new VertexPositionUv(new Vector3(-0.5f, 0.5f, 0), new Vector2(1, 0)),
+            new(new Vector3(-0.5f, -0.5f, 0), new Vector2(0, 0)),
+            new(new Vector3(0.5f, -0.5f, 0), new Vector2(1, 0)),
+            new(new Vector3(0.5f, 0.5f, 0), new Vector2(1, 1)),
+            new(new Vector3(-0.5f, 0.5f, 0), new Vector2(0, 1)),
         }, new uint[]
         {
             2, 1, 0,
@@ -103,13 +103,13 @@ public partial class SpriteRenderSystem : EcsSystem, IInitializeSystem, IRenderS
             {
                 InputLayout = VertexPositionUv.Layout,
                 PrimitiveTopology = PrimitiveTopology.TriangleList,
-                RasterizerDesc = new RasterizerStateDesc { CullMode = CullMode.Back },
+                RasterizerDesc = new RasterizerStateDesc { CullMode = CullMode.Front },
                 DepthStencilDesc = new DepthStencilStateDesc { DepthEnable = true },
-                BlendDesc = new BlendStateDesc()
+                BlendDesc = new BlendStateDesc
                 {
                     RenderTargets = new RenderTargetBlendDesc[]
                     {
-                        new RenderTargetBlendDesc()
+                        new()
                         {
                             BlendEnable = true,
                             SrcBlend = BlendFactor.SrcAlpha,
@@ -155,7 +155,7 @@ public partial class SpriteRenderSystem : EcsSystem, IInitializeSystem, IRenderS
         var texture = sprite.Texture.Value;
         shaderResourceBinding.GetVariableByName(ShaderType.Pixel, "Texture").Set(texture.View, SetShaderResourceFlags.AllowOverwrite);
 
-        var world = Matrix4x4.CreateTranslation(transform.Position.X, transform.Position.Y, 0);
+        var world = Matrix4x4.CreateRotationZ(transform.Rotation) * Matrix4x4.CreateTranslation(transform.Position.X, transform.Position.Y, 0);
         var view = cameraProjection.View;
         var projection = cameraProjection.Projection;
 
