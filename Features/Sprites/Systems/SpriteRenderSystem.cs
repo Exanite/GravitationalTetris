@@ -10,6 +10,7 @@ using System.Numerics;
 using System.Runtime.CompilerServices;
 using Arch.System.SourceGenerator;
 using Diligent;
+using Exanite.Engine.Rendering.Systems;
 using ValueType = Diligent.ValueType;
 using Exanite.GravitationalTetris.Features.Resources;
 
@@ -24,15 +25,19 @@ public partial class SpriteRenderSystem : EcsSystem, IInitializeSystem, IRenderS
 
     private readonly RendererContext rendererContext;
     private readonly ResourceManager resourceManager;
+    private readonly ClearRenderTargetRenderSystem clearRenderTargetRenderSystem;
 
-    public SpriteRenderSystem(RendererContext rendererContext, ResourceManager resourceManager)
+    public SpriteRenderSystem(RendererContext rendererContext, ResourceManager resourceManager, ClearRenderTargetRenderSystem clearRenderTargetRenderSystem)
     {
         this.rendererContext = rendererContext;
         this.resourceManager = resourceManager;
+        this.clearRenderTargetRenderSystem = clearRenderTargetRenderSystem;
     }
 
     public void Initialize()
     {
+        clearRenderTargetRenderSystem.ClearColor = Vector4.Zero;
+
         var renderDevice = rendererContext.RenderDevice;
         var swapChain = rendererContext.SwapChain;
 
