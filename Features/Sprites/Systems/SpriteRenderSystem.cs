@@ -1,20 +1,124 @@
 using Arch.System;
 using Exanite.Ecs.Systems;
+using Exanite.Engine.Rendering;
 using Exanite.GravitationalTetris.Features.Cameras.Components;
 using Exanite.GravitationalTetris.Features.Sprites.Components;
 using Exanite.GravitationalTetris.Features.Transforms.Components;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+using Exanite.ResourceManagement;
+using System;
+using System.Numerics;
+using System.Runtime.CompilerServices;
+using Arch.System.SourceGenerator;
+using Diligent;
+using ValueType = Diligent.ValueType;
 
 namespace Exanite.GravitationalTetris.Features.Sprites.Systems;
 
-public partial class SpriteRenderSystem : EcsSystem, IRenderSystem
+public partial class SpriteRenderSystem : EcsSystem, IInitializeSystem, IRenderSystem, IDisposable
 {
-    private readonly GameSpriteBatch gameSpriteBatch;
+    private Mesh mesh = null!;
+    private IBuffer uniformBuffer = null!;
+    private IPipelineState pipeline = null!;
+    private IShaderResourceBinding shaderResourceBinding = null!;
 
-    public SpriteRenderSystem(GameSpriteBatch gameSpriteBatch)
+    private readonly RendererContext rendererContext;
+    private readonly ResourceManager resourceManager;
+
+    public SpriteRenderSystem(RendererContext rendererContext, ResourceManager resourceManager)
     {
-        this.gameSpriteBatch = gameSpriteBatch;
+        this.rendererContext = rendererContext;
+        this.resourceManager = resourceManager;
+    }
+
+    public void Initialize()
+    {
+        var renderDevice = rendererContext.RenderDevice;
+        var swapChain = rendererContext.SwapChain;
+
+        mesh = Mesh.Create<VertexPositionUv>("Square mesh", rendererContext, new VertexPositionUv[]
+        {
+            new VertexPositionUv(new Vector3(-0.5f, -0.5f, 0), new Vector2(1, 1)),
+            new VertexPositionUv(new Vector3(0.5f, -0.5f, 0), new Vector2(0, 1)),
+            new VertexPositionUv(new Vector3(0.5f, 0.5f, 0), new Vector2(0, 0)),
+            new VertexPositionUv(new Vector3(-0.5f, 0.5f, 0), new Vector2(1, 0)),
+        }, new uint[]
+        {
+            2, 1, 0,
+            3, 2, 0,
+        });
+
+        uniformBuffer = rendererContext.RenderDevice.CreateBuffer(new BufferDesc
+        {
+            Name = "Uniform buffer",
+            Size = (ulong)Unsafe.SizeOf<Matrix4x4>(),
+            Usage = Usage.Dynamic,
+            BindFlags = BindFlags.UniformBuffer,
+            CPUAccessFlags = CpuAccessFlags.Write,
+        });
+
+        var vShader = resourceManager.GetResource<Shader>("E3:Sprite.v.hlsl");
+        var pShader = resourceManager.GetResource<Shader>("E3:Sprite.p.hlsl");
+
+        pipeline = renderDevice.CreateGraphicsPipelineState(new GraphicsPipelineStateCreateInfo
+        {
+            PSODesc = new PipelineStateDesc
+            {
+                Name = "Sprite PSO",
+                ResourceLayout = new PipelineResourceLayoutDesc
+                {
+                    DefaultVariableType = ShaderResourceVariableType.Static,
+                    Variables = new ShaderResourceVariableDesc[]
+                    {
+                        new()
+                        {
+                            ShaderStages = ShaderType.Pixel,
+                            Name = "Texture",
+                            Type = ShaderResourceVariableType.Mutable,
+                        },
+                    },
+                    ImmutableSamplers = new ImmutableSamplerDesc[]
+                    {
+                        new()
+                        {
+                            Desc = new SamplerDesc
+                            {
+                                MinFilter = FilterType.Point, MagFilter = FilterType.Point, MipFilter = FilterType.Point,
+                                AddressU = TextureAddressMode.Clamp, AddressV = TextureAddressMode.Clamp, AddressW = TextureAddressMode.Clamp,
+                            },
+                            SamplerOrTextureName = "Texture",
+                            ShaderStages = ShaderType.Pixel,
+                        },
+                    },
+                },
+            },
+            Vs = vShader.Value.Handle,
+            Ps = pShader.Value.Handle,
+            GraphicsPipeline = new GraphicsPipelineDesc
+            {
+                InputLayout = VertexPositionUv.Layout,
+                PrimitiveTopology = PrimitiveTopology.TriangleList,
+                RasterizerDesc = new RasterizerStateDesc { CullMode = CullMode.Back },
+                DepthStencilDesc = new DepthStencilStateDesc { DepthEnable = true },
+                BlendDesc = new BlendStateDesc()
+                {
+                    RenderTargets = new RenderTargetBlendDesc[]
+                    {
+                        new RenderTargetBlendDesc()
+                        {
+                            BlendEnable = true,
+                            SrcBlend = BlendFactor.SrcAlpha,
+                            DestBlend = BlendFactor.InvSrcAlpha,
+                        },
+                    },
+                },
+                NumRenderTargets = 1,
+                RTVFormats = new[] { swapChain.GetDesc().ColorBufferFormat },
+                DSVFormat = swapChain.GetDesc().DepthBufferFormat,
+            },
+        });
+        pipeline.GetStaticVariableByName(ShaderType.Vertex, "Constants").Set(uniformBuffer, SetShaderResourceFlags.None);
+
+        shaderResourceBinding = pipeline.CreateShaderResourceBinding(true);
     }
 
     public void Render()
@@ -22,48 +126,50 @@ public partial class SpriteRenderSystem : EcsSystem, IRenderSystem
         DrawQuery(World);
     }
 
-    [Query]
-    private void Draw(ref CameraComponent camera, ref CameraProjectionComponent cameraProjection)
+    public void Dispose()
     {
-        var spriteBatch = gameSpriteBatch.SpriteBatch;
+        shaderResourceBinding.Dispose();
+        pipeline.Dispose();
+        uniformBuffer.Dispose();
+        mesh.Dispose();
+    }
 
-        spriteBatch.Begin(
-            SpriteSortMode.Deferred,
-            BlendState.AlphaBlend,
-            SamplerState.PointClamp,
-            DepthStencilState.None,
-            RasterizerState.CullCounterClockwise,
-            null,
-            cameraProjection.WorldToScreen
-        );
-        {
-            DrawSpritesQuery(World, spriteBatch);
-        }
-        spriteBatch.End();
+
+
+    [Query]
+    [All<CameraComponent>]
+    private void Draw(ref CameraProjectionComponent cameraProjection)
+    {
+        DrawSpritesQuery(World, ref cameraProjection);
     }
 
     [Query]
-    private void DrawSprites([Data] SpriteBatch spriteBatch, ref SpriteComponent sprite, ref TransformComponent transform)
+    private void DrawSprites([Data] ref CameraProjectionComponent cameraProjection, ref SpriteComponent sprite, ref TransformComponent transform)
     {
-        var texture = sprite.Resource.Value;
-        if (texture == null)
+        var deviceContext = rendererContext.DeviceContext;
+
+        var texture = sprite.Texture.Value;
+        shaderResourceBinding.GetVariableByName(ShaderType.Pixel, "Texture").Set(texture.View, SetShaderResourceFlags.None);
+
+        var world = Matrix4x4.CreateTranslation(transform.Position.X, transform.Position.Y, 0);
+        var view = cameraProjection.View;
+        var projection = cameraProjection.Projection;
+
+        var worldViewProjection = world * view * projection;
+
+        var mapUniformBuffer = deviceContext.MapBuffer<Matrix4x4>(uniformBuffer, MapType.Write, MapFlags.Discard);
+        mapUniformBuffer[0] = worldViewProjection;
+        deviceContext.UnmapBuffer(uniformBuffer, MapType.Write);
+
+        deviceContext.SetPipelineState(pipeline);
+        deviceContext.SetVertexBuffers(0, new[] { mesh.VertexBuffer }, new[] { 0ul }, ResourceStateTransitionMode.Transition);
+        deviceContext.SetIndexBuffer(mesh.IndexBuffer, 0, ResourceStateTransitionMode.Transition);
+        deviceContext.CommitShaderResources(shaderResourceBinding, ResourceStateTransitionMode.Transition);
+        deviceContext.DrawIndexed(new DrawIndexedAttribs
         {
-            return;
-        }
-
-        var sourceRect = new Rectangle(0, 0, texture.Width, texture.Height);
-        var origin = new Vector2(0.5f * texture.Width, 0.5f * texture.Height);
-        var scale = new Vector2(1f / texture.Width, 1f / texture.Height) * transform.Size;
-
-        spriteBatch.Draw(
-            texture, // Texture
-            transform.Position, // Position
-            sourceRect, // Source Rect
-            Color.White, // Color
-            transform.Rotation, // Rotation
-            origin, // Origin
-            scale, // Scale
-            SpriteEffects.None, // Effects
-            0); // Depth
+            IndexType = ValueType.UInt32,
+            NumIndices = 36,
+            Flags = DrawFlags.VerifyAll,
+        });
     }
 }

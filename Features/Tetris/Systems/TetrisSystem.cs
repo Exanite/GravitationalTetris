@@ -256,7 +256,7 @@ public partial class TetrisSystem : EcsSystem, IInitializeSystem, IUpdateSystem
                         new RigidbodyComponent(body),
                         new SpriteComponent
                         {
-                            Resource = shape.Texture,
+                            Texture = shape.Texture,
                         });
                 }
             }
