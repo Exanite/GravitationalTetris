@@ -62,7 +62,10 @@ public partial class SpriteRenderSystem : EcsSystem, IInitializeSystem, IRenderS
 
         var mapUniformBuffer = uniformBuffer.Map(MapType.Write);
         {
-            mapUniformBuffer[0] = world * view * projection;
+            mapUniformBuffer[0].World = world;
+            mapUniformBuffer[0].View = view;
+            mapUniformBuffer[0].Projection = projection;
+            mapUniformBuffer[0].Color = Vector4.One;
         }
         uniformBuffer.Unmap(MapType.Write);
 

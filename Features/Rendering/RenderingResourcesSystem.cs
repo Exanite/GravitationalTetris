@@ -1,6 +1,5 @@
 using System;
 using System.Numerics;
-using System.Runtime.CompilerServices;
 using Diligent;
 using Exanite.Ecs.Systems;
 using Exanite.Engine.Rendering;
@@ -12,7 +11,7 @@ namespace Exanite.GravitationalTetris.Features.Rendering;
 public class RenderingResourcesSystem : IInitializeSystem, IDisposable
 {
     public Mesh Mesh = null!;
-    public UniformBuffer<Matrix4x4> UniformBuffer = null!;
+    public UniformBuffer<SpriteUniformData> UniformBuffer = null!;
     public IPipelineState Pipeline = null!;
     public IShaderResourceBinding ShaderResourceBinding = null!;
 
@@ -42,7 +41,7 @@ public class RenderingResourcesSystem : IInitializeSystem, IDisposable
             3, 2, 0,
         });
 
-        UniformBuffer = new UniformBuffer<Matrix4x4>("Sprite uniform buffer", rendererContext, new BufferDesc
+        UniformBuffer = new UniformBuffer<SpriteUniformData>("Sprite uniform buffer", rendererContext, new BufferDesc
         {
             Usage = Usage.Dynamic,
             BindFlags = BindFlags.UniformBuffer,
