@@ -12,7 +12,6 @@ using Exanite.Engine.Rendering;
 using Exanite.Engine.Time;
 using Exanite.GravitationalTetris.Features.Lifecycles.Components;
 using Exanite.GravitationalTetris.Features.Physics.Components;
-using Exanite.GravitationalTetris.Features.Players;
 using Exanite.GravitationalTetris.Features.Players.Components;
 using Exanite.GravitationalTetris.Features.Players.Systems;
 using Exanite.GravitationalTetris.Features.Resources;
