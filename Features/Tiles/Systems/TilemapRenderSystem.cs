@@ -1,6 +1,5 @@
 using System;
 using System.Numerics;
-using System.Runtime.CompilerServices;
 using Arch.System;
 using Arch.System.SourceGenerator;
 using Diligent;
@@ -16,129 +15,35 @@ using ValueType = Diligent.ValueType;
 
 namespace Exanite.GravitationalTetris.Features.Tiles.Systems;
 
-public partial class TilemapRenderSystem : EcsSystem, IRenderSystem, IInitializeSystem, IDisposable
+public partial class TilemapRenderSystem : EcsSystem, IRenderSystem, IInitializeSystem
 {
-    private Mesh mesh = null!;
-    private IBuffer uniformBuffer = null!;
-    private IPipelineState pipeline = null!;
-    private IShaderResourceBinding shaderResourceBinding = null!;
-
     private readonly RendererContext rendererContext;
     private readonly GameTilemapData tilemap;
     private readonly ResourceManager resourceManager;
     private readonly SimulationTime time;
+    private readonly RenderingResourcesSystem renderingResourcesSystem;
 
     private IResourceHandle<Texture2D> emptyTileTexture = null!;
     private IResourceHandle<Texture2D> placeholderTileTexture = null!;
 
-    public TilemapRenderSystem(RendererContext rendererContext, GameTilemapData tilemap, ResourceManager resourceManager, SimulationTime time)
+    public TilemapRenderSystem(
+        RendererContext rendererContext,
+        GameTilemapData tilemap,
+        ResourceManager resourceManager,
+        SimulationTime time,
+        RenderingResourcesSystem renderingResourcesSystem)
     {
         this.rendererContext = rendererContext;
         this.tilemap = tilemap;
         this.resourceManager = resourceManager;
         this.time = time;
+        this.renderingResourcesSystem = renderingResourcesSystem;
     }
 
     public void Initialize()
     {
         emptyTileTexture = resourceManager.GetResource(BaseMod.TileNone);
         placeholderTileTexture = resourceManager.GetResource(BaseMod.TilePlaceholder);
-
-        var renderDevice = rendererContext.RenderDevice;
-        var swapChain = rendererContext.SwapChain;
-
-        mesh = Mesh.Create<VertexPositionUv>("Square mesh", rendererContext, new VertexPositionUv[]
-        {
-            new(new Vector3(-0.5f, -0.5f, 0), new Vector2(0, 0)),
-            new(new Vector3(0.5f, -0.5f, 0), new Vector2(1, 0)),
-            new(new Vector3(0.5f, 0.5f, 0), new Vector2(1, 1)),
-            new(new Vector3(-0.5f, 0.5f, 0), new Vector2(0, 1)),
-        }, new uint[]
-        {
-            2, 1, 0,
-            3, 2, 0,
-        });
-
-        uniformBuffer = rendererContext.RenderDevice.CreateBuffer(new BufferDesc
-        {
-            Name = "Uniform buffer",
-            Size = (ulong)Unsafe.SizeOf<Matrix4x4>(),
-            Usage = Usage.Dynamic,
-            BindFlags = BindFlags.UniformBuffer,
-            CPUAccessFlags = CpuAccessFlags.Write,
-        });
-
-        var vShader = resourceManager.GetResource(BaseMod.SpriteVShader);
-        var pShader = resourceManager.GetResource(BaseMod.SpritePShader);
-
-        pipeline = renderDevice.CreateGraphicsPipelineState(new GraphicsPipelineStateCreateInfo
-        {
-            PSODesc = new PipelineStateDesc
-            {
-                Name = "Sprite PSO",
-                ResourceLayout = new PipelineResourceLayoutDesc
-                {
-                    DefaultVariableType = ShaderResourceVariableType.Static,
-                    Variables = new ShaderResourceVariableDesc[]
-                    {
-                        new()
-                        {
-                            ShaderStages = ShaderType.Pixel,
-                            Name = "Texture",
-                            Type = ShaderResourceVariableType.Mutable,
-                        },
-                    },
-                    ImmutableSamplers = new ImmutableSamplerDesc[]
-                    {
-                        new()
-                        {
-                            Desc = new SamplerDesc
-                            {
-                                MinFilter = FilterType.Point, MagFilter = FilterType.Point, MipFilter = FilterType.Point,
-                                AddressU = TextureAddressMode.Clamp, AddressV = TextureAddressMode.Clamp, AddressW = TextureAddressMode.Clamp,
-                            },
-                            SamplerOrTextureName = "Texture",
-                            ShaderStages = ShaderType.Pixel,
-                        },
-                    },
-                },
-            },
-            Vs = vShader.Value.Handle,
-            Ps = pShader.Value.Handle,
-            GraphicsPipeline = new GraphicsPipelineDesc
-            {
-                InputLayout = VertexPositionUv.Layout,
-                PrimitiveTopology = PrimitiveTopology.TriangleList,
-                RasterizerDesc = new RasterizerStateDesc { CullMode = CullMode.Front },
-                DepthStencilDesc = new DepthStencilStateDesc { DepthEnable = true },
-                BlendDesc = new BlendStateDesc
-                {
-                    RenderTargets = new RenderTargetBlendDesc[]
-                    {
-                        new()
-                        {
-                            BlendEnable = true,
-                            SrcBlend = BlendFactor.SrcAlpha,
-                            DestBlend = BlendFactor.InvSrcAlpha,
-                        },
-                    },
-                },
-                NumRenderTargets = 1,
-                RTVFormats = new[] { swapChain.GetDesc().ColorBufferFormat },
-                DSVFormat = swapChain.GetDesc().DepthBufferFormat,
-            },
-        });
-        pipeline.GetStaticVariableByName(ShaderType.Vertex, "Constants").Set(uniformBuffer, SetShaderResourceFlags.None);
-
-        shaderResourceBinding = pipeline.CreateShaderResourceBinding(true);
-    }
-
-    public void Dispose()
-    {
-        shaderResourceBinding.Dispose();
-        pipeline.Dispose();
-        uniformBuffer.Dispose();
-        mesh.Dispose();
     }
 
     public void Render()
@@ -152,6 +57,10 @@ public partial class TilemapRenderSystem : EcsSystem, IRenderSystem, IInitialize
     private void DrawTiles(ref CameraProjectionComponent cameraProjection)
     {
         var deviceContext = rendererContext.DeviceContext;
+        var shaderResourceBinding = renderingResourcesSystem.ShaderResourceBinding;
+        var uniformBuffer = renderingResourcesSystem.UniformBuffer;
+        var pipeline = renderingResourcesSystem.Pipeline;
+        var mesh = renderingResourcesSystem.Mesh;
 
         for (var x = 0; x < tilemap.Tiles.GetLength(0); x++)
         {
@@ -197,6 +106,10 @@ public partial class TilemapRenderSystem : EcsSystem, IRenderSystem, IInitialize
     private void DrawPlaceholders_1([Data] ref TetrisRootComponent tetrisRoot, ref CameraProjectionComponent cameraProjection)
     {
         var deviceContext = rendererContext.DeviceContext;
+        var shaderResourceBinding = renderingResourcesSystem.ShaderResourceBinding;
+        var uniformBuffer = renderingResourcesSystem.UniformBuffer;
+        var pipeline = renderingResourcesSystem.Pipeline;
+        var mesh = renderingResourcesSystem.Mesh;
 
         foreach (var blockPosition in tetrisRoot.PredictedBlockPositions)
         {

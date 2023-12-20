@@ -98,6 +98,7 @@ public class Game1 : Game
         config.RegisterAllCallbacks<TetrisSystem>();
         config.RegisterAllCallbacks<TilemapColliderSystem>();
 
+        config.RegisterAllCallbacks<RenderingResourcesSystem>();
         config.RegisterAllCallbacks<ClearRenderTargetRenderSystem>();
         {
             config.RegisterAllCallbacks<CameraProjectionSystem>();

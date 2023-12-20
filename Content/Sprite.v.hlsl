@@ -1,6 +1,10 @@
 cbuffer Constants
 {
     float4x4 WorldViewProjection;
+    // float4x4 World;
+    // float4x4 View;
+    // float4x4 Projection;
+    // float4 Color;
 };
 
 struct Input
