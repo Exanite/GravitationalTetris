@@ -5,6 +5,9 @@ namespace Exanite.GravitationalTetris;
 
 public static class BaseMod
 {
+    public static PropertyDefinition<Shader> SpriteVShader = new("Base:Sprite.v.hlsl");
+    public static PropertyDefinition<Shader> SpritePShader = new("Base:Sprite.p.hlsl");
+
     public static PropertyDefinition<Texture2D> White = new("Base:White.png");
 
     public static PropertyDefinition<Texture2D> Player = new("Base:Player.png");

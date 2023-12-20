@@ -11,6 +11,7 @@ using System.Runtime.CompilerServices;
 using Arch.System.SourceGenerator;
 using Diligent;
 using ValueType = Diligent.ValueType;
+using Exanite.GravitationalTetris.Features.Resources;
 
 namespace Exanite.GravitationalTetris.Features.Sprites.Systems;
 
@@ -56,8 +57,8 @@ public partial class SpriteRenderSystem : EcsSystem, IInitializeSystem, IRenderS
             CPUAccessFlags = CpuAccessFlags.Write,
         });
 
-        var vShader = resourceManager.GetResource<Shader>("E3:Sprite.v.hlsl");
-        var pShader = resourceManager.GetResource<Shader>("E3:Sprite.p.hlsl");
+        var vShader = resourceManager.GetResource(BaseMod.SpriteVShader);
+        var pShader = resourceManager.GetResource(BaseMod.SpritePShader);
 
         pipeline = renderDevice.CreateGraphicsPipelineState(new GraphicsPipelineStateCreateInfo
         {
