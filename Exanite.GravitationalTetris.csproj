@@ -27,12 +27,13 @@
   <ItemGroup>
     <PackageReference Include="Arch.LowLevel" Version="1.0.9"/>
     <PackageReference Include="Arch.System" Version="1.0.2"/>
-    <PackageReference Include="Arch.System.SourceGenerator" Version="1.1.2"/>
     <PackageReference Include="Autofac" Version="7.1.0"/>
     <PackageReference Include="LiteNetLib" Version="1.1.0"/>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3"/>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Aether.Physics2D\Aether.Physics2D.FNA.csproj"/>
+    <ProjectReference Include="..\Arch.Extended\Arch.System.SourceGenerator\Arch.System.SourceGenerator.csproj" OutputItemType="Analyzer"/>
     <ProjectReference Include="..\Arch\src\Arch\Arch.csproj"/>
     <ProjectReference Include="..\Exanite.Core\Exanite.Core.FNA.csproj"/>
     <ProjectReference Include="..\Exanite.Ecs\Exanite.Ecs.csproj"/>
@@ -40,7 +41,6 @@
     <ProjectReference Include="..\FNA\FNA.Core.csproj"/>
     <ProjectReference Include="..\FontStashSharp\src\XNA\FontStashSharp.FNA.Core.csproj"/>
     <ProjectReference Include="..\Myra\src\Myra\Myra.FNA.Core.csproj"/>
-    <ProjectReference Include="..\Aether.Physics2D\Aether.Physics2D.FNA.csproj"/>
   </ItemGroup>
 
   <PropertyGroup>
