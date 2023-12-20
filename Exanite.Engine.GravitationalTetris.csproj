@@ -21,6 +21,10 @@
     <!-- Allow unsafe code -->
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 
+    <!-- Only support 64 bit computers - Required by DiligentEngine -->
+    <Configurations>Release;Debug</Configurations>
+    <Platforms>x64</Platforms>
+
     <!-- Support high DPI -->
     <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
   </PropertyGroup>
