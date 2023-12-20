@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Numerics;
 using Arch.Core;
 using Arch.Core.Extensions;
 using Arch.System;
@@ -8,7 +9,6 @@ using Exanite.GravitationalTetris.Features.Lifecycles.Components;
 using Exanite.GravitationalTetris.Features.Physics.Components;
 using Exanite.GravitationalTetris.Features.Tiles.Components;
 using Exanite.GravitationalTetris.Features.Transforms.Components;
-using Microsoft.Xna.Framework;
 using nkast.Aether.Physics2D.Common;
 using nkast.Aether.Physics2D.Dynamics;
 
@@ -71,7 +71,7 @@ public partial class TilemapColliderSystem : EcsSystem, IStartSystem, IUpdateSys
                     vertices.Add(new Vector2(1, 1));
                     vertices.Add(new Vector2(1, 0));
 
-                    var transformationMatrix = Matrix.CreateTranslation(x - 0.5f, y - 0.5f, 0);
+                    var transformationMatrix = Matrix4x4.CreateTranslation(x - 0.5f, y - 0.5f, 0);
                     vertices.Transform(ref transformationMatrix);
 
                     polygons.Add(vertices);

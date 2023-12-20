@@ -1,11 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Numerics;
 using Arch.Core;
 using Arch.Core.Extensions;
 using Arch.System;
 using Arch.System.SourceGenerator;
 using Exanite.Ecs.Systems;
+using Exanite.Engine.Inputs;
+using Exanite.Engine.Rendering;
+using Exanite.Engine.Time;
 using Exanite.GravitationalTetris.Features.Lifecycles.Components;
 using Exanite.GravitationalTetris.Features.Physics.Components;
 using Exanite.GravitationalTetris.Features.Players;
@@ -16,13 +20,10 @@ using Exanite.GravitationalTetris.Features.Sprites.Components;
 using Exanite.GravitationalTetris.Features.Tetris.Components;
 using Exanite.GravitationalTetris.Features.Tiles;
 using Exanite.GravitationalTetris.Features.Tiles.Components;
-using Exanite.GravitationalTetris.Features.Time;
 using Exanite.GravitationalTetris.Features.Transforms.Components;
 using Exanite.ResourceManagement;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using nkast.Aether.Physics2D.Dynamics;
+using SDL2;
 
 namespace Exanite.GravitationalTetris.Features.Tetris.Systems;
 
@@ -52,12 +53,12 @@ public partial class TetrisSystem : EcsSystem, IInitializeSystem, IUpdateSystem
 
     private readonly ResourceManager resourceManager;
     private readonly Random random;
-    private readonly GameTimeData time;
-    private readonly GameInputData input;
+    private readonly SimulationTime time;
+    private readonly Input input;
     private readonly GameTilemapData tilemap;
-    private readonly PlayerControllerSystem playerControllerSystem; // Todo Don't do this
+    private readonly PlayerControllerSystem playerControllerSystem;
 
-    public TetrisSystem(ResourceManager resourceManager, Random random, GameTimeData time, GameInputData input, PlayerControllerSystem playerControllerSystem, GameTilemapData tilemap)
+    public TetrisSystem(ResourceManager resourceManager, Random random, SimulationTime time, Input input, PlayerControllerSystem playerControllerSystem, GameTilemapData tilemap)
     {
         this.resourceManager = resourceManager;
         this.random = random;
@@ -195,19 +196,19 @@ public partial class TetrisSystem : EcsSystem, IInitializeSystem, IUpdateSystem
 
         Score += ScorePerSecond * ScoreMultiplier * time.DeltaTime;
 
-        if (currentShapeRoot.IsAlive() && currentShapeRoot.Entity.Has<TetrisRootComponent>() && input.Current.Keyboard.IsKeyDown(Keys.Q) && !input.Previous.Keyboard.IsKeyDown(Keys.Q))
+        if (currentShapeRoot.IsAlive() && currentShapeRoot.Entity.Has<TetrisRootComponent>() && input.GetKeyDown(SDL.SDL_Scancode.SDL_SCANCODE_Q))
         {
             ref var tetrisRootComponent = ref currentShapeRoot.Entity.Get<TetrisRootComponent>();
             tetrisRootComponent.Rotation = (TetrisRotation)(((int)tetrisRootComponent.Rotation + 1) % 4);
         }
 
-        if (currentShapeRoot.IsAlive() && currentShapeRoot.Entity.Has<TetrisRootComponent>() && input.Current.Keyboard.IsKeyDown(Keys.E) && !input.Previous.Keyboard.IsKeyDown(Keys.E))
+        if (currentShapeRoot.IsAlive() && currentShapeRoot.Entity.Has<TetrisRootComponent>() && input.GetKeyDown(SDL.SDL_Scancode.SDL_SCANCODE_E))
         {
             ref var tetrisRootComponent = ref currentShapeRoot.Entity.Get<TetrisRootComponent>();
             tetrisRootComponent.Rotation = (TetrisRotation)(((int)tetrisRootComponent.Rotation + 1) % 4);
         }
 
-        if (!currentShapeRoot.IsAlive() || (input.Current.Keyboard.IsKeyDown(Keys.Space) && !input.Previous.Keyboard.IsKeyDown(Keys.Space)) || World.CountEntities(ShouldShouldPlaceTetris_QueryDescription) > 0)
+        if (!currentShapeRoot.IsAlive() || input.GetKeyDown(SDL.SDL_Scancode.SDL_SCANCODE_SPACE) || World.CountEntities(ShouldShouldPlaceTetris_QueryDescription) > 0)
         {
             PlaceBlocksQuery(World);
 
@@ -432,7 +433,7 @@ public partial class TetrisSystem : EcsSystem, IInitializeSystem, IUpdateSystem
         ref var rootTransform = ref rootEntity.Get<TransformComponent>();
 
         var localPosition = new Vector2(block.LocalX, block.LocalY);
-        transform.Position = Vector2.Transform(localPosition, Matrix.CreateRotationZ(float.Pi / 2 * (int)root.Rotation) * Matrix.CreateTranslation(rootTransform.Position.X, rootTransform.Position.Y, 0));
+        transform.Position = Vector2.Transform(localPosition, Matrix4x4.CreateRotationZ(float.Pi / 2 * (int)root.Rotation) * Matrix4x4.CreateTranslation(rootTransform.Position.X, rootTransform.Position.Y, 0));
     }
 
     [Query]

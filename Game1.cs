@@ -106,7 +106,7 @@ public class Game1 : Game
             config.RegisterAllCallbacks<CameraProjectionSystem>();
             config.RegisterAllCallbacks<TilemapRenderSystem>();
             config.RegisterAllCallbacks<SpriteRenderSystem>();
-            config.RegisterAllCallbacks<TetrisUiSystem>();
+            // config.RegisterAllCallbacks<TetrisUiSystem>();
         }
         config.RegisterAllCallbacks<ResizeSwapChainSystem>();
         config.RegisterAllCallbacks<PresentSwapChainSystem>();

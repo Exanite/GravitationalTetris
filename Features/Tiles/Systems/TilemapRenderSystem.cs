@@ -1,16 +1,17 @@
 using System;
+using System.Drawing;
+using System.Numerics;
 using Arch.System;
 using Arch.System.SourceGenerator;
 using Exanite.Core.Utilities;
 using Exanite.Ecs.Systems;
+using Exanite.Engine.Rendering;
+using Exanite.Engine.Time;
 using Exanite.GravitationalTetris.Features.Cameras.Components;
 using Exanite.GravitationalTetris.Features.Resources;
 using Exanite.GravitationalTetris.Features.Sprites;
 using Exanite.GravitationalTetris.Features.Tetris.Components;
-using Exanite.GravitationalTetris.Features.Time;
 using Exanite.ResourceManagement;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace Exanite.GravitationalTetris.Features.Tiles.Systems;
 
@@ -19,12 +20,12 @@ public partial class TilemapRenderSystem : EcsSystem, IRenderSystem, IInitialize
     private readonly GameSpriteBatch gameSpriteBatch;
     private readonly GameTilemapData tilemap;
     private readonly ResourceManager resourceManager;
-    private readonly GameTimeData time;
+    private readonly SimulationTime time;
 
     private IResourceHandle<Texture2D> emptyTileTexture = null!;
     private IResourceHandle<Texture2D> placeholderTileTexture = null!;
 
-    public TilemapRenderSystem(GameSpriteBatch gameSpriteBatch, GameTilemapData tilemap, ResourceManager resourceManager, GameTimeData time)
+    public TilemapRenderSystem(GameSpriteBatch gameSpriteBatch, GameTilemapData tilemap, ResourceManager resourceManager, SimulationTime time)
     {
         this.gameSpriteBatch = gameSpriteBatch;
         this.tilemap = tilemap;
