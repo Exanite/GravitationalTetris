@@ -27,7 +27,7 @@ public partial class CameraProjectionSystem : EcsSystem, IRenderSystem
         var swapChain = rendererContext.SwapChain;
         var aspectRatio = swapChain.GetDesc().Width / (float)swapChain.GetDesc().Height;
 
-        cameraProjection.View = Matrix4x4.CreateRotationZ(transform.Rotation) * Matrix4x4.CreateTranslation(transform.Position.X, transform.Position.Y, 0);
+        cameraProjection.View = Matrix4x4.CreateRotationZ(transform.Rotation) * Matrix4x4.CreateTranslation(-transform.Position.X, -transform.Position.Y, -10);
         cameraProjection.Projection = Matrix4x4.CreateOrthographic(camera.VerticalHeight * aspectRatio, camera.VerticalHeight, 0.001f, 1000f);
     }
 }

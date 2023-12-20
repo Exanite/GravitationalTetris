@@ -140,8 +140,6 @@ public partial class SpriteRenderSystem : EcsSystem, IInitializeSystem, IRenderS
         mesh.Dispose();
     }
 
-
-
     [Query]
     [All<CameraComponent>]
     private void Draw(ref CameraProjectionComponent cameraProjection)
@@ -155,7 +153,7 @@ public partial class SpriteRenderSystem : EcsSystem, IInitializeSystem, IRenderS
         var deviceContext = rendererContext.DeviceContext;
 
         var texture = sprite.Texture.Value;
-        shaderResourceBinding.GetVariableByName(ShaderType.Pixel, "Texture").Set(texture.View, SetShaderResourceFlags.None);
+        shaderResourceBinding.GetVariableByName(ShaderType.Pixel, "Texture").Set(texture.View, SetShaderResourceFlags.AllowOverwrite);
 
         var world = Matrix4x4.CreateTranslation(transform.Position.X, transform.Position.Y, 0);
         var view = cameraProjection.View;
