@@ -3,12 +3,13 @@ using Exanite.ResourceManagement;
 using FontStashSharp;
 using Myra.Graphics2D;
 using Myra.Graphics2D.UI;
+using Window = Exanite.Engine.Windowing.Window;
 
 namespace Exanite.GravitationalTetris.Features.Tetris.Systems;
 
-public class TetrisUiSystem : EcsSystem, IUpdateSystem, IRenderSystem
+public class TetrisUiSystem : EcsSystem, IInitializeSystem, IUpdateSystem, IRenderSystem
 {
-    private readonly Desktop desktop;
+    private Desktop desktop = null!;
 
     private readonly ResourceManager resourceManager;
     private readonly TetrisSystem tetrisSystem;
@@ -19,7 +20,10 @@ public class TetrisUiSystem : EcsSystem, IUpdateSystem, IRenderSystem
         this.resourceManager = resourceManager;
         this.tetrisSystem = tetrisSystem;
         this.window = window;
+    }
 
+    public void Initialize()
+    {
         desktop = new Desktop();
     }
 
@@ -42,12 +46,12 @@ public class TetrisUiSystem : EcsSystem, IUpdateSystem, IRenderSystem
 
         // Todo Hack for now, need to research how to get screen scaling / DPI
         var fontScaling = 1f;
-        if (window.Width > 1920)
+        if (window.Settings.Width > 1920)
         {
             fontScaling = 1.5f;
         }
 
-        if (window.Width > 2560)
+        if (window.Settings.Width > 2560)
         {
             fontScaling = 2f;
         }
