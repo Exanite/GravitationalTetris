@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Numerics;
+using Diligent;
 using Exanite.Engine.Rendering;
 using FontStashSharp;
 using FontStashSharp.Interfaces;
@@ -89,11 +90,26 @@ public class ExaniteEngineMyraRenderer : IMyraRenderer
     }
 }
 
-public class ExaniteEngineFontTextureManager : ITexture2DManager
+public class ExaniteEngineFontTextureManager : ITexture2DManager, IDisposable
 {
+    private int nextId = 0;
+    private List<Texture2D> textures = new();
+
+    private readonly RendererContext rendererContext;
+
+    public ExaniteEngineFontTextureManager(RendererContext rendererContext)
+    {
+        this.rendererContext = rendererContext;
+    }
+
     public object CreateTexture(int width, int height)
     {
-        throw new NotImplementedException();
+        var texture = new Texture2D($"FontStashSharp Texture #{nextId}", width, height, rendererContext, Usage.Dynamic);
+        textures.Add(texture);
+
+        nextId++;
+
+        return texture;
     }
 
     public Point GetTextureSize(object texture)
@@ -103,8 +119,33 @@ public class ExaniteEngineFontTextureManager : ITexture2DManager
         return new Point(typedTexture.Width, typedTexture.Height);
     }
 
-    public void SetTextureData(object texture, Rectangle bounds, byte[] data)
+    public unsafe void SetTextureData(object texture, Rectangle bounds, byte[] data)
     {
-        throw new NotImplementedException();
+        var typedTexture = (Texture2D)texture;
+
+        var resource = rendererContext.DeviceContext.MapTextureSubresource(typedTexture.Texture, 0, 0, MapType.Write, MapFlags.Discard, new Box()
+        {
+            MinX = (uint)bounds.X,
+            MinY = (uint)bounds.Y,
+            MaxX = (uint)(bounds.X + bounds.Width),
+            MaxY = (uint)(bounds.Y + bounds.Height),
+        });
+        {
+            var resourceData = new Span<byte>((void*)resource.Data, bounds.Width * bounds.Height);
+            // Todo Going to naively copy for now - Likely need to change RGBA order
+            for (var i = 0; i < data.Length; i++)
+            {
+                resourceData[i] = data[i];
+            }
+        }
+        rendererContext.DeviceContext.UnmapTextureSubresource(typedTexture.Texture, 0, 0);
+    }
+
+    public void Dispose()
+    {
+        foreach (var texture in textures)
+        {
+            texture.Dispose();
+        }
     }
 }
