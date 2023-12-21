@@ -10,13 +10,15 @@ public struct SpriteUniformData
     public required Matrix4x4 View;
     public required Matrix4x4 Projection;
 
-    public required Vector4 Color;
+    public Vector4 Color;
 
     public Vector2 Offset;
     public Vector2 Size;
 
     public SpriteUniformData()
     {
+        Color = Vector4.One;
+
         Offset = Vector2.Zero;
         Size = Vector2.One;
     }

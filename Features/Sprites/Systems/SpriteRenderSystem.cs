@@ -44,7 +44,6 @@ public partial class SpriteRenderSystem : EcsSystem, IRenderSystem
             World = world,
             View = view,
             Projection = projection,
-            Color = Vector4.One,
         });
     }
 }

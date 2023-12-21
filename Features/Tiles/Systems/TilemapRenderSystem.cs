@@ -69,7 +69,6 @@ public partial class TilemapRenderSystem : EcsSystem, IRenderSystem, IInitialize
                     World = world,
                     View = view,
                     Projection = projection,
-                    Color = Vector4.One,
                 });
             }
         }
