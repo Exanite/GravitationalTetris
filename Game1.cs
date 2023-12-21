@@ -109,6 +109,7 @@ public class Game1 : Game
         config.RegisterAllCallbacks<TilemapColliderSystem>();
 
         config.RegisterAllCallbacks<RenderingResourcesSystem>();
+        config.RegisterAllCallbacks<ResizeSwapChainSystem>();
         config.RegisterAllCallbacks<ClearRenderTargetRenderSystem>();
         {
             config.RegisterAllCallbacks<CameraProjectionSystem>();
@@ -116,7 +117,6 @@ public class Game1 : Game
             config.RegisterAllCallbacks<SpriteRenderSystem>();
             // config.RegisterAllCallbacks<TetrisUiSystem>();
         }
-        config.RegisterAllCallbacks<ResizeSwapChainSystem>();
         config.RegisterAllCallbacks<PresentSwapChainSystem>();
 
         config.RegisterAllCallbacks<RemoveDestroyedSystem>();
