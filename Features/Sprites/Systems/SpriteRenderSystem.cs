@@ -4,7 +4,6 @@ using Arch.System.SourceGenerator;
 using Diligent;
 using Exanite.Ecs.Systems;
 using Exanite.Engine.Rendering;
-using Exanite.Engine.Rendering.Systems;
 using Exanite.GravitationalTetris.Features.Cameras.Components;
 using Exanite.GravitationalTetris.Features.Rendering;
 using Exanite.GravitationalTetris.Features.Sprites.Components;

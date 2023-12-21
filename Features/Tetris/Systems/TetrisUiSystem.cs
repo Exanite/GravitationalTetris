@@ -1,7 +1,6 @@
 using Exanite.Ecs.Systems;
 using Exanite.ResourceManagement;
 using FontStashSharp;
-using Myra;
 using Myra.Graphics2D;
 using Myra.Graphics2D.UI;
 
