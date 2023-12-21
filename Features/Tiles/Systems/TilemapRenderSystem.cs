@@ -10,6 +10,7 @@ using Exanite.Engine.Time;
 using Exanite.GravitationalTetris.Features.Cameras.Components;
 using Exanite.GravitationalTetris.Features.Rendering;
 using Exanite.GravitationalTetris.Features.Resources;
+using Exanite.GravitationalTetris.Features.Sprites.Systems;
 using Exanite.GravitationalTetris.Features.Tetris.Components;
 using Exanite.ResourceManagement;
 using ValueType = Diligent.ValueType;
@@ -23,6 +24,7 @@ public partial class TilemapRenderSystem : EcsSystem, IRenderSystem, IInitialize
     private readonly ResourceManager resourceManager;
     private readonly SimulationTime time;
     private readonly RenderingResourcesSystem renderingResourcesSystem;
+    private readonly SpriteBatchSystem spriteBatchSystem;
 
     private IResourceHandle<Texture2D> emptyTileTexture = null!;
     private IResourceHandle<Texture2D> placeholderTileTexture = null!;
@@ -32,13 +34,15 @@ public partial class TilemapRenderSystem : EcsSystem, IRenderSystem, IInitialize
         GameTilemapData tilemap,
         ResourceManager resourceManager,
         SimulationTime time,
-        RenderingResourcesSystem renderingResourcesSystem)
+        RenderingResourcesSystem renderingResourcesSystem,
+        SpriteBatchSystem spriteBatchSystem)
     {
         this.rendererContext = rendererContext;
         this.tilemap = tilemap;
         this.resourceManager = resourceManager;
         this.time = time;
         this.renderingResourcesSystem = renderingResourcesSystem;
+        this.spriteBatchSystem = spriteBatchSystem;
     }
 
     public void Initialize()
@@ -57,12 +61,6 @@ public partial class TilemapRenderSystem : EcsSystem, IRenderSystem, IInitialize
     [All<CameraComponent>]
     private void DrawTiles(ref CameraProjectionComponent cameraProjection)
     {
-        var deviceContext = rendererContext.DeviceContext;
-        var shaderResourceBinding = renderingResourcesSystem.ShaderResourceBinding;
-        var uniformBuffer = renderingResourcesSystem.UniformBuffer;
-        var pipeline = renderingResourcesSystem.Pipeline;
-        var mesh = renderingResourcesSystem.Mesh;
-
         for (var x = 0; x < tilemap.Tiles.GetLength(0); x++)
         {
             for (var y = 0; y < tilemap.Tiles.GetLength(1); y++)
@@ -70,30 +68,16 @@ public partial class TilemapRenderSystem : EcsSystem, IRenderSystem, IInitialize
                 ref var tile = ref tilemap.Tiles[x, y];
                 var texture = (tile.Texture ?? emptyTileTexture).Value;
 
-                shaderResourceBinding.GetVariableByName(ShaderType.Pixel, "Texture").Set(texture.View, SetShaderResourceFlags.AllowOverwrite);
-
                 var world = Matrix4x4.CreateTranslation(x, y, -1);
                 var view = cameraProjection.View;
                 var projection = cameraProjection.Projection;
 
-                var mapUniformBuffer = uniformBuffer.Map(MapType.Write, MapFlags.Discard);
+                spriteBatchSystem.DrawSprite(texture, new SpriteUniformData
                 {
-                    mapUniformBuffer[0].World = world;
-                    mapUniformBuffer[0].View = view;
-                    mapUniformBuffer[0].Projection = projection;
-                    mapUniformBuffer[0].Color = Vector4.One;
-                }
-                uniformBuffer.Unmap(MapType.Write);
-
-                deviceContext.SetPipelineState(pipeline);
-                deviceContext.SetVertexBuffers(0, new[] { mesh.VertexBuffer }, new[] { 0ul }, ResourceStateTransitionMode.Transition);
-                deviceContext.SetIndexBuffer(mesh.IndexBuffer, 0, ResourceStateTransitionMode.Transition);
-                deviceContext.CommitShaderResources(shaderResourceBinding, ResourceStateTransitionMode.Transition);
-                deviceContext.DrawIndexed(new DrawIndexedAttribs
-                {
-                    IndexType = ValueType.UInt32,
-                    NumIndices = 36,
-                    Flags = DrawFlags.VerifyAll,
+                    World = world,
+                    View = view,
+                    Projection = projection,
+                    Color = Vector4.One,
                 });
             }
         }
@@ -109,12 +93,6 @@ public partial class TilemapRenderSystem : EcsSystem, IRenderSystem, IInitialize
     [All<CameraComponent>]
     private void DrawPlaceholders_1([Data] ref TetrisRootComponent tetrisRoot, ref CameraProjectionComponent cameraProjection)
     {
-        var deviceContext = rendererContext.DeviceContext;
-        var shaderResourceBinding = renderingResourcesSystem.ShaderResourceBinding;
-        var uniformBuffer = renderingResourcesSystem.UniformBuffer;
-        var pipeline = renderingResourcesSystem.Pipeline;
-        var mesh = renderingResourcesSystem.Mesh;
-
         foreach (var blockPosition in tetrisRoot.PredictedBlockPositions)
         {
             var texture = placeholderTileTexture.Value;
@@ -123,30 +101,16 @@ public partial class TilemapRenderSystem : EcsSystem, IRenderSystem, IInitialize
             var minAlpha = 0.1f;
             var alpha = MathUtility.Remap(EaseInOutCubic(time.Time / 1.5f), 0, 1, minAlpha, maxAlpha);
 
-            shaderResourceBinding.GetVariableByName(ShaderType.Pixel, "Texture").Set(texture.View, SetShaderResourceFlags.AllowOverwrite);
-
             var world = Matrix4x4.CreateTranslation(blockPosition.X, blockPosition.Y, -0.5f);
             var view = cameraProjection.View;
             var projection = cameraProjection.Projection;
 
-            var mapUniformBuffer = uniformBuffer.Map(MapType.Write, MapFlags.Discard);
+            spriteBatchSystem.DrawSprite(texture, new SpriteUniformData
             {
-                mapUniformBuffer[0].World = world;
-                mapUniformBuffer[0].View = view;
-                mapUniformBuffer[0].Projection = projection;
-                mapUniformBuffer[0].Color = new Vector4(1, 1, 1, alpha);
-            }
-            uniformBuffer.Unmap(MapType.Write);
-
-            deviceContext.SetPipelineState(pipeline);
-            deviceContext.SetVertexBuffers(0, new[] { mesh.VertexBuffer }, new[] { 0ul }, ResourceStateTransitionMode.Transition);
-            deviceContext.SetIndexBuffer(mesh.IndexBuffer, 0, ResourceStateTransitionMode.Transition);
-            deviceContext.CommitShaderResources(shaderResourceBinding, ResourceStateTransitionMode.Transition);
-            deviceContext.DrawIndexed(new DrawIndexedAttribs
-            {
-                IndexType = ValueType.UInt32,
-                NumIndices = 36,
-                Flags = DrawFlags.VerifyAll,
+                World = world,
+                View = view,
+                Projection = projection,
+                Color = new Vector4(1, 1, 1, alpha),
             });
         }
     }

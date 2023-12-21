@@ -16,11 +16,13 @@ public partial class SpriteRenderSystem : EcsSystem, IRenderSystem
 {
     private readonly RendererContext rendererContext;
     private readonly RenderingResourcesSystem renderingResourcesSystem;
+    private readonly SpriteBatchSystem spriteBatchSystem;
 
-    public SpriteRenderSystem(RendererContext rendererContext, RenderingResourcesSystem renderingResourcesSystem)
+    public SpriteRenderSystem(RendererContext rendererContext, RenderingResourcesSystem renderingResourcesSystem, SpriteBatchSystem spriteBatchSystem)
     {
         this.rendererContext = rendererContext;
         this.renderingResourcesSystem = renderingResourcesSystem;
+        this.spriteBatchSystem = spriteBatchSystem;
     }
 
     public void Render()
