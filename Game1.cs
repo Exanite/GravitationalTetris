@@ -118,6 +118,7 @@ public class Game1 : Game
         config.RegisterAllCallbacks<ClearRenderTargetRenderSystem>();
         {
             config.RegisterAllCallbacks<SetClearColorSystem>();
+            config.RegisterAllCallbacks<SpriteBatchSystem>();
 
             config.RegisterAllCallbacks<CameraProjectionSystem>();
             config.RegisterAllCallbacks<TilemapRenderSystem>();
