@@ -15,7 +15,7 @@ namespace Exanite.GravitationalTetris.Features.Ui;
 
 public class ExaniteEngineMyraPlatform : IMyraPlatform
 {
-    private TouchCollection touchState;
+    private readonly TouchCollection touchState;
 
     private readonly Window window;
 
@@ -24,14 +24,14 @@ public class ExaniteEngineMyraPlatform : IMyraPlatform
         this.window = window;
         Renderer = renderer;
 
-        touchState = new TouchCollection()
+        touchState = new TouchCollection
         {
             Touches = new List<TouchLocation>(),
             IsConnected = false,
         };
     }
 
-    public Point ViewSize => new Point(window.Settings.Width, window.Settings.Height);
+    public Point ViewSize => new(window.Settings.Width, window.Settings.Height);
     public IMyraRenderer Renderer { get; }
 
     public MouseInfo GetMouseInfo()
@@ -93,7 +93,7 @@ public class ExaniteEngineMyraRenderer : IMyraRenderer
 public class ExaniteEngineFontTextureManager : ITexture2DManager, IDisposable
 {
     private int nextId = 0;
-    private List<Texture2D> textures = new();
+    private readonly List<Texture2D> textures = new();
 
     private readonly RendererContext rendererContext;
 
@@ -123,7 +123,7 @@ public class ExaniteEngineFontTextureManager : ITexture2DManager, IDisposable
     {
         var typedTexture = (Texture2D)texture;
 
-        var resource = rendererContext.DeviceContext.MapTextureSubresource(typedTexture.Texture, 0, 0, MapType.Write, MapFlags.Discard, new Box()
+        var resource = rendererContext.DeviceContext.MapTextureSubresource(typedTexture.Texture, 0, 0, MapType.Write, MapFlags.Discard, new Box
         {
             MinX = (uint)bounds.X,
             MinY = (uint)bounds.Y,
