@@ -48,9 +48,8 @@ public class ExaniteEngineFontTextureManager : ITexture2DManager, IDisposable
             MaxY = (uint)(bounds.Y + bounds.Height),
         });
         {
-            var resourceData = new Span<byte>((void*)resource.Data, bounds.Width * bounds.Height);
-            // Todo Going to naively copy for now - Likely need to change RGBA order
-            for (var i = 0; i < data.Length; i++)
+            var resourceData = new Span<byte>((void*)resource.Data, bounds.Width * bounds.Height * 4);
+            for (var i = 0; i < resourceData.Length; i++)
             {
                 resourceData[i] = data[i];
             }
