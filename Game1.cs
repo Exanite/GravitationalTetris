@@ -117,6 +117,8 @@ public class Game1 : Game
         config.RegisterAllCallbacks<ResizeSwapChainSystem>();
         config.RegisterAllCallbacks<ClearRenderTargetRenderSystem>();
         {
+            config.RegisterAllCallbacks<SetClearColorSystem>();
+
             config.RegisterAllCallbacks<CameraProjectionSystem>();
             config.RegisterAllCallbacks<TilemapRenderSystem>();
             config.RegisterAllCallbacks<SpriteRenderSystem>();

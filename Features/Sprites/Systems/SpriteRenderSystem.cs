@@ -13,22 +13,15 @@ using ValueType = Diligent.ValueType;
 
 namespace Exanite.GravitationalTetris.Features.Sprites.Systems;
 
-public partial class SpriteRenderSystem : EcsSystem, IInitializeSystem, IRenderSystem
+public partial class SpriteRenderSystem : EcsSystem, IRenderSystem
 {
     private readonly RendererContext rendererContext;
-    private readonly ClearRenderTargetRenderSystem clearRenderTargetRenderSystem;
     private readonly RenderingResourcesSystem renderingResourcesSystem;
 
-    public SpriteRenderSystem(RendererContext rendererContext, ClearRenderTargetRenderSystem clearRenderTargetRenderSystem, RenderingResourcesSystem renderingResourcesSystem)
+    public SpriteRenderSystem(RendererContext rendererContext, RenderingResourcesSystem renderingResourcesSystem)
     {
         this.rendererContext = rendererContext;
-        this.clearRenderTargetRenderSystem = clearRenderTargetRenderSystem;
         this.renderingResourcesSystem = renderingResourcesSystem;
-    }
-
-    public void Initialize()
-    {
-        clearRenderTargetRenderSystem.ClearColor = Vector4.Zero;
     }
 
     public void Render()
