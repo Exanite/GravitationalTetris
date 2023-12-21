@@ -16,7 +16,7 @@ struct Output
 {
     float4 Pos : SV_POSITION;
     float2 Uv : TEX_COORD;
-    float4 Color: SV_COLOR;
+    float4 Color: COLOR;
 };
 
 void main(
