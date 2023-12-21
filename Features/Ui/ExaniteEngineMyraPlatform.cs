@@ -71,12 +71,12 @@ public class ExaniteEngineMyraRenderer : IMyraRenderer
 
     public void Begin(TextureFiltering textureFiltering)
     {
-        throw new NotImplementedException();
+        // Todo No batching/instancing for now
     }
 
     public void End()
     {
-        throw new NotImplementedException();
+        // Todo No batching/instancing for now
     }
 
     public void DrawSprite(object texture, Vector2 pos, Rectangle? src, FSColor color, float rotation, Vector2 scale, float depth)
