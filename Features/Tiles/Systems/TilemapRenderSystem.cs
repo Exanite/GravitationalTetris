@@ -2,7 +2,6 @@ using System;
 using System.Numerics;
 using Arch.System;
 using Arch.System.SourceGenerator;
-using Diligent;
 using Exanite.Core.Utilities;
 using Exanite.Ecs.Systems;
 using Exanite.Engine.Rendering;
@@ -13,35 +12,28 @@ using Exanite.GravitationalTetris.Features.Resources;
 using Exanite.GravitationalTetris.Features.Sprites.Systems;
 using Exanite.GravitationalTetris.Features.Tetris.Components;
 using Exanite.ResourceManagement;
-using ValueType = Diligent.ValueType;
 
 namespace Exanite.GravitationalTetris.Features.Tiles.Systems;
 
 public partial class TilemapRenderSystem : EcsSystem, IRenderSystem, IInitializeSystem
 {
-    private readonly RendererContext rendererContext;
     private readonly GameTilemapData tilemap;
     private readonly ResourceManager resourceManager;
     private readonly SimulationTime time;
-    private readonly RenderingResourcesSystem renderingResourcesSystem;
     private readonly SpriteBatchSystem spriteBatchSystem;
 
     private IResourceHandle<Texture2D> emptyTileTexture = null!;
     private IResourceHandle<Texture2D> placeholderTileTexture = null!;
 
     public TilemapRenderSystem(
-        RendererContext rendererContext,
         GameTilemapData tilemap,
         ResourceManager resourceManager,
         SimulationTime time,
-        RenderingResourcesSystem renderingResourcesSystem,
         SpriteBatchSystem spriteBatchSystem)
     {
-        this.rendererContext = rendererContext;
         this.tilemap = tilemap;
         this.resourceManager = resourceManager;
         this.time = time;
-        this.renderingResourcesSystem = renderingResourcesSystem;
         this.spriteBatchSystem = spriteBatchSystem;
     }
 
@@ -68,7 +60,7 @@ public partial class TilemapRenderSystem : EcsSystem, IRenderSystem, IInitialize
                 ref var tile = ref tilemap.Tiles[x, y];
                 var texture = (tile.Texture ?? emptyTileTexture).Value;
 
-                var world = Matrix4x4.CreateTranslation(x, y, -1);
+                var world = Matrix4x4.CreateTranslation(x, y, 0);
                 var view = cameraProjection.View;
                 var projection = cameraProjection.Projection;
 
@@ -101,7 +93,7 @@ public partial class TilemapRenderSystem : EcsSystem, IRenderSystem, IInitialize
             var minAlpha = 0.1f;
             var alpha = MathUtility.Remap(EaseInOutCubic(time.Time / 1.5f), 0, 1, minAlpha, maxAlpha);
 
-            var world = Matrix4x4.CreateTranslation(blockPosition.X, blockPosition.Y, -0.5f);
+            var world = Matrix4x4.CreateTranslation(blockPosition.X, blockPosition.Y, 0);
             var view = cameraProjection.View;
             var projection = cameraProjection.Projection;
 
