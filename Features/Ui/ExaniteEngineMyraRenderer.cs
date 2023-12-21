@@ -54,7 +54,7 @@ public class ExaniteEngineMyraRenderer : IMyraRenderer
             size = new Vector2((float)rect.Width / typedTexture.Width, (float)rect.Height / typedTexture.Height);
         }
 
-        var world = Matrix4x4.CreateScale(scale.X * pixelSize.X, scale.Y * pixelSize.Y, 1) * Matrix4x4.CreateRotationZ(rotation) * Matrix4x4.CreateTranslation(pos.X, pos.Y, 0);
+        var world = Matrix4x4.CreateTranslation(0.5f, 0.5f, 0) * Matrix4x4.CreateScale(scale.X * pixelSize.X, scale.Y * pixelSize.Y, 1) * Matrix4x4.CreateRotationZ(rotation) * Matrix4x4.CreateTranslation(pos.X, pos.Y, 0);
         var view = Matrix4x4.CreateTranslation(0, 0, -10);
         var projection = Matrix4x4.CreateOrthographicOffCenter(0, window.Settings.Width, 0, window.Settings.Height, 0.001f, 1000f) * Matrix4x4.CreateRotationZ(float.Pi) * Matrix4x4.CreateScale(-1, 1, 1);
 
