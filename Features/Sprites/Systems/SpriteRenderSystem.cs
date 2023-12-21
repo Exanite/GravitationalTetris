@@ -7,7 +7,6 @@ using Exanite.Engine.Rendering;
 using Exanite.Engine.Rendering.Systems;
 using Exanite.GravitationalTetris.Features.Cameras.Components;
 using Exanite.GravitationalTetris.Features.Rendering;
-using Exanite.GravitationalTetris.Features.Resources;
 using Exanite.GravitationalTetris.Features.Sprites.Components;
 using Exanite.GravitationalTetris.Features.Transforms.Components;
 using ValueType = Diligent.ValueType;
@@ -60,7 +59,7 @@ public partial class SpriteRenderSystem : EcsSystem, IInitializeSystem, IRenderS
         var view = cameraProjection.View;
         var projection = cameraProjection.Projection;
 
-        var mapUniformBuffer = uniformBuffer.Map(MapType.Write);
+        var mapUniformBuffer = uniformBuffer.Map(MapType.Write, MapFlags.Discard);
         {
             mapUniformBuffer[0].World = world;
             mapUniformBuffer[0].View = view;

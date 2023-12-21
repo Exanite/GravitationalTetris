@@ -25,9 +25,9 @@ public class UniformBuffer<T> : IDisposable
     public IBuffer Buffer { get; private set; }
     public int Count { get; }
 
-    public unsafe Span<T> Map(MapType mapType)
+    public unsafe Span<T> Map(MapType mapType, MapFlags mapFlags)
     {
-        var pointer = rendererContext.DeviceContext.MapBuffer(Buffer, mapType, MapFlags.None);
+        var pointer = rendererContext.DeviceContext.MapBuffer(Buffer, mapType, mapFlags);
 
         return new Span<T>((void*)pointer, Count);
     }

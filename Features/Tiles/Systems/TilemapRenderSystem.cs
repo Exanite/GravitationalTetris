@@ -76,7 +76,7 @@ public partial class TilemapRenderSystem : EcsSystem, IRenderSystem, IInitialize
                 var view = cameraProjection.View;
                 var projection = cameraProjection.Projection;
 
-                var mapUniformBuffer = uniformBuffer.Map(MapType.Write);
+                var mapUniformBuffer = uniformBuffer.Map(MapType.Write, MapFlags.Discard);
                 {
                     mapUniformBuffer[0].World = world;
                     mapUniformBuffer[0].View = view;
@@ -129,7 +129,7 @@ public partial class TilemapRenderSystem : EcsSystem, IRenderSystem, IInitialize
             var view = cameraProjection.View;
             var projection = cameraProjection.Projection;
 
-            var mapUniformBuffer = uniformBuffer.Map(MapType.Write);
+            var mapUniformBuffer = uniformBuffer.Map(MapType.Write, MapFlags.Discard);
             {
                 mapUniformBuffer[0].World = world;
                 mapUniformBuffer[0].View = view;
