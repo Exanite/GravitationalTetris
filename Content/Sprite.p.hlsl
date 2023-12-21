@@ -1,5 +1,5 @@
 Texture2D Texture;
-SamplerState Texture_sampler;
+SamplerState TextureSampler;
 
 struct Input
 {
@@ -17,5 +17,5 @@ void main(
     in Input input,
     out Output output)
 {
-    output.Color = Texture.Sample(Texture_sampler, input.Uv) * input.Color;
+    output.Color = Texture.Sample(TextureSampler, input.Uv) * input.Color;
 }
