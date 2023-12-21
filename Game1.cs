@@ -23,6 +23,8 @@ using Exanite.GravitationalTetris.Features.Sprites.Systems;
 using Exanite.GravitationalTetris.Features.Tetris.Systems;
 using Exanite.GravitationalTetris.Features.Tiles;
 using Exanite.GravitationalTetris.Features.Tiles.Systems;
+using Exanite.GravitationalTetris.Features.Ui;
+using Exanite.GravitationalTetris.Features.Ui.Systems;
 using EcsWorld = Arch.Core.World;
 using PhysicsWorld = nkast.Aether.Physics2D.Dynamics.World;
 
@@ -70,6 +72,9 @@ public class Game1 : Game
         // Input
         builder.RegisterType<Input>().SingleInstance();
 
+        // UI
+        builder.RegisterModule<UiModule>();
+
         // Shared data
         builder.RegisterType<GameTilemapData>().SingleInstance();
 
@@ -115,7 +120,9 @@ public class Game1 : Game
             config.RegisterAllCallbacks<CameraProjectionSystem>();
             config.RegisterAllCallbacks<TilemapRenderSystem>();
             config.RegisterAllCallbacks<SpriteRenderSystem>();
-            // config.RegisterAllCallbacks<TetrisUiSystem>();
+
+            config.RegisterAllCallbacks<MyraUiSystem>();
+            config.RegisterAllCallbacks<TetrisUiSystem>();
         }
         config.RegisterAllCallbacks<PresentSwapChainSystem>();
 
