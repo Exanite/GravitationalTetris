@@ -68,19 +68,6 @@ public class RenderingResourcesSystem : IInitializeSystem, IDisposable
                             Type = ShaderResourceVariableType.Mutable,
                         },
                     },
-                    ImmutableSamplers = new ImmutableSamplerDesc[]
-                    {
-                        new()
-                        {
-                            Desc = new SamplerDesc
-                            {
-                                MinFilter = FilterType.Point, MagFilter = FilterType.Point, MipFilter = FilterType.Point,
-                                AddressU = TextureAddressMode.Clamp, AddressV = TextureAddressMode.Clamp, AddressW = TextureAddressMode.Clamp,
-                            },
-                            SamplerOrTextureName = "Texture",
-                            ShaderStages = ShaderType.Pixel,
-                        },
-                    },
                 },
             },
             Vs = vShader.Value.Handle,
@@ -108,6 +95,12 @@ public class RenderingResourcesSystem : IInitializeSystem, IDisposable
                 DSVFormat = swapChain.GetDesc().DepthBufferFormat,
             },
         });
+        Pipeline.GetStaticVariableByName(ShaderType.Pixel, "TextureSampler")
+            .Set(renderDevice.CreateSampler(new SamplerDesc
+            {
+                MinFilter = FilterType.Point, MagFilter = FilterType.Point, MipFilter = FilterType.Point,
+                AddressU = TextureAddressMode.Clamp, AddressV = TextureAddressMode.Clamp, AddressW = TextureAddressMode.Clamp,
+            }), SetShaderResourceFlags.None);
         Pipeline.GetStaticVariableByName(ShaderType.Vertex, "Constants").Set(UniformBuffer.Buffer, SetShaderResourceFlags.None);
 
         ShaderResourceBinding = Pipeline.CreateShaderResourceBinding(true);

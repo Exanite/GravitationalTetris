@@ -42,6 +42,14 @@ public class Game1 : Game
 
         // Rendering
         builder.Register(_ =>
+        {
+            return new RendererContextSettings
+            {
+                UseCombinedSamplers = false,
+            };
+        });
+
+        builder.Register(_ =>
             {
                 return new Window("Gravitational Tetris");
             })
@@ -50,8 +58,9 @@ public class Game1 : Game
         builder.Register(ctx =>
             {
                 var window = ctx.Resolve<Window>();
+                var settings = ctx.Resolve<RendererContextSettings>();
 
-                return new RendererContext(GraphicsApi.Vulkan, window);
+                return new RendererContext(GraphicsApi.Vulkan, window, settings);
             })
             .SingleInstance();
 
