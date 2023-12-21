@@ -14,6 +14,7 @@ public class RenderingResourcesSystem : IInitializeSystem, IDisposable
     public UniformBuffer<SpriteUniformData> UniformBuffer = null!;
     public IPipelineState Pipeline = null!;
     public IShaderResourceBinding ShaderResourceBinding = null!;
+    public ISampler TextureSampler = null!;
 
     private readonly RendererContext rendererContext;
     private readonly ResourceManager resourceManager;
@@ -95,12 +96,14 @@ public class RenderingResourcesSystem : IInitializeSystem, IDisposable
                 DSVFormat = swapChain.GetDesc().DepthBufferFormat,
             },
         });
-        Pipeline.GetStaticVariableByName(ShaderType.Pixel, "TextureSampler")
-            .Set(renderDevice.CreateSampler(new SamplerDesc
-            {
-                MinFilter = FilterType.Point, MagFilter = FilterType.Point, MipFilter = FilterType.Point,
-                AddressU = TextureAddressMode.Clamp, AddressV = TextureAddressMode.Clamp, AddressW = TextureAddressMode.Clamp,
-            }), SetShaderResourceFlags.None);
+
+        TextureSampler = renderDevice.CreateSampler(new SamplerDesc
+        {
+            MinFilter = FilterType.Point, MagFilter = FilterType.Point, MipFilter = FilterType.Point,
+            AddressU = TextureAddressMode.Clamp, AddressV = TextureAddressMode.Clamp, AddressW = TextureAddressMode.Clamp,
+        });
+
+        Pipeline.GetStaticVariableByName(ShaderType.Pixel, "TextureSampler").Set(TextureSampler, SetShaderResourceFlags.None);
         Pipeline.GetStaticVariableByName(ShaderType.Vertex, "Constants").Set(UniformBuffer.Buffer, SetShaderResourceFlags.None);
 
         ShaderResourceBinding = Pipeline.CreateShaderResourceBinding(true);
@@ -109,6 +112,7 @@ public class RenderingResourcesSystem : IInitializeSystem, IDisposable
     public void Dispose()
     {
         ShaderResourceBinding.Dispose();
+        TextureSampler.Dispose();
         Pipeline.Dispose();
         UniformBuffer.Dispose();
         Mesh.Dispose();
