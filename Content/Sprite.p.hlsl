@@ -5,6 +5,7 @@ struct Input
 {
     float4 Pos : SV_POSITION;
     float2 Uv : TEX_COORD;
+    float4 Color: SV_COLOR;
 };
 
 struct Output
@@ -16,5 +17,5 @@ void main(
     in Input input,
     out Output output)
 {
-    output.Color = Texture.Sample(Texture_sampler, input.Uv);
+    output.Color = Texture.Sample(Texture_sampler, input.Uv) * input.Color;
 }
