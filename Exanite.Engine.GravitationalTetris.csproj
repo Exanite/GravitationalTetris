@@ -42,6 +42,8 @@
     <ProjectReference Include="..\Exanite.Ecs\Exanite.Ecs.csproj"/>
     <ProjectReference Include="..\Exanite.Engine\Exanite.Engine.csproj"/>
     <ProjectReference Include="..\Exanite.ResourceManagement\Exanite.ResourceManagement.csproj"/>
+    <ProjectReference Include="..\FontStashSharp\src\FontStashSharp\FontStashSharp.csproj" />
+    <ProjectReference Include="..\Myra\src\Myra\Myra.PlatformAgnostic.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
