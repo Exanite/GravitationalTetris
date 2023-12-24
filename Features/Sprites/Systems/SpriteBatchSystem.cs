@@ -164,7 +164,7 @@ public class SpriteBatchSystem : IInitializeSystem, IRenderSystem, IDisposable
         deviceContext.DrawIndexed(new DrawIndexedAttribs
         {
             IndexType = ValueType.UInt32,
-            NumIndices = 6,
+            NumIndices = (uint)mesh.IndexCount,
             Flags = DrawFlags.VerifyAll,
         });
     }
