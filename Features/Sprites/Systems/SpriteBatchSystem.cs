@@ -57,7 +57,7 @@ public class SpriteBatchSystem : IInitializeSystem, IRenderSystem, IDisposable
         {
             PSODesc = new PipelineStateDesc
             {
-                Name = "Sprite PSO",
+                Name = "Sprite Shader Pipeline",
                 ResourceLayout = new PipelineResourceLayoutDesc
                 {
                     DefaultVariableType = ShaderResourceVariableType.Static,
@@ -72,14 +72,19 @@ public class SpriteBatchSystem : IInitializeSystem, IRenderSystem, IDisposable
                     },
                 },
             },
-            Vs = vShader.Value.Handle,
-            Ps = pShader.Value.Handle,
+
             GraphicsPipeline = new GraphicsPipelineDesc
             {
                 InputLayout = VertexPositionUv.Layout,
                 PrimitiveTopology = PrimitiveTopology.TriangleStrip,
+
+                NumRenderTargets = 1,
+                RTVFormats = new[] { swapChain.GetDesc().ColorBufferFormat },
+                DSVFormat = swapChain.GetDesc().DepthBufferFormat,
+
                 RasterizerDesc = new RasterizerStateDesc { CullMode = CullMode.None },
                 DepthStencilDesc = new DepthStencilStateDesc { DepthEnable = true },
+
                 BlendDesc = new BlendStateDesc
                 {
                     RenderTargets = new RenderTargetBlendDesc[]
@@ -92,10 +97,10 @@ public class SpriteBatchSystem : IInitializeSystem, IRenderSystem, IDisposable
                         },
                     },
                 },
-                NumRenderTargets = 1,
-                RTVFormats = new[] { swapChain.GetDesc().ColorBufferFormat },
-                DSVFormat = swapChain.GetDesc().DepthBufferFormat,
             },
+
+            Vs = vShader.Value.Handle,
+            Ps = pShader.Value.Handle,
         });
 
         pipeline.GetStaticVariableByName(ShaderType.Pixel, "TextureSampler").Set(textureSampler, SetShaderResourceFlags.None);
