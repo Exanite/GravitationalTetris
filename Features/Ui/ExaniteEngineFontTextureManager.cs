@@ -36,25 +36,17 @@ public class ExaniteEngineFontTextureManager : ITexture2DManager, IDisposable
         return new Point(typedTexture.Width, typedTexture.Height);
     }
 
-    public unsafe void SetTextureData(object texture, Rectangle bounds, byte[] data)
+    public void SetTextureData(object texture, Rectangle bounds, byte[] data)
     {
         var typedTexture = (Texture2D)texture;
 
-        var resource = rendererContext.DeviceContext.MapTextureSubresource(typedTexture.Texture, 0, 0, MapType.Write, MapFlags.Discard, new Box
+        using (typedTexture.Map(0, 0, MapType.Write, MapFlags.Discard, bounds, out var textureData))
         {
-            MinX = (uint)bounds.X,
-            MinY = (uint)bounds.Y,
-            MaxX = (uint)(bounds.X + bounds.Width),
-            MaxY = (uint)(bounds.Y + bounds.Height),
-        });
-        {
-            var resourceData = new Span<byte>((void*)resource.Data, bounds.Width * bounds.Height * 4);
-            for (var i = 0; i < resourceData.Length; i++)
+            for (var i = 0; i < textureData.Length; i++)
             {
-                resourceData[i] = data[i];
+                textureData[i] = data[i];
             }
         }
-        rendererContext.DeviceContext.UnmapTextureSubresource(typedTexture.Texture, 0, 0);
     }
 
     public void Dispose()
