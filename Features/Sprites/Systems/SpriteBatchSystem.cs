@@ -10,7 +10,8 @@ namespace Exanite.GravitationalTetris.Features.Sprites.Systems;
 public class SpriteBatchSystem : IInitializeSystem, IRenderSystem, IDisposable
 {
     private ISampler textureSampler = null!;
-    private Buffer<SpriteUniformData> uniformBuffer = null!;
+    private Buffer<SpriteNonBatchedUniformData> uniformBuffer = null!;
+    private Buffer<SpriteInstanceData> instanceBuffer = null!;
 
     private IPipelineState pipeline = null!;
     private IShaderResourceBinding shaderResourceBinding = null!;
@@ -20,6 +21,8 @@ public class SpriteBatchSystem : IInitializeSystem, IRenderSystem, IDisposable
     private float incrementZ = 0.01f;
 
     private float currentZ;
+
+    private SpriteBeginDrawOptions beginDrawOptions;
 
     private readonly RendererContext rendererContext;
     private readonly ResourceManager resourceManager;
@@ -37,7 +40,14 @@ public class SpriteBatchSystem : IInitializeSystem, IRenderSystem, IDisposable
         var renderDevice = rendererContext.RenderDevice;
         var swapChain = rendererContext.SwapChain;
 
-        uniformBuffer = new Buffer<SpriteUniformData>("Sprite uniform buffer", rendererContext, new BufferDesc
+        uniformBuffer = new Buffer<SpriteNonBatchedUniformData>("Sprite uniform buffer", rendererContext, new BufferDesc
+        {
+            Usage = Usage.Dynamic,
+            BindFlags = BindFlags.UniformBuffer,
+            CPUAccessFlags = CpuAccessFlags.Write,
+        });
+
+        instanceBuffer = new Buffer<SpriteInstanceData>("Sprite instance buffer", rendererContext, new BufferDesc
         {
             Usage = Usage.Dynamic,
             BindFlags = BindFlags.UniformBuffer,
@@ -121,24 +131,40 @@ public class SpriteBatchSystem : IInitializeSystem, IRenderSystem, IDisposable
         textureSampler.Dispose();
         pipeline.Dispose();
         uniformBuffer.Dispose();
+        instanceBuffer.Dispose();
     }
 
-    public void DrawSprite(Texture2D texture, SpriteUniformData spriteUniformData)
+    public void Begin(SpriteBeginDrawOptions options)
+    {
+        beginDrawOptions = options;
+    }
+
+    public void Draw(SpriteDrawOptions options)
     {
         var deviceContext = rendererContext.DeviceContext;
 
-        textureVariable.Set(texture.DefaultView, SetShaderResourceFlags.AllowOverwrite);
+        textureVariable.Set(options.Texture.DefaultView, SetShaderResourceFlags.AllowOverwrite);
 
         using (uniformBuffer.Map(MapType.Write, MapFlags.Discard, out var uniformData))
         {
             // Hack for implementing sprite sorting based on draw order
-            if (spriteUniformData.World.Translation.Z == 0)
+            if (options.World.Translation.Z == 0)
             {
-                spriteUniformData.World.M43 = currentZ;
+                options.World.M43 = currentZ;
                 currentZ += incrementZ;
             }
 
-            uniformData[0] = spriteUniformData;
+            uniformData[0] = new SpriteNonBatchedUniformData
+            {
+                World = options.World,
+                View = beginDrawOptions.View,
+                Projection = beginDrawOptions.Projection,
+
+                Color = options.Color,
+
+                Offset = options.Offset,
+                Size = options.Size,
+            };
         }
 
         deviceContext.SetPipelineState(pipeline);
@@ -147,5 +173,10 @@ public class SpriteBatchSystem : IInitializeSystem, IRenderSystem, IDisposable
         {
             NumVertices = 4,
         });
+    }
+
+    public void End()
+    {
+
     }
 }
