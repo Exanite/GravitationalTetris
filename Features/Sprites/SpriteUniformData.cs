@@ -1,6 +1,5 @@
 using System.Numerics;
 using System.Runtime.InteropServices;
-using Diligent;
 
 namespace Exanite.GravitationalTetris.Features.Sprites;
 
