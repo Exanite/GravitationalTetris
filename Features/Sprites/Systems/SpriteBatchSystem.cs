@@ -1,17 +1,14 @@
 using System;
-using System.Numerics;
 using Diligent;
 using Exanite.Ecs.Systems;
 using Exanite.Engine.Rendering;
 using Exanite.ResourceManagement;
 using Exanite.GravitationalTetris.Features.Resources;
-using ValueType = Diligent.ValueType;
 
 namespace Exanite.GravitationalTetris.Features.Sprites.Systems;
 
 public class SpriteBatchSystem : IInitializeSystem, IRenderSystem, IDisposable
 {
-    private Mesh mesh = null!;
     private ISampler textureSampler = null!;
     private Buffer<SpriteUniformData> uniformBuffer = null!;
 
@@ -23,9 +20,6 @@ public class SpriteBatchSystem : IInitializeSystem, IRenderSystem, IDisposable
     private float incrementZ = 0.01f;
 
     private float currentZ;
-
-    private readonly IBuffer[] vertexBuffers = new IBuffer[1];
-    private readonly ulong[] vertexOffsets = new ulong[1];
 
     private readonly RendererContext rendererContext;
     private readonly ResourceManager resourceManager;
@@ -42,20 +36,6 @@ public class SpriteBatchSystem : IInitializeSystem, IRenderSystem, IDisposable
     {
         var renderDevice = rendererContext.RenderDevice;
         var swapChain = rendererContext.SwapChain;
-
-        mesh = Mesh.Create<VertexPositionUv>("Square mesh", rendererContext, new VertexPositionUv[]
-        {
-            new(new Vector3(-0.5f, -0.5f, 0), new Vector2(0, 0)),
-            new(new Vector3(0.5f, -0.5f, 0), new Vector2(1, 0)),
-            new(new Vector3(0.5f, 0.5f, 0), new Vector2(1, 1)),
-            new(new Vector3(-0.5f, 0.5f, 0), new Vector2(0, 1)),
-        }, new uint[]
-        {
-            2, 1, 0,
-            3, 2, 0,
-        });
-
-        vertexBuffers[0] = mesh.VertexBuffer;
 
         uniformBuffer = new Buffer<SpriteUniformData>("Sprite uniform buffer", rendererContext, new BufferDesc
         {
@@ -97,8 +77,8 @@ public class SpriteBatchSystem : IInitializeSystem, IRenderSystem, IDisposable
             GraphicsPipeline = new GraphicsPipelineDesc
             {
                 InputLayout = VertexPositionUv.Layout,
-                PrimitiveTopology = PrimitiveTopology.TriangleList,
-                RasterizerDesc = new RasterizerStateDesc { CullMode = CullMode.Front },
+                PrimitiveTopology = PrimitiveTopology.TriangleStrip,
+                RasterizerDesc = new RasterizerStateDesc { CullMode = CullMode.None },
                 DepthStencilDesc = new DepthStencilStateDesc { DepthEnable = true },
                 BlendDesc = new BlendStateDesc
                 {
@@ -136,7 +116,6 @@ public class SpriteBatchSystem : IInitializeSystem, IRenderSystem, IDisposable
         textureSampler.Dispose();
         pipeline.Dispose();
         uniformBuffer.Dispose();
-        mesh.Dispose();
     }
 
     public void DrawSprite(Texture2D texture, SpriteUniformData spriteUniformData)
@@ -158,14 +137,10 @@ public class SpriteBatchSystem : IInitializeSystem, IRenderSystem, IDisposable
         }
 
         deviceContext.SetPipelineState(pipeline);
-        deviceContext.SetVertexBuffers(0, vertexBuffers, vertexOffsets, ResourceStateTransitionMode.Transition);
-        deviceContext.SetIndexBuffer(mesh.IndexBuffer, 0, ResourceStateTransitionMode.Transition);
         deviceContext.CommitShaderResources(shaderResourceBinding, ResourceStateTransitionMode.Transition);
-        deviceContext.DrawIndexed(new DrawIndexedAttribs
+        deviceContext.Draw(new DrawAttribs
         {
-            IndexType = ValueType.UInt32,
-            NumIndices = (uint)mesh.IndexCount,
-            Flags = DrawFlags.VerifyAll,
+            NumVertices = 4,
         });
     }
 }
