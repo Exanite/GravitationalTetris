@@ -37,7 +37,7 @@ public class SpriteBatchSystem : IRenderSystem
         var pipeline = renderingResourcesSystem.Pipeline;
         var mesh = renderingResourcesSystem.Mesh;
 
-        shaderResourceBinding.GetVariableByName(ShaderType.Pixel, "Texture").Set(texture.View, SetShaderResourceFlags.AllowOverwrite);
+        shaderResourceBinding.GetVariableByName(ShaderType.Pixel, "Texture").Set(texture.DefaultView, SetShaderResourceFlags.AllowOverwrite);
 
         using (uniformBuffer.Map(MapType.Write, MapFlags.Discard, out var uniformData))
         {
