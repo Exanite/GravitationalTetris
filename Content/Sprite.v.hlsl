@@ -10,7 +10,7 @@ struct Input
     uint VertexId : SV_VertexID;
 
     // Per instance
-    float4 World : ATTRIB0;
+    float4x4 World : ATTRIB0;
 
     float4 Color : ATTRIB1;
     float2 Offset : ATTRIB2;
