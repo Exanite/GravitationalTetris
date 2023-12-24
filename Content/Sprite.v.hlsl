@@ -1,18 +1,20 @@
-cbuffer Constants
+cbuffer Uniforms
 {
-    float4x4 World;
     float4x4 View;
     float4x4 Projection;
-
-    float4 Color;
-
-    float2 Offset;
-    float2 Size;
 };
 
 struct Input
 {
+    // Per vertex
     uint VertexId : SV_VertexID;
+
+    // Per instance
+    float4 World : ATTRIB0;
+
+    float4 Color : ATTRIB1;
+    float2 Offset : ATTRIB2;
+    float2 Size : ATTRIB3;
 };
 
 struct Output
@@ -35,7 +37,7 @@ void main(
     float4 position = float4(positionUvs[input.VertexId].xy, 0, 1);
     float2 uv = float2(positionUvs[input.VertexId].zw);
 
-    output.Pos = mul(World * View * Projection, position);
-    output.Uv = float2(uv.x * Size.x + Offset.x, uv.y * Size.y + Offset.y);
-    output.Color = Color;
+    output.Pos = mul(input.World * View * Projection, position);
+    output.Uv = float2(uv.x * input.Size.x + input.Offset.x, uv.y * input.Size.y + input.Offset.y);
+    output.Color = input.Color;
 }
