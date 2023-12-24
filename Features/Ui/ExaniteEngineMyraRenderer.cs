@@ -41,11 +41,6 @@ public class ExaniteEngineMyraRenderer : IMyraRenderer
         });
     }
 
-    public void End()
-    {
-        spriteBatchSystem.End();
-    }
-
     public void DrawSprite(object texture, Vector2 pos, Rectangle? src, FSColor color, float rotation, Vector2 scale, float depth)
     {
         var typedTexture = (Texture2D)texture;
@@ -73,6 +68,11 @@ public class ExaniteEngineMyraRenderer : IMyraRenderer
             Offset = offset,
             Size = size,
         });
+    }
+
+    public void End()
+    {
+        spriteBatchSystem.End();
     }
 
     public void DrawQuad(object texture, ref VertexPositionColorTexture topLeft, ref VertexPositionColorTexture topRight, ref VertexPositionColorTexture bottomLeft, ref VertexPositionColorTexture bottomRight)
