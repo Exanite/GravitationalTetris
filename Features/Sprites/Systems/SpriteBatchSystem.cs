@@ -9,9 +9,13 @@ namespace Exanite.GravitationalTetris.Features.Sprites.Systems;
 
 public class SpriteBatchSystem : IInitializeSystem, IRenderSystem, IDisposable
 {
+    private const int MaxSpritesPerBatch = 128;
+
     private ISampler textureSampler = null!;
-    private Buffer<SpriteNonBatchedUniformData> uniformBuffer = null!;
+
+    private Buffer<SpriteUniformData> uniformBuffer = null!;
     private Buffer<SpriteInstanceData> instanceBuffer = null!;
+    private SpriteInstanceData[] instanceDataCache = new SpriteInstanceData[MaxSpritesPerBatch];
 
     private IPipelineState pipeline = null!;
     private IShaderResourceBinding shaderResourceBinding = null!;
@@ -20,9 +24,13 @@ public class SpriteBatchSystem : IInitializeSystem, IRenderSystem, IDisposable
     private float initialZ = -500;
     private float incrementZ = 0.01f;
 
-    private float currentZ;
+    private int spritesDrawnThisFrame;
+    private int spritesDrawnThisBatch;
 
     private SpriteBeginDrawOptions beginDrawOptions;
+
+    private readonly IBuffer[] vertexBuffers = new IBuffer[1];
+    private readonly ulong[] vertexOffsets = new ulong[1];
 
     private readonly RendererContext rendererContext;
     private readonly ResourceManager resourceManager;
@@ -31,8 +39,6 @@ public class SpriteBatchSystem : IInitializeSystem, IRenderSystem, IDisposable
     {
         this.rendererContext = rendererContext;
         this.resourceManager = resourceManager;
-
-        currentZ = initialZ;
     }
 
     public void Initialize()
@@ -40,7 +46,7 @@ public class SpriteBatchSystem : IInitializeSystem, IRenderSystem, IDisposable
         var renderDevice = rendererContext.RenderDevice;
         var swapChain = rendererContext.SwapChain;
 
-        uniformBuffer = new Buffer<SpriteNonBatchedUniformData>("Sprite uniform buffer", rendererContext, new BufferDesc
+        uniformBuffer = new Buffer<SpriteUniformData>("Sprite uniform buffer", rendererContext, new BufferDesc
         {
             Usage = Usage.Dynamic,
             BindFlags = BindFlags.UniformBuffer,
@@ -50,15 +56,17 @@ public class SpriteBatchSystem : IInitializeSystem, IRenderSystem, IDisposable
         instanceBuffer = new Buffer<SpriteInstanceData>("Sprite instance buffer", rendererContext, new BufferDesc
         {
             Usage = Usage.Dynamic,
-            BindFlags = BindFlags.UniformBuffer,
+            BindFlags = BindFlags.VertexBuffer,
             CPUAccessFlags = CpuAccessFlags.Write,
-        });
+        }, MaxSpritesPerBatch);
 
         textureSampler = renderDevice.CreateSampler(new SamplerDesc
         {
             MinFilter = FilterType.Point, MagFilter = FilterType.Point, MipFilter = FilterType.Point,
             AddressU = TextureAddressMode.Clamp, AddressV = TextureAddressMode.Clamp, AddressW = TextureAddressMode.Clamp,
         });
+
+        vertexBuffers[0] = instanceBuffer.Handle;
 
         var vShader = resourceManager.GetResource(BaseMod.SpriteVShader);
         var pShader = resourceManager.GetResource(BaseMod.SpritePShader);
@@ -85,7 +93,7 @@ public class SpriteBatchSystem : IInitializeSystem, IRenderSystem, IDisposable
 
             GraphicsPipeline = new GraphicsPipelineDesc
             {
-                InputLayout = VertexPositionUv.Layout,
+                InputLayout = SpriteInstanceData.Layout,
                 PrimitiveTopology = PrimitiveTopology.TriangleStrip,
 
                 NumRenderTargets = 1,
@@ -114,7 +122,7 @@ public class SpriteBatchSystem : IInitializeSystem, IRenderSystem, IDisposable
         });
 
         pipeline.GetStaticVariableByName(ShaderType.Pixel, "TextureSampler").Set(textureSampler, SetShaderResourceFlags.None);
-        pipeline.GetStaticVariableByName(ShaderType.Vertex, "Constants").Set(uniformBuffer.Handle, SetShaderResourceFlags.None);
+        pipeline.GetStaticVariableByName(ShaderType.Vertex, "Uniforms").Set(uniformBuffer.Handle, SetShaderResourceFlags.None);
 
         shaderResourceBinding = pipeline.CreateShaderResourceBinding(true);
         textureVariable = shaderResourceBinding.GetVariableByName(ShaderType.Pixel, "Texture");
@@ -122,7 +130,7 @@ public class SpriteBatchSystem : IInitializeSystem, IRenderSystem, IDisposable
 
     public void Render()
     {
-        currentZ = initialZ;
+        spritesDrawnThisFrame = 0;
     }
 
     public void Dispose()
@@ -136,47 +144,73 @@ public class SpriteBatchSystem : IInitializeSystem, IRenderSystem, IDisposable
 
     public void Begin(SpriteBeginDrawOptions options)
     {
+        End();
+
         beginDrawOptions = options;
+
+        using (uniformBuffer.Map(MapType.Write, MapFlags.Discard, out var uniformData))
+        {
+            uniformData[0] = new SpriteUniformData()
+            {
+                View = beginDrawOptions.View,
+                Projection = beginDrawOptions.Projection,
+            };
+        }
     }
 
     public void Draw(SpriteDrawOptions options)
     {
-        var deviceContext = rendererContext.DeviceContext;
-
-        textureVariable.Set(options.Texture.DefaultView, SetShaderResourceFlags.AllowOverwrite);
-
-        using (uniformBuffer.Map(MapType.Write, MapFlags.Discard, out var uniformData))
+        if (spritesDrawnThisBatch == MaxSpritesPerBatch)
         {
-            // Hack for implementing sprite sorting based on draw order
-            if (options.World.Translation.Z == 0)
-            {
-                options.World.M43 = currentZ;
-                currentZ += incrementZ;
-            }
-
-            uniformData[0] = new SpriteNonBatchedUniformData
-            {
-                World = options.World,
-                View = beginDrawOptions.View,
-                Projection = beginDrawOptions.Projection,
-
-                Color = options.Color,
-
-                Offset = options.Offset,
-                Size = options.Size,
-            };
+            End();
         }
 
-        deviceContext.SetPipelineState(pipeline);
-        deviceContext.CommitShaderResources(shaderResourceBinding, ResourceStateTransitionMode.Transition);
-        deviceContext.Draw(new DrawAttribs
+        // Hack for implementing sprite sorting based on draw order
+        options.World.M43 = initialZ + incrementZ * spritesDrawnThisFrame;
+
+        instanceDataCache[spritesDrawnThisBatch] = new SpriteInstanceData
         {
-            NumVertices = 4,
-        });
+            World = options.World,
+
+            Color = options.Color,
+            Offset = options.Offset,
+
+            Size = options.Size,
+        };
+
+        spritesDrawnThisFrame++;
+        spritesDrawnThisBatch++;
     }
 
     public void End()
     {
+        if (spritesDrawnThisBatch == 0)
+        {
+            return;
+        }
 
+        var deviceContext = rendererContext.DeviceContext;
+
+        textureVariable.Set(resourceManager.GetResource(BaseMod.TileGreen).Value.DefaultView, SetShaderResourceFlags.AllowOverwrite);
+
+        using (instanceBuffer.Map(MapType.Write, MapFlags.Discard, out var instanceData))
+        {
+            for (var i = 0; i < spritesDrawnThisBatch; i++)
+            {
+                instanceData[i] = instanceDataCache[i];
+            }
+        }
+
+        deviceContext.SetPipelineState(pipeline);
+        deviceContext.SetVertexBuffers(0, vertexBuffers, vertexOffsets, ResourceStateTransitionMode.Transition);
+        deviceContext.CommitShaderResources(shaderResourceBinding, ResourceStateTransitionMode.Transition);
+        deviceContext.Draw(new DrawAttribs
+        {
+            NumVertices = 4,
+            NumInstances = (uint)spritesDrawnThisBatch,
+            Flags = DrawFlags.VerifyAll,
+        });
+
+        spritesDrawnThisBatch = 0;
     }
 }
