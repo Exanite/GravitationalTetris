@@ -16,7 +16,7 @@ public struct SpriteInstanceData
                 HLSLSemantic = "ATTRIB",
                 InputIndex = 0,
 
-                NumComponents = 16,
+                NumComponents = 4,
                 ValueType = ValueType.Float32,
 
                 IsNormalized = false,
@@ -40,7 +40,7 @@ public struct SpriteInstanceData
                 HLSLSemantic = "ATTRIB",
                 InputIndex = 2,
 
-                NumComponents = 2,
+                NumComponents = 4,
                 ValueType = ValueType.Float32,
 
                 IsNormalized = false,
@@ -52,6 +52,42 @@ public struct SpriteInstanceData
                 HLSLSemantic = "ATTRIB",
                 InputIndex = 3,
 
+                NumComponents = 4,
+                ValueType = ValueType.Float32,
+
+                IsNormalized = false,
+
+                Frequency = InputElementFrequency.PerInstance,
+            },
+            new LayoutElement
+            {
+                HLSLSemantic = "ATTRIB",
+                InputIndex = 4,
+
+                NumComponents = 4,
+                ValueType = ValueType.Float32,
+
+                IsNormalized = false,
+
+                Frequency = InputElementFrequency.PerInstance,
+            },
+            new LayoutElement
+            {
+                HLSLSemantic = "ATTRIB",
+                InputIndex = 5,
+
+                NumComponents = 2,
+                ValueType = ValueType.Float32,
+
+                IsNormalized = false,
+
+                Frequency = InputElementFrequency.PerInstance,
+            },
+            new LayoutElement
+            {
+                HLSLSemantic = "ATTRIB",
+                InputIndex = 6,
+
                 NumComponents = 2,
                 ValueType = ValueType.Float32,
 
@@ -62,7 +98,7 @@ public struct SpriteInstanceData
         },
     };
 
-    public required Matrix4x4 World;
+    private Matrix4x4 world;
 
     public Vector4 Color;
 
