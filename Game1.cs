@@ -16,7 +16,6 @@ using Exanite.GravitationalTetris.Features.Cameras.Systems;
 using Exanite.GravitationalTetris.Features.Lifecycles.Systems;
 using Exanite.GravitationalTetris.Features.Physics.Systems;
 using Exanite.GravitationalTetris.Features.Players.Systems;
-using Exanite.GravitationalTetris.Features.Rendering;
 using Exanite.GravitationalTetris.Features.Resources;
 using Exanite.GravitationalTetris.Features.Resources.Systems;
 using Exanite.GravitationalTetris.Features.Sprites.Systems;
@@ -113,7 +112,6 @@ public class Game1 : Game
         config.RegisterAllCallbacks<TetrisSystem>();
         config.RegisterAllCallbacks<TilemapColliderSystem>();
 
-        config.RegisterAllCallbacks<RenderingResourcesSystem>();
         config.RegisterAllCallbacks<ResizeSwapChainSystem>();
         config.RegisterAllCallbacks<ClearRenderTargetRenderSystem>();
         {

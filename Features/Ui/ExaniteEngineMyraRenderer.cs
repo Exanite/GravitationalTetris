@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Numerics;
 using Exanite.Engine.Rendering;
 using Exanite.Engine.Windowing;
-using Exanite.GravitationalTetris.Features.Rendering;
+using Exanite.GravitationalTetris.Features.Sprites;
 using Exanite.GravitationalTetris.Features.Sprites.Systems;
 using FontStashSharp;
 using FontStashSharp.Interfaces;

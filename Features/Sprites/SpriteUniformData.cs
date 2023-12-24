@@ -1,7 +1,7 @@
 using System.Numerics;
 using System.Runtime.InteropServices;
 
-namespace Exanite.GravitationalTetris.Features.Rendering;
+namespace Exanite.GravitationalTetris.Features.Sprites;
 
 [StructLayout(LayoutKind.Sequential)]
 public struct SpriteUniformData
