@@ -112,4 +112,10 @@ public struct SpriteInstanceData
         Offset = Vector2.Zero;
         Size = Vector2.One;
     }
+
+    public required Matrix4x4 World
+    {
+        get => Matrix4x4.Transpose(world);
+        set => world = Matrix4x4.Transpose(value);
+    }
 }
