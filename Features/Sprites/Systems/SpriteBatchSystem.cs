@@ -39,7 +39,7 @@ public class SpriteBatchSystem : IRenderSystem
 
         shaderResourceBinding.GetVariableByName(ShaderType.Pixel, "Texture").Set(texture.View, SetShaderResourceFlags.AllowOverwrite);
 
-        var mapUniformBuffer = uniformBuffer.Map(MapType.Write, MapFlags.Discard);
+        using (uniformBuffer.Map(MapType.Write, MapFlags.Discard, out var uniformData))
         {
             // Hack for implementing sprite sorting based on draw order
             if (spriteUniformData.World.Translation.Z == 0)
@@ -48,9 +48,8 @@ public class SpriteBatchSystem : IRenderSystem
                 currentZ += incrementZ;
             }
 
-            mapUniformBuffer[0] = spriteUniformData;
+            uniformData[0] = spriteUniformData;
         }
-        uniformBuffer.Unmap(MapType.Write);
 
         deviceContext.SetPipelineState(pipeline);
         deviceContext.SetVertexBuffers(0, new[] { mesh.VertexBuffer }, new[] { 0ul }, ResourceStateTransitionMode.Transition);
