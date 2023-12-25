@@ -35,9 +35,8 @@ public class ResourcesModule : Module
                 var resourceManager = e.Instance;
                 var rendererContext = e.Context.Resolve<RendererContext>();
 
-                resourceManager.Mount("Base:", new DirectoryFileSystem(GameDirectories.ContentDirectory), true);
-
-                resourceManager.Mount("Myra:", new DirectoryFileSystem(Path.Join(GameDirectories.ContentDirectory, "Myra")));
+                resourceManager.Mount("Base:", new DirectoryFileSystem(Path.Join(GameDirectories.ContentDirectory, "Base")), true);
+                resourceManager.Mount("Myra:", new DirectoryFileSystem(Path.Join(GameDirectories.ContentDirectory, "Myra")), true);
 
                 resourceManager.RegisterLoader<Shader>(loadOperation =>
                 {
