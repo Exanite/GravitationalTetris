@@ -26,23 +26,27 @@ public partial class SpriteRenderSystem : EcsSystem, IRenderSystem
     [All<CameraComponent>]
     private void Draw(ref CameraProjectionComponent cameraProjection)
     {
-        DrawSpritesQuery(World, ref cameraProjection);
+        spriteBatchSystem.Begin(new SpriteBeginDrawOptions
+        {
+            View = cameraProjection.View,
+            Projection = cameraProjection.Projection,
+        });
+        {
+            DrawSpritesQuery(World);
+        }
+        spriteBatchSystem.End();
     }
 
     [Query]
-    private void DrawSprites([Data] ref CameraProjectionComponent cameraProjection, ref SpriteComponent sprite, ref TransformComponent transform)
+    private void DrawSprites(ref SpriteComponent sprite, ref TransformComponent transform)
     {
         var texture = sprite.Texture.Value;
-
         var world = Matrix4x4.CreateRotationZ(transform.Rotation) * Matrix4x4.CreateTranslation(transform.Position.X, transform.Position.Y, 0);
-        var view = cameraProjection.View;
-        var projection = cameraProjection.Projection;
 
-        spriteBatchSystem.DrawSprite(texture, new SpriteUniformData
+        spriteBatchSystem.Draw(new SpriteDrawOptions
         {
+            Texture = texture,
             World = world,
-            View = view,
-            Projection = projection,
         });
     }
 }

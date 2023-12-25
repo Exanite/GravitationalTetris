@@ -45,44 +45,47 @@ public partial class TilemapRenderSystem : EcsSystem, IRenderSystem, IInitialize
 
     public void Render()
     {
-        DrawTilesQuery(World);
-        DrawPlaceholdersQuery(World);
+        ForEachCameraQuery(World);
     }
 
     [Query]
     [All<CameraComponent>]
-    private void DrawTiles(ref CameraProjectionComponent cameraProjection)
+    private void ForEachCamera(ref CameraProjectionComponent cameraProjection)
+    {
+        spriteBatchSystem.Begin(new SpriteBeginDrawOptions
+        {
+            View = cameraProjection.View,
+            Projection = cameraProjection.Projection,
+        });
+        {
+            DrawTiles();
+            DrawPlaceholdersQuery(World);
+        }
+        spriteBatchSystem.End();
+    }
+
+    private void DrawTiles()
     {
         for (var x = 0; x < tilemap.Tiles.GetLength(0); x++)
         {
             for (var y = 0; y < tilemap.Tiles.GetLength(1); y++)
             {
                 ref var tile = ref tilemap.Tiles[x, y];
+
                 var texture = (tile.Texture ?? emptyTileTexture).Value;
-
                 var world = Matrix4x4.CreateTranslation(x, y, 0);
-                var view = cameraProjection.View;
-                var projection = cameraProjection.Projection;
 
-                spriteBatchSystem.DrawSprite(texture, new SpriteUniformData
+                spriteBatchSystem.Draw(new SpriteDrawOptions
                 {
+                    Texture = texture,
                     World = world,
-                    View = view,
-                    Projection = projection,
                 });
             }
         }
     }
 
     [Query]
-    private void DrawPlaceholders(ref TetrisRootComponent root)
-    {
-        DrawPlaceholders_1Query(World, ref root);
-    }
-
-    [Query]
-    [All<CameraComponent>]
-    private void DrawPlaceholders_1([Data] ref TetrisRootComponent tetrisRoot, ref CameraProjectionComponent cameraProjection)
+    private void DrawPlaceholders(ref TetrisRootComponent tetrisRoot)
     {
         foreach (var blockPosition in tetrisRoot.PredictedBlockPositions)
         {
@@ -93,14 +96,11 @@ public partial class TilemapRenderSystem : EcsSystem, IRenderSystem, IInitialize
             var alpha = MathUtility.Remap(EaseInOutCubic(time.Time / 1.5f), 0, 1, minAlpha, maxAlpha);
 
             var world = Matrix4x4.CreateTranslation(blockPosition.X, blockPosition.Y, 0);
-            var view = cameraProjection.View;
-            var projection = cameraProjection.Projection;
 
-            spriteBatchSystem.DrawSprite(texture, new SpriteUniformData
+            spriteBatchSystem.Draw(new SpriteDrawOptions
             {
+                Texture = texture,
                 World = world,
-                View = view,
-                Projection = projection,
                 Color = new Vector4(1, 1, 1, alpha),
             });
         }
