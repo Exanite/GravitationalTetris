@@ -27,7 +27,8 @@ public class SpriteBatchSystem : IInitializeSystem, IRenderSystem, IDisposable
     private int spritesDrawnThisFrame;
     private int spritesDrawnThisBatch;
 
-    private SpriteBeginDrawOptions beginDrawOptions;
+    private SpriteBeginDrawOptions currentBeginDrawOptions;
+    private Texture2D? currentTexture;
 
     private readonly IBuffer[] vertexBuffers = new IBuffer[1];
     private readonly ulong[] vertexOffsets = new ulong[1];
@@ -144,16 +145,19 @@ public class SpriteBatchSystem : IInitializeSystem, IRenderSystem, IDisposable
 
     public void Begin(SpriteBeginDrawOptions options)
     {
-        End();
+        if (options != currentBeginDrawOptions)
+        {
+            End();
+        }
 
-        beginDrawOptions = options;
+        currentBeginDrawOptions = options;
 
         using (uniformBuffer.Map(MapType.Write, MapFlags.Discard, out var uniformData))
         {
             uniformData[0] = new SpriteUniformData()
             {
-                View = beginDrawOptions.View,
-                Projection = beginDrawOptions.Projection,
+                View = currentBeginDrawOptions.View,
+                Projection = currentBeginDrawOptions.Projection,
             };
         }
     }
@@ -163,6 +167,14 @@ public class SpriteBatchSystem : IInitializeSystem, IRenderSystem, IDisposable
         if (spritesDrawnThisBatch == MaxSpritesPerBatch)
         {
             End();
+        }
+
+        if (options.Texture != currentTexture)
+        {
+            End();
+
+            textureVariable.Set(options.Texture.DefaultView, SetShaderResourceFlags.AllowOverwrite);
+            currentTexture = options.Texture;
         }
 
         // Hack for implementing sprite sorting based on draw order
@@ -190,8 +202,6 @@ public class SpriteBatchSystem : IInitializeSystem, IRenderSystem, IDisposable
         }
 
         var deviceContext = rendererContext.DeviceContext;
-
-        textureVariable.Set(resourceManager.GetResource(BaseMod.TileGreen).Value.DefaultView, SetShaderResourceFlags.AllowOverwrite);
 
         using (instanceBuffer.Map(MapType.Write, MapFlags.Discard, out var instanceData))
         {
