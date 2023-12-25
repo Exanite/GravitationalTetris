@@ -72,12 +72,22 @@ public partial class TilemapRenderSystem : EcsSystem, IRenderSystem, IInitialize
             {
                 ref var tile = ref tilemap.Tiles[x, y];
 
-                var texture = (tile.Texture ?? emptyTileTexture).Value;
+                var texture = emptyTileTexture;
+                if (tile.Shape != null)
+                {
+                    texture = tile.Shape.DefaultTexture;
+
+                    if (y + 1 == tilemap.Tiles.GetLength(1) || tilemap.Tiles[x, y + 1].Shape == null)
+                    {
+                        texture = tile.Shape.SnowTexture;
+                    }
+                }
+
                 var world = Matrix4x4.CreateTranslation(x, y, 0);
 
                 spriteBatchSystem.Draw(new SpriteDrawOptions
                 {
-                    Texture = texture,
+                    Texture = texture.Value,
                     World = world,
                 });
             }

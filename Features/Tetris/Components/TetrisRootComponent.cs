@@ -4,7 +4,7 @@ namespace Exanite.GravitationalTetris.Features.Tetris.Components;
 
 public struct TetrisRootComponent
 {
-    public required TetrisShapeDefinition Definition;
+    public required TetrisShapeDefinition Shape;
     public required TetrisRotation Rotation;
 
     public readonly List<TetrisVector2Int> BlockPositions;

@@ -96,7 +96,8 @@ public partial class TetrisSystem : EcsSystem, IInitializeSystem, IUpdateSystem
             PivotX = 0,
             PivotY = 1,
 
-            Texture = resourceManager.GetResource(BaseMod.TileCyan),
+            DefaultTexture = resourceManager.GetResource(BaseMod.TileCyan),
+            SnowTexture = resourceManager.GetResource(WinterMod.TileCyan),
         });
 
         shapes.Add(new TetrisShapeDefinition
@@ -110,7 +111,8 @@ public partial class TetrisSystem : EcsSystem, IInitializeSystem, IUpdateSystem
             PivotX = 1,
             PivotY = 1,
 
-            Texture = resourceManager.GetResource(BaseMod.TileBlue),
+            DefaultTexture = resourceManager.GetResource(BaseMod.TileBlue),
+            SnowTexture = resourceManager.GetResource(WinterMod.TileBlue),
         });
 
         shapes.Add(new TetrisShapeDefinition
@@ -124,7 +126,8 @@ public partial class TetrisSystem : EcsSystem, IInitializeSystem, IUpdateSystem
             PivotX = 1,
             PivotY = 1,
 
-            Texture = resourceManager.GetResource(BaseMod.TileOrange),
+            DefaultTexture = resourceManager.GetResource(BaseMod.TileOrange),
+            SnowTexture = resourceManager.GetResource(WinterMod.TileOrange),
         });
 
         shapes.Add(new TetrisShapeDefinition
@@ -138,7 +141,8 @@ public partial class TetrisSystem : EcsSystem, IInitializeSystem, IUpdateSystem
             PivotX = 0,
             PivotY = 0,
 
-            Texture = resourceManager.GetResource(BaseMod.TileYellow),
+            DefaultTexture = resourceManager.GetResource(BaseMod.TileYellow),
+            SnowTexture = resourceManager.GetResource(WinterMod.TileYellow),
         });
 
         shapes.Add(new TetrisShapeDefinition
@@ -152,7 +156,8 @@ public partial class TetrisSystem : EcsSystem, IInitializeSystem, IUpdateSystem
             PivotX = 1,
             PivotY = 1,
 
-            Texture = resourceManager.GetResource(BaseMod.TileGreen),
+            DefaultTexture = resourceManager.GetResource(BaseMod.TileGreen),
+            SnowTexture = resourceManager.GetResource(WinterMod.TileGreen),
         });
 
         shapes.Add(new TetrisShapeDefinition
@@ -166,7 +171,8 @@ public partial class TetrisSystem : EcsSystem, IInitializeSystem, IUpdateSystem
             PivotX = 1,
             PivotY = 1,
 
-            Texture = resourceManager.GetResource(BaseMod.TilePurple),
+            DefaultTexture = resourceManager.GetResource(BaseMod.TilePurple),
+            SnowTexture = resourceManager.GetResource(WinterMod.TilePurple),
         });
 
         shapes.Add(new TetrisShapeDefinition
@@ -180,7 +186,8 @@ public partial class TetrisSystem : EcsSystem, IInitializeSystem, IUpdateSystem
             PivotX = 1,
             PivotY = 1,
 
-            Texture = resourceManager.GetResource(BaseMod.TileRed),
+            DefaultTexture = resourceManager.GetResource(BaseMod.TileRed),
+            SnowTexture = resourceManager.GetResource(WinterMod.TileRed),
         });
     }
 
@@ -216,7 +223,7 @@ public partial class TetrisSystem : EcsSystem, IInitializeSystem, IUpdateSystem
             var currentShapeRootEntity = World.Create(
                 new TetrisRootComponent
                 {
-                    Definition = shape,
+                    Shape = shape,
                     Rotation = (TetrisRotation)random.Next(0, 4),
                 },
                 new TransformComponent
@@ -255,7 +262,7 @@ public partial class TetrisSystem : EcsSystem, IInitializeSystem, IUpdateSystem
                         new RigidbodyComponent(body),
                         new SpriteComponent
                         {
-                            Texture = shape.Texture,
+                            Texture = shape.DefaultTexture,
                         });
                 }
             }
@@ -299,29 +306,29 @@ public partial class TetrisSystem : EcsSystem, IInitializeSystem, IUpdateSystem
         {
             case TetrisRotation.R0:
             {
-                minX = minX + root.Definition.PivotX;
-                maxX = maxX + root.Definition.PivotX - root.Definition.Shape.GetLength(0) + 1;
+                minX = minX + root.Shape.PivotX;
+                maxX = maxX + root.Shape.PivotX - root.Shape.Shape.GetLength(0) + 1;
 
                 break;
             }
             case TetrisRotation.R90:
             {
-                minX = minX - root.Definition.PivotY + root.Definition.Shape.GetLength(1) - 1;
-                maxX = maxX - root.Definition.PivotY;
+                minX = minX - root.Shape.PivotY + root.Shape.Shape.GetLength(1) - 1;
+                maxX = maxX - root.Shape.PivotY;
 
                 break;
             }
             case TetrisRotation.R180:
             {
-                minX = minX - root.Definition.PivotX + root.Definition.Shape.GetLength(0) - 1;
-                maxX = maxX - root.Definition.PivotX;
+                minX = minX - root.Shape.PivotX + root.Shape.Shape.GetLength(0) - 1;
+                maxX = maxX - root.Shape.PivotX;
 
                 break;
             }
             case TetrisRotation.R270:
             {
-                minX = minX + root.Definition.PivotY;
-                maxX = maxX + root.Definition.PivotY - root.Definition.Shape.GetLength(1) + 1;
+                minX = minX + root.Shape.PivotY;
+                maxX = maxX + root.Shape.PivotY - root.Shape.Shape.GetLength(1) + 1;
 
                 break;
             }
@@ -347,16 +354,16 @@ public partial class TetrisSystem : EcsSystem, IInitializeSystem, IUpdateSystem
 
         root.BlockPositions.Clear();
 
-        for (var x = 0; x < root.Definition.Shape.GetLength(0); x++)
+        for (var x = 0; x < root.Shape.Shape.GetLength(0); x++)
         {
-            for (var y = 0; y < root.Definition.Shape.GetLength(1); y++)
+            for (var y = 0; y < root.Shape.Shape.GetLength(1); y++)
             {
-                if (!root.Definition.Shape[x, y])
+                if (!root.Shape.Shape[x, y])
                 {
                     continue;
                 }
 
-                var position = new TetrisVector2Int(x - root.Definition.PivotX, y - root.Definition.PivotY);
+                var position = new TetrisVector2Int(x - root.Shape.PivotX, y - root.Shape.PivotY);
                 for (var i = 0; i < (int)root.Rotation; i++)
                 {
                     position = new TetrisVector2Int(-position.Y, position.X);
@@ -442,7 +449,7 @@ public partial class TetrisSystem : EcsSystem, IInitializeSystem, IUpdateSystem
         {
             ref var tile = ref tilemap.Tiles[x, y];
             tile.IsWall = true;
-            tile.Texture = root.Definition.Texture;
+            tile.Shape = root.Shape;
         }
 
         World.Create(new UpdateTilemapCollidersEventComponent());
@@ -470,7 +477,7 @@ public partial class TetrisSystem : EcsSystem, IInitializeSystem, IUpdateSystem
                 var targetPosition = new TetrisVector2Int(position.X + direction.X, position.Y + direction.Y);
                 if (IsMatchingTileAndNotPartOfSelf(targetPosition, ref root))
                 {
-                    RecursiveRemove(targetPosition, root.Definition.Texture);
+                    RecursiveRemove(targetPosition, root.Shape);
                     World.Create(new UpdateTilemapCollidersEventComponent());
 
                     while (TryApplyBlockGravity()) {}
@@ -495,7 +502,7 @@ public partial class TetrisSystem : EcsSystem, IInitializeSystem, IUpdateSystem
                 return false;
             }
 
-            if (tilemap.Tiles[position.X, position.Y].Texture != root.Definition.Texture)
+            if (tilemap.Tiles[position.X, position.Y].Shape != root.Shape)
             {
                 return false;
             }
@@ -503,7 +510,7 @@ public partial class TetrisSystem : EcsSystem, IInitializeSystem, IUpdateSystem
             return true;
         }
 
-        void RecursiveRemove(TetrisVector2Int position, IResourceHandle<Texture2D> texture)
+        void RecursiveRemove(TetrisVector2Int position, TetrisShapeDefinition shape)
         {
             if (position.X < 0
                 || position.Y < 0
@@ -513,7 +520,7 @@ public partial class TetrisSystem : EcsSystem, IInitializeSystem, IUpdateSystem
                 return;
             }
 
-            if (tilemap.Tiles[position.X, position.Y].Texture != texture)
+            if (tilemap.Tiles[position.X, position.Y].Shape != shape)
             {
                 return;
             }
@@ -525,7 +532,7 @@ public partial class TetrisSystem : EcsSystem, IInitializeSystem, IUpdateSystem
             foreach (var direction in Directions)
             {
                 var targetPosition = new TetrisVector2Int(position.X + direction.X, position.Y + direction.Y);
-                RecursiveRemove(targetPosition, texture);
+                RecursiveRemove(targetPosition, shape);
             }
         }
 
