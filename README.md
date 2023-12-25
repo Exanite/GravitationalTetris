@@ -1,5 +1,7 @@
 # Gravitational Tetris
 
+> Game now uses a custom engine! Original game jam version can be found on the [`original-fna`](https://github.com/Exanite/GravitationalTetris/tree/original-fna) branch.
+
 This game was made for the [DevLUp 2023 Wargames game jam](https://itch.io/jam/devlup-fall-23-wargames) and can be found here on [Itch.io](https://exanite.itch.io/gravitational-tetris)!
 
 The theme was **Upside-Down**.
@@ -17,9 +19,9 @@ Space to reverse gravity *and* place block.
 
 ## 3rd party assets
 
-Gameplay code and art was created by me (Exanite).
+Custom game engine, gameplay code and art was created by me (Exanite).
 
-FNA-XNA - Game framework: https://github.com/FNA-XNA/FNA
+Diligent Engine - Rendering Framework: https://github.com/DiligentGraphics/DiligentEngine
 
 Arch ECS: https://github.com/genaray/Arch
 
