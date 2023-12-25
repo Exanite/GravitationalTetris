@@ -9,7 +9,7 @@ namespace Exanite.GravitationalTetris.Features.Sprites.Systems;
 
 public class SpriteBatchSystem : IInitializeSystem, IRenderSystem, IDisposable
 {
-    private const int MaxSpritesPerBatch = 1024;
+    private const int MaxSpritesPerBatch = 128;
 
     private ISampler textureSampler = null!;
 
