@@ -23,6 +23,10 @@ Custom game engine, gameplay code and art was created by me (Exanite).
 
 Diligent Engine - Rendering Framework: https://github.com/DiligentGraphics/DiligentEngine
 
+SDL2 (C) - Windowing Library: https://github.com/libsdl-org/SDL
+
+SDL2-CS (C#) - Windowing Library: https://github.com/flibitijibibo/SDL2-CS
+
 Arch ECS: https://github.com/genaray/Arch
 
 Aether.Physics2D: https://github.com/nkast/Aether.Physics2D
