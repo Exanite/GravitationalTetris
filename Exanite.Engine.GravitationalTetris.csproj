@@ -29,19 +29,9 @@
     <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Autofac" Version="7.1.0"/>
-    <PackageReference Include="LiteNetLib" Version="1.1.0"/>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3"/>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Aether.Physics2D\Aether.Physics2D.csproj"/>
     <ProjectReference Include="..\Arch.Extended\Arch.System.SourceGenerator\Arch.System.SourceGenerator.csproj" OutputItemType="Analyzer"/>
-    <ProjectReference Include="..\Arch.Extended\Arch.System\Arch.System.csproj"/>
-    <ProjectReference Include="..\Arch\src\Arch\Arch.csproj"/>
-    <ProjectReference Include="..\Exanite.Core\Exanite.Core.csproj"/>
-    <ProjectReference Include="..\Exanite.Ecs\Exanite.Ecs.csproj"/>
     <ProjectReference Include="..\Exanite.Engine\Exanite.Engine.csproj"/>
-    <ProjectReference Include="..\Exanite.ResourceManagement\Exanite.ResourceManagement.csproj"/>
     <ProjectReference Include="..\FontStashSharp\src\FontStashSharp\FontStashSharp.csproj" />
     <ProjectReference Include="..\Myra\src\Myra\Myra.PlatformAgnostic.csproj" />
   </ItemGroup>
