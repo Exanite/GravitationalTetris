@@ -12,7 +12,7 @@ public static class GameDirectories
         get
         {
 #if DEBUG
-            return Path.Join(InstallDirectory, "../../../Content");
+            return Path.Join(InstallDirectory, "../../../../Content");
 #else
             return Path.Join(InstallDirectory, "Content");
 #endif
