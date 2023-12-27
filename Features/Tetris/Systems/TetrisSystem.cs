@@ -8,8 +8,8 @@ using Arch.System;
 using Arch.System.SourceGenerator;
 using Exanite.Ecs.Systems;
 using Exanite.Engine.Inputs;
-using Exanite.Engine.Rendering;
 using Exanite.Engine.Time;
+using Exanite.GravitationalTetris.Features.Audio.Systems;
 using Exanite.GravitationalTetris.Features.Lifecycles.Components;
 using Exanite.GravitationalTetris.Features.Physics.Components;
 using Exanite.GravitationalTetris.Features.Players.Components;
@@ -56,8 +56,9 @@ public partial class TetrisSystem : EcsSystem, IInitializeSystem, IUpdateSystem
     private readonly Input input;
     private readonly GameTilemapData tilemap;
     private readonly PlayerControllerSystem playerControllerSystem;
+    private readonly FmodAudioSystem audioSystem;
 
-    public TetrisSystem(ResourceManager resourceManager, Random random, SimulationTime time, Input input, PlayerControllerSystem playerControllerSystem, GameTilemapData tilemap)
+    public TetrisSystem(ResourceManager resourceManager, Random random, SimulationTime time, Input input, PlayerControllerSystem playerControllerSystem, GameTilemapData tilemap, FmodAudioSystem audioSystem)
     {
         this.resourceManager = resourceManager;
         this.random = random;
@@ -65,6 +66,7 @@ public partial class TetrisSystem : EcsSystem, IInitializeSystem, IUpdateSystem
         this.input = input;
         this.playerControllerSystem = playerControllerSystem;
         this.tilemap = tilemap;
+        this.audioSystem = audioSystem;
     }
 
     public void Initialize()
@@ -204,68 +206,29 @@ public partial class TetrisSystem : EcsSystem, IInitializeSystem, IUpdateSystem
 
         if (currentShapeRoot.IsAlive() && currentShapeRoot.Entity.Has<TetrisRootComponent>() && input.GetKeyDown(SDL.SDL_Scancode.SDL_SCANCODE_Q))
         {
+            audioSystem.Play(FmodAudioSystem.RotateShape);
+
             ref var tetrisRootComponent = ref currentShapeRoot.Entity.Get<TetrisRootComponent>();
             tetrisRootComponent.Rotation = (TetrisRotation)(((int)tetrisRootComponent.Rotation + 1) % 4);
         }
 
         if (currentShapeRoot.IsAlive() && currentShapeRoot.Entity.Has<TetrisRootComponent>() && input.GetKeyDown(SDL.SDL_Scancode.SDL_SCANCODE_E))
         {
+            audioSystem.Play(FmodAudioSystem.RotateShape);
+
             ref var tetrisRootComponent = ref currentShapeRoot.Entity.Get<TetrisRootComponent>();
             tetrisRootComponent.Rotation = (TetrisRotation)(((int)tetrisRootComponent.Rotation + 1) % 4);
         }
 
-        if (!currentShapeRoot.IsAlive() || input.GetKeyDown(SDL.SDL_Scancode.SDL_SCANCODE_SPACE) || World.CountEntities(ShouldShouldPlaceTetris_QueryDescription) > 0)
+        if (!currentShapeRoot.IsAlive())
         {
-            PlaceBlocksQuery(World);
+            PlaceShape();
+        }
+        else if (input.GetKeyDown(SDL.SDL_Scancode.SDL_SCANCODE_SPACE) || World.CountEntities(ShouldShouldPlaceTetris_QueryDescription) > 0)
+        {
+            audioSystem.Play(FmodAudioSystem.SwitchGravity);
 
-            var shape = shapes[random.Next(0, shapes.Count)];
-
-            var currentShapeRootEntity = World.Create(
-                new TetrisRootComponent
-                {
-                    Shape = shape,
-                    Rotation = (TetrisRotation)random.Next(0, 4),
-                },
-                new TransformComponent
-                {
-                    Position = new Vector2(5, 20),
-                });
-
-            currentShapeRoot = currentShapeRootEntity.Reference();
-
-            for (var x = 0; x < shape.Shape.GetLength(0); x++)
-            {
-                for (var y = 0; y < shape.Shape.GetLength(1); y++)
-                {
-                    if (!shape.Shape[x, y])
-                    {
-                        continue;
-                    }
-
-                    var body = new Body();
-                    body.BodyType = BodyType.Kinematic;
-                    body.FixedRotation = true;
-
-                    var fixture = body.CreateRectangle(1, 1, 1, Vector2.Zero);
-                    fixture.Restitution = 0;
-
-                    World.Create(
-                        new TetrisBlockComponent
-                        {
-                            Root = currentShapeRoot,
-
-                            Definition = shape,
-                            LocalX = x - shape.PivotX,
-                            LocalY = y - shape.PivotY,
-                        },
-                        new TransformComponent(),
-                        new RigidbodyComponent(body),
-                        new SpriteComponent
-                        {
-                            Texture = shape.DefaultTexture,
-                        });
-                }
-            }
+            PlaceShape();
         }
 
         UpdateRootPositionsQuery(World);
@@ -281,6 +244,60 @@ public partial class TetrisSystem : EcsSystem, IInitializeSystem, IUpdateSystem
             if (tilemap.Tiles[x, tilemap.Tiles.GetLength(1) - 1].IsWall)
             {
                 ResetGameQuery(World);
+            }
+        }
+    }
+
+    private void PlaceShape()
+    {
+        PlaceBlocksQuery(World);
+
+        var shape = shapes[random.Next(0, shapes.Count)];
+
+        var currentShapeRootEntity = World.Create(
+            new TetrisRootComponent
+            {
+                Shape = shape,
+                Rotation = (TetrisRotation)random.Next(0, 4),
+            },
+            new TransformComponent
+            {
+                Position = new Vector2(5, 20),
+            });
+
+        currentShapeRoot = currentShapeRootEntity.Reference();
+
+        for (var x = 0; x < shape.Shape.GetLength(0); x++)
+        {
+            for (var y = 0; y < shape.Shape.GetLength(1); y++)
+            {
+                if (!shape.Shape[x, y])
+                {
+                    continue;
+                }
+
+                var body = new Body();
+                body.BodyType = BodyType.Kinematic;
+                body.FixedRotation = true;
+
+                var fixture = body.CreateRectangle(1, 1, 1, Vector2.Zero);
+                fixture.Restitution = 0;
+
+                World.Create(
+                    new TetrisBlockComponent
+                    {
+                        Root = currentShapeRoot,
+
+                        Definition = shape,
+                        LocalX = x - shape.PivotX,
+                        LocalY = y - shape.PivotY,
+                    },
+                    new TransformComponent(),
+                    new RigidbodyComponent(body),
+                    new SpriteComponent
+                    {
+                        Texture = shape.DefaultTexture,
+                    });
             }
         }
     }
@@ -482,10 +499,14 @@ public partial class TetrisSystem : EcsSystem, IInitializeSystem, IUpdateSystem
 
                     while (TryApplyBlockGravity()) {}
 
+                    audioSystem.Play(FmodAudioSystem.ClearTile);
+
                     return;
                 }
             }
         }
+
+        return;
 
         bool IsMatchingTileAndNotPartOfSelf(TetrisVector2Int position, ref TetrisRootComponent root)
         {
@@ -651,6 +672,8 @@ public partial class TetrisSystem : EcsSystem, IInitializeSystem, IUpdateSystem
     [All<PlayerComponent>]
     private void ResetGame(ref TransformComponent playerTransform, ref VelocityComponent velocity)
     {
+        audioSystem.Play(FmodAudioSystem.Restart);
+
         playerTransform.Position = new Vector2(4f, 0);
         velocity.Velocity = Vector2.Zero;
         playerControllerSystem.SetIsGravityDown(true);
