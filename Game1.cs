@@ -12,6 +12,7 @@ using Exanite.Engine.Time.Systems;
 using Exanite.Engine.Windowing;
 using Exanite.Engine.Windowing.Systems;
 using Exanite.GravitationalTetris.Features;
+using Exanite.GravitationalTetris.Features.Audio.Systems;
 using Exanite.GravitationalTetris.Features.Cameras.Systems;
 using Exanite.GravitationalTetris.Features.Lifecycles.Systems;
 using Exanite.GravitationalTetris.Features.Physics.Systems;
@@ -111,6 +112,8 @@ public class Game1 : Game
         config.RegisterAllCallbacks<PlayerControllerSystem>();
         config.RegisterAllCallbacks<TetrisSystem>();
         config.RegisterAllCallbacks<TilemapColliderSystem>();
+
+        config.RegisterAllCallbacks<FmodAudioSystem>();
 
         config.RegisterAllCallbacks<ResizeSwapChainSystem>();
         config.RegisterAllCallbacks<ClearRenderTargetRenderSystem>();

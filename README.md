@@ -34,3 +34,17 @@ Aether.Physics2D: https://github.com/nkast/Aether.Physics2D
 Myra UI: https://github.com/rds1983/Myra
 
 Fiery Turk - Font: https://www.dafont.com/fiery-turk.font
+
+### Sounds
+
+`abs-popdown-2.mp3`: https://hitrison.itch.io/menu-sfx-pack
+
+`African2.mp3`: https://ellr.itch.io/universal-ui-soundpack
+
+`Minimalist6.mp3`: https://ellr.itch.io/universal-ui-soundpack
+
+`Swishes - SWSH 17, Swish, Combat, Weapon.wav`: https://makotohiramatsu.itch.io/swishes
+
+`Swishes - SWSH 19, Swish, Combat, Weapon.wav`: https://makotohiramatsu.itch.io/swishes
+
+`Swishes - SWSH 20, Swish, Combat, Weapon.wav`: https://makotohiramatsu.itch.io/swishes
