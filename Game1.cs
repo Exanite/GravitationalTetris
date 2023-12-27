@@ -25,6 +25,8 @@ using Exanite.GravitationalTetris.Features.Tiles;
 using Exanite.GravitationalTetris.Features.Tiles.Systems;
 using Exanite.GravitationalTetris.Features.Ui;
 using Exanite.GravitationalTetris.Features.Ui.Systems;
+using Exanite.Logging;
+using Serilog;
 using EcsWorld = Arch.Core.World;
 using PhysicsWorld = nkast.Aether.Physics2D.Dynamics.World;
 
@@ -41,6 +43,9 @@ public class Game1 : Game
 
         // Misc
         builder.RegisterType<Random>().InstancePerDependency();
+
+        // Logging
+        builder.RegisterModule(new LoggingModule(GameDirectories.PersistentDataDirectory));
 
         // Rendering
         builder.Register(_ =>
@@ -60,9 +65,10 @@ public class Game1 : Game
         builder.Register(ctx =>
             {
                 var window = ctx.Resolve<Window>();
+                var logger = ctx.Resolve<ILogger>();
                 var settings = ctx.Resolve<RendererContextSettings>();
 
-                return new RendererContext(GraphicsApi.Vulkan, window, settings);
+                return new RendererContext(GraphicsApi.Vulkan, window, logger, settings);
             })
             .SingleInstance();
 

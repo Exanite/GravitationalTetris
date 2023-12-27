@@ -15,6 +15,7 @@ using FontStashSharp;
 using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
+using Serilog;
 
 namespace Exanite.GravitationalTetris.Features.Resources;
 
@@ -25,9 +26,12 @@ public class ResourcesModule : Module
         // Assumed to be the main thread
         builder.Register(_ => Thread.CurrentThread).SingleInstance();
 
-        builder.Register(context =>
+        builder.Register(ctx =>
             {
-                return new ResourceManager(context.Resolve<Thread>(), true);
+                var thread = ctx.Resolve<Thread>();
+                var logger = ctx.Resolve<ILogger>();
+
+                return new ResourceManager(thread, logger, true);
             })
             .SingleInstance()
             .OnActivating(e =>
