@@ -13,11 +13,10 @@ public static class Program
     public static async Task Main(string[] args)
     {
         var logger = LoggingModule.CreateBootstrapLogger(GameDirectories.LogsDirectory);
-
-        Thread.CurrentThread.Name = "Main";
-
         try
         {
+            Thread.CurrentThread.Name = "Main";
+
             await using var game = new Game1();
             logger = game.Container.Resolve<ILogger>();
 
