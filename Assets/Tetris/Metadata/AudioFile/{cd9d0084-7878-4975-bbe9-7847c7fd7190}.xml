@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{cd9d0084-7878-4975-bbe9-7847c7fd7190}">
+		<property name="assetPath">
+			<value>Swishes - SWSH 19, Swish, Combat, Weapon.wav</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>48</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>1.0087916666666668</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{dfc06ac2-3ffb-4d7b-a306-9b4cb3d577e2}</destination>
+		</relationship>
+	</object>
+</objects>

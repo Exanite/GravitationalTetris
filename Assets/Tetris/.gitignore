@@ -1,0 +1,9 @@
+# --- FMOD ---
+
+.cache/
+.unsaved/
+.user/
+
+Build/
+
+fmod_studio_guids.cs
