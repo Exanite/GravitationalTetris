@@ -45,7 +45,7 @@ public class Game1 : Game
         builder.RegisterType<Random>().InstancePerDependency();
 
         // Logging
-        builder.RegisterModule(new LoggingModule(GameDirectories.PersistentDataDirectory));
+        builder.RegisterModule(new LoggingModule(GameDirectories.LogsDirectory));
 
         // Rendering
         builder.Register(_ =>

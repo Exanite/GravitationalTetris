@@ -20,4 +20,6 @@ public static class GameDirectories
     }
 
     public static string PersistentDataDirectory => Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Exanite", "GravitationalTetris");
+
+    public static string LogsDirectory => Path.Join(PersistentDataDirectory, "Logs");
 }
