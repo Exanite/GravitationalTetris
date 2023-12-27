@@ -25,6 +25,8 @@ public static class Program
         catch (Exception e)
         {
             logger.Fatal(e, "Unhandled exception");
+
+            Environment.Exit(1);
         }
     }
 }
