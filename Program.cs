@@ -10,20 +10,25 @@ public static class Program
     [STAThread]
     public static async Task Main(string[] args)
     {
-        var logger = LoggingModule.CreateBootstrapLogger(GameDirectories.LogsDirectory);
-        try
+        var exitCode = 0;
         {
-            Thread.CurrentThread.Name = "Main";
+            await using var logger = LoggingModule.CreateBootstrapLogger(GameDirectories.LogsDirectory);
+            try
+            {
+                Thread.CurrentThread.Name = "Main";
 
-            await using var game = new Game1();
+                await using var game = new Game1();
 
-            game.Run();
+                game.Run();
+            }
+            catch (Exception e)
+            {
+                logger.Fatal(e, "Unhandled exception");
+
+                exitCode = 1;
+            }
         }
-        catch (Exception e)
-        {
-            logger.Fatal(e, "Unhandled exception");
 
-            Environment.Exit(1);
-        }
+        Environment.Exit(exitCode);
     }
 }
