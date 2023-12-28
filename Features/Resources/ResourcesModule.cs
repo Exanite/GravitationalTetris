@@ -40,9 +40,13 @@ public class ResourcesModule : Module
                 var rendererContext = e.Context.Resolve<RendererContext>();
 
                 resourceManager.Mount("Base:", new DirectoryFileSystem(Path.Join(GameDirectories.ContentDirectory, "Base")), true);
+
                 resourceManager.Mount("Myra:", new DirectoryFileSystem(Path.Join(GameDirectories.ContentDirectory, "Myra")), true);
+
                 resourceManager.Mount("Winter:", new DirectoryFileSystem(Path.Join(GameDirectories.ContentDirectory, "Winter", "Content")), true);
                 resourceManager.Mount("Base:", new DirectoryFileSystem(Path.Join(GameDirectories.ContentDirectory, "Winter", "Overrides", "Base")), true);
+
+                resourceManager.Mount("Lighting:", new DirectoryFileSystem(Path.Join(GameDirectories.ContentDirectory, "Lighting")), true);
 
                 resourceManager.RegisterLoader<Shader>(loadOperation =>
                 {
