@@ -34,6 +34,8 @@ public class ResourcesModule : Module
                 return new ResourceManager(thread, logger, true);
             })
             .SingleInstance()
+            .AsSelf()
+            .AsImplementedInterfaces()
             .OnActivating(e =>
             {
                 var resourceManager = e.Instance;
