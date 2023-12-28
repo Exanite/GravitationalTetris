@@ -15,7 +15,7 @@ using Exanite.ResourceManagement;
 
 namespace Exanite.GravitationalTetris.Features.Tiles.Systems;
 
-public partial class TilemapRenderSystem : EcsSystem, IRenderSystem, IInitializeSystem
+public partial class TilemapRenderSystem : EcsSystem, IRenderSystem, ISetupSystem
 {
     private readonly GameTilemapData tilemap;
     private readonly ResourceManager resourceManager;
@@ -37,7 +37,7 @@ public partial class TilemapRenderSystem : EcsSystem, IRenderSystem, IInitialize
         this.spriteBatchSystem = spriteBatchSystem;
     }
 
-    public void Initialize()
+    public void Setup()
     {
         emptyTileTexture = resourceManager.GetResource(BaseMod.TileNone);
         placeholderTileTexture = resourceManager.GetResource(BaseMod.TilePlaceholder);

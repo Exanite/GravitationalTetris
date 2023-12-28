@@ -7,7 +7,7 @@ using Exanite.GravitationalTetris.Features.Resources;
 
 namespace Exanite.GravitationalTetris.Features.Sprites.Systems;
 
-public class SpriteBatchSystem : IInitializeSystem, IRenderSystem, IDisposable
+public class SpriteBatchSystem : ISetupSystem, IRenderSystem, IDisposable
 {
     private const int MaxSpritesPerBatch = 128;
 
@@ -42,7 +42,7 @@ public class SpriteBatchSystem : IInitializeSystem, IRenderSystem, IDisposable
         this.resourceManager = resourceManager;
     }
 
-    public void Initialize()
+    public void Setup()
     {
         var renderDevice = rendererContext.RenderDevice;
         var swapChain = rendererContext.SwapChain;
