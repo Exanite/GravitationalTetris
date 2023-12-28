@@ -10,9 +10,15 @@ public class WorldRenderTargetSystem : ISetupSystem, IRenderSystem
     private uint previousWidth;
     private uint previousHeight;
 
-    private ITexture renderTarget = null!;
-    private ITextureView renderTargetRtView = null!;
-    private ITextureView renderTargetSrView = null!;
+    public ITexture worldColor = null!;
+    public ITextureView worldColorRenderTarget = null!;
+    public ITextureView worldColorShaderResource = null!;
+
+    public ITexture worldDepth = null!;
+    public ITextureView worldDepthRenderTarget = null!;
+    public ITextureView worldDepthShaderResource = null!;
+
+    private readonly ITextureView[] renderTargets = new ITextureView[1];
 
     private readonly RendererContext rendererContext;
 
@@ -23,40 +29,42 @@ public class WorldRenderTargetSystem : ISetupSystem, IRenderSystem
 
     public void Setup()
     {
-        CreateRenderTarget();
+        CreateRenderTargets();
     }
 
     public void Render()
     {
         var deviceContext = rendererContext.DeviceContext;
 
-        ResizeRenderTarget();
+        ResizeRenderTargets();
 
-        deviceContext.SetRenderTargets(new ITextureView[] { renderTargetRtView }, null, ResourceStateTransitionMode.Transition);
-        deviceContext.ClearRenderTarget(renderTargetRtView, Vector4.Zero, ResourceStateTransitionMode.Transition);
+        renderTargets[0] = worldColorRenderTarget;
+
+        deviceContext.SetRenderTargets(renderTargets, worldDepthRenderTarget, ResourceStateTransitionMode.Transition);
+        deviceContext.ClearRenderTarget(worldColorRenderTarget, Vector4.Zero, ResourceStateTransitionMode.Transition);
     }
 
-    private void ResizeRenderTarget()
+    private void ResizeRenderTargets()
     {
         var swapChain = rendererContext.SwapChain;
         var swapChainDesc = swapChain.GetDesc();
 
         if (previousWidth != swapChainDesc.Width || previousHeight != swapChain.GetDesc().Height)
         {
-            renderTarget.Dispose();
-            CreateRenderTarget();
+            worldColor.Dispose();
+            CreateRenderTargets();
         }
     }
 
-    private void CreateRenderTarget()
+    private void CreateRenderTargets()
     {
         var swapChain = rendererContext.SwapChain;
         var swapChainDesc = swapChain.GetDesc();
 
-        renderTarget = rendererContext.RenderDevice.CreateTexture(
+        worldColor = rendererContext.RenderDevice.CreateTexture(
             new TextureDesc
             {
-                Name = "Lighting Render Target",
+                Name = "World Color Render Target",
                 Type = ResourceDimension.Tex2d,
                 Width = swapChainDesc.Width,
                 Height = swapChainDesc.Height,
@@ -65,8 +73,23 @@ public class WorldRenderTargetSystem : ISetupSystem, IRenderSystem
                 Usage = Usage.Default,
             });
 
-        renderTargetRtView = renderTarget.GetDefaultView(TextureViewType.RenderTarget);
-        renderTargetSrView = renderTarget.GetDefaultView(TextureViewType.ShaderResource);
+        worldColorRenderTarget = worldColor.GetDefaultView(TextureViewType.RenderTarget);
+        worldDepthShaderResource = worldColor.GetDefaultView(TextureViewType.ShaderResource);
+
+        worldDepth = rendererContext.RenderDevice.CreateTexture(
+            new TextureDesc
+            {
+                Name = "World Depth Render Target",
+                Type = ResourceDimension.Tex2d,
+                Width = swapChainDesc.Width,
+                Height = swapChainDesc.Height,
+                Format = swapChain.GetDepthBufferDSV().GetDesc().Format,
+                BindFlags = BindFlags.ShaderResource | BindFlags.RenderTarget,
+                Usage = Usage.Default,
+            });
+
+        worldDepthRenderTarget = worldDepth.GetDefaultView(TextureViewType.RenderTarget);
+        worldDepthShaderResource = worldDepth.GetDefaultView(TextureViewType.ShaderResource);
 
         previousWidth = swapChainDesc.Width;
         previousHeight = swapChainDesc.Height;
