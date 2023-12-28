@@ -123,7 +123,8 @@ public class Game1 : Game
         config.RegisterAllCallbacks<FmodAudioSystem>();
 
         config.RegisterAllCallbacks<ResizeSwapChainSystem>();
-        config.RegisterAllCallbacks<ClearRenderTargetRenderSystem>();
+        config.RegisterAllCallbacks<UseMainRenderTargetSystem>();
+        config.RegisterAllCallbacks<ClearMainRenderTargetSystem>();
         {
             config.RegisterAllCallbacks<SetClearColorSystem>();
             config.RegisterAllCallbacks<SpriteBatchSystem>();
