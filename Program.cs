@@ -12,17 +12,16 @@ public static class Program
     {
         var exitCode = 0;
         {
-            await using var logger = LoggingUtility.CreateBootstrapLogger(GameDirectories.LogsDirectory);
             try
             {
                 Thread.CurrentThread.Name = "Main";
 
                 await using var game = new Game1();
-
                 game.Run();
             }
             catch (Exception e)
             {
+                await using var logger = LoggingUtility.CreateBootstrapLogger(GameDirectories.LogsDirectory, "crash");
                 logger.Fatal(e, "Unhandled exception");
 
                 exitCode = 1;
