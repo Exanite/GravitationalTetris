@@ -12,7 +12,7 @@ public static class Program
     {
         var exitCode = 0;
         {
-            await using var logger = LoggingModule.CreateBootstrapLogger(GameDirectories.LogsDirectory);
+            await using var logger = LoggingUtility.CreateBootstrapLogger(GameDirectories.LogsDirectory);
             try
             {
                 Thread.CurrentThread.Name = "Main";
