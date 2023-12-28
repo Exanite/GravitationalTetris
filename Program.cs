@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Autofac;
 using Exanite.Logging;
-using Serilog;
 
 namespace Exanite.GravitationalTetris;
 
@@ -18,7 +16,6 @@ public static class Program
             Thread.CurrentThread.Name = "Main";
 
             await using var game = new Game1();
-            logger = game.Container.Resolve<ILogger>();
 
             game.Run();
         }
