@@ -124,17 +124,21 @@ public class Game1 : Game
         config.RegisterAllCallbacks<FmodAudioSystem>();
 
         config.RegisterAllCallbacks<ResizeSwapChainSystem>();
-        config.RegisterAllCallbacks<WorldRenderTargetSystem>();
         config.RegisterAllCallbacks<ClearMainRenderTargetSystem>();
         {
             config.RegisterAllCallbacks<SetClearColorSystem>();
+            config.RegisterAllCallbacks<CameraProjectionSystem>();
             config.RegisterAllCallbacks<SpriteBatchSystem>();
 
-            config.RegisterAllCallbacks<CameraProjectionSystem>();
+            // World RT
+            config.RegisterAllCallbacks<WorldRenderTargetSystem>();
+
             config.RegisterAllCallbacks<TilemapRenderSystem>();
             config.RegisterAllCallbacks<SpriteRenderSystem>();
 
+            // Main RT
             config.RegisterAllCallbacks<UseMainRenderTargetSystem>();
+            
             config.RegisterAllCallbacks<PostProcessSystem>();
 
             config.RegisterAllCallbacks<MyraUiSystem>();
