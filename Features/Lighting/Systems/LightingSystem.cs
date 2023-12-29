@@ -84,7 +84,7 @@ public class LightingSystem : ISetupSystem, IRenderSystem
     {
         var deviceContext = rendererContext.DeviceContext;
 
-        textureVariable.Set(worldRenderTargetSystem.worldColorShaderResource, SetShaderResourceFlags.AllowOverwrite);
+        textureVariable.Set(worldRenderTargetSystem.worldColorRenderTarget, SetShaderResourceFlags.AllowOverwrite);
 
         deviceContext.SetPipelineState(pipeline);
         deviceContext.CommitShaderResources(shaderResourceBinding, ResourceStateTransitionMode.Transition);
