@@ -42,6 +42,7 @@ public class WorldRenderTargetSystem : ISetupSystem, IRenderSystem
 
         deviceContext.SetRenderTargets(renderTargets, worldDepthRenderTarget, ResourceStateTransitionMode.Transition);
         deviceContext.ClearRenderTarget(worldColorRenderTarget, Vector4.Zero, ResourceStateTransitionMode.Transition);
+        deviceContext.ClearDepthStencil(worldDepthRenderTarget, ClearDepthStencilFlags.Depth | ClearDepthStencilFlags.Stencil, 1, 0, ResourceStateTransitionMode.Transition);
     }
 
     private void ResizeRenderTargets()
