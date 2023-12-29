@@ -47,14 +47,14 @@ public class SpriteBatchSystem : ISetupSystem, IRenderSystem, IDisposable
         var renderDevice = rendererContext.RenderDevice;
         var swapChain = rendererContext.SwapChain;
 
-        uniformBuffer = new Buffer<SpriteUniformData>("Sprite uniform buffer", rendererContext, new BufferDesc
+        uniformBuffer = new Buffer<SpriteUniformData>("Sprite Uniform Buffer", rendererContext, new BufferDesc
         {
             Usage = Usage.Dynamic,
             BindFlags = BindFlags.UniformBuffer,
             CPUAccessFlags = CpuAccessFlags.Write,
         });
 
-        instanceBuffer = new Buffer<SpriteInstanceData>("Sprite instance buffer", rendererContext, new BufferDesc
+        instanceBuffer = new Buffer<SpriteInstanceData>("Sprite Instance Buffer", rendererContext, new BufferDesc
         {
             Usage = Usage.Dynamic,
             BindFlags = BindFlags.VertexBuffer,
