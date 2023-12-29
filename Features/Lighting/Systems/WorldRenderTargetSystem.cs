@@ -5,7 +5,7 @@ using Exanite.Engine.Rendering;
 
 namespace Exanite.GravitationalTetris.Features.Lighting.Systems;
 
-public class WorldRenderTargetSystem : ISetupSystem, IRenderSystem
+public class WorldRenderTargetSystem : ISetupSystem, IRenderSystem, ITeardownSystem
 {
     private uint previousWidth;
     private uint previousHeight;
@@ -53,6 +53,7 @@ public class WorldRenderTargetSystem : ISetupSystem, IRenderSystem
         if (previousWidth != swapChainDesc.Width || previousHeight != swapChain.GetDesc().Height)
         {
             worldColor.Dispose();
+            worldDepth.Dispose();
             CreateRenderTargets();
         }
     }
@@ -94,5 +95,11 @@ public class WorldRenderTargetSystem : ISetupSystem, IRenderSystem
 
         previousWidth = swapChainDesc.Width;
         previousHeight = swapChainDesc.Height;
+    }
+
+    public void Teardown()
+    {
+        worldColor.Dispose();
+        worldDepth.Dispose();
     }
 }
