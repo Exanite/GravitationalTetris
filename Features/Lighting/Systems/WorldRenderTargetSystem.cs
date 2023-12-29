@@ -15,7 +15,7 @@ public class WorldRenderTargetSystem : ISetupSystem, IRenderSystem, ITeardownSys
     public ITextureView worldColorShaderResource = null!;
 
     public ITexture worldDepth = null!;
-    public ITextureView worldDepthRenderTarget = null!;
+    public ITextureView worldDepthDepthStencil = null!;
     public ITextureView worldDepthShaderResource = null!;
 
     private readonly ITextureView[] renderTargets = new ITextureView[1];
@@ -40,9 +40,9 @@ public class WorldRenderTargetSystem : ISetupSystem, IRenderSystem, ITeardownSys
 
         renderTargets[0] = worldColorRenderTarget;
 
-        deviceContext.SetRenderTargets(renderTargets, worldDepthRenderTarget, ResourceStateTransitionMode.Transition);
+        deviceContext.SetRenderTargets(renderTargets, worldDepthDepthStencil, ResourceStateTransitionMode.Transition);
         deviceContext.ClearRenderTarget(worldColorRenderTarget, Vector4.Zero, ResourceStateTransitionMode.Transition);
-        deviceContext.ClearDepthStencil(worldDepthRenderTarget, ClearDepthStencilFlags.Depth | ClearDepthStencilFlags.Stencil, 1, 0, ResourceStateTransitionMode.Transition);
+        deviceContext.ClearDepthStencil(worldDepthDepthStencil, ClearDepthStencilFlags.Depth | ClearDepthStencilFlags.Stencil, 1, 0, ResourceStateTransitionMode.Transition);
     }
 
     private void ResizeRenderTargets()
@@ -86,11 +86,11 @@ public class WorldRenderTargetSystem : ISetupSystem, IRenderSystem, ITeardownSys
                 Width = swapChainDesc.Width,
                 Height = swapChainDesc.Height,
                 Format = swapChain.GetDepthBufferDSV().GetDesc().Format,
-                BindFlags = BindFlags.ShaderResource | BindFlags.RenderTarget,
+                BindFlags = BindFlags.ShaderResource | BindFlags.DepthStencil,
                 Usage = Usage.Default,
             });
 
-        worldDepthRenderTarget = worldDepth.GetDefaultView(TextureViewType.RenderTarget);
+        worldDepthDepthStencil = worldDepth.GetDefaultView(TextureViewType.DepthStencil);
         worldDepthShaderResource = worldDepth.GetDefaultView(TextureViewType.ShaderResource);
 
         previousWidth = swapChainDesc.Width;
