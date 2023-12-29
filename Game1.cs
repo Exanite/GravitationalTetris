@@ -138,7 +138,7 @@ public class Game1 : Game
 
             // Main RT
             config.RegisterAllCallbacks<UseMainRenderTargetSystem>();
-            
+
             config.RegisterAllCallbacks<PostProcessSystem>();
 
             config.RegisterAllCallbacks<MyraUiSystem>();

@@ -54,7 +54,7 @@ public class PostProcessSystem : ISetupSystem, IRenderSystem
         textureSampler = renderDevice.CreateSampler(new SamplerDesc
         {
             MinFilter = FilterType.Point, MagFilter = FilterType.Point, MipFilter = FilterType.Point,
-            AddressU = TextureAddressMode.Wrap, AddressV = TextureAddressMode.Wrap, AddressW = TextureAddressMode.Wrap,
+            AddressU = TextureAddressMode.Mirror, AddressV = TextureAddressMode.Mirror, AddressW = TextureAddressMode.Mirror,
         });
 
         pipeline = renderDevice.CreateGraphicsPipelineState(new GraphicsPipelineStateCreateInfo
