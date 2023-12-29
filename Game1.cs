@@ -123,7 +123,7 @@ public class Game1 : Game
         config.RegisterAllCallbacks<FmodAudioSystem>();
 
         config.RegisterAllCallbacks<ResizeSwapChainSystem>();
-        config.RegisterAllCallbacks<UseMainRenderTargetSystem>();
+        config.RegisterAllCallbacks<WorldRenderTargetSystem>();
         config.RegisterAllCallbacks<ClearMainRenderTargetSystem>();
         {
             config.RegisterAllCallbacks<SetClearColorSystem>();
@@ -133,10 +133,11 @@ public class Game1 : Game
             config.RegisterAllCallbacks<TilemapRenderSystem>();
             config.RegisterAllCallbacks<SpriteRenderSystem>();
 
+            config.RegisterAllCallbacks<UseMainRenderTargetSystem>();
+            config.RegisterAllCallbacks<LightingSystem>();
+
             config.RegisterAllCallbacks<MyraUiSystem>();
             config.RegisterAllCallbacks<TetrisUiSystem>();
-
-            config.RegisterAllCallbacks<LightingSystem>();
         }
         config.RegisterAllCallbacks<PresentSwapChainSystem>();
 
