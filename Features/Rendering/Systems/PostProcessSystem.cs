@@ -1,14 +1,23 @@
+using System.Runtime.InteropServices;
 using Diligent;
 using Exanite.Ecs.Systems;
 using Exanite.Engine.Rendering;
+using Exanite.Engine.Time;
 using Exanite.GravitationalTetris.Features.Lighting.Systems;
 using Exanite.GravitationalTetris.Features.Sprites;
 using Exanite.ResourceManagement;
 
 namespace Exanite.GravitationalTetris.Features.Rendering.Systems;
 
+[StructLayout(LayoutKind.Sequential)]
+public struct PostProcessUniformData
+{
+    public float Time;
+}
+
 public class PostProcessSystem : ISetupSystem, IRenderSystem
 {
+    private Buffer<PostProcessUniformData> uniformBuffer = null!;
     private ISampler textureSampler = null!;
     private IPipelineState pipeline = null!;
     private IShaderResourceBinding shaderResourceBinding = null!;
@@ -17,12 +26,14 @@ public class PostProcessSystem : ISetupSystem, IRenderSystem
     private readonly RendererContext rendererContext;
     private readonly IResourceManager resourceManager;
     private readonly WorldRenderTargetSystem worldRenderTargetSystem;
+    private readonly SimulationTime time;
 
-    public PostProcessSystem(RendererContext rendererContext, IResourceManager resourceManager, WorldRenderTargetSystem worldRenderTargetSystem)
+    public PostProcessSystem(RendererContext rendererContext, IResourceManager resourceManager, WorldRenderTargetSystem worldRenderTargetSystem, SimulationTime time)
     {
         this.rendererContext = rendererContext;
         this.resourceManager = resourceManager;
         this.worldRenderTargetSystem = worldRenderTargetSystem;
+        this.time = time;
     }
 
     public void Setup()
@@ -32,6 +43,13 @@ public class PostProcessSystem : ISetupSystem, IRenderSystem
 
         var vShader = resourceManager.GetResource<Shader>("Rendering:PostProcess.v.hlsl");
         var pShader = resourceManager.GetResource<Shader>("Rendering:PostProcess.p.hlsl");
+
+        uniformBuffer = new Buffer<PostProcessUniformData>("Post Process Uniform Buffer", rendererContext, new BufferDesc
+        {
+            Usage = Usage.Dynamic,
+            BindFlags = BindFlags.UniformBuffer,
+            CPUAccessFlags = CpuAccessFlags.Write,
+        });
 
         textureSampler = renderDevice.CreateSampler(new SamplerDesc
         {
@@ -54,7 +72,7 @@ public class PostProcessSystem : ISetupSystem, IRenderSystem
                             ShaderStages = ShaderType.Pixel,
                             Name = "Texture",
                             Type = ShaderResourceVariableType.Mutable,
-                        }
+                        },
                     },
                 },
             },
@@ -76,6 +94,7 @@ public class PostProcessSystem : ISetupSystem, IRenderSystem
         });
 
         pipeline.GetStaticVariableByName(ShaderType.Pixel, "TextureSampler").Set(textureSampler, SetShaderResourceFlags.None);
+        pipeline.GetStaticVariableByName(ShaderType.Pixel, "Uniforms").Set(uniformBuffer.Handle, SetShaderResourceFlags.None);
 
         shaderResourceBinding = pipeline.CreateShaderResourceBinding(true);
         textureVariable = shaderResourceBinding.GetVariableByName(ShaderType.Pixel, "Texture");
@@ -84,6 +103,11 @@ public class PostProcessSystem : ISetupSystem, IRenderSystem
     public void Render()
     {
         var deviceContext = rendererContext.DeviceContext;
+
+        using (uniformBuffer.Map(MapType.Write, MapFlags.Discard, out var uniformData))
+        {
+            uniformData[0].Time = time.Time;
+        }
 
         textureVariable.Set(worldRenderTargetSystem.worldColorRenderTarget, SetShaderResourceFlags.AllowOverwrite);
 

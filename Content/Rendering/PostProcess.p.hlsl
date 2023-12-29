@@ -1,3 +1,8 @@
+cbuffer Uniforms
+{
+    float Time;
+}
+
 Texture2D Texture;
 SamplerState TextureSampler;
 
@@ -16,5 +21,5 @@ void main(
     in Input input,
     out Output output)
 {
-    output.Color = Texture.Sample(TextureSampler, input.Uv);
+    output.Color = Texture.Sample(TextureSampler, input.Uv) * (Time % 1);
 }
