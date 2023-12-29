@@ -9,14 +9,18 @@ namespace Exanite.GravitationalTetris.Features.Lighting.Systems;
 public class LightingSystem : ISetupSystem, IRenderSystem
 {
     private IPipelineState pipeline = null!;
+    private IShaderResourceBinding shaderResourceBinding = null!;
+    private IShaderResourceVariable textureVariable = null!;
 
     private readonly RendererContext rendererContext;
     private readonly IResourceManager resourceManager;
+    private readonly WorldRenderTargetSystem worldRenderTargetSystem;
 
-    public LightingSystem(RendererContext rendererContext, IResourceManager resourceManager)
+    public LightingSystem(RendererContext rendererContext, IResourceManager resourceManager, WorldRenderTargetSystem worldRenderTargetSystem)
     {
         this.rendererContext = rendererContext;
         this.resourceManager = resourceManager;
+        this.worldRenderTargetSystem = worldRenderTargetSystem;
     }
 
     public void Setup()
@@ -32,6 +36,32 @@ public class LightingSystem : ISetupSystem, IRenderSystem
             PSODesc = new PipelineStateDesc
             {
                 Name = "Lighting Shader Pipeline",
+                ResourceLayout = new PipelineResourceLayoutDesc
+                {
+                    DefaultVariableType = ShaderResourceVariableType.Static,
+                    Variables = new ShaderResourceVariableDesc[]
+                    {
+                        new ShaderResourceVariableDesc
+                        {
+                            ShaderStages = ShaderType.Pixel,
+                            Name = "Texture",
+                            Type = ShaderResourceVariableType.Mutable,
+                        }
+                    },
+                    ImmutableSamplers = new ImmutableSamplerDesc[]
+                    {
+                        new()
+                        {
+                            SamplerOrTextureName = "Texture",
+                            ShaderStages = ShaderType.Pixel,
+                            Desc = new SamplerDesc
+                            {
+                                MinFilter = FilterType.Linear, MagFilter = FilterType.Linear, MipFilter = FilterType.Linear,
+                                AddressU = TextureAddressMode.Wrap, AddressV = TextureAddressMode.Wrap, AddressW = TextureAddressMode.Wrap,
+                            },
+                        },
+                    },
+                },
             },
 
             GraphicsPipeline = new GraphicsPipelineDesc
@@ -49,13 +79,19 @@ public class LightingSystem : ISetupSystem, IRenderSystem
             Vs = vShader.Value.Handle,
             Ps = pShader.Value.Handle,
         });
+
+        shaderResourceBinding = pipeline.CreateShaderResourceBinding(true);
+        textureVariable = shaderResourceBinding.GetVariableByName(ShaderType.Pixel, "Texture");
     }
 
     public void Render()
     {
         var deviceContext = rendererContext.DeviceContext;
 
+        textureVariable.Set(worldRenderTargetSystem.worldColorShaderResource, SetShaderResourceFlags.AllowOverwrite);
+
         deviceContext.SetPipelineState(pipeline);
+        deviceContext.CommitShaderResources(shaderResourceBinding, ResourceStateTransitionMode.Transition);
         deviceContext.Draw(new DrawAttribs
         {
             NumVertices = 4,

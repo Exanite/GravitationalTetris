@@ -1,3 +1,6 @@
+Texture2D Texture;
+SamplerState TextureSampler;
+
 struct Input
 {
     float4 Pos : SV_POSITION;
@@ -13,5 +16,5 @@ void main(
     in Input input,
     out Output output)
 {
-    output.Color = float4(input.Uv.x, input.Uv.y, 0, 0);
+    output.Color = Texture.Sample(TextureSampler, input.Uv);
 }
