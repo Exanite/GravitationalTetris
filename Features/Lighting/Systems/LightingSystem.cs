@@ -8,6 +8,7 @@ namespace Exanite.GravitationalTetris.Features.Lighting.Systems;
 
 public class LightingSystem : ISetupSystem, IRenderSystem
 {
+    private ISampler textureSampler = null!;
     private IPipelineState pipeline = null!;
     private IShaderResourceBinding shaderResourceBinding = null!;
     private IShaderResourceVariable textureVariable = null!;
@@ -31,6 +32,12 @@ public class LightingSystem : ISetupSystem, IRenderSystem
         var vShader = resourceManager.GetResource<Shader>("Lighting:Light.v.hlsl");
         var pShader = resourceManager.GetResource<Shader>("Lighting:Light.p.hlsl");
 
+        textureSampler = renderDevice.CreateSampler(new SamplerDesc
+        {
+            MinFilter = FilterType.Point, MagFilter = FilterType.Point, MipFilter = FilterType.Point,
+            AddressU = TextureAddressMode.Wrap, AddressV = TextureAddressMode.Wrap, AddressW = TextureAddressMode.Wrap,
+        });
+
         pipeline = renderDevice.CreateGraphicsPipelineState(new GraphicsPipelineStateCreateInfo
         {
             PSODesc = new PipelineStateDesc
@@ -47,19 +54,6 @@ public class LightingSystem : ISetupSystem, IRenderSystem
                             Name = "Texture",
                             Type = ShaderResourceVariableType.Mutable,
                         }
-                    },
-                    ImmutableSamplers = new ImmutableSamplerDesc[]
-                    {
-                        new()
-                        {
-                            SamplerOrTextureName = "Texture",
-                            ShaderStages = ShaderType.Pixel,
-                            Desc = new SamplerDesc
-                            {
-                                MinFilter = FilterType.Linear, MagFilter = FilterType.Linear, MipFilter = FilterType.Linear,
-                                AddressU = TextureAddressMode.Wrap, AddressV = TextureAddressMode.Wrap, AddressW = TextureAddressMode.Wrap,
-                            },
-                        },
                     },
                 },
             },
@@ -79,6 +73,8 @@ public class LightingSystem : ISetupSystem, IRenderSystem
             Vs = vShader.Value.Handle,
             Ps = pShader.Value.Handle,
         });
+
+        pipeline.GetStaticVariableByName(ShaderType.Pixel, "TextureSampler").Set(textureSampler, SetShaderResourceFlags.None);
 
         shaderResourceBinding = pipeline.CreateShaderResourceBinding(true);
         textureVariable = shaderResourceBinding.GetVariableByName(ShaderType.Pixel, "Texture");
