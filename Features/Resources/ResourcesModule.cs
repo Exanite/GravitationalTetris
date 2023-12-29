@@ -48,7 +48,7 @@ public class ResourcesModule : Module
                 resourceManager.Mount("Winter:", new DirectoryFileSystem(Path.Join(GameDirectories.ContentDirectory, "Winter", "Content")), true);
                 resourceManager.Mount("Base:", new DirectoryFileSystem(Path.Join(GameDirectories.ContentDirectory, "Winter", "Overrides", "Base")), true);
 
-                resourceManager.Mount("Lighting:", new DirectoryFileSystem(Path.Join(GameDirectories.ContentDirectory, "Lighting")), true);
+                resourceManager.Mount("Rendering:", new DirectoryFileSystem(Path.Join(GameDirectories.ContentDirectory, "Rendering")), true);
 
                 resourceManager.RegisterLoader<Shader>(loadOperation =>
                 {

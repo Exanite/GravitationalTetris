@@ -18,6 +18,7 @@ using Exanite.GravitationalTetris.Features.Lifecycles.Systems;
 using Exanite.GravitationalTetris.Features.Lighting.Systems;
 using Exanite.GravitationalTetris.Features.Physics.Systems;
 using Exanite.GravitationalTetris.Features.Players.Systems;
+using Exanite.GravitationalTetris.Features.Rendering.Systems;
 using Exanite.GravitationalTetris.Features.Resources;
 using Exanite.GravitationalTetris.Features.Resources.Systems;
 using Exanite.GravitationalTetris.Features.Sprites.Systems;
@@ -134,7 +135,7 @@ public class Game1 : Game
             config.RegisterAllCallbacks<SpriteRenderSystem>();
 
             config.RegisterAllCallbacks<UseMainRenderTargetSystem>();
-            config.RegisterAllCallbacks<LightingSystem>();
+            config.RegisterAllCallbacks<PostProcessSystem>();
 
             config.RegisterAllCallbacks<MyraUiSystem>();
             config.RegisterAllCallbacks<TetrisUiSystem>();

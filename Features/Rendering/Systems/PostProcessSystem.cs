@@ -1,12 +1,13 @@
 using Diligent;
 using Exanite.Ecs.Systems;
 using Exanite.Engine.Rendering;
+using Exanite.GravitationalTetris.Features.Lighting.Systems;
 using Exanite.GravitationalTetris.Features.Sprites;
 using Exanite.ResourceManagement;
 
-namespace Exanite.GravitationalTetris.Features.Lighting.Systems;
+namespace Exanite.GravitationalTetris.Features.Rendering.Systems;
 
-public class LightingSystem : ISetupSystem, IRenderSystem
+public class PostProcessSystem : ISetupSystem, IRenderSystem
 {
     private ISampler textureSampler = null!;
     private IPipelineState pipeline = null!;
@@ -17,7 +18,7 @@ public class LightingSystem : ISetupSystem, IRenderSystem
     private readonly IResourceManager resourceManager;
     private readonly WorldRenderTargetSystem worldRenderTargetSystem;
 
-    public LightingSystem(RendererContext rendererContext, IResourceManager resourceManager, WorldRenderTargetSystem worldRenderTargetSystem)
+    public PostProcessSystem(RendererContext rendererContext, IResourceManager resourceManager, WorldRenderTargetSystem worldRenderTargetSystem)
     {
         this.rendererContext = rendererContext;
         this.resourceManager = resourceManager;
@@ -29,8 +30,8 @@ public class LightingSystem : ISetupSystem, IRenderSystem
         var renderDevice = rendererContext.RenderDevice;
         var swapChain = rendererContext.SwapChain;
 
-        var vShader = resourceManager.GetResource<Shader>("Lighting:Light.v.hlsl");
-        var pShader = resourceManager.GetResource<Shader>("Lighting:Light.p.hlsl");
+        var vShader = resourceManager.GetResource<Shader>("Rendering:PostProcess.v.hlsl");
+        var pShader = resourceManager.GetResource<Shader>("Rendering:PostProcess.p.hlsl");
 
         textureSampler = renderDevice.CreateSampler(new SamplerDesc
         {
@@ -42,7 +43,7 @@ public class LightingSystem : ISetupSystem, IRenderSystem
         {
             PSODesc = new PipelineStateDesc
             {
-                Name = "Lighting Shader Pipeline",
+                Name = "Post Process Shader Pipeline",
                 ResourceLayout = new PipelineResourceLayoutDesc
                 {
                     DefaultVariableType = ShaderResourceVariableType.Static,
