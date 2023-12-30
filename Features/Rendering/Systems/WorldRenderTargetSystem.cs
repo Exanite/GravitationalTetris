@@ -70,7 +70,7 @@ public class WorldRenderTargetSystem : ISetupSystem, IRenderSystem, ITeardownSys
                 Type = ResourceDimension.Tex2d,
                 Width = swapChainDesc.Width,
                 Height = swapChainDesc.Height,
-                Format = swapChain.GetCurrentBackBufferRTV().GetDesc().Format,
+                Format = TextureFormat.RGBA32_Float,
                 BindFlags = BindFlags.ShaderResource | BindFlags.RenderTarget,
                 Usage = Usage.Default,
             });
