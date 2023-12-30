@@ -85,7 +85,7 @@ public class WorldRenderTargetSystem : ISetupSystem, IRenderSystem, ITeardownSys
                 Type = ResourceDimension.Tex2d,
                 Width = swapChainDesc.Width,
                 Height = swapChainDesc.Height,
-                Format = swapChain.GetDepthBufferDSV().GetDesc().Format,
+                Format = TextureFormat.D32_Float,
                 BindFlags = BindFlags.ShaderResource | BindFlags.DepthStencil,
                 Usage = Usage.Default,
             });
