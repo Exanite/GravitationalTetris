@@ -148,6 +148,19 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
 
                     RasterizerDesc = new RasterizerStateDesc { CullMode = CullMode.None },
                     DepthStencilDesc = new DepthStencilStateDesc { DepthEnable = false },
+
+                    BlendDesc = new BlendStateDesc
+                    {
+                        RenderTargets = new RenderTargetBlendDesc[]
+                        {
+                            new()
+                            {
+                                BlendEnable = true,
+                                SrcBlend = BlendFactor.SrcAlpha,
+                                DestBlend = BlendFactor.InvSrcAlpha,
+                            },
+                        },
+                    },
                 },
 
                 Vs = vShader.Value.Handle,
