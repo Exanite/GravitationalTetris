@@ -50,7 +50,7 @@ public class WorldRenderTextureSystem : ISetupSystem, IRenderSystem, ITeardownSy
         var swapChain = rendererContext.SwapChain;
         var swapChainDesc = swapChain.GetDesc();
 
-        if (previousWidth != swapChainDesc.Width || previousHeight != swapChain.GetDesc().Height)
+        if (previousWidth != swapChainDesc.Width || previousHeight != swapChainDesc.Height)
         {
             worldColor.Dispose();
             worldDepth.Dispose();
