@@ -102,6 +102,7 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
         for (var i = 0; i < iterationCount; i++)
         {
             var previousView = renderTextureViews[(i + 1) % 2];
+            var currentView = renderTextureViews[i % 2];
 
             if (i == 0)
             {
@@ -112,7 +113,7 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
                 textureVariable.Set(previousView, SetShaderResourceFlags.AllowOverwrite);
             }
 
-            renderTargets[0] = previousView;
+            renderTargets[0] = currentView;
             deviceContext.SetRenderTargets(renderTargets, null, ResourceStateTransitionMode.Transition);
 
             deviceContext.CommitShaderResources(shaderResourceBinding, ResourceStateTransitionMode.Transition);
