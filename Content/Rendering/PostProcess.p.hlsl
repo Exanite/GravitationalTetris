@@ -8,7 +8,6 @@ SamplerState TextureSampler;
 
 struct Input
 {
-    float4 Pos : SV_POSITION;
     float2 Uv : TEX_COORD;
 };
 
