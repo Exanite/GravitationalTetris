@@ -15,7 +15,7 @@ public struct PostProcessUniformData
     public float Time;
 }
 
-public class PostProcessSystem : ISetupSystem, IRenderSystem
+public class PostProcessSystem : ISetupSystem, IRenderSystem, ITeardownSystem
 {
     private Buffer<PostProcessUniformData> uniformBuffer = null!;
     private ISampler textureSampler = null!;
@@ -67,7 +67,7 @@ public class PostProcessSystem : ISetupSystem, IRenderSystem
                     DefaultVariableType = ShaderResourceVariableType.Static,
                     Variables = new ShaderResourceVariableDesc[]
                     {
-                        new ShaderResourceVariableDesc
+                        new()
                         {
                             ShaderStages = ShaderType.Pixel,
                             Name = "Texture",
@@ -118,5 +118,14 @@ public class PostProcessSystem : ISetupSystem, IRenderSystem
             NumVertices = 4,
             Flags = DrawFlags.VerifyAll,
         });
+    }
+
+    public void Teardown()
+    {
+        uniformBuffer.Dispose();
+        textureSampler.Dispose();
+        pipeline.Dispose();
+        shaderResourceBinding.Dispose();
+        textureVariable.Dispose();
     }
 }
