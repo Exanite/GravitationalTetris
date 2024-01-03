@@ -1,3 +1,4 @@
+using System.Numerics;
 using Diligent;
 using Exanite.Ecs.Systems;
 using Exanite.Engine.Rendering;
@@ -100,6 +101,11 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
 
         var deviceContext = rendererContext.DeviceContext;
         var swapChain = rendererContext.SwapChain;
+
+        for (var i = 0; i < iterationCount; i++)
+        {
+            deviceContext.ClearRenderTarget(renderTextureViews[i], Vector4.Zero, ResourceStateTransitionMode.Transition);
+        }
 
         deviceContext.SetPipelineState(downPipeline);
         for (var i = 0; i < iterationCount; i++)
