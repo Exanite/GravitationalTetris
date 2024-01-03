@@ -12,11 +12,9 @@ public class WorldRenderTextureSystem : ISetupSystem, IRenderSystem, ITeardownSy
 
     public ITexture worldColor = null!;
     public ITextureView worldColorRenderTarget = null!;
-    public ITextureView worldColorShaderResource = null!;
 
     public ITexture worldDepth = null!;
     public ITextureView worldDepthDepthStencil = null!;
-    public ITextureView worldDepthShaderResource = null!;
 
     private readonly ITextureView[] renderTargets = new ITextureView[1];
 
@@ -77,7 +75,6 @@ public class WorldRenderTextureSystem : ISetupSystem, IRenderSystem, ITeardownSy
             });
 
         worldColorRenderTarget = worldColor.GetDefaultView(TextureViewType.RenderTarget);
-        worldDepthShaderResource = worldColor.GetDefaultView(TextureViewType.ShaderResource);
 
         worldDepth = renderDevice.CreateTexture(
             new TextureDesc
@@ -92,7 +89,6 @@ public class WorldRenderTextureSystem : ISetupSystem, IRenderSystem, ITeardownSy
             });
 
         worldDepthDepthStencil = worldDepth.GetDefaultView(TextureViewType.DepthStencil);
-        worldDepthShaderResource = worldDepth.GetDefaultView(TextureViewType.ShaderResource);
 
         previousWidth = swapChainDesc.Width;
         previousHeight = swapChainDesc.Height;
