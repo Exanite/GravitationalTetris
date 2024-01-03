@@ -7,7 +7,7 @@ namespace Exanite.GravitationalTetris.Features.Rendering.Systems;
 
 public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
 {
-    private int iterationCount = 4;
+    private int iterationCount = 6;
 
     private ISampler textureSampler = null!;
     private IPipelineState downPipeline = null!;
@@ -19,8 +19,8 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
 
     private readonly ITextureView[] renderTargets = new ITextureView[1];
 
-    private readonly ITexture[] renderTextures = new ITexture[2];
-    private readonly ITextureView[] renderTextureViews = new ITextureView[2];
+    private readonly ITexture[] renderTextures;
+    private readonly ITextureView[] renderTextureViews;
 
     private readonly RendererContext rendererContext;
     private readonly IResourceManager resourceManager;
@@ -31,6 +31,9 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
         this.rendererContext = rendererContext;
         this.resourceManager = resourceManager;
         this.worldRenderTextureSystem = worldRenderTextureSystem;
+
+        renderTextures = new ITexture[iterationCount];
+        renderTextureViews = new ITextureView[iterationCount];
     }
 
     public void Setup()
@@ -166,6 +169,10 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
         var swapChain = rendererContext.SwapChain;
         var swapChainDesc = swapChain.GetDesc();
 
+        var width = swapChainDesc.Width;
+        var height = swapChainDesc.Height;
+
+        // Todo Need to prevent zero width/height textures
         for (var i = 0; i < renderTextures.Length; i++)
         {
             renderTextures[i] = renderDevice.CreateTexture(
@@ -173,14 +180,17 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
                 {
                     Name = $"Bloom Render Texture {i + 1}/{renderTextures.Length}",
                     Type = ResourceDimension.Tex2d,
-                    Width = swapChainDesc.Width,
-                    Height = swapChainDesc.Height,
+                    Width = width,
+                    Height = height,
                     Format = TextureFormat.RGBA32_Float,
                     BindFlags = BindFlags.ShaderResource | BindFlags.RenderTarget,
                     Usage = Usage.Default,
                 });
 
             renderTextureViews[i] = renderTextures[i].GetDefaultView(TextureViewType.RenderTarget);
+
+            width /= 2;
+            height /= 2;
         }
 
         previousWidth = swapChainDesc.Width;
