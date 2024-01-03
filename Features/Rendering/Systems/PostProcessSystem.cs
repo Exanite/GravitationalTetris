@@ -40,7 +40,7 @@ public class PostProcessSystem : ISetupSystem, IRenderSystem, ITeardownSystem
         var renderDevice = rendererContext.RenderDevice;
         var swapChain = rendererContext.SwapChain;
 
-        var vShader = resourceManager.GetResource<Shader>("Rendering:PostProcess.v.hlsl");
+        var vShader = resourceManager.GetResource<Shader>("Rendering:Screen.v.hlsl");
         var pShader = resourceManager.GetResource<Shader>("Rendering:PostProcess.p.hlsl");
 
         uniformBuffer = new Buffer<PostProcessUniformData>("Post Process Uniform Buffer", rendererContext, new BufferDesc

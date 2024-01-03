@@ -51,7 +51,7 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
         var renderDevice = rendererContext.RenderDevice;
         var swapChain = rendererContext.SwapChain;
 
-        var vShader = resourceManager.GetResource<Shader>("Rendering:Bloom.v.hlsl");
+        var vShader = resourceManager.GetResource<Shader>("Rendering:Screen.v.hlsl");
         var pShaderDown = resourceManager.GetResource<Shader>("Rendering:BloomDown.p.hlsl");
         var pShaderUp = resourceManager.GetResource<Shader>("Rendering:BloomUp.p.hlsl");
 
