@@ -24,14 +24,14 @@ public class PostProcessSystem : ISetupSystem, IRenderSystem, ITeardownSystem
 
     private readonly RendererContext rendererContext;
     private readonly IResourceManager resourceManager;
-    private readonly WorldRenderTargetSystem worldRenderTargetSystem;
+    private readonly WorldRenderTextureSystem worldRenderTextureSystem;
     private readonly SimulationTime time;
 
-    public PostProcessSystem(RendererContext rendererContext, IResourceManager resourceManager, WorldRenderTargetSystem worldRenderTargetSystem, SimulationTime time)
+    public PostProcessSystem(RendererContext rendererContext, IResourceManager resourceManager, WorldRenderTextureSystem worldRenderTextureSystem, SimulationTime time)
     {
         this.rendererContext = rendererContext;
         this.resourceManager = resourceManager;
-        this.worldRenderTargetSystem = worldRenderTargetSystem;
+        this.worldRenderTextureSystem = worldRenderTextureSystem;
         this.time = time;
     }
 
@@ -108,7 +108,7 @@ public class PostProcessSystem : ISetupSystem, IRenderSystem, ITeardownSystem
             uniformData[0].Time = time.Time;
         }
 
-        textureVariable.Set(worldRenderTargetSystem.worldColorRenderTarget, SetShaderResourceFlags.AllowOverwrite);
+        textureVariable.Set(worldRenderTextureSystem.worldColorRenderTarget, SetShaderResourceFlags.AllowOverwrite);
 
         deviceContext.SetPipelineState(pipeline);
         deviceContext.CommitShaderResources(shaderResourceBinding, ResourceStateTransitionMode.Transition);

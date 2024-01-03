@@ -5,7 +5,7 @@ using Exanite.Engine.Rendering;
 
 namespace Exanite.GravitationalTetris.Features.Rendering.Systems;
 
-public class WorldRenderTargetSystem : ISetupSystem, IRenderSystem, ITeardownSystem
+public class WorldRenderTextureSystem : ISetupSystem, IRenderSystem, ITeardownSystem
 {
     private uint previousWidth;
     private uint previousHeight;
@@ -22,21 +22,21 @@ public class WorldRenderTargetSystem : ISetupSystem, IRenderSystem, ITeardownSys
 
     private readonly RendererContext rendererContext;
 
-    public WorldRenderTargetSystem(RendererContext rendererContext)
+    public WorldRenderTextureSystem(RendererContext rendererContext)
     {
         this.rendererContext = rendererContext;
     }
 
     public void Setup()
     {
-        CreateRenderTargets();
+        CreateRenderTextures();
     }
 
     public void Render()
     {
         var deviceContext = rendererContext.DeviceContext;
 
-        ResizeRenderTargets();
+        ResizeRenderTextures();
 
         renderTargets[0] = worldColorRenderTarget;
 
@@ -45,7 +45,7 @@ public class WorldRenderTargetSystem : ISetupSystem, IRenderSystem, ITeardownSys
         deviceContext.ClearDepthStencil(worldDepthDepthStencil, ClearDepthStencilFlags.Depth | ClearDepthStencilFlags.Stencil, 1, 0, ResourceStateTransitionMode.Transition);
     }
 
-    private void ResizeRenderTargets()
+    private void ResizeRenderTextures()
     {
         var swapChain = rendererContext.SwapChain;
         var swapChainDesc = swapChain.GetDesc();
@@ -54,11 +54,11 @@ public class WorldRenderTargetSystem : ISetupSystem, IRenderSystem, ITeardownSys
         {
             worldColor.Dispose();
             worldDepth.Dispose();
-            CreateRenderTargets();
+            CreateRenderTextures();
         }
     }
 
-    private void CreateRenderTargets()
+    private void CreateRenderTextures()
     {
         var swapChain = rendererContext.SwapChain;
         var swapChainDesc = swapChain.GetDesc();
@@ -66,7 +66,7 @@ public class WorldRenderTargetSystem : ISetupSystem, IRenderSystem, ITeardownSys
         worldColor = rendererContext.RenderDevice.CreateTexture(
             new TextureDesc
             {
-                Name = "World Color Render Target",
+                Name = "World Color Render Texture",
                 Type = ResourceDimension.Tex2d,
                 Width = swapChainDesc.Width,
                 Height = swapChainDesc.Height,
@@ -81,7 +81,7 @@ public class WorldRenderTargetSystem : ISetupSystem, IRenderSystem, ITeardownSys
         worldDepth = rendererContext.RenderDevice.CreateTexture(
             new TextureDesc
             {
-                Name = "World Depth Render Target",
+                Name = "World Depth Render Texture",
                 Type = ResourceDimension.Tex2d,
                 Width = swapChainDesc.Width,
                 Height = swapChainDesc.Height,
