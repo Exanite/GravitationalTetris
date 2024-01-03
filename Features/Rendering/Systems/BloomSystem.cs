@@ -9,6 +9,7 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
 {
     private int iterationCount = 4;
 
+    private ISampler textureSampler = null!;
     private IPipelineState downPipeline = null!;
     private IShaderResourceBinding shaderResourceBinding = null!;
     private IShaderResourceVariable textureVariable = null!;
@@ -42,6 +43,12 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
         var vShader = resourceManager.GetResource<Shader>("Rendering:Bloom.v.hlsl");
         var pShaderDown = resourceManager.GetResource<Shader>("Rendering:BloomDown.p.hlsl");
         var pShaderUp = resourceManager.GetResource<Shader>("Rendering:BloomUp.p.hlsl");
+
+        textureSampler = renderDevice.CreateSampler(new SamplerDesc
+        {
+            MinFilter = FilterType.Linear, MagFilter = FilterType.Linear, MipFilter = FilterType.Linear,
+            AddressU = TextureAddressMode.Clamp, AddressV = TextureAddressMode.Clamp, AddressW = TextureAddressMode.Clamp,
+        });
 
         downPipeline = renderDevice.CreateGraphicsPipelineState(new GraphicsPipelineStateCreateInfo
         {
@@ -77,6 +84,8 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
             Vs = vShader.Value.Handle,
             Ps = pShaderDown.Value.Handle,
         });
+
+        downPipeline.GetStaticVariableByName(ShaderType.Pixel, "TextureSampler").Set(textureSampler, SetShaderResourceFlags.None);
 
         shaderResourceBinding = downPipeline.CreateShaderResourceBinding(true);
         textureVariable = shaderResourceBinding.GetVariableByName(ShaderType.Pixel, "Texture");
