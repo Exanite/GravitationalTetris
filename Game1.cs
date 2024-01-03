@@ -139,6 +139,7 @@ public class Game1 : Game
             config.RegisterAllCallbacks<UseMainRenderTargetSystem>();
 
             config.RegisterAllCallbacks<PostProcessSystem>();
+            config.RegisterAllCallbacks<BloomSystem>();
 
             config.RegisterAllCallbacks<MyraUiSystem>();
             config.RegisterAllCallbacks<TetrisUiSystem>();
