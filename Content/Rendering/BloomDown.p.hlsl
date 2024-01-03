@@ -16,5 +16,5 @@ void main(
     in Input input,
     out Output output)
 {
-    output.Color = Texture.Sample(TextureSampler, input.Uv);
+    output.Color = Texture.Sample(TextureSampler, float2(input.Uv.x, 1 - input.Uv.y));
 }
