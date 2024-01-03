@@ -22,5 +22,32 @@ void main(
     in Input input,
     out Output output)
 {
+    float2 uv = float2(input.Uv.x, 1 - input.Uv.y);
+
     output.Color = Texture.Sample(TextureSampler, input.Uv);
+
+    float x = FilterStep.x;
+    float y = FilterStep.y;
+
+    // Take 9 samples around current texel
+    float3 a = Texture.Sample(TextureSampler, float2(uv.x - x, uv.y + y)).rgb;
+    float3 b = Texture.Sample(TextureSampler, float2(uv.x, uv.y + y)).rgb;
+    float3 c = Texture.Sample(TextureSampler, float2(uv.x + x, uv.y + y)).rgb;
+
+    float3 d = Texture.Sample(TextureSampler, float2(uv.x - x, uv.y)).rgb;
+    float3 e = Texture.Sample(TextureSampler, float2(uv.x, uv.y)).rgb;
+    float3 f = Texture.Sample(TextureSampler, float2(uv.x + x, uv.y)).rgb;
+
+    float3 g = Texture.Sample(TextureSampler, float2(uv.x - x, uv.y - y)).rgb;
+    float3 h = Texture.Sample(TextureSampler, float2(uv.x, uv.y - y)).rgb;
+    float3 i = Texture.Sample(TextureSampler, float2(uv.x + x, uv.y - y)).rgb;
+
+    // Apply weighted distribution
+    float3 outputColor;
+    outputColor = e * 4.0;
+    outputColor += (b + d + f + h) * 2.0;
+    outputColor += (a + c + g + i);
+    outputColor *= 1.0 / 16.0;
+
+    output.Color = float4(outputColor, 1);
 }
