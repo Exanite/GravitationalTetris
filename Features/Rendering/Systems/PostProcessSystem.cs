@@ -107,7 +107,7 @@ public class PostProcessSystem : ISetupSystem, IRenderSystem, ITeardownSystem
             uniformData[0].Time = time.Time;
         }
 
-        textureVariable.Set(worldRenderTextureSystem.worldColorRenderTarget, SetShaderResourceFlags.AllowOverwrite);
+        textureVariable.Set(worldRenderTextureSystem.worldColorView, SetShaderResourceFlags.AllowOverwrite);
 
         deviceContext.SetPipelineState(pipeline);
         deviceContext.CommitShaderResources(shaderResourceBinding, ResourceStateTransitionMode.Transition);

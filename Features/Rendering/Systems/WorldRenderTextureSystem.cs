@@ -11,10 +11,10 @@ public class WorldRenderTextureSystem : ISetupSystem, IRenderSystem, ITeardownSy
     private uint previousHeight;
 
     public ITexture worldColor = null!;
-    public ITextureView worldColorRenderTarget = null!;
+    public ITextureView worldColorView = null!;
 
     public ITexture worldDepth = null!;
-    public ITextureView worldDepthDepthStencil = null!;
+    public ITextureView worldDepthView = null!;
 
     private readonly ITextureView[] renderTargets = new ITextureView[1];
 
@@ -36,11 +36,11 @@ public class WorldRenderTextureSystem : ISetupSystem, IRenderSystem, ITeardownSy
 
         ResizeRenderTextures();
 
-        renderTargets[0] = worldColorRenderTarget;
+        renderTargets[0] = worldColorView;
 
-        deviceContext.SetRenderTargets(renderTargets, worldDepthDepthStencil, ResourceStateTransitionMode.Transition);
-        deviceContext.ClearRenderTarget(worldColorRenderTarget, Vector4.Zero, ResourceStateTransitionMode.Transition);
-        deviceContext.ClearDepthStencil(worldDepthDepthStencil, ClearDepthStencilFlags.Depth | ClearDepthStencilFlags.Stencil, 1, 0, ResourceStateTransitionMode.Transition);
+        deviceContext.SetRenderTargets(renderTargets, worldDepthView, ResourceStateTransitionMode.Transition);
+        deviceContext.ClearRenderTarget(worldColorView, Vector4.Zero, ResourceStateTransitionMode.Transition);
+        deviceContext.ClearDepthStencil(worldDepthView, ClearDepthStencilFlags.Depth | ClearDepthStencilFlags.Stencil, 1, 0, ResourceStateTransitionMode.Transition);
     }
 
     private void ResizeRenderTextures()
@@ -74,7 +74,7 @@ public class WorldRenderTextureSystem : ISetupSystem, IRenderSystem, ITeardownSy
                 Usage = Usage.Default,
             });
 
-        worldColorRenderTarget = worldColor.GetDefaultView(TextureViewType.RenderTarget);
+        worldColorView = worldColor.GetDefaultView(TextureViewType.RenderTarget);
 
         worldDepth = renderDevice.CreateTexture(
             new TextureDesc
@@ -88,7 +88,7 @@ public class WorldRenderTextureSystem : ISetupSystem, IRenderSystem, ITeardownSy
                 Usage = Usage.Default,
             });
 
-        worldDepthDepthStencil = worldDepth.GetDefaultView(TextureViewType.DepthStencil);
+        worldDepthView = worldDepth.GetDefaultView(TextureViewType.DepthStencil);
 
         previousWidth = swapChainDesc.Width;
         previousHeight = swapChainDesc.Height;
