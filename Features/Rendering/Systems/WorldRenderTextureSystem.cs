@@ -7,14 +7,14 @@ namespace Exanite.GravitationalTetris.Features.Rendering.Systems;
 
 public class WorldRenderTextureSystem : ISetupSystem, IRenderSystem, ITeardownSystem
 {
+    public ITexture WorldColor = null!;
+    public ITextureView WorldColorView = null!;
+
+    public ITexture WorldDepth = null!;
+    public ITextureView WorldDepthView = null!;
+
     private uint previousWidth;
     private uint previousHeight;
-
-    public ITexture worldColor = null!;
-    public ITextureView worldColorView = null!;
-
-    public ITexture worldDepth = null!;
-    public ITextureView worldDepthView = null!;
 
     private readonly ITextureView[] renderTargets = new ITextureView[1];
 
@@ -36,11 +36,11 @@ public class WorldRenderTextureSystem : ISetupSystem, IRenderSystem, ITeardownSy
 
         ResizeRenderTextures();
 
-        renderTargets[0] = worldColorView;
+        renderTargets[0] = WorldColorView;
 
-        deviceContext.SetRenderTargets(renderTargets, worldDepthView, ResourceStateTransitionMode.Transition);
-        deviceContext.ClearRenderTarget(worldColorView, Vector4.Zero, ResourceStateTransitionMode.Transition);
-        deviceContext.ClearDepthStencil(worldDepthView, ClearDepthStencilFlags.Depth | ClearDepthStencilFlags.Stencil, 1, 0, ResourceStateTransitionMode.Transition);
+        deviceContext.SetRenderTargets(renderTargets, WorldDepthView, ResourceStateTransitionMode.Transition);
+        deviceContext.ClearRenderTarget(WorldColorView, Vector4.Zero, ResourceStateTransitionMode.Transition);
+        deviceContext.ClearDepthStencil(WorldDepthView, ClearDepthStencilFlags.Depth | ClearDepthStencilFlags.Stencil, 1, 0, ResourceStateTransitionMode.Transition);
     }
 
     private void ResizeRenderTextures()
@@ -50,8 +50,8 @@ public class WorldRenderTextureSystem : ISetupSystem, IRenderSystem, ITeardownSy
 
         if (previousWidth != swapChainDesc.Width || previousHeight != swapChainDesc.Height)
         {
-            worldColor.Dispose();
-            worldDepth.Dispose();
+            WorldColor.Dispose();
+            WorldDepth.Dispose();
             CreateRenderTextures();
         }
     }
@@ -62,7 +62,7 @@ public class WorldRenderTextureSystem : ISetupSystem, IRenderSystem, ITeardownSy
         var swapChain = rendererContext.SwapChain;
         var swapChainDesc = swapChain.GetDesc();
 
-        worldColor = renderDevice.CreateTexture(
+        WorldColor = renderDevice.CreateTexture(
             new TextureDesc
             {
                 Name = "World Color Render Texture",
@@ -74,9 +74,9 @@ public class WorldRenderTextureSystem : ISetupSystem, IRenderSystem, ITeardownSy
                 Usage = Usage.Default,
             });
 
-        worldColorView = worldColor.GetDefaultView(TextureViewType.RenderTarget);
+        WorldColorView = WorldColor.GetDefaultView(TextureViewType.RenderTarget);
 
-        worldDepth = renderDevice.CreateTexture(
+        WorldDepth = renderDevice.CreateTexture(
             new TextureDesc
             {
                 Name = "World Depth Render Texture",
@@ -88,7 +88,7 @@ public class WorldRenderTextureSystem : ISetupSystem, IRenderSystem, ITeardownSy
                 Usage = Usage.Default,
             });
 
-        worldDepthView = worldDepth.GetDefaultView(TextureViewType.DepthStencil);
+        WorldDepthView = WorldDepth.GetDefaultView(TextureViewType.DepthStencil);
 
         previousWidth = swapChainDesc.Width;
         previousHeight = swapChainDesc.Height;
@@ -96,7 +96,7 @@ public class WorldRenderTextureSystem : ISetupSystem, IRenderSystem, ITeardownSy
 
     public void Teardown()
     {
-        worldColor.Dispose();
-        worldDepth.Dispose();
+        WorldColor.Dispose();
+        WorldDepth.Dispose();
     }
 }

@@ -110,7 +110,7 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
         deviceContext.SetPipelineState(downPipeline);
         for (var i = 0; i < iterationCount; i++)
         {
-            var previousView = i > 0 ? renderTextureViews[i - 1] : worldRenderTextureSystem.worldColorView;
+            var previousView = i > 0 ? renderTextureViews[i - 1] : worldRenderTextureSystem.WorldColorView;
             var currentView = renderTextureViews[i];
 
             textureVariable.Set(previousView, SetShaderResourceFlags.AllowOverwrite);
