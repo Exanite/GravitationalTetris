@@ -161,7 +161,7 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
             renderTextures[i] = renderDevice.CreateTexture(
                 new TextureDesc
                 {
-                    Name = $"Bloom Render Texture {i + 1}/{iterationCount + 1}",
+                    Name = $"Bloom Render Texture {i + 1}/{renderTextures.Length}",
                     Type = ResourceDimension.Tex2d,
                     Width = swapChainDesc.Width,
                     Height = swapChainDesc.Height,
