@@ -1,3 +1,8 @@
+cbuffer Uniforms
+{
+    float2 TextureResolution;
+}
+
 Texture2D Texture;
 SamplerState TextureSampler;
 
