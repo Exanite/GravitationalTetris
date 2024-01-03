@@ -11,17 +11,14 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
     private uint previousWidth;
     private uint previousHeight;
 
-    private readonly ITexture[] renderTextures;
-    private readonly ITextureView[] renderTextureViews;
+    private readonly ITexture[] renderTextures = new ITexture[2];
+    private readonly ITextureView[] renderTextureViews = new ITextureView[2];
 
     private readonly RendererContext rendererContext;
 
     public BloomSystem(RendererContext rendererContext)
     {
         this.rendererContext = rendererContext;
-
-        renderTextures = new ITexture[iterationCount];
-        renderTextureViews = new ITextureView[iterationCount];
     }
 
     public void Setup()
@@ -64,12 +61,12 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
         var swapChain = rendererContext.SwapChain;
         var swapChainDesc = swapChain.GetDesc();
 
-        for (var i = 0; i < iterationCount; i++)
+        for (var i = 0; i < renderTextures.Length; i++)
         {
             renderTextures[i] = renderDevice.CreateTexture(
                 new TextureDesc
                 {
-                    Name = "World Color Render Texture",
+                    Name = $"Bloom Render Texture {i + 1}/{iterationCount + 1}",
                     Type = ResourceDimension.Tex2d,
                     Width = swapChainDesc.Width,
                     Height = swapChainDesc.Height,
