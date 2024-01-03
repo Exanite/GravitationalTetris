@@ -17,6 +17,7 @@ struct Output
     float4 Color : SV_TARGET;
 };
 
+// Based on https://learnopengl.com/Guest-Articles/2022/Phys.-Based-Bloom
 void main(
     in Input input,
     out Output output)
