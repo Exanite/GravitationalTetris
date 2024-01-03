@@ -3,7 +3,7 @@ using Diligent;
 using Exanite.Ecs.Systems;
 using Exanite.Engine.Rendering;
 
-namespace Exanite.GravitationalTetris.Features.Lighting.Systems;
+namespace Exanite.GravitationalTetris.Features.Rendering.Systems;
 
 public class WorldRenderTargetSystem : ISetupSystem, IRenderSystem, ITeardownSystem
 {

@@ -3,7 +3,6 @@ using Diligent;
 using Exanite.Ecs.Systems;
 using Exanite.Engine.Rendering;
 using Exanite.Engine.Time;
-using Exanite.GravitationalTetris.Features.Lighting.Systems;
 using Exanite.GravitationalTetris.Features.Sprites;
 using Exanite.ResourceManagement;
 

@@ -15,7 +15,6 @@ using Exanite.GravitationalTetris.Features;
 using Exanite.GravitationalTetris.Features.Audio.Systems;
 using Exanite.GravitationalTetris.Features.Cameras.Systems;
 using Exanite.GravitationalTetris.Features.Lifecycles.Systems;
-using Exanite.GravitationalTetris.Features.Lighting.Systems;
 using Exanite.GravitationalTetris.Features.Physics.Systems;
 using Exanite.GravitationalTetris.Features.Players.Systems;
 using Exanite.GravitationalTetris.Features.Rendering.Systems;
