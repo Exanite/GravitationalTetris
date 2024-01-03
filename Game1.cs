@@ -135,14 +135,16 @@ public class Game1 : Game
             config.RegisterAllCallbacks<TilemapRenderSystem>();
             config.RegisterAllCallbacks<SpriteRenderSystem>();
 
-            // Main RT
-            config.RegisterAllCallbacks<UseMainRenderTargetSystem>();
+            // // Main RT
+            // config.RegisterAllCallbacks<UseMainRenderTargetSystem>();
+            //
+            // config.RegisterAllCallbacks<PostProcessSystem>();
+            //
+            // config.RegisterAllCallbacks<MyraUiSystem>();
+            // config.RegisterAllCallbacks<TetrisUiSystem>();
 
-            config.RegisterAllCallbacks<PostProcessSystem>();
+            // Experimental
             config.RegisterAllCallbacks<BloomSystem>();
-
-            config.RegisterAllCallbacks<MyraUiSystem>();
-            config.RegisterAllCallbacks<TetrisUiSystem>();
         }
         config.RegisterAllCallbacks<PresentSwapChainSystem>();
 
