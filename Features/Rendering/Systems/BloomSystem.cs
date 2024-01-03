@@ -8,7 +8,7 @@ namespace Exanite.GravitationalTetris.Features.Rendering.Systems;
 
 public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
 {
-    private int iterationCount = 6;
+    private int iterationCount = 4;
 
     private ISampler textureSampler = null!;
 
@@ -174,6 +174,7 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
             deviceContext.ClearRenderTarget(renderTextureViews[i], Vector4.Zero, ResourceStateTransitionMode.Transition);
         }
 
+        // Down sample
         deviceContext.SetPipelineState(downPipeline);
         for (var i = 0; i < iterationCount; i++)
         {
@@ -200,11 +201,38 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
             });
         }
 
-        downTextureVariable.Set(renderTextureViews[iterationCount - 1], SetShaderResourceFlags.AllowOverwrite);
+        // Up sample
+        using (upUniformBuffer.Map(MapType.Write, MapFlags.Discard, out var upUniformData))
+        {
+            var aspectRatio = (float)swapChain.GetDesc().Width / swapChain.GetDesc().Height;
+            var step = 0.01f;
+
+            upUniformData[0].FilterStep = new Vector2(step / aspectRatio, step);
+        }
+
+        deviceContext.SetPipelineState(upPipeline);
+        for (var i = iterationCount - 2; i >= 0; i--)
+        {
+            var previousView = renderTextureViews[i + 1];
+            var currentView = renderTextureViews[i];
+
+            upTextureVariable.Set(previousView, SetShaderResourceFlags.AllowOverwrite);
+            renderTargets[0] = currentView;
+
+            deviceContext.SetRenderTargets(renderTargets, null, ResourceStateTransitionMode.Transition);
+            deviceContext.CommitShaderResources(upResources, ResourceStateTransitionMode.Transition);
+            deviceContext.Draw(new DrawAttribs
+            {
+                NumVertices = 4,
+                Flags = DrawFlags.VerifyAll,
+            });
+        }
+
+        upTextureVariable.Set(renderTextureViews[0], SetShaderResourceFlags.AllowOverwrite);
         renderTargets[0] = swapChain.GetCurrentBackBufferRTV();
 
         deviceContext.SetRenderTargets(renderTargets, swapChain.GetDepthBufferDSV(), ResourceStateTransitionMode.Transition);
-        deviceContext.CommitShaderResources(downResources, ResourceStateTransitionMode.Transition);
+        deviceContext.CommitShaderResources(upResources, ResourceStateTransitionMode.Transition);
         deviceContext.Draw(new DrawAttribs
         {
             NumVertices = 4,
