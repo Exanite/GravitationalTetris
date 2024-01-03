@@ -78,7 +78,6 @@ public class PostProcessSystem : ISetupSystem, IRenderSystem, ITeardownSystem
 
             GraphicsPipeline = new GraphicsPipelineDesc
             {
-                InputLayout = SpriteInstanceData.Layout,
                 PrimitiveTopology = PrimitiveTopology.TriangleStrip,
 
                 NumRenderTargets = 1,
