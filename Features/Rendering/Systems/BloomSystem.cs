@@ -17,6 +17,11 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
     private IShaderResourceBinding downResources = null!;
     private IShaderResourceVariable downTextureVariable = null!;
 
+    private Buffer<BloomUpUniformData> upUniformBuffer = null!;
+    private IPipelineState upPipeline = null!;
+    private IShaderResourceBinding upResources = null!;
+    private IShaderResourceVariable upTextureVariable = null!;
+
     private uint previousWidth;
     private uint previousHeight;
 
@@ -50,59 +55,111 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
         var pShaderDown = resourceManager.GetResource<Shader>("Rendering:BloomDown.p.hlsl");
         var pShaderUp = resourceManager.GetResource<Shader>("Rendering:BloomUp.p.hlsl");
 
-        downUniformBuffer = new Buffer<BloomDownUniformData>("Bloom Down Uniform Buffer", rendererContext, new BufferDesc
-        {
-            Usage = Usage.Dynamic,
-            BindFlags = BindFlags.UniformBuffer,
-            CPUAccessFlags = CpuAccessFlags.Write,
-        });
-
         textureSampler = renderDevice.CreateSampler(new SamplerDesc
         {
             MinFilter = FilterType.Linear, MagFilter = FilterType.Linear, MipFilter = FilterType.Linear,
             AddressU = TextureAddressMode.Clamp, AddressV = TextureAddressMode.Clamp, AddressW = TextureAddressMode.Clamp,
         });
 
-        downPipeline = renderDevice.CreateGraphicsPipelineState(new GraphicsPipelineStateCreateInfo
         {
-            PSODesc = new PipelineStateDesc
+            downUniformBuffer = new Buffer<BloomDownUniformData>("Bloom Down Uniform Buffer", rendererContext, new BufferDesc
             {
-                Name = "Bloom Down Shader Pipeline",
-                ResourceLayout = new PipelineResourceLayoutDesc
+                Usage = Usage.Dynamic,
+                BindFlags = BindFlags.UniformBuffer,
+                CPUAccessFlags = CpuAccessFlags.Write,
+            });
+
+            downPipeline = renderDevice.CreateGraphicsPipelineState(new GraphicsPipelineStateCreateInfo
+            {
+                PSODesc = new PipelineStateDesc
                 {
-                    DefaultVariableType = ShaderResourceVariableType.Static,
-                    Variables = new ShaderResourceVariableDesc[]
+                    Name = "Bloom Down Shader Pipeline",
+                    ResourceLayout = new PipelineResourceLayoutDesc
                     {
-                        new()
+                        DefaultVariableType = ShaderResourceVariableType.Static,
+                        Variables = new ShaderResourceVariableDesc[]
                         {
-                            ShaderStages = ShaderType.Pixel,
-                            Name = "Texture",
-                            Type = ShaderResourceVariableType.Mutable,
+                            new()
+                            {
+                                ShaderStages = ShaderType.Pixel,
+                                Name = "Texture",
+                                Type = ShaderResourceVariableType.Mutable,
+                            },
                         },
                     },
                 },
-            },
 
-            GraphicsPipeline = new GraphicsPipelineDesc
+                GraphicsPipeline = new GraphicsPipelineDesc
+                {
+                    PrimitiveTopology = PrimitiveTopology.TriangleStrip,
+
+                    NumRenderTargets = 1,
+                    RTVFormats = new[] { swapChain.GetDesc().ColorBufferFormat },
+
+                    RasterizerDesc = new RasterizerStateDesc { CullMode = CullMode.None },
+                    DepthStencilDesc = new DepthStencilStateDesc { DepthEnable = false },
+                },
+
+                Vs = vShader.Value.Handle,
+                Ps = pShaderDown.Value.Handle,
+            });
+
+            downPipeline.GetStaticVariableByName(ShaderType.Pixel, "TextureSampler").Set(textureSampler, SetShaderResourceFlags.None);
+            downPipeline.GetStaticVariableByName(ShaderType.Pixel, "Uniforms").Set(downUniformBuffer.Handle, SetShaderResourceFlags.None);
+
+            downResources = downPipeline.CreateShaderResourceBinding(true);
+            downTextureVariable = downResources.GetVariableByName(ShaderType.Pixel, "Texture");
+        }
+
+        {
+            upUniformBuffer = new Buffer<BloomUpUniformData>("Bloom Up Uniform Buffer", rendererContext, new BufferDesc
             {
-                PrimitiveTopology = PrimitiveTopology.TriangleStrip,
+                Usage = Usage.Dynamic,
+                BindFlags = BindFlags.UniformBuffer,
+                CPUAccessFlags = CpuAccessFlags.Write,
+            });
 
-                NumRenderTargets = 1,
-                RTVFormats = new[] { swapChain.GetDesc().ColorBufferFormat },
+            upPipeline = renderDevice.CreateGraphicsPipelineState(new GraphicsPipelineStateCreateInfo
+            {
+                PSODesc = new PipelineStateDesc
+                {
+                    Name = "Bloom Up Shader Pipeline",
+                    ResourceLayout = new PipelineResourceLayoutDesc
+                    {
+                        DefaultVariableType = ShaderResourceVariableType.Static,
+                        Variables = new ShaderResourceVariableDesc[]
+                        {
+                            new()
+                            {
+                                ShaderStages = ShaderType.Pixel,
+                                Name = "Texture",
+                                Type = ShaderResourceVariableType.Mutable,
+                            },
+                        },
+                    },
+                },
 
-                RasterizerDesc = new RasterizerStateDesc { CullMode = CullMode.None },
-                DepthStencilDesc = new DepthStencilStateDesc { DepthEnable = false },
-            },
+                GraphicsPipeline = new GraphicsPipelineDesc
+                {
+                    PrimitiveTopology = PrimitiveTopology.TriangleStrip,
 
-            Vs = vShader.Value.Handle,
-            Ps = pShaderDown.Value.Handle,
-        });
+                    NumRenderTargets = 1,
+                    RTVFormats = new[] { swapChain.GetDesc().ColorBufferFormat },
 
-        downPipeline.GetStaticVariableByName(ShaderType.Pixel, "TextureSampler").Set(textureSampler, SetShaderResourceFlags.None);
-        downPipeline.GetStaticVariableByName(ShaderType.Pixel, "Uniforms").Set(downUniformBuffer.Handle, SetShaderResourceFlags.None);
+                    RasterizerDesc = new RasterizerStateDesc { CullMode = CullMode.None },
+                    DepthStencilDesc = new DepthStencilStateDesc { DepthEnable = false },
+                },
 
-        downResources = downPipeline.CreateShaderResourceBinding(true);
-        downTextureVariable = downResources.GetVariableByName(ShaderType.Pixel, "Texture");
+                Vs = vShader.Value.Handle,
+                Ps = pShaderUp.Value.Handle,
+            });
+
+            upPipeline.GetStaticVariableByName(ShaderType.Pixel, "TextureSampler").Set(textureSampler, SetShaderResourceFlags.None);
+            upPipeline.GetStaticVariableByName(ShaderType.Pixel, "Uniforms").Set(upUniformBuffer.Handle, SetShaderResourceFlags.None);
+
+            upResources = upPipeline.CreateShaderResourceBinding(true);
+            upTextureVariable = upResources.GetVariableByName(ShaderType.Pixel, "Texture");
+        }
     }
 
     public void Render()
@@ -157,9 +214,15 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
 
     public void Teardown()
     {
+        upResources.Dispose();
+        upPipeline.Dispose();
+        upUniformBuffer.Dispose();
+
         downResources.Dispose();
         downPipeline.Dispose();
         downUniformBuffer.Dispose();
+
+        textureSampler.Dispose();
 
         foreach (var texture in renderTextures)
         {
