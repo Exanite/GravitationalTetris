@@ -24,8 +24,6 @@ void main(
 {
     float2 uv = float2(input.Uv.x, 1 - input.Uv.y);
 
-    output.Color = Texture.Sample(TextureSampler, input.Uv);
-
     float x = FilterStep.x;
     float y = FilterStep.y;
 
