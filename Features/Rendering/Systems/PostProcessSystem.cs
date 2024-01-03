@@ -121,10 +121,9 @@ public class PostProcessSystem : ISetupSystem, IRenderSystem, ITeardownSystem
 
     public void Teardown()
     {
-        uniformBuffer.Dispose();
-        textureSampler.Dispose();
-        pipeline.Dispose();
         shaderResourceBinding.Dispose();
-        textureVariable.Dispose();
+        pipeline.Dispose();
+        textureSampler.Dispose();
+        uniformBuffer.Dispose();
     }
 }
