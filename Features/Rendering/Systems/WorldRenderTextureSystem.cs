@@ -60,10 +60,11 @@ public class WorldRenderTextureSystem : ISetupSystem, IRenderSystem, ITeardownSy
 
     private void CreateRenderTextures()
     {
+        var renderDevice = rendererContext.RenderDevice;
         var swapChain = rendererContext.SwapChain;
         var swapChainDesc = swapChain.GetDesc();
 
-        worldColor = rendererContext.RenderDevice.CreateTexture(
+        worldColor = renderDevice.CreateTexture(
             new TextureDesc
             {
                 Name = "World Color Render Texture",
@@ -78,7 +79,7 @@ public class WorldRenderTextureSystem : ISetupSystem, IRenderSystem, ITeardownSy
         worldColorRenderTarget = worldColor.GetDefaultView(TextureViewType.RenderTarget);
         worldDepthShaderResource = worldColor.GetDefaultView(TextureViewType.ShaderResource);
 
-        worldDepth = rendererContext.RenderDevice.CreateTexture(
+        worldDepth = renderDevice.CreateTexture(
             new TextureDesc
             {
                 Name = "World Depth Render Texture",

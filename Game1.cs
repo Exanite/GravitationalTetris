@@ -130,7 +130,7 @@ public class Game1 : Game
             config.RegisterAllCallbacks<SpriteBatchSystem>();
 
             // World RT
-            config.RegisterAllCallbacks<WorldRenderTargetSystem>();
+            config.RegisterAllCallbacks<WorldRenderTextureSystem>();
 
             config.RegisterAllCallbacks<TilemapRenderSystem>();
             config.RegisterAllCallbacks<SpriteRenderSystem>();
