@@ -272,7 +272,7 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
         using (upUniformBuffer.Map(MapType.Write, MapFlags.Discard, out var upUniformData))
         {
             var aspectRatio = (float)swapChain.GetDesc().Width / swapChain.GetDesc().Height;
-            var step = 0.01f;
+            var step = 0.005f;
 
             upUniformData[0].FilterStep = new Vector2(step / aspectRatio, step);
         }
