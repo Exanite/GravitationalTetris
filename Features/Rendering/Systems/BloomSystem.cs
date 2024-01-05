@@ -110,6 +110,19 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
 
                     RasterizerDesc = new RasterizerStateDesc { CullMode = CullMode.None },
                     DepthStencilDesc = new DepthStencilStateDesc { DepthEnable = false },
+
+                    BlendDesc = new BlendStateDesc
+                    {
+                        RenderTargets = new RenderTargetBlendDesc[]
+                        {
+                            new()
+                            {
+                                BlendEnable = true,
+                                SrcBlend = BlendFactor.One,
+                                DestBlend = BlendFactor.Zero,
+                            },
+                        },
+                    },
                 },
 
                 Vs = vShader.Value.Handle,
@@ -235,11 +248,6 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
 
         var deviceContext = rendererContext.DeviceContext;
         var swapChain = rendererContext.SwapChain;
-
-        for (var i = 0; i < iterationCount; i++)
-        {
-            deviceContext.ClearRenderTarget(renderTextureViews[i], Vector4.Zero, ResourceStateTransitionMode.Transition);
-        }
 
         // Down sample
         deviceContext.SetPipelineState(downPipeline);
