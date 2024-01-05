@@ -1,6 +1,6 @@
 cbuffer Uniforms
 {
-    float2 TextureResolution;
+    float2 FilterStep;
 }
 
 Texture2D Texture;
@@ -24,9 +24,8 @@ void main(
 {
     float2 uv = float2(input.Uv.x, 1 - input.Uv.y);
 
-    float2 texelSize = 1.0 / TextureResolution;
-    float x = texelSize.x;
-    float y = texelSize.y;
+    float x = FilterStep.x;
+    float y = FilterStep.y;
 
     // Take 13 samples around current texel
     float3 a = Texture.Sample(TextureSampler, float2(uv.x - 2 * x, uv.y + 2 * y)).rgb;

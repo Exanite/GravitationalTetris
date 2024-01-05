@@ -8,7 +8,7 @@ namespace Exanite.GravitationalTetris.Features.Rendering.Systems;
 
 public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
 {
-    private int iterationCount = 4;
+    private int iterationCount = 8;
 
     private ISampler linearClampTextureSampler = null!;
     private ISampler pointClampTextureSampler = null!;
@@ -256,7 +256,7 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
             {
                 var textureDesc = currentTexture.GetDesc();
 
-                downUniformData[0].TextureResolution = new Vector2(textureDesc.Width, textureDesc.Height);
+                downUniformData[0].FilterStep = new Vector2(1f / textureDesc.Width, 1f / textureDesc.Height);
             }
 
             deviceContext.SetRenderTargets(renderTargets, null, ResourceStateTransitionMode.Transition);
