@@ -295,25 +295,27 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
             });
         }
 
-        // Use main RT
-        renderTargets[0] = swapChain.GetCurrentBackBufferRTV();
-        deviceContext.SetRenderTargets(renderTargets, swapChain.GetDepthBufferDSV(), ResourceStateTransitionMode.Transition);
+        // Draw bloom to world RT
+        renderTargets[0] = worldRenderTextureSystem.WorldColorView;
+        deviceContext.SetRenderTargets(renderTargets, null, ResourceStateTransitionMode.Transition);
 
-        // Draw world to main RT
-        deviceContext.SetPipelineState(passthroughPipeline);
-        passthroughTextureVariable.Set(worldRenderTextureSystem.WorldColorView, SetShaderResourceFlags.AllowOverwrite);
-        deviceContext.CommitShaderResources(passthroughResources, ResourceStateTransitionMode.Transition);
+        deviceContext.SetPipelineState(upPipeline);
+
+        upTextureVariable.Set(renderTextureViews[0], SetShaderResourceFlags.AllowOverwrite);
+        deviceContext.CommitShaderResources(upResources, ResourceStateTransitionMode.Transition);
         deviceContext.Draw(new DrawAttribs
         {
             NumVertices = 4,
             Flags = DrawFlags.VerifyAll,
         });
 
-        // Draw bloom to main RT
-        deviceContext.SetPipelineState(upPipeline);
+        // Copy world to main RT
+        renderTargets[0] = swapChain.GetCurrentBackBufferRTV();
+        deviceContext.SetRenderTargets(renderTargets, swapChain.GetDepthBufferDSV(), ResourceStateTransitionMode.Transition);
 
-        upTextureVariable.Set(renderTextureViews[0], SetShaderResourceFlags.AllowOverwrite);
-        deviceContext.CommitShaderResources(upResources, ResourceStateTransitionMode.Transition);
+        deviceContext.SetPipelineState(passthroughPipeline);
+        passthroughTextureVariable.Set(worldRenderTextureSystem.WorldColorView, SetShaderResourceFlags.AllowOverwrite);
+        deviceContext.CommitShaderResources(passthroughResources, ResourceStateTransitionMode.Transition);
         deviceContext.Draw(new DrawAttribs
         {
             NumVertices = 4,
