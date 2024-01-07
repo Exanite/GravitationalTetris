@@ -9,6 +9,8 @@ namespace Exanite.GravitationalTetris.Features.Rendering.Systems;
 
 public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
 {
+    private float referenceResolutionHeight = 1080;
+
     private int maxIterationCount = 6;
     private int iterationCount = 6;
     private float bloomIntensity = 0.01f;
@@ -54,10 +56,9 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
 
     public void Setup()
     {
-        CreateRenderTextures();
+        ResizeRenderTextures();
 
         var renderDevice = rendererContext.RenderDevice;
-        var swapChain = rendererContext.SwapChain;
 
         var vShader = resourceManager.GetResource<Shader>("Rendering:Screen.v.hlsl");
         var pShaderDown = resourceManager.GetResource<Shader>("Rendering:BloomDown.p.hlsl");
@@ -261,7 +262,7 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
         deviceContext.SetPipelineState(downPipeline);
         for (var i = 0; i < iterationCount; i++)
         {
-            var previousView = i > 0 ? renderTextureViews[i - 1] : worldRenderTextureSystem.WorldColorView;
+            var previousView = i > 0 ? renderTextureViews[i - 1] : GetSourceTextureView();
             var currentView = renderTextureViews[i];
             var currentTexture = renderTextures[i];
 
@@ -317,7 +318,7 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
         }
 
         // Draw bloom to world RT
-        renderTargets[0] = worldRenderTextureSystem.WorldColorView;
+        renderTargets[0] = GetSourceTextureView();
         deviceContext.SetRenderTargets(renderTargets, null, ResourceStateTransitionMode.Transition);
 
         deviceContext.SetPipelineState(upPipeline);
@@ -341,7 +342,7 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
         deviceContext.SetRenderTargets(renderTargets, swapChain.GetDepthBufferDSV(), ResourceStateTransitionMode.Transition);
 
         deviceContext.SetPipelineState(passthroughPipeline);
-        passthroughTextureVariable?.Set(worldRenderTextureSystem.WorldColorView, SetShaderResourceFlags.AllowOverwrite);
+        passthroughTextureVariable?.Set(GetSourceTextureView(), SetShaderResourceFlags.AllowOverwrite);
         deviceContext.CommitShaderResources(passthroughResources, ResourceStateTransitionMode.Transition);
         deviceContext.Draw(new DrawAttribs
         {
@@ -374,10 +375,8 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
 
     private void ResizeRenderTextures()
     {
-        var swapChain = rendererContext.SwapChain;
-        var swapChainDesc = swapChain.GetDesc();
-
-        if (previousWidth != swapChainDesc.Width || previousHeight != swapChainDesc.Height)
+        var sourceSize = GetSourceSize();
+        if (previousWidth != sourceSize.Width || previousHeight != sourceSize.Height)
         {
             foreach (var texture in renderTextures)
             {
@@ -388,24 +387,29 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
 
             CreateRenderTextures();
         }
+
+        previousWidth = sourceSize.Width;
+        previousHeight = sourceSize.Height;
     }
 
     private void CreateRenderTextures()
     {
         var renderDevice = rendererContext.RenderDevice;
-        var swapChain = rendererContext.SwapChain;
-        var swapChainDesc = swapChain.GetDesc();
 
-        var width = swapChainDesc.Width;
-        var height = swapChainDesc.Height;
+        var sourceSize = GetSourceSize();
+        var sourceAspectRatio = (float)sourceSize.Width / sourceSize.Height;
+
+        // Use constant height to make bloom effect render the same regardless of resolution
+        var width = referenceResolutionHeight * sourceAspectRatio;
+        var height = referenceResolutionHeight;
 
         iterationCount = 0;
         for (var i = 0; i < renderTextures.Length; i++)
         {
-            width /= 2;
-            height /= 2;
+            var uWidth = (uint)width;
+            var uHeight = (uint)height;
 
-            if (width == 0 || height == 0)
+            if (uWidth == 0 || uHeight == 0)
             {
                 return;
             }
@@ -415,8 +419,8 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
                 {
                     Name = $"Bloom Render Texture {i + 1}/{renderTextures.Length}",
                     Type = ResourceDimension.Tex2d,
-                    Width = width,
-                    Height = height,
+                    Width = uWidth,
+                    Height = uHeight,
                     Format = TextureFormat.RGBA32_Float,
                     BindFlags = BindFlags.ShaderResource | BindFlags.RenderTarget,
                     Usage = Usage.Default,
@@ -424,9 +428,22 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
 
             renderTextureViews[i] = renderTextures[i]!.GetDefaultView(TextureViewType.RenderTarget);
             iterationCount = i + 1;
-        }
 
-        previousWidth = swapChainDesc.Width;
-        previousHeight = swapChainDesc.Height;
+            width /= 2;
+            height /= 2;
+        }
+    }
+
+    // Temporary - Used to reduce coupling
+    private ITextureView GetSourceTextureView()
+    {
+        return worldRenderTextureSystem.WorldColorView;
+    }
+
+    private (uint Width, uint Height) GetSourceSize()
+    {
+        var desc = worldRenderTextureSystem.WorldColor.GetDesc();
+
+        return (desc.Width, desc.Height);
     }
 }
