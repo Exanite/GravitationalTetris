@@ -1,3 +1,4 @@
+using System;
 using System.Numerics;
 using Diligent;
 using Exanite.Ecs.Systems;
@@ -8,6 +9,7 @@ namespace Exanite.GravitationalTetris.Features.Rendering.Systems;
 
 public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
 {
+    private int maxIterationCount = 6;
     private int iterationCount = 6;
     private float bloomIntensity = 0.01f;
 
@@ -33,8 +35,8 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
 
     private readonly ITextureView[] renderTargets = new ITextureView[1];
 
-    private readonly ITexture[] renderTextures;
-    private readonly ITextureView[] renderTextureViews;
+    private readonly ITexture?[] renderTextures;
+    private readonly ITextureView?[] renderTextureViews;
 
     private readonly RendererContext rendererContext;
     private readonly IResourceManager resourceManager;
@@ -46,8 +48,8 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
         this.resourceManager = resourceManager;
         this.worldRenderTextureSystem = worldRenderTextureSystem;
 
-        renderTextures = new ITexture[iterationCount];
-        renderTextureViews = new ITextureView[iterationCount];
+        renderTextures = new ITexture[maxIterationCount];
+        renderTextureViews = new ITextureView[maxIterationCount];
     }
 
     public void Setup()
@@ -247,6 +249,11 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
     {
         ResizeRenderTextures();
 
+        if (iterationCount == 0)
+        {
+            return;
+        }
+
         var deviceContext = rendererContext.DeviceContext;
         var swapChain = rendererContext.SwapChain;
 
@@ -259,11 +266,11 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
             var currentTexture = renderTextures[i];
 
             downTextureVariable?.Set(previousView, SetShaderResourceFlags.AllowOverwrite);
-            renderTargets[0] = currentView;
+            renderTargets[0] = currentView!;
 
             using (downUniformBuffer.Map(MapType.Write, MapFlags.Discard, out var downUniformData))
             {
-                var textureDesc = currentTexture.GetDesc();
+                var textureDesc = currentTexture!.GetDesc();
 
                 downUniformData[0].FilterStep = new Vector2(1f / textureDesc.Width, 1f / textureDesc.Height);
             }
@@ -298,7 +305,7 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
             var currentView = renderTextureViews[i];
 
             upTextureVariable?.Set(previousView, SetShaderResourceFlags.AllowOverwrite);
-            renderTargets[0] = currentView;
+            renderTargets[0] = currentView!;
 
             deviceContext.SetRenderTargets(renderTargets, null, ResourceStateTransitionMode.Transition);
             deviceContext.CommitShaderResources(upResources, ResourceStateTransitionMode.Transition);
@@ -361,7 +368,7 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
 
         foreach (var texture in renderTextures)
         {
-            texture.Dispose();
+            texture?.Dispose();
         }
     }
 
@@ -374,8 +381,10 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
         {
             foreach (var texture in renderTextures)
             {
-                texture.Dispose();
+                texture?.Dispose();
             }
+
+            Array.Clear(renderTextures);
 
             CreateRenderTextures();
         }
@@ -390,11 +399,16 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
         var width = swapChainDesc.Width;
         var height = swapChainDesc.Height;
 
-        // Todo Need to prevent zero width/height textures
+        iterationCount = 0;
         for (var i = 0; i < renderTextures.Length; i++)
         {
             width /= 2;
             height /= 2;
+
+            if (width == 0 || height == 0)
+            {
+                return;
+            }
 
             renderTextures[i] = renderDevice.CreateTexture(
                 new TextureDesc
@@ -408,7 +422,8 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
                     Usage = Usage.Default,
                 });
 
-            renderTextureViews[i] = renderTextures[i].GetDefaultView(TextureViewType.RenderTarget);
+            renderTextureViews[i] = renderTextures[i]!.GetDefaultView(TextureViewType.RenderTarget);
+            iterationCount = i + 1;
         }
 
         previousWidth = swapChainDesc.Width;
