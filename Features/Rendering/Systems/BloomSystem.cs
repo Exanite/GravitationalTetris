@@ -12,7 +12,7 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
     private float referenceResolutionHeight = 1080;
 
     private int maxIterationCount = 6;
-    private int iterationCount = 6;
+    private int iterationCount;
     private float bloomIntensity = 0.01f;
 
     private ISampler linearClampTextureSampler = null!;
@@ -250,65 +250,83 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
     {
         ResizeRenderTextures();
 
-        if (iterationCount == 0)
-        {
-            return;
-        }
-
         var deviceContext = rendererContext.DeviceContext;
         var swapChain = rendererContext.SwapChain;
 
-        // Down sample
-        deviceContext.SetPipelineState(downPipeline);
-        for (var i = 0; i < iterationCount; i++)
+        if (iterationCount != 0)
         {
-            var previousView = i > 0 ? renderTextureViews[i - 1] : GetSourceTextureView();
-            var currentView = renderTextureViews[i];
-            var currentTexture = renderTextures[i];
-
-            downTextureVariable?.Set(previousView, SetShaderResourceFlags.AllowOverwrite);
-            renderTargets[0] = currentView!;
-
-            using (downUniformBuffer.Map(MapType.Write, MapFlags.Discard, out var downUniformData))
+            // Down sample
+            deviceContext.SetPipelineState(downPipeline);
+            for (var i = 0; i < iterationCount; i++)
             {
-                var textureDesc = currentTexture!.GetDesc();
+                var previousView = i > 0 ? renderTextureViews[i - 1] : GetSourceTextureView();
+                var currentView = renderTextureViews[i];
+                var currentTexture = renderTextures[i];
 
-                downUniformData[0].FilterStep = new Vector2(1f / textureDesc.Width, 1f / textureDesc.Height);
+                downTextureVariable?.Set(previousView, SetShaderResourceFlags.AllowOverwrite);
+                renderTargets[0] = currentView!;
+
+                using (downUniformBuffer.Map(MapType.Write, MapFlags.Discard, out var downUniformData))
+                {
+                    var textureDesc = currentTexture!.GetDesc();
+
+                    downUniformData[0].FilterStep = new Vector2(1f / textureDesc.Width, 1f / textureDesc.Height);
+                }
+
+                deviceContext.SetRenderTargets(renderTargets, null, ResourceStateTransitionMode.Transition);
+                deviceContext.CommitShaderResources(downResources, ResourceStateTransitionMode.Transition);
+                deviceContext.Draw(new DrawAttribs
+                {
+                    NumVertices = 4,
+                    Flags = DrawFlags.VerifyAll,
+                });
             }
 
-            deviceContext.SetRenderTargets(renderTargets, null, ResourceStateTransitionMode.Transition);
-            deviceContext.CommitShaderResources(downResources, ResourceStateTransitionMode.Transition);
-            deviceContext.Draw(new DrawAttribs
+            var aspectRatio = (float)swapChain.GetDesc().Width / swapChain.GetDesc().Height;
+            var step = 0.005f;
+            var localUpUniformData = new BloomUpUniformData
             {
-                NumVertices = 4,
-                Flags = DrawFlags.VerifyAll,
-            });
-        }
+                FilterStep = new Vector2(step / aspectRatio, step),
+                Alpha = 1,
+            };
 
-        var aspectRatio = (float)swapChain.GetDesc().Width / swapChain.GetDesc().Height;
-        var step = 0.005f;
-        var localUpUniformData = new BloomUpUniformData
-        {
-            FilterStep = new Vector2(step / aspectRatio, step),
-            Alpha = 1,
-        };
+            using (upUniformBuffer.Map(MapType.Write, MapFlags.Discard, out var upUniformData))
+            {
+                upUniformData[0] = localUpUniformData;
+            }
 
-        using (upUniformBuffer.Map(MapType.Write, MapFlags.Discard, out var upUniformData))
-        {
-            upUniformData[0] = localUpUniformData;
-        }
+            // Up sample
+            deviceContext.SetPipelineState(upPipeline);
+            for (var i = iterationCount - 2; i >= 0; i--)
+            {
+                var previousView = renderTextureViews[i + 1];
+                var currentView = renderTextureViews[i];
 
-        // Up sample
-        deviceContext.SetPipelineState(upPipeline);
-        for (var i = iterationCount - 2; i >= 0; i--)
-        {
-            var previousView = renderTextureViews[i + 1];
-            var currentView = renderTextureViews[i];
+                upTextureVariable?.Set(previousView, SetShaderResourceFlags.AllowOverwrite);
+                renderTargets[0] = currentView!;
 
-            upTextureVariable?.Set(previousView, SetShaderResourceFlags.AllowOverwrite);
-            renderTargets[0] = currentView!;
+                deviceContext.SetRenderTargets(renderTargets, null, ResourceStateTransitionMode.Transition);
+                deviceContext.CommitShaderResources(upResources, ResourceStateTransitionMode.Transition);
+                deviceContext.Draw(new DrawAttribs
+                {
+                    NumVertices = 4,
+                    Flags = DrawFlags.VerifyAll,
+                });
+            }
 
+            // Draw bloom to world RT
+            renderTargets[0] = GetSourceTextureView();
             deviceContext.SetRenderTargets(renderTargets, null, ResourceStateTransitionMode.Transition);
+
+            deviceContext.SetPipelineState(upPipeline);
+
+            localUpUniformData.Alpha = bloomIntensity;
+            using (upUniformBuffer.Map(MapType.Write, MapFlags.Discard, out var upUniformData))
+            {
+                upUniformData[0] = localUpUniformData;
+            }
+
+            upTextureVariable?.Set(renderTextureViews[0], SetShaderResourceFlags.AllowOverwrite);
             deviceContext.CommitShaderResources(upResources, ResourceStateTransitionMode.Transition);
             deviceContext.Draw(new DrawAttribs
             {
@@ -316,26 +334,6 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
                 Flags = DrawFlags.VerifyAll,
             });
         }
-
-        // Draw bloom to world RT
-        renderTargets[0] = GetSourceTextureView();
-        deviceContext.SetRenderTargets(renderTargets, null, ResourceStateTransitionMode.Transition);
-
-        deviceContext.SetPipelineState(upPipeline);
-
-        localUpUniformData.Alpha = bloomIntensity;
-        using (upUniformBuffer.Map(MapType.Write, MapFlags.Discard, out var upUniformData))
-        {
-            upUniformData[0] = localUpUniformData;
-        }
-
-        upTextureVariable?.Set(renderTextureViews[0], SetShaderResourceFlags.AllowOverwrite);
-        deviceContext.CommitShaderResources(upResources, ResourceStateTransitionMode.Transition);
-        deviceContext.Draw(new DrawAttribs
-        {
-            NumVertices = 4,
-            Flags = DrawFlags.VerifyAll,
-        });
 
         // Copy world to main RT
         renderTargets[0] = swapChain.GetCurrentBackBufferRTV();
