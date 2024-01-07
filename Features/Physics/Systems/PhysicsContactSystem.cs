@@ -3,7 +3,7 @@ using World = nkast.Aether.Physics2D.Dynamics.World;
 
 namespace Exanite.GravitationalTetris.Features.Physics.Systems;
 
-public class PhysicsContactSystem : IInitializeSystem
+public class PhysicsContactSystem : ISetupSystem
 {
     private readonly World physicsWorld;
 
@@ -12,7 +12,7 @@ public class PhysicsContactSystem : IInitializeSystem
         this.physicsWorld = physicsWorld;
     }
 
-    public void Initialize()
+    public void Setup()
     {
         // physicsWorld.ContactManager.BeginContact = (contact) =>
         // {

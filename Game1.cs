@@ -17,6 +17,7 @@ using Exanite.GravitationalTetris.Features.Cameras.Systems;
 using Exanite.GravitationalTetris.Features.Lifecycles.Systems;
 using Exanite.GravitationalTetris.Features.Physics.Systems;
 using Exanite.GravitationalTetris.Features.Players.Systems;
+using Exanite.GravitationalTetris.Features.Rendering.Systems;
 using Exanite.GravitationalTetris.Features.Resources;
 using Exanite.GravitationalTetris.Features.Resources.Systems;
 using Exanite.GravitationalTetris.Features.Sprites.Systems;
@@ -122,17 +123,28 @@ public class Game1 : Game
         config.RegisterAllCallbacks<FmodAudioSystem>();
 
         config.RegisterAllCallbacks<ResizeSwapChainSystem>();
-        config.RegisterAllCallbacks<ClearRenderTargetRenderSystem>();
+        config.RegisterAllCallbacks<ClearMainRenderTargetSystem>();
         {
             config.RegisterAllCallbacks<SetClearColorSystem>();
+            config.RegisterAllCallbacks<CameraProjectionSystem>();
             config.RegisterAllCallbacks<SpriteBatchSystem>();
 
-            config.RegisterAllCallbacks<CameraProjectionSystem>();
+            // World RT
+            config.RegisterAllCallbacks<WorldRenderTextureSystem>();
+
             config.RegisterAllCallbacks<TilemapRenderSystem>();
             config.RegisterAllCallbacks<SpriteRenderSystem>();
 
-            config.RegisterAllCallbacks<MyraUiSystem>();
-            config.RegisterAllCallbacks<TetrisUiSystem>();
+            // // Main RT
+            // config.RegisterAllCallbacks<UseMainRenderTargetSystem>();
+            //
+            // config.RegisterAllCallbacks<PostProcessSystem>();
+            //
+            // config.RegisterAllCallbacks<MyraUiSystem>();
+            // config.RegisterAllCallbacks<TetrisUiSystem>();
+
+            // Experimental
+            config.RegisterAllCallbacks<BloomSystem>();
         }
         config.RegisterAllCallbacks<PresentSwapChainSystem>();
 

@@ -26,7 +26,7 @@ using SDL2;
 
 namespace Exanite.GravitationalTetris.Features.Tetris.Systems;
 
-public partial class TetrisSystem : EcsSystem, IInitializeSystem, IUpdateSystem
+public partial class TetrisSystem : EcsSystem, ISetupSystem, IUpdateSystem
 {
     public static readonly string ScoresFilePath = Path.Join(GameDirectories.PersistentDataDirectory, "Scores.txt");
 
@@ -69,7 +69,7 @@ public partial class TetrisSystem : EcsSystem, IInitializeSystem, IUpdateSystem
         this.audioSystem = audioSystem;
     }
 
-    public void Initialize()
+    public void Setup()
     {
         if (File.Exists(ScoresFilePath))
         {

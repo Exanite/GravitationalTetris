@@ -6,15 +6,15 @@ namespace Exanite.GravitationalTetris.Features.Tetris.Systems;
 
 public class SetClearColorSystem : IStartSystem
 {
-    private readonly ClearRenderTargetRenderSystem clearRenderTargetRenderSystem;
+    private readonly ClearMainRenderTargetSystem clearMainRenderTargetSystem;
 
-    public SetClearColorSystem(ClearRenderTargetRenderSystem clearRenderTargetRenderSystem)
+    public SetClearColorSystem(ClearMainRenderTargetSystem clearMainRenderTargetSystem)
     {
-        this.clearRenderTargetRenderSystem = clearRenderTargetRenderSystem;
+        this.clearMainRenderTargetSystem = clearMainRenderTargetSystem;
     }
 
     public void Start()
     {
-        clearRenderTargetRenderSystem.ClearColor = Vector4.Zero;
+        clearMainRenderTargetSystem.ClearColor = Vector4.Zero;
     }
 }

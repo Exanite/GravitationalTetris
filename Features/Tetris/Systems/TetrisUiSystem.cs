@@ -7,7 +7,7 @@ using Window = Exanite.Engine.Windowing.Window;
 
 namespace Exanite.GravitationalTetris.Features.Tetris.Systems;
 
-public class TetrisUiSystem : EcsSystem, IInitializeSystem, IUpdateSystem, IRenderSystem
+public class TetrisUiSystem : EcsSystem, ISetupSystem, IUpdateSystem, IRenderSystem
 {
     private Desktop desktop = null!;
 
@@ -22,7 +22,7 @@ public class TetrisUiSystem : EcsSystem, IInitializeSystem, IUpdateSystem, IRend
         this.window = window;
     }
 
-    public void Initialize()
+    public void Setup()
     {
         desktop = new Desktop();
     }

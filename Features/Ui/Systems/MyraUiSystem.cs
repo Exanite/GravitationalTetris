@@ -5,7 +5,7 @@ using Myra.Platform;
 
 namespace Exanite.GravitationalTetris.Features.Ui.Systems;
 
-public class MyraUiSystem : IInitializeSystem
+public class MyraUiSystem : ISetupSystem
 {
     private readonly ResourceManager resourceManager;
     private IMyraPlatform platform;
@@ -16,7 +16,7 @@ public class MyraUiSystem : IInitializeSystem
         this.platform = platform;
     }
 
-    public void Initialize()
+    public void Setup()
     {
         var assetManager = new AssetManager(resourceManager);
 
