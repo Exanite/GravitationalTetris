@@ -16,16 +16,16 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
     private Buffer<BloomDownUniformData> downUniformBuffer = null!;
     private IPipelineState downPipeline = null!;
     private IShaderResourceBinding downResources = null!;
-    private IShaderResourceVariable downTextureVariable = null!;
+    private IShaderResourceVariable? downTextureVariable;
 
     private Buffer<BloomUpUniformData> upUniformBuffer = null!;
     private IPipelineState upPipeline = null!;
     private IShaderResourceBinding upResources = null!;
-    private IShaderResourceVariable upTextureVariable = null!;
+    private IShaderResourceVariable? upTextureVariable;
 
     private IPipelineState passthroughPipeline = null!;
     private IShaderResourceBinding passthroughResources = null!;
-    private IShaderResourceVariable passthroughTextureVariable = null!;
+    private IShaderResourceVariable? passthroughTextureVariable;
 
     private uint previousWidth;
     private uint previousHeight;
@@ -129,8 +129,8 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
                 Ps = pShaderDown.Value.Handle,
             });
 
-            downPipeline.GetStaticVariableByName(ShaderType.Pixel, "TextureSampler").Set(linearClampTextureSampler, SetShaderResourceFlags.None);
-            downPipeline.GetStaticVariableByName(ShaderType.Pixel, "Uniforms").Set(downUniformBuffer.Handle, SetShaderResourceFlags.None);
+            downPipeline.GetStaticVariableByName(ShaderType.Pixel, "TextureSampler")?.Set(linearClampTextureSampler, SetShaderResourceFlags.None);
+            downPipeline.GetStaticVariableByName(ShaderType.Pixel, "Uniforms")?.Set(downUniformBuffer.Handle, SetShaderResourceFlags.None);
 
             downResources = downPipeline.CreateShaderResourceBinding(true);
             downTextureVariable = downResources.GetVariableByName(ShaderType.Pixel, "Texture");
@@ -235,7 +235,7 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
                 Ps = pShaderPassthrough.Value.Handle,
             });
 
-            passthroughPipeline.GetStaticVariableByName(ShaderType.Pixel, "TextureSampler").Set(pointClampTextureSampler, SetShaderResourceFlags.None);
+            passthroughPipeline.GetStaticVariableByName(ShaderType.Pixel, "TextureSampler")?.Set(pointClampTextureSampler, SetShaderResourceFlags.None);
 
             passthroughResources = passthroughPipeline.CreateShaderResourceBinding(true);
             passthroughTextureVariable = passthroughResources.GetVariableByName(ShaderType.Pixel, "Texture");
@@ -257,7 +257,7 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
             var currentView = renderTextureViews[i];
             var currentTexture = renderTextures[i];
 
-            downTextureVariable.Set(previousView, SetShaderResourceFlags.AllowOverwrite);
+            downTextureVariable?.Set(previousView, SetShaderResourceFlags.AllowOverwrite);
             renderTargets[0] = currentView;
 
             using (downUniformBuffer.Map(MapType.Write, MapFlags.Discard, out var downUniformData))
@@ -291,7 +291,7 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
             var previousView = renderTextureViews[i + 1];
             var currentView = renderTextureViews[i];
 
-            upTextureVariable.Set(previousView, SetShaderResourceFlags.AllowOverwrite);
+            upTextureVariable?.Set(previousView, SetShaderResourceFlags.AllowOverwrite);
             renderTargets[0] = currentView;
 
             deviceContext.SetRenderTargets(renderTargets, null, ResourceStateTransitionMode.Transition);
@@ -309,7 +309,7 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
 
         deviceContext.SetPipelineState(upPipeline);
 
-        upTextureVariable.Set(renderTextureViews[0], SetShaderResourceFlags.AllowOverwrite);
+        upTextureVariable?.Set(renderTextureViews[0], SetShaderResourceFlags.AllowOverwrite);
         deviceContext.CommitShaderResources(upResources, ResourceStateTransitionMode.Transition);
         deviceContext.Draw(new DrawAttribs
         {
@@ -322,7 +322,7 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
         deviceContext.SetRenderTargets(renderTargets, swapChain.GetDepthBufferDSV(), ResourceStateTransitionMode.Transition);
 
         deviceContext.SetPipelineState(passthroughPipeline);
-        passthroughTextureVariable.Set(worldRenderTextureSystem.WorldColorView, SetShaderResourceFlags.AllowOverwrite);
+        passthroughTextureVariable?.Set(worldRenderTextureSystem.WorldColorView, SetShaderResourceFlags.AllowOverwrite);
         deviceContext.CommitShaderResources(passthroughResources, ResourceStateTransitionMode.Transition);
         deviceContext.Draw(new DrawAttribs
         {
