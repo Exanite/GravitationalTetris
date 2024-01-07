@@ -8,7 +8,8 @@ namespace Exanite.GravitationalTetris.Features.Rendering.Systems;
 
 public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
 {
-    private int iterationCount = 8;
+    private int iterationCount = 6;
+    private float bloomIntensity = 0.01f;
 
     private ISampler linearClampTextureSampler = null!;
     private ISampler pointClampTextureSampler = null!;
@@ -276,15 +277,20 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
             });
         }
 
-        // Up sample
+        var aspectRatio = (float)swapChain.GetDesc().Width / swapChain.GetDesc().Height;
+        var step = 0.005f;
+        var localUpUniformData = new BloomUpUniformData
+        {
+            FilterStep = new Vector2(step / aspectRatio, step),
+            Alpha = 1,
+        };
+
         using (upUniformBuffer.Map(MapType.Write, MapFlags.Discard, out var upUniformData))
         {
-            var aspectRatio = (float)swapChain.GetDesc().Width / swapChain.GetDesc().Height;
-            var step = 0.005f;
-
-            upUniformData[0].FilterStep = new Vector2(step / aspectRatio, step);
+            upUniformData[0] = localUpUniformData;
         }
 
+        // Up sample
         deviceContext.SetPipelineState(upPipeline);
         for (var i = iterationCount - 2; i >= 0; i--)
         {
@@ -308,6 +314,12 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
         deviceContext.SetRenderTargets(renderTargets, null, ResourceStateTransitionMode.Transition);
 
         deviceContext.SetPipelineState(upPipeline);
+
+        localUpUniformData.Alpha = bloomIntensity;
+        using (upUniformBuffer.Map(MapType.Write, MapFlags.Discard, out var upUniformData))
+        {
+            upUniformData[0] = localUpUniformData;
+        }
 
         upTextureVariable?.Set(renderTextureViews[0], SetShaderResourceFlags.AllowOverwrite);
         deviceContext.CommitShaderResources(upResources, ResourceStateTransitionMode.Transition);
@@ -343,7 +355,7 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
         upUniformBuffer.Dispose();
         upPipeline.Dispose();
         upResources.Dispose();
-        
+
         passthroughPipeline.Dispose();
         passthroughResources.Dispose();
 

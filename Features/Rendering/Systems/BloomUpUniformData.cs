@@ -7,4 +7,5 @@ namespace Exanite.GravitationalTetris.Features.Rendering.Systems;
 public struct BloomUpUniformData
 {
     public Vector2 FilterStep;
+    public float Alpha;
 }

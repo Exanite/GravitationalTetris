@@ -1,6 +1,7 @@
 cbuffer Uniforms
 {
     float2 FilterStep;
+    float Alpha;
 }
 
 Texture2D Texture;
@@ -47,5 +48,5 @@ void main(
     outputColor += (a + c + g + i);
     outputColor *= 1.0 / 16.0;
 
-    output.Color = float4(outputColor, 1);
+    output.Color = float4(outputColor * Alpha, 0); // Alpha channel is ignored by pipeline
 }
