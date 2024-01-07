@@ -98,8 +98,8 @@ public class SpriteBatchSystem : ISetupSystem, IRenderSystem, IDisposable
                 PrimitiveTopology = PrimitiveTopology.TriangleStrip,
 
                 NumRenderTargets = 1,
-                RTVFormats = new[] { swapChain.GetDesc().ColorBufferFormat },
-                DSVFormat = swapChain.GetDesc().DepthBufferFormat,
+                RTVFormats = new[] { TextureFormat.RGB32_Float },
+                DSVFormat = TextureFormat.D32_Float,
 
                 RasterizerDesc = new RasterizerStateDesc { CullMode = CullMode.None },
                 DepthStencilDesc = new DepthStencilStateDesc { DepthEnable = true },

@@ -81,7 +81,7 @@ public class PostProcessSystem : ISetupSystem, IRenderSystem, ITeardownSystem
                 PrimitiveTopology = PrimitiveTopology.TriangleStrip,
 
                 NumRenderTargets = 1,
-                RTVFormats = new[] { swapChain.GetDesc().ColorBufferFormat },
+                RTVFormats = new[] { TextureFormat.RGB32_Float },
 
                 RasterizerDesc = new RasterizerStateDesc { CullMode = CullMode.None },
                 DepthStencilDesc = new DepthStencilStateDesc { DepthEnable = false },
