@@ -192,8 +192,8 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
                 Ps = pShaderUp.Value.Handle,
             });
 
-            upPipeline.GetStaticVariableByName(ShaderType.Pixel, "TextureSampler").Set(linearClampTextureSampler, SetShaderResourceFlags.None);
-            upPipeline.GetStaticVariableByName(ShaderType.Pixel, "Uniforms").Set(upUniformBuffer.Handle, SetShaderResourceFlags.None);
+            upPipeline.GetStaticVariableByName(ShaderType.Pixel, "TextureSampler")?.Set(linearClampTextureSampler, SetShaderResourceFlags.None);
+            upPipeline.GetStaticVariableByName(ShaderType.Pixel, "Uniforms")?.Set(upUniformBuffer.Handle, SetShaderResourceFlags.None);
 
             upResources = upPipeline.CreateShaderResourceBinding(true);
             upTextureVariable = upResources.GetVariableByName(ShaderType.Pixel, "Texture");
