@@ -333,15 +333,19 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
 
     public void Teardown()
     {
-        upResources.Dispose();
-        upPipeline.Dispose();
-        upUniformBuffer.Dispose();
-
-        downResources.Dispose();
-        downPipeline.Dispose();
-        downUniformBuffer.Dispose();
-
         linearClampTextureSampler.Dispose();
+        pointClampTextureSampler.Dispose();
+
+        downUniformBuffer.Dispose();
+        downPipeline.Dispose();
+        downResources.Dispose();
+
+        upUniformBuffer.Dispose();
+        upPipeline.Dispose();
+        upResources.Dispose();
+        
+        passthroughPipeline.Dispose();
+        passthroughResources.Dispose();
 
         foreach (var texture in renderTextures)
         {
