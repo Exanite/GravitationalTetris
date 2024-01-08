@@ -335,9 +335,9 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
             });
         }
 
-        // Copy world to main RT
+        // Copy world to main RT, but without depth testing
         renderTargets[0] = swapChain.GetCurrentBackBufferRTV();
-        deviceContext.SetRenderTargets(renderTargets, swapChain.GetDepthBufferDSV(), ResourceStateTransitionMode.Transition);
+        deviceContext.SetRenderTargets(renderTargets, null, ResourceStateTransitionMode.Transition);
 
         deviceContext.SetPipelineState(passthroughPipeline);
         passthroughTextureVariable?.Set(GetSourceTextureView(), SetShaderResourceFlags.AllowOverwrite);
@@ -347,6 +347,9 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
             NumVertices = 4,
             Flags = DrawFlags.VerifyAll,
         });
+
+        // Restore main RT settings
+        deviceContext.SetRenderTargets(renderTargets, swapChain.GetDepthBufferDSV(), ResourceStateTransitionMode.Transition);
     }
 
     public void Teardown()
