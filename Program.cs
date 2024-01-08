@@ -10,22 +10,28 @@ public static class Program
     [STAThread]
     public static async Task Main(string[] args)
     {
-        var bootstrapLogName = "bootstrap-crash";
         var exitCode = 0;
         {
             try
             {
-                LoggingUtility.RemoveBootstrapLogs(GameDirectories.LogsDirectory, bootstrapLogName);
-
+                LoggingUtility.RemoveProgramCrashLog(GameDirectories.LogsDirectory);
                 Thread.CurrentThread.Name = "Main";
 
                 await using var game = new Game1();
-                game.Run();
+                try
+                {
+                    game.Run();
+                }
+                catch (Exception e)
+                {
+                    LoggingUtility.LogProgramCrash(GameDirectories.LogsDirectory, typeof(Program), e);
+
+                    exitCode = 1;
+                }
             }
             catch (Exception e)
             {
-                await using var logger = LoggingUtility.CreateBootstrapLogger(GameDirectories.LogsDirectory, bootstrapLogName);
-                logger.Fatal(e, "Unhandled exception");
+                LoggingUtility.LogProgramCrash(GameDirectories.LogsDirectory, typeof(Program), e);
 
                 exitCode = 1;
             }
