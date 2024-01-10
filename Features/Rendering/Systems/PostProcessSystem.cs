@@ -21,6 +21,8 @@ public class PostProcessSystem : ISetupSystem, IRenderSystem, ITeardownSystem
     private IShaderResourceBinding shaderResourceBinding = null!;
     private IShaderResourceVariable? textureVariable;
 
+    private readonly ITextureView[] renderTargets = new ITextureView[1];
+
     private readonly RendererContext rendererContext;
     private readonly IResourceManager resourceManager;
     private readonly WorldRenderTextureSystem worldRenderTextureSystem;
@@ -100,6 +102,12 @@ public class PostProcessSystem : ISetupSystem, IRenderSystem, ITeardownSystem
     public void Render()
     {
         var deviceContext = rendererContext.DeviceContext;
+        var swapChain = rendererContext.SwapChain;
+
+        // Disable depth buffer
+        // Todo Figure out why DepthEnable=false doesn't work
+        renderTargets[0] = swapChain.GetCurrentBackBufferRTV();
+        deviceContext.SetRenderTargets(renderTargets, null, ResourceStateTransitionMode.Transition);
 
         using (uniformBuffer.Map(MapType.Write, MapFlags.Discard, out var uniformData))
         {
@@ -115,6 +123,8 @@ public class PostProcessSystem : ISetupSystem, IRenderSystem, ITeardownSystem
             NumVertices = 4,
             Flags = DrawFlags.VerifyAll,
         });
+
+        deviceContext.SetRenderTargets(renderTargets, swapChain.GetDepthBufferDSV(), ResourceStateTransitionMode.Transition);
     }
 
     public void Teardown()
