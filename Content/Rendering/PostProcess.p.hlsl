@@ -20,15 +20,7 @@ void main(
     in Input input,
     out Output output)
 {
-    float2 uv = input.Uv;
+    float2 uv = float2(input.Uv.x, 1 - input.Uv.y);
 
-    uv += 0.1 * float2(
-        sin(input.Uv.y * 30) * 0.1 * sin(Time.x * 3),
-        sin(input.Uv.x * 20) * 0.02 * sin(Time.x * 2));
-
-    uv = float2(uv.x, 1 - uv.y);
-
-    output.Color = (Texture.Sample(TextureSampler, uv) / 2)
-        + (Texture.Sample(TextureSampler, uv) * (((sin(Time) + 1) / 4)))
-        + float4((input.Uv * ((sin(Time) + 1) / 4)).xy, 0, 0);
+    output.Color = Texture.Sample(TextureSampler, uv);
 }

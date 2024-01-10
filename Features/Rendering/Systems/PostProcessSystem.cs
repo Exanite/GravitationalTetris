@@ -20,7 +20,7 @@ public class PostProcessSystem : ISetupSystem, IRenderSystem, ITeardownSystem
     private ISampler textureSampler = null!;
     private IPipelineState pipeline = null!;
     private IShaderResourceBinding shaderResourceBinding = null!;
-    private IShaderResourceVariable textureVariable = null!;
+    private IShaderResourceVariable? textureVariable;
 
     private readonly RendererContext rendererContext;
     private readonly IResourceManager resourceManager;
@@ -91,8 +91,8 @@ public class PostProcessSystem : ISetupSystem, IRenderSystem, ITeardownSystem
             Ps = pShader.Value.Handle,
         });
 
-        pipeline.GetStaticVariableByName(ShaderType.Pixel, "TextureSampler").Set(textureSampler, SetShaderResourceFlags.None);
-        pipeline.GetStaticVariableByName(ShaderType.Pixel, "Uniforms").Set(uniformBuffer.Handle, SetShaderResourceFlags.None);
+        pipeline.GetStaticVariableByName(ShaderType.Pixel, "TextureSampler")?.Set(textureSampler, SetShaderResourceFlags.None);
+        pipeline.GetStaticVariableByName(ShaderType.Pixel, "Uniforms")?.Set(uniformBuffer.Handle, SetShaderResourceFlags.None);
 
         shaderResourceBinding = pipeline.CreateShaderResourceBinding(true);
         textureVariable = shaderResourceBinding.GetVariableByName(ShaderType.Pixel, "Texture");
@@ -107,7 +107,7 @@ public class PostProcessSystem : ISetupSystem, IRenderSystem, ITeardownSystem
             uniformData[0].Time = time.Time;
         }
 
-        textureVariable.Set(worldRenderTextureSystem.WorldColorView, SetShaderResourceFlags.AllowOverwrite);
+        textureVariable?.Set(worldRenderTextureSystem.WorldColorView, SetShaderResourceFlags.AllowOverwrite);
 
         deviceContext.SetPipelineState(pipeline);
         deviceContext.CommitShaderResources(shaderResourceBinding, ResourceStateTransitionMode.Transition);
