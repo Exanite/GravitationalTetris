@@ -16,39 +16,24 @@ struct Output
     float4 Color : SV_TARGET;
 };
 
-float Luminance(float3 rgb)
+// From https://www.shadertoy.com/view/XsGfWV
+float3 TonemapAces(float3 color)
 {
-    return 0.2125 * rgb.r + 0.7154 * rgb.g + 0.0721 * rgb.b;
-}
+    float3x3 m1 = float3x3(
+        0.59719, 0.07600, 0.02840,
+        0.35458, 0.90834, 0.13383,
+        0.04823, 0.01566, 0.83777
+    );
+    float3x3 m2 = float3x3(
+        1.60475, -0.10208, -0.00327,
+        -0.53108, 1.10813, -0.07276,
+        -0.07367, -0.00605, 1.07602
+    );
+    float3 v = m1 * color;
+    float3 a = v * (v + 0.0245786) - 0.000090537;
+    float3 b = v * (0.983729 * v + 0.4329510) + 0.238081;
 
-float Reinhard(float x)
-{
-    return x / (9.6 * 25);
-}
-
-// Conversion functions from http://brucelindbloom.com/index.html?Math.html
-float3 Convert_xyYToXYZ(float3 xyY)
-{
-    float x = xyY.x * xyY.z / xyY.y;
-    float y = xyY.z;
-    float z = (1 - xyY.x - xyY.y) * xyY.z / xyY.y;
-
-    return float3(x, y, z);
-}
-
-float3 Convert_XYZToxyY(float3 xyz)
-{
-    return float3(0, 0, 0);
-}
-
-float3 Convert_XYZToRGB(float3 xyz)
-{
-    return float3(0, 0, 0);
-}
-
-float3 Convert_RGBToXYZ(float3 rgb)
-{
-    return float3(0, 0, 0);
+    return m2 * (a / b);
 }
 
 void main(
@@ -58,6 +43,5 @@ void main(
     float2 uv = float2(input.Uv.x, 1 - input.Uv.y);
     float4 color = Texture.Sample(TextureSampler, uv);
 
-    output.Color = color;
-    // output.Color = float4(Reinhard(color.x), Reinhard(color.y), Reinhard(color.z), 1);
+    output.Color = float4(TonemapAces(color.xyz), 1);
 }
