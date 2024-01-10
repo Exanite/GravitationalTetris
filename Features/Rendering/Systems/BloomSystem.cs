@@ -13,7 +13,7 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
 
     private int maxIterationCount = 6;
     private int iterationCount;
-    private float bloomIntensity = 100;
+    private float bloomIntensity = 0.05f;
 
     private ISampler linearClampTextureSampler = null!;
     private ISampler pointClampTextureSampler = null!;

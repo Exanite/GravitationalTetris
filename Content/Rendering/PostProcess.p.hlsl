@@ -43,5 +43,5 @@ void main(
     float2 uv = float2(input.Uv.x, 1 - input.Uv.y);
     float4 color = Texture.Sample(TextureSampler, uv);
 
-    output.Color = float4(TonemapAces(color.xyz), 1);
+    output.Color = float4(TonemapAces(color.xyz * 1.75), 1);
 }
