@@ -7,11 +7,11 @@ namespace Exanite.GravitationalTetris.Features.Sprites;
 [StructLayout(LayoutKind.Sequential)]
 public struct SpriteInstanceData
 {
-    public static InputLayoutDesc Layout { get; } = new InputLayoutDesc
+    public static InputLayoutDesc Layout { get; } = new()
     {
         LayoutElements = new LayoutElement[]
         {
-            new LayoutElement
+            new()
             {
                 HLSLSemantic = "ATTRIB",
                 InputIndex = 0,
@@ -23,7 +23,7 @@ public struct SpriteInstanceData
 
                 Frequency = InputElementFrequency.PerInstance,
             },
-            new LayoutElement
+            new()
             {
                 HLSLSemantic = "ATTRIB",
                 InputIndex = 1,
@@ -35,7 +35,7 @@ public struct SpriteInstanceData
 
                 Frequency = InputElementFrequency.PerInstance,
             },
-            new LayoutElement
+            new()
             {
                 HLSLSemantic = "ATTRIB",
                 InputIndex = 2,
@@ -47,7 +47,7 @@ public struct SpriteInstanceData
 
                 Frequency = InputElementFrequency.PerInstance,
             },
-            new LayoutElement
+            new()
             {
                 HLSLSemantic = "ATTRIB",
                 InputIndex = 3,
@@ -59,7 +59,7 @@ public struct SpriteInstanceData
 
                 Frequency = InputElementFrequency.PerInstance,
             },
-            new LayoutElement
+            new()
             {
                 HLSLSemantic = "ATTRIB",
                 InputIndex = 4,
@@ -71,7 +71,7 @@ public struct SpriteInstanceData
 
                 Frequency = InputElementFrequency.PerInstance,
             },
-            new LayoutElement
+            new()
             {
                 HLSLSemantic = "ATTRIB",
                 InputIndex = 5,
@@ -83,7 +83,7 @@ public struct SpriteInstanceData
 
                 Frequency = InputElementFrequency.PerInstance,
             },
-            new LayoutElement
+            new()
             {
                 HLSLSemantic = "ATTRIB",
                 InputIndex = 6,
