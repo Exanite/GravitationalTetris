@@ -9,7 +9,6 @@ using Autofac;
 using Diligent;
 using Exanite.Engine.Rendering;
 using Exanite.ResourceManagement;
-using Exanite.ResourceManagement.Exceptions;
 using Exanite.ResourceManagement.FileSystems;
 using FontStashSharp;
 using Myra.Graphics2D.TextureAtlases;
@@ -142,7 +141,7 @@ public class ResourcesModule : Module
                         return Task.CompletedTask;
                     }
 
-                    throw new ResourceException(loadOperation.Key, "Failed to load font.");
+                    throw new ResourceLoadException(loadOperation.Key, "Failed to load font.");
                 });
 
                 resourceManager.RegisterLoader<Stylesheet>(loadOperation =>
