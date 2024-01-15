@@ -9,7 +9,6 @@ namespace Exanite.GravitationalTetris.Features.Rendering.Systems;
 public class ToneMappingSystem : ISetupSystem, IRenderSystem, ITeardownSystem
 {
     private Buffer<ToneMapUniformData> uniformBuffer = null!;
-    private ISampler textureSampler = null!;
     private Reloadable<IPipelineState> pipeline = null!;
     private IShaderResourceBinding shaderResourceBinding = null!;
     private IShaderResourceVariable? textureVariable;
@@ -43,12 +42,6 @@ public class ToneMappingSystem : ISetupSystem, IRenderSystem, ITeardownSystem
             CPUAccessFlags = CpuAccessFlags.Write,
         });
 
-        textureSampler = renderDevice.CreateSampler(new SamplerDesc
-        {
-            MinFilter = FilterType.Point, MagFilter = FilterType.Point, MipFilter = FilterType.Point,
-            AddressU = TextureAddressMode.Mirror, AddressV = TextureAddressMode.Mirror, AddressW = TextureAddressMode.Mirror,
-        });
-
         pipeline = new Reloadable<IPipelineState>(dependencies =>
         {
             dependencies.Add(vShader);
@@ -71,6 +64,19 @@ public class ToneMappingSystem : ISetupSystem, IRenderSystem, ITeardownSystem
                                 Type = ShaderResourceVariableType.Mutable,
                             },
                         },
+                        ImmutableSamplers = new ImmutableSamplerDesc[]
+                        {
+                            new()
+                            {
+                                SamplerOrTextureName = "TextureSampler",
+                                ShaderStages = ShaderType.Pixel,
+                                Desc = new SamplerDesc
+                                {
+                                    MinFilter = FilterType.Point, MagFilter = FilterType.Point, MipFilter = FilterType.Point,
+                                    AddressU = TextureAddressMode.Clamp, AddressV = TextureAddressMode.Clamp, AddressW = TextureAddressMode.Clamp,
+                                },
+                            },
+                        },
                     },
                 },
 
@@ -90,7 +96,6 @@ public class ToneMappingSystem : ISetupSystem, IRenderSystem, ITeardownSystem
             });
         });
 
-        pipeline.Value.GetStaticVariableByName(ShaderType.Pixel, "TextureSampler")?.Set(textureSampler, SetShaderResourceFlags.None);
         pipeline.Value.GetStaticVariableByName(ShaderType.Pixel, "Uniforms")?.Set(uniformBuffer.Handle, SetShaderResourceFlags.None);
 
         shaderResourceBinding = pipeline.Value.CreateShaderResourceBinding(true);
@@ -126,7 +131,6 @@ public class ToneMappingSystem : ISetupSystem, IRenderSystem, ITeardownSystem
     {
         shaderResourceBinding.Dispose();
         pipeline.Dispose();
-        textureSampler.Dispose();
         uniformBuffer.Dispose();
     }
 }

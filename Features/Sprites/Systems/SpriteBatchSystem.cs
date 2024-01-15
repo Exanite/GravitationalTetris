@@ -4,14 +4,13 @@ using Exanite.Ecs.Systems;
 using Exanite.Engine.Rendering;
 using Exanite.ResourceManagement;
 using Exanite.GravitationalTetris.Features.Resources;
+using FilterType = Diligent.FilterType;
 
 namespace Exanite.GravitationalTetris.Features.Sprites.Systems;
 
 public class SpriteBatchSystem : ISetupSystem, IRenderSystem, IDisposable
 {
     private const int MaxSpritesPerBatch = 128;
-
-    private ISampler textureSampler = null!;
 
     private Buffer<SpriteUniformData> uniformBuffer = null!;
     private Buffer<SpriteInstanceData> instanceBuffer = null!;
@@ -60,12 +59,6 @@ public class SpriteBatchSystem : ISetupSystem, IRenderSystem, IDisposable
             CPUAccessFlags = CpuAccessFlags.Write,
         }, MaxSpritesPerBatch);
 
-        textureSampler = renderDevice.CreateSampler(new SamplerDesc
-        {
-            MinFilter = FilterType.Point, MagFilter = FilterType.Point, MipFilter = FilterType.Point,
-            AddressU = TextureAddressMode.Clamp, AddressV = TextureAddressMode.Clamp, AddressW = TextureAddressMode.Clamp,
-        });
-
         vertexBuffers[0] = instanceBuffer.Handle;
 
         var vShader = resourceManager.GetResource(BaseMod.SpriteVShader);
@@ -86,6 +79,19 @@ public class SpriteBatchSystem : ISetupSystem, IRenderSystem, IDisposable
                             ShaderStages = ShaderType.Pixel,
                             Name = "Texture",
                             Type = ShaderResourceVariableType.Mutable,
+                        },
+                    },
+                    ImmutableSamplers = new ImmutableSamplerDesc[]
+                    {
+                        new()
+                        {
+                            SamplerOrTextureName = "TextureSampler",
+                            ShaderStages = ShaderType.Pixel,
+                            Desc = new SamplerDesc
+                            {
+                                MinFilter = FilterType.Point, MagFilter = FilterType.Point, MipFilter = FilterType.Point,
+                                AddressU = TextureAddressMode.Clamp, AddressV = TextureAddressMode.Clamp, AddressW = TextureAddressMode.Clamp,
+                            },
                         },
                     },
                 },
@@ -121,7 +127,6 @@ public class SpriteBatchSystem : ISetupSystem, IRenderSystem, IDisposable
             Ps = pShader.Value.Handle,
         });
 
-        pipeline.GetStaticVariableByName(ShaderType.Pixel, "TextureSampler").Set(textureSampler, SetShaderResourceFlags.None);
         pipeline.GetStaticVariableByName(ShaderType.Vertex, "Uniforms").Set(uniformBuffer.Handle, SetShaderResourceFlags.None);
 
         shaderResourceBinding = pipeline.CreateShaderResourceBinding(true);
@@ -136,7 +141,6 @@ public class SpriteBatchSystem : ISetupSystem, IRenderSystem, IDisposable
     public void Dispose()
     {
         shaderResourceBinding.Dispose();
-        textureSampler.Dispose();
         pipeline.Dispose();
         uniformBuffer.Dispose();
         instanceBuffer.Dispose();

@@ -7,8 +7,6 @@ namespace Exanite.GravitationalTetris.Features.Rendering.Systems;
 
 public class RenderWorldToMainSystem : ISetupSystem, IRenderSystem, ITeardownSystem
 {
-    private ISampler pointClampTextureSampler = null!;
-
     private IPipelineState passthroughPipeline = null!;
     private IShaderResourceBinding passthroughResources = null!;
     private IShaderResourceVariable? passthroughTextureVariable;
@@ -33,12 +31,6 @@ public class RenderWorldToMainSystem : ISetupSystem, IRenderSystem, ITeardownSys
         var vShader = resourceManager.GetResource<Shader>("Rendering:Screen.v.hlsl");
         var pShaderPassthrough = resourceManager.GetResource<Shader>("Rendering:Passthrough.p.hlsl");
 
-        pointClampTextureSampler = renderDevice.CreateSampler(new SamplerDesc
-        {
-            MinFilter = FilterType.Point, MagFilter = FilterType.Point, MipFilter = FilterType.Point,
-            AddressU = TextureAddressMode.Clamp, AddressV = TextureAddressMode.Clamp, AddressW = TextureAddressMode.Clamp,
-        });
-
         passthroughPipeline = renderDevice.CreateGraphicsPipelineState(new GraphicsPipelineStateCreateInfo
         {
             PSODesc = new PipelineStateDesc
@@ -54,6 +46,19 @@ public class RenderWorldToMainSystem : ISetupSystem, IRenderSystem, ITeardownSys
                             ShaderStages = ShaderType.Pixel,
                             Name = "Texture",
                             Type = ShaderResourceVariableType.Mutable,
+                        },
+                    },
+                    ImmutableSamplers = new ImmutableSamplerDesc[]
+                    {
+                        new()
+                        {
+                            SamplerOrTextureName = "TextureSampler",
+                            ShaderStages = ShaderType.Pixel,
+                            Desc = new SamplerDesc
+                            {
+                                MinFilter = FilterType.Point, MagFilter = FilterType.Point, MipFilter = FilterType.Point,
+                                AddressU = TextureAddressMode.Clamp, AddressV = TextureAddressMode.Clamp, AddressW = TextureAddressMode.Clamp,
+                            },
                         },
                     },
                 },
@@ -73,8 +78,6 @@ public class RenderWorldToMainSystem : ISetupSystem, IRenderSystem, ITeardownSys
             Vs = vShader.Value.Handle,
             Ps = pShaderPassthrough.Value.Handle,
         });
-
-        passthroughPipeline.GetStaticVariableByName(ShaderType.Pixel, "TextureSampler")?.Set(pointClampTextureSampler, SetShaderResourceFlags.None);
 
         passthroughResources = passthroughPipeline.CreateShaderResourceBinding(true);
         passthroughTextureVariable = passthroughResources.GetVariableByName(ShaderType.Pixel, "Texture");
@@ -103,8 +106,6 @@ public class RenderWorldToMainSystem : ISetupSystem, IRenderSystem, ITeardownSys
 
     public void Teardown()
     {
-        pointClampTextureSampler.Dispose();
-
         passthroughPipeline.Dispose();
         passthroughResources.Dispose();
     }

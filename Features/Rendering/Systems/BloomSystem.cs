@@ -15,9 +15,6 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
     private int iterationCount;
     private float bloomIntensity = 0.05f;
 
-    private ISampler linearClampTextureSampler = null!;
-    private ISampler pointClampTextureSampler = null!;
-
     private Buffer<BloomDownUniformData> downUniformBuffer = null!;
     private IPipelineState downPipeline = null!;
     private IShaderResourceBinding downResources = null!;
@@ -60,18 +57,6 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
         var pShaderDown = resourceManager.GetResource<Shader>("Rendering:BloomDown.p.hlsl");
         var pShaderUp = resourceManager.GetResource<Shader>("Rendering:BloomUp.p.hlsl");
 
-        linearClampTextureSampler = renderDevice.CreateSampler(new SamplerDesc
-        {
-            MinFilter = FilterType.Linear, MagFilter = FilterType.Linear, MipFilter = FilterType.Linear,
-            AddressU = TextureAddressMode.Clamp, AddressV = TextureAddressMode.Clamp, AddressW = TextureAddressMode.Clamp,
-        });
-
-        pointClampTextureSampler = renderDevice.CreateSampler(new SamplerDesc
-        {
-            MinFilter = FilterType.Point, MagFilter = FilterType.Point, MipFilter = FilterType.Point,
-            AddressU = TextureAddressMode.Clamp, AddressV = TextureAddressMode.Clamp, AddressW = TextureAddressMode.Clamp,
-        });
-
         {
             downUniformBuffer = new Buffer<BloomDownUniformData>("Bloom Down Uniform Buffer", rendererContext, new BufferDesc
             {
@@ -95,6 +80,19 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
                                 ShaderStages = ShaderType.Pixel,
                                 Name = "Texture",
                                 Type = ShaderResourceVariableType.Mutable,
+                            },
+                        },
+                        ImmutableSamplers = new ImmutableSamplerDesc[]
+                        {
+                            new()
+                            {
+                                SamplerOrTextureName = "TextureSampler",
+                                ShaderStages = ShaderType.Pixel,
+                                Desc = new SamplerDesc
+                                {
+                                    MinFilter = FilterType.Linear, MagFilter = FilterType.Linear, MipFilter = FilterType.Linear,
+                                    AddressU = TextureAddressMode.Clamp, AddressV = TextureAddressMode.Clamp, AddressW = TextureAddressMode.Clamp,
+                                },
                             },
                         },
                     },
@@ -128,7 +126,6 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
                 Ps = pShaderDown.Value.Handle,
             });
 
-            downPipeline.GetStaticVariableByName(ShaderType.Pixel, "TextureSampler")?.Set(linearClampTextureSampler, SetShaderResourceFlags.None);
             downPipeline.GetStaticVariableByName(ShaderType.Pixel, "Uniforms")?.Set(downUniformBuffer.Handle, SetShaderResourceFlags.None);
 
             downResources = downPipeline.CreateShaderResourceBinding(true);
@@ -158,6 +155,19 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
                                 ShaderStages = ShaderType.Pixel,
                                 Name = "Texture",
                                 Type = ShaderResourceVariableType.Mutable,
+                            },
+                        },
+                        ImmutableSamplers = new ImmutableSamplerDesc[]
+                        {
+                            new()
+                            {
+                                SamplerOrTextureName = "TextureSampler",
+                                ShaderStages = ShaderType.Pixel,
+                                Desc = new SamplerDesc
+                                {
+                                    MinFilter = FilterType.Linear, MagFilter = FilterType.Linear, MipFilter = FilterType.Linear,
+                                    AddressU = TextureAddressMode.Clamp, AddressV = TextureAddressMode.Clamp, AddressW = TextureAddressMode.Clamp,
+                                },
                             },
                         },
                     },
@@ -191,7 +201,6 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
                 Ps = pShaderUp.Value.Handle,
             });
 
-            upPipeline.GetStaticVariableByName(ShaderType.Pixel, "TextureSampler")?.Set(linearClampTextureSampler, SetShaderResourceFlags.None);
             upPipeline.GetStaticVariableByName(ShaderType.Pixel, "Uniforms")?.Set(upUniformBuffer.Handle, SetShaderResourceFlags.None);
 
             upResources = upPipeline.CreateShaderResourceBinding(true);
@@ -291,9 +300,6 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
 
     public void Teardown()
     {
-        linearClampTextureSampler.Dispose();
-        pointClampTextureSampler.Dispose();
-
         downUniformBuffer.Dispose();
         downPipeline.Dispose();
         downResources.Dispose();
