@@ -1,4 +1,3 @@
-using System.Runtime.InteropServices;
 using Diligent;
 using Exanite.Ecs.Systems;
 using Exanite.Engine.Rendering;
@@ -7,15 +6,9 @@ using Exanite.ResourceManagement;
 
 namespace Exanite.GravitationalTetris.Features.Rendering.Systems;
 
-[StructLayout(LayoutKind.Sequential)]
-public struct PostProcessUniformData
+public class ToneMappingSystem : ISetupSystem, IRenderSystem, ITeardownSystem
 {
-    public float Time;
-}
-
-public class PostProcessSystem : ISetupSystem, IRenderSystem, ITeardownSystem
-{
-    private Buffer<PostProcessUniformData> uniformBuffer = null!;
+    private Buffer<ToneMapUniformData> uniformBuffer = null!;
     private ISampler textureSampler = null!;
     private Reloadable<IPipelineState> pipeline = null!;
     private IShaderResourceBinding shaderResourceBinding = null!;
@@ -28,7 +21,7 @@ public class PostProcessSystem : ISetupSystem, IRenderSystem, ITeardownSystem
     private readonly WorldRenderTextureSystem worldRenderTextureSystem;
     private readonly SimulationTime time;
 
-    public PostProcessSystem(RendererContext rendererContext, IResourceManager resourceManager, WorldRenderTextureSystem worldRenderTextureSystem, SimulationTime time)
+    public ToneMappingSystem(RendererContext rendererContext, IResourceManager resourceManager, WorldRenderTextureSystem worldRenderTextureSystem, SimulationTime time)
     {
         this.rendererContext = rendererContext;
         this.resourceManager = resourceManager;
@@ -41,9 +34,9 @@ public class PostProcessSystem : ISetupSystem, IRenderSystem, ITeardownSystem
         var renderDevice = rendererContext.RenderDevice;
 
         var vShader = resourceManager.GetResource<Shader>("Rendering:Screen.v.hlsl");
-        var pShader = resourceManager.GetResource<Shader>("Rendering:PostProcess.p.hlsl");
+        var pShader = resourceManager.GetResource<Shader>("Rendering:ToneMap.p.hlsl");
 
-        uniformBuffer = new Buffer<PostProcessUniformData>("Post Process Uniform Buffer", rendererContext, new BufferDesc
+        uniformBuffer = new Buffer<ToneMapUniformData>("Tone Map Uniform Buffer", rendererContext, new BufferDesc
         {
             Usage = Usage.Dynamic,
             BindFlags = BindFlags.UniformBuffer,

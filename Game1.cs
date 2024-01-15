@@ -140,7 +140,7 @@ public class Game1 : Game
 
             config.RegisterAllCallbacks<UseMainRenderTargetSystem>();
 
-            config.RegisterAllCallbacks<PostProcessSystem>();
+            config.RegisterAllCallbacks<ToneMappingSystem>();
 
             config.RegisterAllCallbacks<MyraUiSystem>();
             config.RegisterAllCallbacks<TetrisUiSystem>();
