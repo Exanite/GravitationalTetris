@@ -28,10 +28,6 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
     private IShaderResourceBinding upResources = null!;
     private IShaderResourceVariable? upTextureVariable;
 
-    private IPipelineState passthroughPipeline = null!;
-    private IShaderResourceBinding passthroughResources = null!;
-    private IShaderResourceVariable? passthroughTextureVariable;
-
     private uint previousWidth;
     private uint previousHeight;
 
@@ -63,7 +59,6 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
         var vShader = resourceManager.GetResource<Shader>("Rendering:Screen.v.hlsl");
         var pShaderDown = resourceManager.GetResource<Shader>("Rendering:BloomDown.p.hlsl");
         var pShaderUp = resourceManager.GetResource<Shader>("Rendering:BloomUp.p.hlsl");
-        var pShaderPassthrough = resourceManager.GetResource<Shader>("Rendering:Passthrough.p.hlsl");
 
         linearClampTextureSampler = renderDevice.CreateSampler(new SamplerDesc
         {
@@ -202,48 +197,6 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
             upResources = upPipeline.CreateShaderResourceBinding(true);
             upTextureVariable = upResources.GetVariableByName(ShaderType.Pixel, "Texture");
         }
-
-        {
-            passthroughPipeline = renderDevice.CreateGraphicsPipelineState(new GraphicsPipelineStateCreateInfo
-            {
-                PSODesc = new PipelineStateDesc
-                {
-                    Name = "Passthrough Shader Pipeline",
-                    ResourceLayout = new PipelineResourceLayoutDesc
-                    {
-                        DefaultVariableType = ShaderResourceVariableType.Static,
-                        Variables = new ShaderResourceVariableDesc[]
-                        {
-                            new()
-                            {
-                                ShaderStages = ShaderType.Pixel,
-                                Name = "Texture",
-                                Type = ShaderResourceVariableType.Mutable,
-                            },
-                        },
-                    },
-                },
-
-                GraphicsPipeline = new GraphicsPipelineDesc
-                {
-                    PrimitiveTopology = PrimitiveTopology.TriangleStrip,
-
-                    NumRenderTargets = 1,
-                    RTVFormats = new[] { TextureFormat.RGB32_Float },
-
-                    RasterizerDesc = new RasterizerStateDesc { CullMode = CullMode.None },
-                    DepthStencilDesc = new DepthStencilStateDesc { DepthEnable = false },
-                },
-
-                Vs = vShader.Value.Handle,
-                Ps = pShaderPassthrough.Value.Handle,
-            });
-
-            passthroughPipeline.GetStaticVariableByName(ShaderType.Pixel, "TextureSampler")?.Set(pointClampTextureSampler, SetShaderResourceFlags.None);
-
-            passthroughResources = passthroughPipeline.CreateShaderResourceBinding(true);
-            passthroughTextureVariable = passthroughResources.GetVariableByName(ShaderType.Pixel, "Texture");
-        }
     }
 
     public void Render()
@@ -348,9 +301,6 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
         upUniformBuffer.Dispose();
         upPipeline.Dispose();
         upResources.Dispose();
-
-        passthroughPipeline.Dispose();
-        passthroughResources.Dispose();
 
         foreach (var texture in renderTextures)
         {

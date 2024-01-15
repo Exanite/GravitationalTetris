@@ -142,10 +142,10 @@ public class Game1 : Game
 
             config.RegisterAllCallbacks<ToneMappingSystem>();
 
+            config.RegisterAllCallbacks<RenderWorldToMainSystem>();
+
             config.RegisterAllCallbacks<MyraUiSystem>();
             config.RegisterAllCallbacks<TetrisUiSystem>();
-
-            // Experimental
         }
         config.RegisterAllCallbacks<PresentSwapChainSystem>();
 
