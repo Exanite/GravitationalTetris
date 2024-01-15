@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using Diligent;
 using Exanite.Ecs.Systems;
 using Exanite.Engine.Rendering;
@@ -42,12 +44,12 @@ public class ToneMappingSystem : ISetupSystem, IRenderSystem, ITeardownSystem
             CPUAccessFlags = CpuAccessFlags.Write,
         });
 
-        pipeline = new Reloadable<IPipelineState>(dependencies =>
+        pipeline = new Reloadable<IPipelineState>((List<IHandle> dependencies, out IPipelineState resource, out Action<IPipelineState> unloadAction) =>
         {
             dependencies.Add(vShader);
             dependencies.Add(pShader);
 
-            return renderDevice.CreateGraphicsPipelineState(new GraphicsPipelineStateCreateInfo
+            resource = renderDevice.CreateGraphicsPipelineState(new GraphicsPipelineStateCreateInfo
             {
                 PSODesc = new PipelineStateDesc
                 {
@@ -94,12 +96,20 @@ public class ToneMappingSystem : ISetupSystem, IRenderSystem, ITeardownSystem
                 Vs = vShader.Value.Handle,
                 Ps = pShader.Value.Handle,
             });
+
+            pipeline.Value.GetStaticVariableByName(ShaderType.Pixel, "Uniforms")?.Set(uniformBuffer.Handle, SetShaderResourceFlags.None);
+
+            shaderResourceBinding = pipeline.Value.CreateShaderResourceBinding(true);
+            textureVariable = shaderResourceBinding.GetVariableByName(ShaderType.Pixel, "Texture");
+
+            unloadAction = resource =>
+            {
+                resource.Dispose();
+                shaderResourceBinding.Dispose();
+                shaderResourceBinding = null!;
+                textureVariable = null!;
+            };
         });
-
-        pipeline.Value.GetStaticVariableByName(ShaderType.Pixel, "Uniforms")?.Set(uniformBuffer.Handle, SetShaderResourceFlags.None);
-
-        shaderResourceBinding = pipeline.Value.CreateShaderResourceBinding(true);
-        textureVariable = shaderResourceBinding.GetVariableByName(ShaderType.Pixel, "Texture");
     }
 
     public void Render()
@@ -129,8 +139,7 @@ public class ToneMappingSystem : ISetupSystem, IRenderSystem, ITeardownSystem
 
     public void Teardown()
     {
-        shaderResourceBinding.Dispose();
-        pipeline.Dispose();
         uniformBuffer.Dispose();
+        pipeline.Dispose();
     }
 }
