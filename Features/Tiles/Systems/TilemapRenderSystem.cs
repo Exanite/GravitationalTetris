@@ -1,13 +1,10 @@
 using System;
 using System.Numerics;
-using Arch.System;
-using Arch.System.SourceGenerator;
 using Exanite.Core.Utilities;
 using Exanite.Ecs.Systems;
 using Exanite.Engine.Rendering;
 using Exanite.Engine.Time;
 using Exanite.GravitationalTetris.Features.Cameras.Components;
-using Exanite.GravitationalTetris.Features.Resources;
 using Exanite.GravitationalTetris.Features.Sprites;
 using Exanite.GravitationalTetris.Features.Sprites.Systems;
 using Exanite.GravitationalTetris.Features.Tetris.Components;
@@ -15,7 +12,7 @@ using Exanite.ResourceManagement;
 
 namespace Exanite.GravitationalTetris.Features.Tiles.Systems;
 
-public partial class TilemapRenderSystem : EcsSystem, IRenderSystem, ISetupSystem
+public class TilemapRenderSystem : EcsSystem, IRenderSystem, ISetupSystem
 {
     private readonly GameTilemapData tilemap;
     private readonly ResourceManager resourceManager;
@@ -59,6 +56,8 @@ public partial class TilemapRenderSystem : EcsSystem, IRenderSystem, ISetupSyste
         });
         {
             DrawTiles();
+
+            World.Each<TetrisRootComponent>(DrawPlaceholders);
             DrawPlaceholdersQuery(World);
         }
         spriteBatchSystem.End();
@@ -94,7 +93,6 @@ public partial class TilemapRenderSystem : EcsSystem, IRenderSystem, ISetupSyste
         }
     }
 
-    [Query]
     private void DrawPlaceholders(ref TetrisRootComponent tetrisRoot)
     {
         foreach (var blockPosition in tetrisRoot.PredictedBlockPositions)

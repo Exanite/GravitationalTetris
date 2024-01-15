@@ -1,15 +1,16 @@
 using System.Numerics;
-using Arch.System;
-using Arch.System.SourceGenerator;
 using Exanite.Ecs.Systems;
 using Exanite.GravitationalTetris.Features.Cameras.Components;
 using Exanite.GravitationalTetris.Features.Sprites.Components;
 using Exanite.GravitationalTetris.Features.Transforms.Components;
+using Flecs.NET.Core;
 
 namespace Exanite.GravitationalTetris.Features.Sprites.Systems;
 
-public partial class SpriteRenderSystem : EcsSystem, IRenderSystem
+public class SpriteRenderSystem : EcsSystem, ISetupSystem, IRenderSystem
 {
+    private Query renderToCameraQuery;
+
     private readonly SpriteBatchSystem spriteBatchSystem;
 
     public SpriteRenderSystem(SpriteBatchSystem spriteBatchSystem)
@@ -17,14 +18,17 @@ public partial class SpriteRenderSystem : EcsSystem, IRenderSystem
         this.spriteBatchSystem = spriteBatchSystem;
     }
 
-    public void Render()
+    public void Setup()
     {
-        DrawQuery(World);
+        renderToCameraQuery = World.Query(World.FilterBuilder<CameraComponent, CameraProjectionComponent>());
     }
 
-    [Query]
-    [All<CameraComponent>]
-    private void Draw(ref CameraProjectionComponent cameraProjection)
+    public void Render()
+    {
+        renderToCameraQuery.Each<CameraProjectionComponent>(RenderToCamera);
+    }
+
+    private void RenderToCamera(ref CameraProjectionComponent cameraProjection)
     {
         spriteBatchSystem.Begin(new SpriteBeginDrawOptions
         {
@@ -32,12 +36,11 @@ public partial class SpriteRenderSystem : EcsSystem, IRenderSystem
             Projection = cameraProjection.Projection,
         });
         {
-            DrawSpritesQuery(World);
+            World.Each<SpriteComponent, TransformComponent>(DrawSprites);
         }
         spriteBatchSystem.End();
     }
 
-    [Query]
     private void DrawSprites(ref SpriteComponent sprite, ref TransformComponent transform)
     {
         var texture = sprite.Texture.Value;

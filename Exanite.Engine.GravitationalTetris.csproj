@@ -30,7 +30,6 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Aether.Physics2D\Aether.Physics2D.csproj"/>
-    <ProjectReference Include="..\Arch.Extended\Arch.System.SourceGenerator\Arch.System.SourceGenerator.csproj" OutputItemType="Analyzer"/>
     <ProjectReference Include="..\Exanite.Engine\Exanite.Engine.csproj"/>
     <ProjectReference Include="..\FontStashSharp\src\FontStashSharp\FontStashSharp.csproj" />
     <ProjectReference Include="..\Myra\src\Myra\Myra.PlatformAgnostic.csproj" />

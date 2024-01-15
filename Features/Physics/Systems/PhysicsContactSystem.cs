@@ -19,17 +19,17 @@ public class PhysicsContactSystem : ISetupSystem
         //     var bodyA = contact.FixtureA.Body;
         //     var bodyB = contact.FixtureB.Body;
         //
-        //     if (bodyA.Tag is not BoxedObject<EntityReference> refA || bodyB.Tag is not BoxedObject<EntityReference> refB)
+        //     if (bodyA.Tag is not BoxedValue<Entity> refA || bodyB.Tag is not BoxedValue<Entity> refB)
         //     {
         //         return contact.Enabled;
         //     }
         //
-        //     if (!refA.Value.Entity.IsAlive() || !refB.Value.Entity.IsAlive())
+        //     if (!refA.Value.IsAlive() || !refB.Value.IsAlive())
         //     {
         //         return contact.Enabled;
         //     }
         //
-        //     if (refA.Value.Entity.Has<PlayerComponent>() || !refB.Value.Entity.Has<TetrisBlockComponent>())
+        //     if (refA.Value.Has<PlayerComponent>() || !refB.Value.Has<TetrisBlockComponent>())
         //     {
         //         contact.FixtureB.Body.LinearVelocity = Vector2.UnitY * 0.5f;
         //

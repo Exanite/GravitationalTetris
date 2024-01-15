@@ -1,20 +1,19 @@
 using System.Numerics;
-using Arch.Core;
-using Arch.Core.Extensions;
-using Arch.System;
-using Arch.System.SourceGenerator;
 using Exanite.Core.HighPerformance;
 using Exanite.Ecs.Systems;
+using Exanite.Engine.Lifecycles.Components;
 using Exanite.Engine.Time;
-using Exanite.GravitationalTetris.Features.Lifecycles.Components;
 using Exanite.GravitationalTetris.Features.Physics.Components;
 using Exanite.GravitationalTetris.Features.Transforms.Components;
+using Flecs.NET.Core;
 using World = nkast.Aether.Physics2D.Dynamics.World;
 
 namespace Exanite.GravitationalTetris.Features.Physics.Systems;
 
-public partial class PhysicsSimulationSystem : EcsSystem, IStartSystem, IUpdateSystem, ICleanupSystem
+public class PhysicsSimulationSystem : EcsSystem, ISetupSystem, IStartSystem, IUpdateSystem, ICleanupSystem
 {
+    private Query removeRigidbodiesQuery;
+
     private readonly World physicsWorld;
     private readonly SimulationTime time;
 
@@ -24,6 +23,11 @@ public partial class PhysicsSimulationSystem : EcsSystem, IStartSystem, IUpdateS
         this.time = time;
     }
 
+    public void Setup()
+    {
+        removeRigidbodiesQuery = World.Query(World.FilterBuilder<RigidbodyComponent, DestroyedComponent>());
+    }
+
     public void Start()
     {
         physicsWorld.Gravity = Vector2.UnitY * 4f;
@@ -31,20 +35,21 @@ public partial class PhysicsSimulationSystem : EcsSystem, IStartSystem, IUpdateS
 
     public void Update()
     {
-        AddRigidbodiesQuery(World);
+        World.Each<RigidbodyComponent>(AddRigidbodies);
 
-        SyncTransformsToPhysicsQuery(World);
-        SyncVelocitiesToPhysicsQuery(World);
+        World.Each<TransformComponent, RigidbodyComponent>(SyncTransformsToPhysics);
+        World.Each<VelocityComponent, RigidbodyComponent>(SyncVelocitiesToPhysics);
         {
             SimulatePhysicsWorld();
         }
-        SyncTransformsFromPhysicsQuery(World);
-        SyncVelocitiesFromPhysicsQuery(World);
+        World.Each<TransformComponent, RigidbodyComponent>(SyncTransformsFromPhysics);
+        World.Each<VelocityComponent, RigidbodyComponent>(SyncVelocitiesFromPhysics);
     }
 
     public void Cleanup()
     {
-        RemoveRigidbodiesQuery(World);
+        // Todo Validate that this is correct
+        removeRigidbodiesQuery.Each<RigidbodyComponent>(RemoveDestroyedRigidbodies);
     }
 
     private void SimulatePhysicsWorld()
@@ -52,57 +57,48 @@ public partial class PhysicsSimulationSystem : EcsSystem, IStartSystem, IUpdateS
         physicsWorld.Step(time.DeltaTime);
     }
 
-    [Query]
     private void AddRigidbodies(Entity entity, ref RigidbodyComponent rigidbody)
     {
         if (rigidbody.Body.World == null)
         {
             physicsWorld.Add(rigidbody.Body);
-            rigidbody.Body.Tag = new BoxedValue<EntityReference>(entity.Reference());
+            rigidbody.Body.Tag = new BoxedValue<Entity>(entity);
         }
     }
 
-    [Query]
     private void SyncTransformsToPhysics(ref TransformComponent transform, ref RigidbodyComponent rigidbody)
     {
         rigidbody.Body.Position = transform.Position;
         rigidbody.Body.Rotation = transform.Rotation;
     }
 
-    [Query]
     private void SyncVelocitiesToPhysics(ref VelocityComponent velocity, ref RigidbodyComponent rigidbody)
     {
         rigidbody.Body.LinearVelocity = velocity.Velocity;
     }
 
-    [Query]
     private void SyncAngularVelocitiesToPhysics(ref AngularVelocityComponent angularVelocity, ref RigidbodyComponent rigidbody)
     {
         rigidbody.Body.AngularVelocity = angularVelocity.AngularVelocity;
     }
 
-    [Query]
     private void SyncTransformsFromPhysics(ref TransformComponent transform, ref RigidbodyComponent rigidbody)
     {
         transform.Position = rigidbody.Body.Position;
         transform.Rotation = rigidbody.Body.Rotation;
     }
 
-    [Query]
     private void SyncVelocitiesFromPhysics(ref VelocityComponent velocity, ref RigidbodyComponent rigidbody)
     {
         velocity.Velocity = rigidbody.Body.LinearVelocity;
     }
 
-    [Query]
     private void SyncAngularVelocitiesFromPhysics(ref AngularVelocityComponent angularVelocity, ref RigidbodyComponent rigidbody)
     {
         angularVelocity.AngularVelocity = rigidbody.Body.AngularVelocity;
     }
 
-    [Query]
-    [All<DestroyedComponent>]
-    private void RemoveRigidbodies(ref RigidbodyComponent rigidbody)
+    private void RemoveDestroyedRigidbodies(ref RigidbodyComponent rigidbody)
     {
         var body = rigidbody.Body;
         if (body.World != null)

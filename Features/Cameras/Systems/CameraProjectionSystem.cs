@@ -1,5 +1,4 @@
 using System.Numerics;
-using Arch.System;
 using Exanite.Ecs.Systems;
 using Exanite.Engine.Rendering;
 using Exanite.GravitationalTetris.Features.Cameras.Components;
@@ -7,7 +6,7 @@ using Exanite.GravitationalTetris.Features.Transforms.Components;
 
 namespace Exanite.GravitationalTetris.Features.Cameras.Systems;
 
-public partial class CameraProjectionSystem : EcsSystem, IRenderSystem
+public class CameraProjectionSystem : EcsSystem, IRenderSystem
 {
     private readonly RendererContext rendererContext;
 
@@ -18,11 +17,10 @@ public partial class CameraProjectionSystem : EcsSystem, IRenderSystem
 
     public void Render()
     {
-        UpdateQuery(World);
+        World.Each<CameraComponent, TransformComponent, CameraProjectionComponent>(UpdateProjection);
     }
 
-    [Query]
-    private void Update(ref CameraComponent camera, ref TransformComponent transform, ref CameraProjectionComponent cameraProjection)
+    private void UpdateProjection(ref CameraComponent camera, ref TransformComponent transform, ref CameraProjectionComponent cameraProjection)
     {
         var swapChain = rendererContext.SwapChain;
         var aspectRatio = swapChain.GetDesc().Width / (float)swapChain.GetDesc().Height;

@@ -1,20 +1,17 @@
 using System.Collections.Generic;
 using System.Numerics;
-using Arch.Core;
-using Arch.Core.Extensions;
-using Arch.System;
-using Arch.System.SourceGenerator;
 using Exanite.Ecs.Systems;
-using Exanite.GravitationalTetris.Features.Lifecycles.Components;
+using Exanite.Engine.Lifecycles.Components;
 using Exanite.GravitationalTetris.Features.Physics.Components;
 using Exanite.GravitationalTetris.Features.Tiles.Components;
 using Exanite.GravitationalTetris.Features.Transforms.Components;
+using Flecs.NET.Core;
 using nkast.Aether.Physics2D.Common;
 using nkast.Aether.Physics2D.Dynamics;
 
 namespace Exanite.GravitationalTetris.Features.Tiles.Systems;
 
-public partial class TilemapColliderSystem : EcsSystem, IStartSystem, IUpdateSystem
+public class TilemapColliderSystem : EcsSystem, IStartSystem, IUpdateSystem
 {
     private readonly GameTilemapData tilemap;
 
@@ -39,14 +36,12 @@ public partial class TilemapColliderSystem : EcsSystem, IStartSystem, IUpdateSys
         }
     }
 
-    [Query]
     [All<UpdateTilemapCollidersEventComponent>]
     private void RemoveUpdateTilemapCollidersEvent(Entity entity)
     {
         entity.Add(new DestroyedComponent());
     }
 
-    [Query]
     [All<TilemapColliderComponent>]
     private void RemoveTilemapColliders(Entity entity)
     {
@@ -83,6 +78,9 @@ public partial class TilemapColliderSystem : EcsSystem, IStartSystem, IUpdateSys
         body.BodyType = BodyType.Static;
         body.CreateCompoundPolygon(polygons, 1);
 
-        World.Create(new TransformComponent(), new RigidbodyComponent(body), new TilemapColliderComponent());
+        var tilemapCollider = World.Entity();
+        tilemapCollider.Set(new TransformComponent());
+        tilemapCollider.Set(new RigidbodyComponent(body));
+        tilemapCollider.Set(new TilemapColliderComponent());
     }
 }

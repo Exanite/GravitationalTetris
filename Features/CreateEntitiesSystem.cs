@@ -23,55 +23,62 @@ public class CreateEntitiesSystem : EcsSystem, IStartSystem
     public void Start()
     {
         // Camera
-        World.Create(
-            new CameraComponent(20),
-            new TransformComponent
+        {
+            var camera = World.Entity();
+            camera.Set(new CameraComponent(20));
+            camera.Set(new TransformComponent
             {
                 Position = new Vector2(5f - 0.5f, 10f - 0.5f),
-            },
-            new CameraProjectionComponent());
+            });
+            camera.Set(new CameraProjectionComponent());
+        }
 
         // Player
-        var playerBody = new Body();
-        playerBody.FixedRotation = true;
-        playerBody.BodyType = BodyType.Dynamic;
-        playerBody.IsBullet = true;
-        playerBody.SleepingAllowed = false;
+        {
+            var playerBody = new Body();
+            playerBody.FixedRotation = true;
+            playerBody.BodyType = BodyType.Dynamic;
+            playerBody.IsBullet = true;
+            playerBody.SleepingAllowed = false;
 
-        var head = playerBody.CreateRectangle(8f / 16f, 5f / 16f, 1, new Vector2(0, -0.5f / 16f));
-        head.Friction = 0;
-        head.Restitution = 0;
+            var head = playerBody.CreateRectangle(8f / 16f, 5f / 16f, 1, new Vector2(0, -0.5f / 16f));
+            head.Friction = 0;
+            head.Restitution = 0;
 
-        var body = playerBody.CreateRectangle(4f / 16f, 10f / 16f, 1, new Vector2(0, 2f / 16f));
-        body.Friction = 0;
-        body.Restitution = 0;
+            var body = playerBody.CreateRectangle(4f / 16f, 10f / 16f, 1, new Vector2(0, 2f / 16f));
+            body.Friction = 0;
+            body.Restitution = 0;
 
-        var feet = playerBody.CreateCircle(2f / 16f, 1, new Vector2(0, 6f / 16f));
-        feet.Restitution = 0;
+            var feet = playerBody.CreateCircle(2f / 16f, 1, new Vector2(0, 6f / 16f));
+            feet.Restitution = 0;
 
-        World.Create(
-            new PlayerComponent(),
-            new TransformComponent
+            var player = World.Entity();
+            player.Set(new PlayerComponent());
+            player.Set(new TransformComponent
             {
                 Position = new Vector2(4f, 0),
                 Size = new Vector2(1, 1),
-            },
-            new SpriteComponent(resourceManager.GetResource(BaseMod.Player)),
-            new RigidbodyComponent(playerBody),
-            new VelocityComponent(),
-            new MovementSpeedComponent(5),
-            new PlayerMovement
+            });
+            player.Set(new SpriteComponent(resourceManager.GetResource(BaseMod.Player)));
+            player.Set(new RigidbodyComponent(playerBody));
+            player.Set(new VelocityComponent());
+            player.Set(new MovementSpeedComponent(5));
+            player.Set(new PlayerMovement
             {
                 SmoothTime = 0.05f,
             });
+        }
 
         // Walls on side
-        var wallBody = new Body();
-        wallBody.BodyType = BodyType.Static;
+        {
+            var wallBody = new Body();
+            wallBody.BodyType = BodyType.Static;
 
-        wallBody.CreateRectangle(1, 60, 1, new Vector2(-2, 15));
-        wallBody.CreateRectangle(1, 60, 1, new Vector2(11, 15));
+            wallBody.CreateRectangle(1, 60, 1, new Vector2(-2, 15));
+            wallBody.CreateRectangle(1, 60, 1, new Vector2(11, 15));
 
-        World.Create(new RigidbodyComponent(wallBody));
+            var wall = World.Entity();
+            wall.Set(new RigidbodyComponent(wallBody));
+        }
     }
 }
