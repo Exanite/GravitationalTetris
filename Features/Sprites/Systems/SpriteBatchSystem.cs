@@ -3,7 +3,6 @@ using Diligent;
 using Exanite.Ecs.Systems;
 using Exanite.Engine.Rendering;
 using Exanite.ResourceManagement;
-using Exanite.GravitationalTetris.Features.Resources;
 using FilterType = Diligent.FilterType;
 
 namespace Exanite.GravitationalTetris.Features.Sprites.Systems;
