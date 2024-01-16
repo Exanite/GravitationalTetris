@@ -11,8 +11,11 @@ using nkast.Aether.Physics2D.Dynamics;
 
 namespace Exanite.GravitationalTetris.Features.Tiles.Systems;
 
-public class TilemapColliderSystem : EcsSystem, IStartSystem, IUpdateSystem
+public class TilemapColliderSystem : EcsSystem, ISetupSystem, IStartSystem, IUpdateSystem
 {
+    private Query removeUpdateTilemapCollidersQuery;
+    private Query removeTilemapCollidersQuery;
+
     private readonly GameTilemapData tilemap;
 
     public TilemapColliderSystem(GameTilemapData tilemap)
@@ -20,32 +23,36 @@ public class TilemapColliderSystem : EcsSystem, IStartSystem, IUpdateSystem
         this.tilemap = tilemap;
     }
 
+    public void Setup()
+    {
+        removeUpdateTilemapCollidersQuery = World.Query(World.FilterBuilder<UpdateTilemapCollidersEventComponent>());
+        removeTilemapCollidersQuery = World.Query(World.FilterBuilder<TilemapColliderComponent>());
+    }
+
     public void Start()
     {
-        World.Create(new UpdateTilemapCollidersEventComponent());
+        World.Entity().Add<UpdateTilemapCollidersEventComponent>();
     }
 
     public void Update()
     {
-        if (World.CountEntities(RemoveUpdateTilemapCollidersEvent_QueryDescription) > 0)
+        if (removeTilemapCollidersQuery.Iter().Count() > 0)
         {
-            RemoveUpdateTilemapCollidersEventQuery(World);
-            RemoveTilemapCollidersQuery(World);
+            removeUpdateTilemapCollidersQuery.Each(RemoveUpdateTilemapCollidersEvent);
+            removeTilemapCollidersQuery.Each(RemoveTilemapColliders);
 
             UpdateTilemapColliders();
         }
     }
 
-    [All<UpdateTilemapCollidersEventComponent>]
     private void RemoveUpdateTilemapCollidersEvent(Entity entity)
     {
-        entity.Add(new DestroyedComponent());
+        entity.Add<DestroyedComponent>();
     }
 
-    [All<TilemapColliderComponent>]
     private void RemoveTilemapColliders(Entity entity)
     {
-        entity.Add(new DestroyedComponent());
+        entity.Add<DestroyedComponent>();
     }
 
     private void UpdateTilemapColliders()
@@ -81,6 +88,6 @@ public class TilemapColliderSystem : EcsSystem, IStartSystem, IUpdateSystem
         var tilemapCollider = World.Entity();
         tilemapCollider.Set(new TransformComponent());
         tilemapCollider.Set(new RigidbodyComponent(body));
-        tilemapCollider.Set(new TilemapColliderComponent());
+        tilemapCollider.Add<TilemapColliderComponent>();
     }
 }

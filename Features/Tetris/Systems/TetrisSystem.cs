@@ -44,6 +44,17 @@ public class TetrisSystem : EcsSystem, ISetupSystem, IUpdateSystem
     private readonly float blockHorizontalSpeed = 2f;
     private Entity currentShapeRoot;
 
+    private Query updateRootPositionsQuery;
+    private Query updateRootPositions_1Query;
+    private Query updateRootBlockPositionsQuery;
+    private Query updateBlockPositionsQuery;
+    private Query placeBlocksQuery;
+    private Query removeMatchingBlockTilesQuery;
+    private Query movePlayerOutOfTileQuery;
+    private Query resetIfPlayerOutOfBoundsQuery;
+    private Query resetGameQuery;
+    private Query removeAllTetrisBlocksQuery;
+
     private readonly List<TetrisShapeDefinition> shapes = new();
 
     private readonly ResourceManager resourceManager;
@@ -187,6 +198,17 @@ public class TetrisSystem : EcsSystem, ISetupSystem, IUpdateSystem
             DefaultTexture = resourceManager.GetResource(BaseMod.TileRed),
             SnowTexture = resourceManager.GetResource(WinterMod.TileRed),
         });
+
+        updateRootPositionsQuery = World.Query(World.FilterBuilder<PlayerComponent, TransformComponent>());
+        updateRootPositions_1Query = World.Query(World.FilterBuilder<TetrisRootComponent, TransformComponent>());
+        updateRootBlockPositionsQuery = World.Query(World.FilterBuilder<TetrisRootComponent, TransformComponent>());
+        updateBlockPositionsQuery = World.Query(World.FilterBuilder<TetrisBlockComponent, TransformComponent>());
+        placeBlocksQuery = World.Query(World.FilterBuilder<TetrisRootComponent>());
+        removeMatchingBlockTilesQuery = World.Query(World.FilterBuilder<TetrisRootComponent>());
+        movePlayerOutOfTileQuery = World.Query(World.FilterBuilder<PlayerComponent, TransformComponent>());
+        resetIfPlayerOutOfBoundsQuery = World.Query(World.FilterBuilder<PlayerComponent, TransformComponent>());
+        resetGameQuery = World.Query(World.FilterBuilder<PlayerComponent, TransformComponent, VelocityComponent>());
+        removeAllTetrisBlocksQuery = World.Query(World.FilterBuilder().With<TetrisRootComponent>().Or().With<TetrisBlockComponent>());
     }
 
     public void Update()
@@ -227,26 +249,26 @@ public class TetrisSystem : EcsSystem, ISetupSystem, IUpdateSystem
             PlaceShape();
         }
 
-        UpdateRootPositionsQuery(World);
-        UpdateRootBlockPositionsQuery(World);
+        updateRootPositionsQuery.Each<TransformComponent>(UpdateRootPositions);
+        updateRootBlockPositionsQuery.Each<TetrisRootComponent, TransformComponent>(UpdateRootBlockPositions);
 
-        UpdateBlockPositionsQuery(World);
+        updateBlockPositionsQuery.Each<TetrisBlockComponent, TransformComponent>(UpdateBlockPositions);
 
-        MovePlayerOutOfTileQuery(World);
+        movePlayerOutOfTileQuery.Each<TransformComponent>(MovePlayerOutOfTile);
 
-        ResetIfPlayerOutOfBoundsQuery(World);
+        resetIfPlayerOutOfBoundsQuery.Each<TransformComponent>(ResetIfPlayerOutOfBounds);
         for (var x = 0; x < tilemap.Tiles.GetLength(0); x++)
         {
             if (tilemap.Tiles[x, tilemap.Tiles.GetLength(1) - 1].IsWall)
             {
-                ResetGameQuery(World);
+                resetGameQuery.Each<TransformComponent, VelocityComponent>(ResetGame);
             }
         }
     }
 
     private void PlaceShape()
     {
-        PlaceBlocksQuery(World);
+        placeBlocksQuery.Each<TetrisRootComponent>(PlaceBlocks);
 
         var shape = shapes[random.Next(0, shapes.Count)];
 
@@ -296,13 +318,17 @@ public class TetrisSystem : EcsSystem, ISetupSystem, IUpdateSystem
         }
     }
 
-    [All<PlayerComponent>]
     private void UpdateRootPositions(ref TransformComponent playerTransform)
     {
-        UpdateRootPositions_1Query(World, ref playerTransform);
+        var playerTransformLocal = playerTransform;
+        updateRootPositions_1Query.Each((ref TetrisRootComponent root, ref TransformComponent transform) =>
+        {
+            UpdateRootPositions_1(ref playerTransformLocal, ref root, ref transform);
+        });
+        playerTransform = playerTransformLocal;
     }
 
-    private void UpdateRootPositions_1([Data] ref TransformComponent playerTransform, ref TetrisRootComponent root, ref TransformComponent transform)
+    private void UpdateRootPositions_1(ref TransformComponent playerTransform, ref TetrisRootComponent root, ref TransformComponent transform)
     {
         var minX = 0;
         var maxX = 9;
@@ -419,7 +445,7 @@ public class TetrisSystem : EcsSystem, ISetupSystem, IUpdateSystem
 
         if (actualY == predictedY)
         {
-            entity.Add(new ShouldPlaceTetrisEventComponent());
+            entity.Set(new ShouldPlaceTetrisEventComponent());
         }
 
         root.PredictedBlockPositions.RemoveAll(position => position.Y >= tilemap.Tiles.GetLength(1));
@@ -454,9 +480,9 @@ public class TetrisSystem : EcsSystem, ISetupSystem, IUpdateSystem
             tile.Shape = root.Shape;
         }
 
-        World.Create(new UpdateTilemapCollidersEventComponent());
+        World.Entity().Set(new UpdateTilemapCollidersEventComponent());
 
-        RemoveAllTetrisBlocksQuery(World);
+        removeAllTetrisBlocksQuery.Each(RemoveAllTetrisBlocks);
         RemoveMatchingBlockTiles(ref root);
     }
 
@@ -480,7 +506,7 @@ public class TetrisSystem : EcsSystem, ISetupSystem, IUpdateSystem
                 if (IsMatchingTileAndNotPartOfSelf(targetPosition, ref root))
                 {
                     RecursiveRemove(targetPosition, root.Shape);
-                    World.Create(new UpdateTilemapCollidersEventComponent());
+                    World.Entity().Set(new UpdateTilemapCollidersEventComponent());
 
                     while (TryApplyBlockGravity()) {}
 
@@ -616,7 +642,6 @@ public class TetrisSystem : EcsSystem, ISetupSystem, IUpdateSystem
         }
     }
 
-    [All<PlayerComponent>]
     private void MovePlayerOutOfTile(ref TransformComponent transform)
     {
         var position = new TetrisVector2Int((int)MathF.Round(transform.Position.X), (int)MathF.Round(transform.Position.Y));
@@ -640,7 +665,6 @@ public class TetrisSystem : EcsSystem, ISetupSystem, IUpdateSystem
         }
     }
 
-    [All<PlayerComponent>]
     private void ResetIfPlayerOutOfBounds(ref TransformComponent transform)
     {
         if (!(transform.Position.Y < -1f) && !(transform.Position.Y > 20.5f))
@@ -648,10 +672,9 @@ public class TetrisSystem : EcsSystem, ISetupSystem, IUpdateSystem
             return;
         }
 
-        ResetGameQuery(World);
+        resetGameQuery.Each<TransformComponent, VelocityComponent>(ResetGame);
     }
 
-    [All<PlayerComponent>]
     private void ResetGame(ref TransformComponent playerTransform, ref VelocityComponent velocity)
     {
         audioSystem.Play(FmodAudioSystem.Restart);
@@ -660,7 +683,7 @@ public class TetrisSystem : EcsSystem, ISetupSystem, IUpdateSystem
         velocity.Velocity = Vector2.Zero;
         playerControllerSystem.SetIsGravityDown(true);
 
-        RemoveAllTetrisBlocksQuery(World);
+        removeAllTetrisBlocksQuery.Each(RemoveAllTetrisBlocks);
 
         for (var x = 0; x < tilemap.Tiles.GetLength(0); x++)
         {
@@ -678,7 +701,7 @@ public class TetrisSystem : EcsSystem, ISetupSystem, IUpdateSystem
         SpeedMultiplier = 1;
         DifficultyIncreaseTimer = 0;
 
-        World.Create(new UpdateTilemapCollidersEventComponent());
+        World.Entity().Add<UpdateTilemapCollidersEventComponent>();
 
         Directory.CreateDirectory(GameDirectories.PersistentDataDirectory);
         using (var stream = new FileStream(ScoresFilePath, FileMode.Append))
@@ -690,12 +713,11 @@ public class TetrisSystem : EcsSystem, ISetupSystem, IUpdateSystem
         HighScores.Sort((a, b) => -a.CompareTo(b));
     }
 
-    [Any<TetrisRootComponent, TetrisBlockComponent>]
     private void RemoveAllTetrisBlocks(Entity entity)
     {
         if (!entity.Has<DestroyedComponent>())
         {
-            entity.Add(new DestroyedComponent());
+            entity.Add<DestroyedComponent>();
         }
     }
 }

@@ -52,7 +52,7 @@ public class CreateEntitiesSystem : EcsSystem, IStartSystem
             feet.Restitution = 0;
 
             var player = World.Entity();
-            player.Set(new PlayerComponent());
+            player.Add<PlayerComponent>();
             player.Set(new TransformComponent
             {
                 Position = new Vector2(4f, 0),

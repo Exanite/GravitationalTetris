@@ -9,18 +9,22 @@ using Exanite.GravitationalTetris.Features.Sprites;
 using Exanite.GravitationalTetris.Features.Sprites.Systems;
 using Exanite.GravitationalTetris.Features.Tetris.Components;
 using Exanite.ResourceManagement;
+using Flecs.NET.Core;
 
 namespace Exanite.GravitationalTetris.Features.Tiles.Systems;
 
 public class TilemapRenderSystem : EcsSystem, IRenderSystem, ISetupSystem
 {
+    private IResourceHandle<Texture2D> emptyTileTexture = null!;
+    private IResourceHandle<Texture2D> placeholderTileTexture = null!;
+
+    private Query renderToCameraQuery;
+    private Query drawPlaceholdersQuery;
+
     private readonly GameTilemapData tilemap;
     private readonly ResourceManager resourceManager;
     private readonly SimulationTime time;
     private readonly SpriteBatchSystem spriteBatchSystem;
-
-    private IResourceHandle<Texture2D> emptyTileTexture = null!;
-    private IResourceHandle<Texture2D> placeholderTileTexture = null!;
 
     public TilemapRenderSystem(
         GameTilemapData tilemap,
@@ -38,16 +42,17 @@ public class TilemapRenderSystem : EcsSystem, IRenderSystem, ISetupSystem
     {
         emptyTileTexture = resourceManager.GetResource(BaseMod.TileNone);
         placeholderTileTexture = resourceManager.GetResource(BaseMod.TilePlaceholder);
+
+        renderToCameraQuery = World.Query(World.FilterBuilder<CameraComponent, CameraProjectionComponent>());
+        drawPlaceholdersQuery = World.Query(World.FilterBuilder<TetrisRootComponent>());
     }
 
     public void Render()
     {
-        ForEachCameraQuery(World);
+        renderToCameraQuery.Each<CameraProjectionComponent>(RenderToCamera);
     }
 
-    [Query]
-    [All<CameraComponent>]
-    private void ForEachCamera(ref CameraProjectionComponent cameraProjection)
+    private void RenderToCamera(ref CameraProjectionComponent cameraProjection)
     {
         spriteBatchSystem.Begin(new SpriteBeginDrawOptions
         {
@@ -58,7 +63,7 @@ public class TilemapRenderSystem : EcsSystem, IRenderSystem, ISetupSystem
             DrawTiles();
 
             World.Each<TetrisRootComponent>(DrawPlaceholders);
-            DrawPlaceholdersQuery(World);
+            drawPlaceholdersQuery.Each<TetrisRootComponent>(DrawPlaceholders);
         }
         spriteBatchSystem.End();
     }
