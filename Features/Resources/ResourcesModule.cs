@@ -51,7 +51,7 @@ public class ResourcesModule : Module
 
                 resourceManager.RegisterLoader<Shader>(loadOperation =>
                 {
-                    using var stream = resourceManager.Open(loadOperation.Key);
+                    using var stream = loadOperation.Open(loadOperation.Key);
                     using var reader = new StreamReader(stream);
 
                     ShaderType type;
@@ -76,7 +76,7 @@ public class ResourcesModule : Module
 
                 resourceManager.RegisterLoader<Texture2D>(loadOperation =>
                 {
-                    using var stream = resourceManager.Open(loadOperation.Key);
+                    using var stream = loadOperation.Open(loadOperation.Key);
 
                     var texture = new Texture2D(loadOperation.Key, stream, rendererContext);
                     loadOperation.Fulfill(texture);
@@ -87,7 +87,7 @@ public class ResourcesModule : Module
                 // Myra
                 resourceManager.RegisterLoader<TextureRegionAtlas>(loadOperation =>
                 {
-                    using var stream = resourceManager.Open(loadOperation.Key);
+                    using var stream = loadOperation.Open(loadOperation.Key);
                     using var streamReader = new StreamReader(stream);
                     var data = streamReader.ReadToEnd();
 
@@ -98,7 +98,7 @@ public class ResourcesModule : Module
 
                 resourceManager.RegisterLoader<StaticSpriteFont>(loadOperation =>
                 {
-                    using var stream = resourceManager.Open(loadOperation.Key);
+                    using var stream = loadOperation.Open(loadOperation.Key);
                     using var streamReader = new StreamReader(stream);
                     var fontData = streamReader.ReadToEnd();
 
@@ -146,7 +146,7 @@ public class ResourcesModule : Module
 
                 resourceManager.RegisterLoader<Stylesheet>(loadOperation =>
                 {
-                    using var stream = resourceManager.Open(loadOperation.Key);
+                    using var stream = loadOperation.Open(loadOperation.Key);
                     using var streamReader = new StreamReader(stream);
                     var xml = streamReader.ReadToEnd();
 
@@ -263,7 +263,7 @@ public class ResourcesModule : Module
                         fontSystemSettings.ExistingTextureUsedSpace = fontSystemLoadingSettings.ExistingTextureUsedSpace;
                     }
 
-                    using var stream = resourceManager.Open(loadOperation.Key);
+                    using var stream = loadOperation.Open(loadOperation.Key);
                     var fontSystem = new FontSystem(fontSystemSettings);
                     fontSystem.AddFont(stream);
 
@@ -271,7 +271,7 @@ public class ResourcesModule : Module
                     {
                         foreach (var file in fontSystemLoadingSettings.AdditionalFonts)
                         {
-                            using var stream2 = resourceManager.Open(file);
+                            using var stream2 = loadOperation.Open(file);
                             fontSystem.AddFont(stream2);
                         }
                     }
