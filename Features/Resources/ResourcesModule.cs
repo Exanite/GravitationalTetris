@@ -30,7 +30,14 @@ public class ResourcesModule : Module
                 var thread = ctx.Resolve<Thread>();
                 var logger = ctx.Resolve<ILogger>();
 
-                return new ResourceManager(thread, logger, true);
+                return new ResourceManager(new ResourceManagerSettings
+                {
+                    TargetThread = thread,
+                    Logger = logger,
+
+                    EnableHotReload = true,
+                    EnableImmediateHotReload = true,
+                });
             })
             .SingleInstance()
             .AsSelf()
