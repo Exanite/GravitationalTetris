@@ -5,7 +5,7 @@ using Arch.Core.Extensions;
 using Arch.System;
 using Arch.System.SourceGenerator;
 using Exanite.Ecs.Systems;
-using Exanite.GravitationalTetris.Features.Lifecycles.Components;
+using Exanite.Engine.Lifecycles.Components;
 using Exanite.GravitationalTetris.Features.Physics.Components;
 using Exanite.GravitationalTetris.Features.Tiles.Components;
 using Exanite.GravitationalTetris.Features.Transforms.Components;
