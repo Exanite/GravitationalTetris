@@ -105,52 +105,52 @@ public class Game1 : Game
     {
         var config = new SystemScheduler.Config();
 
-        config.RegisterAllCallbacks<WindowSystem>();
-        config.RegisterAllCallbacks<UpdateWindowSizeSystem>();
+        config.Register<WindowSystem>();
+        config.Register<UpdateWindowSizeSystem>();
 
-        config.RegisterAllCallbacks<TimeSystem>();
-        config.RegisterAllCallbacks<InputSystem>();
+        config.Register<TimeSystem>();
+        config.Register<InputSystem>();
 
-        config.RegisterAllCallbacks<CreateEntitiesSystem>();
+        config.Register<CreateEntitiesSystem>();
 
-        config.RegisterAllCallbacks<PhysicsSimulationSystem>();
-        config.RegisterAllCallbacks<PhysicsContactSystem>();
+        config.Register<PhysicsSimulationSystem>();
+        config.Register<PhysicsContactSystem>();
 
-        config.RegisterAllCallbacks<PlayerControllerSystem>();
-        config.RegisterAllCallbacks<TetrisSystem>();
-        config.RegisterAllCallbacks<TilemapColliderSystem>();
+        config.Register<PlayerControllerSystem>();
+        config.Register<TetrisSystem>();
+        config.Register<TilemapColliderSystem>();
 
-        config.RegisterAllCallbacks<FmodAudioSystem>();
+        config.Register<FmodAudioSystem>();
 
-        config.RegisterAllCallbacks<ResizeSwapChainSystem>();
-        config.RegisterAllCallbacks<ClearMainRenderTargetSystem>();
+        config.Register<ResizeSwapChainSystem>();
+        config.Register<ClearMainRenderTargetSystem>();
         {
-            config.RegisterAllCallbacks<SetClearColorSystem>();
-            config.RegisterAllCallbacks<CameraProjectionSystem>();
-            config.RegisterAllCallbacks<SpriteBatchSystem>();
+            config.Register<SetClearColorSystem>();
+            config.Register<CameraProjectionSystem>();
+            config.Register<SpriteBatchSystem>();
 
             // World RT
-            config.RegisterAllCallbacks<WorldRenderTextureSystem>();
+            config.Register<WorldRenderTextureSystem>();
 
-            config.RegisterAllCallbacks<TilemapRenderSystem>();
-            config.RegisterAllCallbacks<SpriteRenderSystem>();
+            config.Register<TilemapRenderSystem>();
+            config.Register<SpriteRenderSystem>();
 
             // Main RT
-            config.RegisterAllCallbacks<BloomSystem>();
+            config.Register<BloomSystem>();
 
-            config.RegisterAllCallbacks<UseMainRenderTargetSystem>();
+            config.Register<UseMainRenderTargetSystem>();
 
-            config.RegisterAllCallbacks<ToneMappingSystem>();
+            config.Register<ToneMappingSystem>();
 
-            config.RegisterAllCallbacks<RenderWorldToMainSystem>();
+            config.Register<RenderWorldToMainSystem>();
 
-            config.RegisterAllCallbacks<MyraUiSystem>();
-            config.RegisterAllCallbacks<TetrisUiSystem>();
+            config.Register<MyraUiSystem>();
+            config.Register<TetrisUiSystem>();
         }
-        config.RegisterAllCallbacks<PresentSwapChainSystem>();
+        config.Register<PresentSwapChainSystem>();
 
-        config.RegisterAllCallbacks<RemoveDestroyedSystem>();
-        config.RegisterAllCallbacks<RunResourceManagerSystem>();
+        config.Register<RemoveDestroyedSystem>();
+        config.Register<RunResourceManagerSystem>();
 
         return config;
     }
