@@ -223,7 +223,7 @@ public partial class TetrisSystem : EcsSystem, ISetupSystem, IUpdateSystem
         {
             PlaceShape();
         }
-        else if (input.GetKeyDown(SDL.SDL_Scancode.SDL_SCANCODE_SPACE) || World.CountEntities(ShouldShouldPlaceTetris_QueryDescription) > 0)
+        else if (input.GetKeyDown(SDL.SDL_Scancode.SDL_SCANCODE_SPACE) || input.GetKeyDown(KeyCode.Mouse0) || World.CountEntities(ShouldShouldPlaceTetris_QueryDescription) > 0)
         {
             audioSystem.Play(FmodAudioSystem.SwitchGravity);
 
