@@ -61,7 +61,7 @@ public class FmodAudioSystem : ISetupSystem, IUpdateSystem, IDisposable
 
     private Bank LoadBank(string resourceKey)
     {
-        using (var stream = resourceManager.Open(resourceKey))
+        using (var stream = resourceManager.OpenFile(resourceKey))
         using (var memoryStream = new MemoryStream())
         {
             stream.CopyTo(memoryStream);
