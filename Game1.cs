@@ -19,7 +19,6 @@ using Exanite.GravitationalTetris.Features.Physics.Systems;
 using Exanite.GravitationalTetris.Features.Players.Systems;
 using Exanite.GravitationalTetris.Features.Rendering.Systems;
 using Exanite.GravitationalTetris.Features.Resources;
-using Exanite.GravitationalTetris.Features.Resources.Systems;
 using Exanite.GravitationalTetris.Features.Sprites.Systems;
 using Exanite.GravitationalTetris.Features.Tetris.Systems;
 using Exanite.GravitationalTetris.Features.Tiles;
@@ -150,7 +149,6 @@ public class Game1 : Game
         config.Register<PresentSwapChainSystem>();
 
         config.Register<RemoveDestroyedSystem>();
-        config.Register<RunResourceManagerSystem>();
 
         return config;
     }

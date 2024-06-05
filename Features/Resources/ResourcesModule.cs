@@ -24,17 +24,12 @@ public class ResourcesModule : Module
     {
         base.Load(builder);
 
-        // Assumed to be the main thread
-        builder.Register(_ => Thread.CurrentThread).SingleInstance();
-
         builder.Register(ctx =>
             {
-                var thread = ctx.Resolve<Thread>();
                 var logger = ctx.Resolve<ILogger>();
 
                 return new ResourceManager(new ResourceManagerSettings
                 {
-                    TargetThread = thread,
                     Logger = logger,
 
                     EnableHotReload = true,
@@ -79,8 +74,6 @@ public class ResourcesModule : Module
 
                     var shader = new Shader(loadOperation.Key, reader.ReadToEnd(), type, rendererContext);
                     loadOperation.Fulfill(shader);
-
-                    return Task.CompletedTask;
                 }, false);
 
                 resourceManager.RegisterLoader<Texture2D>(loadOperation =>
@@ -89,8 +82,6 @@ public class ResourcesModule : Module
 
                     var texture = new Texture2D(loadOperation.Key, stream, rendererContext);
                     loadOperation.Fulfill(texture);
-
-                    return Task.CompletedTask;
                 });
 
                 // Myra
@@ -101,8 +92,6 @@ public class ResourcesModule : Module
                     var data = streamReader.ReadToEnd();
 
                     loadOperation.Fulfill(TextureRegionAtlas.Load(data, name => resourceManager.GetResource<Texture2D>(name).Value));
-
-                    return Task.CompletedTask;
                 });
 
                 resourceManager.RegisterLoader<StaticSpriteFont>(loadOperation =>
@@ -118,8 +107,6 @@ public class ResourcesModule : Module
 
                             return new TextureWithOffset(region.Texture, region.Bounds.Location);
                         }));
-
-                    return Task.CompletedTask;
                 });
 
                 // Original docs:
@@ -131,7 +118,7 @@ public class ResourcesModule : Module
                     {
                         loadOperation.Fulfill(resourceManager.GetResource<StaticSpriteFont>(loadOperation.Key).Value);
 
-                        return Task.CompletedTask;
+                        return;
                     }
 
                     if (loadOperation.Key.Contains(".ttf"))
@@ -146,8 +133,6 @@ public class ResourcesModule : Module
                         var fontSystem = resourceManager.GetResource<FontSystem>(parts[0].Trim()).Value;
 
                         loadOperation.Fulfill(fontSystem.GetFont(fontSize));
-
-                        return Task.CompletedTask;
                     }
 
                     throw new ResourceLoadException(loadOperation.Key, "Failed to load font.");
@@ -234,8 +219,6 @@ public class ResourcesModule : Module
                     }
 
                     loadOperation.Fulfill(Stylesheet.LoadFromSource(xml, textureRegionAtlas, fonts));
-
-                    return Task.CompletedTask;
                 });
 
                 // Original docs:
@@ -252,14 +235,12 @@ public class ResourcesModule : Module
 
                         loadOperation.Fulfill(textureRegionAtlas[parts[1]]);
 
-                        return Task.CompletedTask;
+                        return;
                     }
 
                     // Ordinary texture
                     var texture = resourceManager.GetResource<Texture2D>(loadOperation.Key).Value;
                     loadOperation.Fulfill(new TextureRegion(texture, new Rectangle(0, 0, texture.Width, texture.Height)));
-
-                    return Task.CompletedTask;
                 });
 
                 resourceManager.RegisterLoader<FontSystem>(loadOperation =>
@@ -286,8 +267,6 @@ public class ResourcesModule : Module
                     }
 
                     loadOperation.Fulfill(fontSystem);
-
-                    return Task.CompletedTask;
                 });
             });
     }
