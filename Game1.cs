@@ -47,28 +47,20 @@ public class Game1 : Game
         // Logging
         builder.RegisterModule(new LoggingModule(GameDirectories.LogsDirectory));
 
-        // Rendering
-        builder.Register(_ =>
+        // Windowing
+        builder.Register(_ => new WindowSettings()
         {
-            return new RendererContextSettings
-            {
-                UseCombinedSamplers = false,
-            };
-        });
+            Name = "Gravitational Tetris",
+        }).SingleInstance();
 
-        builder.Register(_ =>
-            {
-                return new Window("Gravitational Tetris");
-            })
-            .SingleInstance();
+        builder.RegisterType<Window>().SingleInstance();
 
+        // Rendering
         builder.Register(ctx =>
             {
-                var window = ctx.Resolve<Window>();
                 var logger = ctx.Resolve<ILogger>();
-                var settings = ctx.Resolve<RendererContextSettings>();
 
-                return new RendererContext(GraphicsApi.Vulkan, window, logger, settings);
+                return new RendererContext(GraphicsApi.Vulkan, logger);
             })
             .SingleInstance();
 

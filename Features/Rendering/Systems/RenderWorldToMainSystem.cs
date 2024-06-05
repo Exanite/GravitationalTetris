@@ -1,6 +1,7 @@
 using Diligent;
 using Exanite.Ecs.Systems;
 using Exanite.Engine.Rendering;
+using Exanite.Engine.Windowing;
 using Exanite.ResourceManagement;
 
 namespace Exanite.GravitationalTetris.Features.Rendering.Systems;
@@ -16,12 +17,14 @@ public class RenderWorldToMainSystem : ISetupSystem, IRenderSystem, ITeardownSys
     private readonly RendererContext rendererContext;
     private readonly IResourceManager resourceManager;
     private readonly WorldRenderTextureSystem worldRenderTextureSystem;
+    private readonly Window window;
 
-    public RenderWorldToMainSystem(RendererContext rendererContext, IResourceManager resourceManager, WorldRenderTextureSystem worldRenderTextureSystem)
+    public RenderWorldToMainSystem(RendererContext rendererContext, IResourceManager resourceManager, WorldRenderTextureSystem worldRenderTextureSystem, Window window)
     {
         this.rendererContext = rendererContext;
         this.resourceManager = resourceManager;
         this.worldRenderTextureSystem = worldRenderTextureSystem;
+        this.window = window;
     }
 
     public void Setup()
@@ -86,7 +89,7 @@ public class RenderWorldToMainSystem : ISetupSystem, IRenderSystem, ITeardownSys
     public void Render()
     {
         var deviceContext = rendererContext.DeviceContext;
-        var swapChain = rendererContext.SwapChain;
+        var swapChain = window.SwapChain;
 
         renderTargets[0] = swapChain.GetCurrentBackBufferRTV();
         deviceContext.SetRenderTargets(renderTargets, null, ResourceStateTransitionMode.Transition);

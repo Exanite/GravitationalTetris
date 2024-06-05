@@ -3,6 +3,7 @@ using System.Numerics;
 using Diligent;
 using Exanite.Ecs.Systems;
 using Exanite.Engine.Rendering;
+using Exanite.Engine.Windowing;
 using Exanite.ResourceManagement;
 
 namespace Exanite.GravitationalTetris.Features.Rendering.Systems;
@@ -36,12 +37,14 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
     private readonly RendererContext rendererContext;
     private readonly IResourceManager resourceManager;
     private readonly WorldRenderTextureSystem worldRenderTextureSystem;
+    private readonly Window window;
 
-    public BloomSystem(RendererContext rendererContext, IResourceManager resourceManager, WorldRenderTextureSystem worldRenderTextureSystem)
+    public BloomSystem(RendererContext rendererContext, IResourceManager resourceManager, WorldRenderTextureSystem worldRenderTextureSystem, Window window)
     {
         this.rendererContext = rendererContext;
         this.resourceManager = resourceManager;
         this.worldRenderTextureSystem = worldRenderTextureSystem;
+        this.window = window;
 
         renderTextures = new ITexture[maxIterationCount];
         renderTextureViews = new ITextureView[maxIterationCount];
@@ -213,7 +216,7 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
         ResizeRenderTextures();
 
         var deviceContext = rendererContext.DeviceContext;
-        var swapChain = rendererContext.SwapChain;
+        var swapChain = window.SwapChain;
 
         if (iterationCount != 0)
         {

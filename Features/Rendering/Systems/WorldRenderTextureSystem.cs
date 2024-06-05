@@ -2,6 +2,7 @@ using System.Numerics;
 using Diligent;
 using Exanite.Ecs.Systems;
 using Exanite.Engine.Rendering;
+using Exanite.Engine.Windowing;
 
 namespace Exanite.GravitationalTetris.Features.Rendering.Systems;
 
@@ -19,10 +20,12 @@ public class WorldRenderTextureSystem : ISetupSystem, IRenderSystem, ITeardownSy
     private readonly ITextureView[] renderTargets = new ITextureView[1];
 
     private readonly RendererContext rendererContext;
+    private readonly Window window;
 
-    public WorldRenderTextureSystem(RendererContext rendererContext)
+    public WorldRenderTextureSystem(RendererContext rendererContext, Window window)
     {
         this.rendererContext = rendererContext;
+        this.window = window;
     }
 
     public void Setup()
@@ -45,7 +48,7 @@ public class WorldRenderTextureSystem : ISetupSystem, IRenderSystem, ITeardownSy
 
     private void ResizeRenderTextures()
     {
-        var swapChain = rendererContext.SwapChain;
+        var swapChain = window.SwapChain;
         var swapChainDesc = swapChain.GetDesc();
 
         if (previousWidth != swapChainDesc.Width || previousHeight != swapChainDesc.Height)
@@ -59,7 +62,7 @@ public class WorldRenderTextureSystem : ISetupSystem, IRenderSystem, ITeardownSy
     private void CreateRenderTextures()
     {
         var renderDevice = rendererContext.RenderDevice;
-        var swapChain = rendererContext.SwapChain;
+        var swapChain = window.SwapChain;
         var swapChainDesc = swapChain.GetDesc();
 
         WorldColor = renderDevice.CreateTexture(
