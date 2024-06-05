@@ -22,6 +22,8 @@ public class ResourcesModule : Module
 {
     protected override void Load(ContainerBuilder builder)
     {
+        base.Load(builder);
+
         // Assumed to be the main thread
         builder.Register(_ => Thread.CurrentThread).SingleInstance();
 
