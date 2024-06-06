@@ -99,7 +99,7 @@ public class Game1 : Game
         config.Register<WindowSystem>();
         config.Register<UpdateWindowSizeSystem>();
 
-        config.Register<TimeSystem>();
+        config.Register<SimulationTimeSystem>();
         config.Register<InputSystem>();
 
         config.Register<CreateEntitiesSystem>();
