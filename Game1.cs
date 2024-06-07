@@ -38,7 +38,7 @@ public class Game1 : Game
     {
         var builder = new ContainerBuilder();
 
-        // Container
+        // Game
         builder.RegisterInstance(this).SingleInstance();
 
         // Misc
