@@ -80,7 +80,7 @@ public class ResourcesModule : Module
                 {
                     using var stream = loadOperation.Open(loadOperation.Key);
 
-                    var texture = new Texture2D(loadOperation.Key, stream, rendererContext);
+                    var texture = new Texture2D(rendererContext, loadOperation.Key, stream);
                     loadOperation.Fulfill(texture);
                 });
 

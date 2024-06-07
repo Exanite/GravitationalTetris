@@ -21,7 +21,7 @@ public class ExaniteEngineFontTextureManager : ITexture2DManager, IDisposable
 
     public object CreateTexture(int width, int height)
     {
-        var texture = new Texture2D($"FontStashSharp Texture #{nextId}", width, height, rendererContext, Usage.Dynamic);
+        var texture = new Texture2D(rendererContext, $"FontStashSharp Texture #{nextId}", width, height, Usage.Dynamic);
         textures.Add(texture);
 
         nextId++;
