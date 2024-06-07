@@ -175,7 +175,7 @@ public class SpriteBatchSystem : ISetupSystem, IRenderSystem, IDisposable
         {
             End();
 
-            textureVariable.Set(options.Texture.DefaultView, SetShaderResourceFlags.AllowOverwrite);
+            textureVariable.Set(options.Texture.ShaderResource, SetShaderResourceFlags.AllowOverwrite);
             currentTexture = options.Texture;
         }
 
