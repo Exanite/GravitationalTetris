@@ -12,9 +12,6 @@ public class WorldRenderTextureSystem : ISetupSystem, IRenderSystem, ITeardownSy
     public ColorRenderTexture2D WorldColor = null!;
     public DepthRenderTexture2D WorldDepth = null!;
 
-    private uint previousWidth;
-    private uint previousHeight;
-
     private readonly ITextureView[] renderTargets = new ITextureView[1];
 
     private readonly RendererContext rendererContext;
@@ -49,12 +46,10 @@ public class WorldRenderTextureSystem : ISetupSystem, IRenderSystem, ITeardownSy
         var swapChain = window.SwapChain;
         var swapChainDesc = swapChain.GetDesc();
 
-        if (previousWidth != swapChainDesc.Width || previousHeight != swapChainDesc.Height)
-        {
-            WorldColor.Dispose();
-            WorldDepth.Dispose();
-            CreateRenderTextures();
-        }
+        var size = new Vector2Int((int)swapChainDesc.Width, (int)swapChainDesc.Height);
+
+        WorldColor.ResizeIfNeeded(size);
+        WorldDepth.ResizeIfNeeded(size);
     }
 
     private void CreateRenderTextures()
@@ -66,9 +61,6 @@ public class WorldRenderTextureSystem : ISetupSystem, IRenderSystem, ITeardownSy
 
         WorldColor = new ColorRenderTexture2D(rendererContext, "World Color", size);
         WorldDepth = new DepthRenderTexture2D(rendererContext, "World Depth", size);
-
-        previousWidth = swapChainDesc.Width;
-        previousHeight = swapChainDesc.Height;
     }
 
     public void Teardown()
