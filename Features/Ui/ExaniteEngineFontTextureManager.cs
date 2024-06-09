@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using Diligent;
+using Exanite.Core.Numerics;
 using Exanite.Engine.Rendering;
 using FontStashSharp.Interfaces;
 
@@ -21,7 +22,7 @@ public class ExaniteEngineFontTextureManager : ITexture2DManager, IDisposable
 
     public object CreateTexture(int width, int height)
     {
-        var texture = new Texture2D(rendererContext, $"FontStashSharp Texture #{nextId}", width, height, Usage.Dynamic);
+        var texture = new Texture2D(rendererContext, $"FontStashSharp Texture #{nextId}", new Vector2Int(width, height), Usage.Dynamic);
         textures.Add(texture);
 
         nextId++;
