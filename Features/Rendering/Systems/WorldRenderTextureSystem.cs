@@ -1,5 +1,6 @@
 using System.Numerics;
 using Diligent;
+using Exanite.Core.Numerics;
 using Exanite.Ecs.Systems;
 using Exanite.Engine.Rendering;
 using Exanite.Engine.Windowing;
@@ -8,11 +9,8 @@ namespace Exanite.GravitationalTetris.Features.Rendering.Systems;
 
 public class WorldRenderTextureSystem : ISetupSystem, IRenderSystem, ITeardownSystem
 {
-    public ITexture WorldColor = null!;
-    public ITextureView WorldColorView = null!;
-
-    public ITexture WorldDepth = null!;
-    public ITextureView WorldDepthView = null!;
+    public ColorRenderTexture2D WorldColor = null!;
+    public DepthRenderTexture2D WorldDepth = null!;
 
     private uint previousWidth;
     private uint previousHeight;
@@ -39,11 +37,11 @@ public class WorldRenderTextureSystem : ISetupSystem, IRenderSystem, ITeardownSy
 
         ResizeRenderTextures();
 
-        renderTargets[0] = WorldColorView;
+        renderTargets[0] = WorldColor.RenderTarget;
 
-        deviceContext.SetRenderTargets(renderTargets, WorldDepthView, ResourceStateTransitionMode.Transition);
-        deviceContext.ClearRenderTarget(WorldColorView, Vector4.Zero, ResourceStateTransitionMode.Transition);
-        deviceContext.ClearDepthStencil(WorldDepthView, ClearDepthStencilFlags.Depth | ClearDepthStencilFlags.Stencil, 1, 0, ResourceStateTransitionMode.Transition);
+        deviceContext.SetRenderTargets(renderTargets, WorldDepth.DepthStencil, ResourceStateTransitionMode.Transition);
+        deviceContext.ClearRenderTarget(WorldColor.RenderTarget, Vector4.Zero, ResourceStateTransitionMode.Transition);
+        deviceContext.ClearDepthStencil(WorldDepth.DepthStencil, ClearDepthStencilFlags.Depth | ClearDepthStencilFlags.Stencil, 1, 0, ResourceStateTransitionMode.Transition);
     }
 
     private void ResizeRenderTextures()
@@ -61,37 +59,13 @@ public class WorldRenderTextureSystem : ISetupSystem, IRenderSystem, ITeardownSy
 
     private void CreateRenderTextures()
     {
-        var renderDevice = rendererContext.RenderDevice;
         var swapChain = window.SwapChain;
         var swapChainDesc = swapChain.GetDesc();
 
-        WorldColor = renderDevice.CreateTexture(
-            new TextureDesc
-            {
-                Name = "World Color Render Texture",
-                Type = ResourceDimension.Tex2d,
-                Width = swapChainDesc.Width,
-                Height = swapChainDesc.Height,
-                Format = CommonTextureFormats.HdrTextureFormat,
-                BindFlags = BindFlags.ShaderResource | BindFlags.RenderTarget,
-                Usage = Usage.Default,
-            });
+        var size = new Vector2Int((int)swapChainDesc.Width, (int)swapChainDesc.Height);
 
-        WorldColorView = WorldColor.GetDefaultView(TextureViewType.RenderTarget);
-
-        WorldDepth = renderDevice.CreateTexture(
-            new TextureDesc
-            {
-                Name = "World Depth Render Texture",
-                Type = ResourceDimension.Tex2d,
-                Width = swapChainDesc.Width,
-                Height = swapChainDesc.Height,
-                Format = CommonTextureFormats.DepthTextureFormat,
-                BindFlags = BindFlags.ShaderResource | BindFlags.DepthStencil,
-                Usage = Usage.Default,
-            });
-
-        WorldDepthView = WorldDepth.GetDefaultView(TextureViewType.DepthStencil);
+        WorldColor = new ColorRenderTexture2D(rendererContext, "World Color", size);
+        WorldDepth = new DepthRenderTexture2D(rendererContext, "World Depth", size);
 
         previousWidth = swapChainDesc.Width;
         previousHeight = swapChainDesc.Height;

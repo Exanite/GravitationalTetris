@@ -118,7 +118,7 @@ public class ToneMappingSystem : ISetupSystem, IRenderSystem, ITeardownSystem
 
         // Disable depth buffer
         // Todo Figure out why DepthEnable=false doesn't work
-        renderTargets[0] = worldRenderTextureSystem.WorldColorView;
+        renderTargets[0] = worldRenderTextureSystem.WorldColor.RenderTarget;
         deviceContext.SetRenderTargets(renderTargets, null, ResourceStateTransitionMode.Transition);
 
         using (uniformBuffer.Map(MapType.Write, MapFlags.Discard, out var uniformData))
@@ -126,7 +126,7 @@ public class ToneMappingSystem : ISetupSystem, IRenderSystem, ITeardownSystem
             uniformData[0].Time = time.Time;
         }
 
-        textureVariable?.Set(worldRenderTextureSystem.WorldColorView, SetShaderResourceFlags.AllowOverwrite);
+        textureVariable?.Set(worldRenderTextureSystem.WorldColor.RenderTarget, SetShaderResourceFlags.AllowOverwrite);
 
         deviceContext.SetPipelineState(pipeline.Value);
         deviceContext.CommitShaderResources(shaderResourceBinding, ResourceStateTransitionMode.Transition);

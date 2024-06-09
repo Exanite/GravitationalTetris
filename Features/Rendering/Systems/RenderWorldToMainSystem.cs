@@ -94,7 +94,7 @@ public class RenderWorldToMainSystem : ISetupSystem, IRenderSystem, ITeardownSys
         renderTargets[0] = swapChain.GetCurrentBackBufferRTV();
         deviceContext.SetRenderTargets(renderTargets, null, ResourceStateTransitionMode.Transition);
 
-        passthroughTextureVariable?.Set(worldRenderTextureSystem.WorldColorView, SetShaderResourceFlags.AllowOverwrite);
+        passthroughTextureVariable?.Set(worldRenderTextureSystem.WorldColor.RenderTarget, SetShaderResourceFlags.AllowOverwrite);
 
         deviceContext.SetPipelineState(passthroughPipeline);
         deviceContext.CommitShaderResources(passthroughResources, ResourceStateTransitionMode.Transition);

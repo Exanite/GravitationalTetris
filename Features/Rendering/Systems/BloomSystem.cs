@@ -365,12 +365,12 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
     // Temporary - Used to reduce coupling
     private ITextureView GetSourceRenderTarget()
     {
-        return worldRenderTextureSystem.WorldColorView;
+        return worldRenderTextureSystem.WorldColor.RenderTarget;
     }
 
     private (uint Width, uint Height) GetSourceSize()
     {
-        var desc = worldRenderTextureSystem.WorldColor.GetDesc();
+        var desc = worldRenderTextureSystem.WorldColor.Handle.GetDesc();
 
         return (desc.Width, desc.Height);
     }
