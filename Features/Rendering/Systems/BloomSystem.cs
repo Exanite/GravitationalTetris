@@ -219,12 +219,12 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
             deviceContext.SetPipelineState(downPipeline);
             for (var i = 0; i < renderTextures.Count; i++)
             {
-                var previousView = i > 0 ? renderTextures[i - 1].RenderTarget : GetSourceRenderTarget();
-                var currentView = renderTextures[i].RenderTarget ;
+                var previousRenderTarget = i > 0 ? renderTextures[i - 1].RenderTarget : GetSourceRenderTexture().RenderTarget;
+                var currentRenderTarget = renderTextures[i].RenderTarget ;
                 var currentTexture = renderTextures[i];
 
-                downTextureVariable?.Set(previousView, SetShaderResourceFlags.AllowOverwrite);
-                renderTargets[0] = currentView;
+                downTextureVariable?.Set(previousRenderTarget, SetShaderResourceFlags.AllowOverwrite);
+                renderTargets[0] = currentRenderTarget;
 
                 using (downUniformBuffer.Map(MapType.Write, MapFlags.Discard, out var downUniformData))
                 {
@@ -258,11 +258,11 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
             deviceContext.SetPipelineState(upPipeline);
             for (var i = renderTextures.Count - 2; i >= 0; i--)
             {
-                var previousView = renderTextures[i + 1].RenderTarget;
-                var currentView = renderTextures[i].RenderTarget;
+                var previousRenderTarget = renderTextures[i + 1].RenderTarget;
+                var currentRenderTarget = renderTextures[i].RenderTarget;
 
-                upTextureVariable?.Set(previousView, SetShaderResourceFlags.AllowOverwrite);
-                renderTargets[0] = currentView;
+                upTextureVariable?.Set(previousRenderTarget, SetShaderResourceFlags.AllowOverwrite);
+                renderTargets[0] = currentRenderTarget;
 
                 deviceContext.SetRenderTargets(renderTargets, null, ResourceStateTransitionMode.Transition);
                 deviceContext.CommitShaderResources(upResources, ResourceStateTransitionMode.Transition);
@@ -274,7 +274,7 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
             }
 
             // Draw bloom to world RT
-            renderTargets[0] = GetSourceRenderTarget();
+            renderTargets[0] = GetSourceRenderTexture().RenderTarget;
             deviceContext.SetRenderTargets(renderTargets, null, ResourceStateTransitionMode.Transition);
 
             deviceContext.SetPipelineState(upPipeline);
@@ -357,9 +357,9 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
     }
 
     // Temporary - Used to reduce coupling
-    private ITextureView GetSourceRenderTarget()
+    private ColorRenderTexture2D GetSourceRenderTexture()
     {
-        return worldRenderTextureSystem.WorldColor.RenderTarget;
+        return worldRenderTextureSystem.WorldColor;
     }
 
     private Vector2Int GetSourceSize()
