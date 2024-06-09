@@ -1,6 +1,5 @@
 using System.Numerics;
 using Diligent;
-using Exanite.Core.Numerics;
 using Exanite.Ecs.Systems;
 using Exanite.Engine.Rendering;
 using Exanite.Engine.Windowing;
@@ -43,10 +42,7 @@ public class WorldRenderTextureSystem : ISetupSystem, IRenderSystem, ITeardownSy
 
     private void ResizeRenderTextures()
     {
-        var swapChain = window.SwapChain;
-        var swapChainDesc = swapChain.GetDesc();
-
-        var size = new Vector2Int((int)swapChainDesc.Width, (int)swapChainDesc.Height);
+        var size = window.SwapChain.GetDesc().GetSize();
 
         WorldColor.ResizeIfNeeded(size);
         WorldDepth.ResizeIfNeeded(size);
@@ -54,10 +50,7 @@ public class WorldRenderTextureSystem : ISetupSystem, IRenderSystem, ITeardownSy
 
     private void CreateRenderTextures()
     {
-        var swapChain = window.SwapChain;
-        var swapChainDesc = swapChain.GetDesc();
-
-        var size = new Vector2Int((int)swapChainDesc.Width, (int)swapChainDesc.Height);
+        var size = window.SwapChain.GetDesc().GetSize();
 
         WorldColor = new ColorRenderTexture2D(rendererContext, "World Color", size);
         WorldDepth = new DepthRenderTexture2D(rendererContext, "World Depth", size);
