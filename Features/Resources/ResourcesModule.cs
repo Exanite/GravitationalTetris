@@ -240,7 +240,7 @@ public class ResourcesModule : Module
 
                     // Ordinary texture
                     var texture = resourceManager.GetResource<Texture2D>(loadOperation.Key).Value;
-                    loadOperation.Fulfill(new TextureRegion(texture, new Rectangle(0, 0, texture.Width, texture.Height)));
+                    loadOperation.Fulfill(new TextureRegion(texture, new Rectangle(0, 0, texture.Size.X, texture.Size.Y)));
                 });
 
                 resourceManager.RegisterLoader<FontSystem>(loadOperation =>
