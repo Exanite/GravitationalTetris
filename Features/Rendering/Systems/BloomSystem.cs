@@ -1,6 +1,7 @@
 using System;
 using System.Numerics;
 using Diligent;
+using Exanite.Core.Numerics;
 using Exanite.Ecs.Systems;
 using Exanite.Engine.Rendering;
 using Exanite.Engine.Windowing;
@@ -31,8 +32,7 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
 
     private readonly ITextureView[] renderTargets = new ITextureView[1];
 
-    private readonly ITexture?[] renderTextures;
-    private readonly ITextureView?[] renderTextureViews;
+    private readonly ColorRenderTexture2D?[] renderTextures;
 
     private readonly RendererContext rendererContext;
     private readonly IResourceManager resourceManager;
@@ -46,8 +46,7 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
         this.worldRenderTextureSystem = worldRenderTextureSystem;
         this.window = window;
 
-        renderTextures = new ITexture[maxIterationCount];
-        renderTextureViews = new ITextureView[maxIterationCount];
+        renderTextures = new ColorRenderTexture2D[maxIterationCount];
     }
 
     public void Setup()
@@ -224,8 +223,8 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
             deviceContext.SetPipelineState(downPipeline);
             for (var i = 0; i < iterationCount; i++)
             {
-                var previousView = i > 0 ? renderTextureViews[i - 1] : GetSourceTextureView();
-                var currentView = renderTextureViews[i];
+                var previousView = i > 0 ? renderTextures[i - 1]!.RenderTarget : GetSourceRenderTarget();
+                var currentView = renderTextures[i]!.RenderTarget ;
                 var currentTexture = renderTextures[i];
 
                 downTextureVariable?.Set(previousView, SetShaderResourceFlags.AllowOverwrite);
@@ -233,8 +232,7 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
 
                 using (downUniformBuffer.Map(MapType.Write, MapFlags.Discard, out var downUniformData))
                 {
-                    var textureDesc = currentTexture!.GetDesc();
-
+                    var textureDesc = currentTexture!.Handle.GetDesc();
                     downUniformData[0].FilterStep = new Vector2(1f / textureDesc.Width, 1f / textureDesc.Height);
                 }
 
@@ -264,8 +262,8 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
             deviceContext.SetPipelineState(upPipeline);
             for (var i = iterationCount - 2; i >= 0; i--)
             {
-                var previousView = renderTextureViews[i + 1];
-                var currentView = renderTextureViews[i];
+                var previousView = renderTextures[i + 1]!.RenderTarget;
+                var currentView = renderTextures[i]!.RenderTarget;
 
                 upTextureVariable?.Set(previousView, SetShaderResourceFlags.AllowOverwrite);
                 renderTargets[0] = currentView!;
@@ -280,7 +278,7 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
             }
 
             // Draw bloom to world RT
-            renderTargets[0] = GetSourceTextureView();
+            renderTargets[0] = GetSourceRenderTarget();
             deviceContext.SetRenderTargets(renderTargets, null, ResourceStateTransitionMode.Transition);
 
             deviceContext.SetPipelineState(upPipeline);
@@ -291,7 +289,7 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
                 upUniformData[0] = localUpUniformData;
             }
 
-            upTextureVariable?.Set(renderTextureViews[0], SetShaderResourceFlags.AllowOverwrite);
+            upTextureVariable?.Set(renderTextures[0]!.RenderTarget, SetShaderResourceFlags.AllowOverwrite);
             deviceContext.CommitShaderResources(upResources, ResourceStateTransitionMode.Transition);
             deviceContext.Draw(new DrawAttribs
             {
@@ -338,8 +336,6 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
 
     private void CreateRenderTextures()
     {
-        var renderDevice = rendererContext.RenderDevice;
-
         var sourceSize = GetSourceSize();
         var sourceAspectRatio = (float)sourceSize.Width / sourceSize.Height;
 
@@ -350,36 +346,24 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
         iterationCount = 0;
         for (var i = 0; i < renderTextures.Length; i++)
         {
-            var uWidth = (uint)width;
-            var uHeight = (uint)height;
+            var iWidth = (int)width;
+            var iHeight = (int)height;
 
-            if (uWidth == 0 || uHeight == 0)
+            if (iWidth == 0 || iHeight == 0)
             {
                 return;
             }
 
-            renderTextures[i] = renderDevice.CreateTexture(
-                new TextureDesc
-                {
-                    Name = $"Bloom Render Texture {i + 1}/{renderTextures.Length}",
-                    Type = ResourceDimension.Tex2d,
-                    Width = uWidth,
-                    Height = uHeight,
-                    Format = CommonTextureFormats.HdrTextureFormat,
-                    BindFlags = BindFlags.ShaderResource | BindFlags.RenderTarget,
-                    Usage = Usage.Default,
-                });
+            renderTextures[i] = new ColorRenderTexture2D(rendererContext, $"Bloom Render Texture {i + 1}/{renderTextures.Length}", new Vector2Int(iWidth, iHeight), CommonTextureFormats.HdrTextureFormat);
 
-            renderTextureViews[i] = renderTextures[i]!.GetDefaultView(TextureViewType.RenderTarget);
             iterationCount = i + 1;
-
             width /= 2;
             height /= 2;
         }
     }
 
     // Temporary - Used to reduce coupling
-    private ITextureView GetSourceTextureView()
+    private ITextureView GetSourceRenderTarget()
     {
         return worldRenderTextureSystem.WorldColorView;
     }
