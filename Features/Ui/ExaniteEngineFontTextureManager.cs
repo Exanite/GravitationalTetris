@@ -33,7 +33,7 @@ public class ExaniteEngineFontTextureManager : ITexture2DManager, IDisposable
     {
         var typedTexture = (Texture2D)texture;
 
-        return new Point(typedTexture.Width, typedTexture.Height);
+        return new Point(typedTexture.Size.X, typedTexture.Size.Y);
     }
 
     public void SetTextureData(object texture, Rectangle bounds, byte[] data)

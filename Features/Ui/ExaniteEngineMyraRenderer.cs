@@ -46,14 +46,14 @@ public class ExaniteEngineMyraRenderer : IMyraRenderer
         var typedTexture = (Texture2D)texture;
 
         var offset = Vector2.Zero;
-        var pixelSize = new Vector2(typedTexture.Width, typedTexture.Height);
+        var pixelSize = new Vector2(typedTexture.Size.X, typedTexture.Size.Y);
         var size = Vector2.One;
         if (src.HasValue)
         {
             var rect = src.Value;
-            offset = new Vector2((float)rect.X / typedTexture.Width, (float)rect.Y / typedTexture.Height);
+            offset = new Vector2((float)rect.X / typedTexture.Size.X, (float)rect.Y / typedTexture.Size.Y);
             pixelSize = new Vector2(rect.Width, rect.Height);
-            size = new Vector2((float)rect.Width / typedTexture.Width, (float)rect.Height / typedTexture.Height);
+            size = new Vector2((float)rect.Width / typedTexture.Size.X, (float)rect.Height / typedTexture.Size.Y);
         }
 
         var world = Matrix4x4.CreateTranslation(0.5f, 0.5f, 0) * Matrix4x4.CreateScale(scale.X * pixelSize.X, scale.Y * pixelSize.Y, 1) * Matrix4x4.CreateRotationZ(rotation) * Matrix4x4.CreateTranslation(pos.X, pos.Y, 0);
