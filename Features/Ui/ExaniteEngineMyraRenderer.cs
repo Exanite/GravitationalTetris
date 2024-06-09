@@ -32,7 +32,7 @@ public class ExaniteEngineMyraRenderer : IMyraRenderer
     public void Begin(TextureFiltering textureFiltering)
     {
         var view = Matrix4x4.CreateTranslation(0, 0, -10);
-        var projection = Matrix4x4.CreateOrthographicOffCenter(0, window.Settings.Width, 0, window.Settings.Height, 0.001f, 1000f) * Matrix4x4.CreateRotationZ(float.Pi) * Matrix4x4.CreateScale(-1, 1, 1);
+        var projection = Matrix4x4.CreateOrthographicOffCenter(0, window.Size.X, 0, window.Size.Y, 0.001f, 1000f) * Matrix4x4.CreateRotationZ(float.Pi) * Matrix4x4.CreateScale(-1, 1, 1);
 
         spriteBatchSystem.Begin(new SpriteBeginDrawOptions
         {

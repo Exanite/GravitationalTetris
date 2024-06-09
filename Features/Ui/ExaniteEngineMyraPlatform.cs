@@ -24,7 +24,7 @@ public class ExaniteEngineMyraPlatform : IMyraPlatform
         };
     }
 
-    public Point ViewSize => new(window.Settings.Width, window.Settings.Height);
+    public Point ViewSize => new(window.Size.X, window.Size.Y);
     public IMyraRenderer Renderer { get; }
 
     public MouseInfo GetMouseInfo()

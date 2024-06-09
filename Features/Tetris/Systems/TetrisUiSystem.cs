@@ -46,12 +46,12 @@ public class TetrisUiSystem : EcsSystem, ISetupSystem, IUpdateSystem, IRenderSys
 
         // Todo Hack for now, need to research how to get screen scaling / DPI
         var fontScaling = 1f;
-        if (window.Settings.Width > 1920)
+        if (window.Size.X > 1920)
         {
             fontScaling = 1.5f;
         }
 
-        if (window.Settings.Width > 2560)
+        if (window.Size.X > 2560)
         {
             fontScaling = 2f;
         }

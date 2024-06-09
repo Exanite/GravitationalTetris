@@ -97,7 +97,6 @@ public class Game1 : Game
         var config = new SystemScheduler.Config();
 
         config.Register<WindowSystem>();
-        config.Register<UpdateWindowSizeSystem>();
 
         config.Register<SimulationTimeSystem>();
         config.Register<InputSystem>();
