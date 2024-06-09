@@ -1,4 +1,4 @@
-using System;
+using System.Collections.Generic;
 using System.Numerics;
 using Diligent;
 using Exanite.Core.Numerics;
@@ -14,7 +14,6 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
     private float referenceResolutionHeight = 1080;
 
     private int maxIterationCount = 6;
-    private int iterationCount;
     private float bloomIntensity = 0.05f;
 
     private Buffer<BloomDownUniformData> downUniformBuffer = null!;
@@ -31,7 +30,7 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
 
     private readonly ITextureView[] renderTargets = new ITextureView[1];
 
-    private readonly ColorRenderTexture2D?[] renderTextures;
+    private readonly List<ColorRenderTexture2D> renderTextures = new();
 
     private readonly RendererContext rendererContext;
     private readonly IResourceManager resourceManager;
@@ -44,8 +43,6 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
         this.resourceManager = resourceManager;
         this.worldRenderTextureSystem = worldRenderTextureSystem;
         this.window = window;
-
-        renderTextures = new ColorRenderTexture2D[maxIterationCount];
     }
 
     public void Setup()
@@ -216,14 +213,14 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
         var deviceContext = rendererContext.DeviceContext;
         var swapChain = window.SwapChain;
 
-        if (iterationCount != 0)
+        if (renderTextures.Count != 0)
         {
             // Down sample
             deviceContext.SetPipelineState(downPipeline);
-            for (var i = 0; i < iterationCount; i++)
+            for (var i = 0; i < renderTextures.Count; i++)
             {
-                var previousView = i > 0 ? renderTextures[i - 1]!.RenderTarget : GetSourceRenderTarget();
-                var currentView = renderTextures[i]!.RenderTarget ;
+                var previousView = i > 0 ? renderTextures[i - 1].RenderTarget : GetSourceRenderTarget();
+                var currentView = renderTextures[i].RenderTarget ;
                 var currentTexture = renderTextures[i];
 
                 downTextureVariable?.Set(previousView, SetShaderResourceFlags.AllowOverwrite);
@@ -231,7 +228,7 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
 
                 using (downUniformBuffer.Map(MapType.Write, MapFlags.Discard, out var downUniformData))
                 {
-                    var textureDesc = currentTexture!.Handle.GetDesc();
+                    var textureDesc = currentTexture.Handle.GetDesc();
                     downUniformData[0].FilterStep = new Vector2(1f / textureDesc.Width, 1f / textureDesc.Height);
                 }
 
@@ -259,10 +256,10 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
 
             // Up sample
             deviceContext.SetPipelineState(upPipeline);
-            for (var i = iterationCount - 2; i >= 0; i--)
+            for (var i = renderTextures.Count - 2; i >= 0; i--)
             {
-                var previousView = renderTextures[i + 1]!.RenderTarget;
-                var currentView = renderTextures[i]!.RenderTarget;
+                var previousView = renderTextures[i + 1].RenderTarget;
+                var currentView = renderTextures[i].RenderTarget;
 
                 upTextureVariable?.Set(previousView, SetShaderResourceFlags.AllowOverwrite);
                 renderTargets[0] = currentView;
@@ -288,7 +285,7 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
                 upUniformData[0] = localUpUniformData;
             }
 
-            upTextureVariable?.Set(renderTextures[0]!.RenderTarget, SetShaderResourceFlags.AllowOverwrite);
+            upTextureVariable?.Set(renderTextures[0].RenderTarget, SetShaderResourceFlags.AllowOverwrite);
             deviceContext.CommitShaderResources(upResources, ResourceStateTransitionMode.Transition);
             deviceContext.Draw(new DrawAttribs
             {
@@ -310,7 +307,7 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
 
         foreach (var texture in renderTextures)
         {
-            texture?.Dispose();
+            texture.Dispose();
         }
     }
 
@@ -321,10 +318,10 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
         {
             foreach (var texture in renderTextures)
             {
-                texture?.Dispose();
+                texture.Dispose();
             }
 
-            Array.Clear(renderTextures);
+            renderTextures.Clear();
 
             CreateRenderTextures();
         }
@@ -341,8 +338,8 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
         var width = referenceResolutionHeight * sourceAspectRatio;
         var height = referenceResolutionHeight;
 
-        iterationCount = 0;
-        for (var i = 0; i < renderTextures.Length; i++)
+        renderTextures.Clear();
+        for (var i = 0; i < maxIterationCount; i++)
         {
             var iWidth = (int)width;
             var iHeight = (int)height;
@@ -352,9 +349,8 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
                 return;
             }
 
-            renderTextures[i] = new ColorRenderTexture2D(rendererContext, $"Bloom Render Texture {i + 1}/{renderTextures.Length}", new Vector2Int(iWidth, iHeight), CommonTextureFormats.HdrTextureFormat);
+            renderTextures.Add(new ColorRenderTexture2D(rendererContext, $"Bloom Render Texture {i + 1}/{renderTextures.Count}", new Vector2Int(iWidth, iHeight), CommonTextureFormats.HdrTextureFormat));
 
-            iterationCount = i + 1;
             width /= 2;
             height /= 2;
         }
