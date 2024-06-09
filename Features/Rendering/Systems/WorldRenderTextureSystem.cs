@@ -72,7 +72,7 @@ public class WorldRenderTextureSystem : ISetupSystem, IRenderSystem, ITeardownSy
                 Type = ResourceDimension.Tex2d,
                 Width = swapChainDesc.Width,
                 Height = swapChainDesc.Height,
-                Format = TextureFormat.RGBA32_Float,
+                Format = CommonTextureFormats.HdrTextureFormat,
                 BindFlags = BindFlags.ShaderResource | BindFlags.RenderTarget,
                 Usage = Usage.Default,
             });
@@ -86,7 +86,7 @@ public class WorldRenderTextureSystem : ISetupSystem, IRenderSystem, ITeardownSy
                 Type = ResourceDimension.Tex2d,
                 Width = swapChainDesc.Width,
                 Height = swapChainDesc.Height,
-                Format = TextureFormat.D32_Float,
+                Format = CommonTextureFormats.DepthTextureFormat,
                 BindFlags = BindFlags.ShaderResource | BindFlags.DepthStencil,
                 Usage = Usage.Default,
             });

@@ -106,7 +106,7 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
                     PrimitiveTopology = PrimitiveTopology.TriangleStrip,
 
                     NumRenderTargets = 1,
-                    RTVFormats = new[] { TextureFormat.RGB32_Float },
+                    RTVFormats = new[] { CommonTextureFormats.HdrTextureFormat },
 
                     RasterizerDesc = new RasterizerStateDesc { CullMode = CullMode.None },
                     DepthStencilDesc = new DepthStencilStateDesc { DepthEnable = false },
@@ -181,7 +181,7 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
                     PrimitiveTopology = PrimitiveTopology.TriangleStrip,
 
                     NumRenderTargets = 1,
-                    RTVFormats = new[] { TextureFormat.RGB32_Float },
+                    RTVFormats = new[] { CommonTextureFormats.HdrTextureFormat },
 
                     RasterizerDesc = new RasterizerStateDesc { CullMode = CullMode.None },
                     DepthStencilDesc = new DepthStencilStateDesc { DepthEnable = false },
@@ -365,7 +365,7 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
                     Type = ResourceDimension.Tex2d,
                     Width = uWidth,
                     Height = uHeight,
-                    Format = TextureFormat.RGBA32_Float,
+                    Format = CommonTextureFormats.HdrTextureFormat,
                     BindFlags = BindFlags.ShaderResource | BindFlags.RenderTarget,
                     Usage = Usage.Default,
                 });
