@@ -27,8 +27,7 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
     private IShaderResourceBinding upResources = null!;
     private IShaderResourceVariable? upTextureVariable;
 
-    private uint previousWidth;
-    private uint previousHeight;
+    private Vector2Int currentSize;
 
     private readonly ITextureView[] renderTargets = new ITextureView[1];
 
@@ -228,7 +227,7 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
                 var currentTexture = renderTextures[i];
 
                 downTextureVariable?.Set(previousView, SetShaderResourceFlags.AllowOverwrite);
-                renderTargets[0] = currentView!;
+                renderTargets[0] = currentView;
 
                 using (downUniformBuffer.Map(MapType.Write, MapFlags.Discard, out var downUniformData))
                 {
@@ -266,7 +265,7 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
                 var currentView = renderTextures[i]!.RenderTarget;
 
                 upTextureVariable?.Set(previousView, SetShaderResourceFlags.AllowOverwrite);
-                renderTargets[0] = currentView!;
+                renderTargets[0] = currentView;
 
                 deviceContext.SetRenderTargets(renderTargets, null, ResourceStateTransitionMode.Transition);
                 deviceContext.CommitShaderResources(upResources, ResourceStateTransitionMode.Transition);
@@ -318,7 +317,7 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
     private void ResizeRenderTextures()
     {
         var sourceSize = GetSourceSize();
-        if (previousWidth != sourceSize.Width || previousHeight != sourceSize.Height)
+        if (currentSize != sourceSize)
         {
             foreach (var texture in renderTextures)
             {
@@ -330,14 +329,13 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
             CreateRenderTextures();
         }
 
-        previousWidth = sourceSize.Width;
-        previousHeight = sourceSize.Height;
+        currentSize = sourceSize;
     }
 
     private void CreateRenderTextures()
     {
         var sourceSize = GetSourceSize();
-        var sourceAspectRatio = (float)sourceSize.Width / sourceSize.Height;
+        var sourceAspectRatio = (float)sourceSize.X / sourceSize.Y;
 
         // Use constant height to make bloom effect render the same regardless of resolution
         var width = referenceResolutionHeight * sourceAspectRatio;
@@ -368,10 +366,10 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
         return worldRenderTextureSystem.WorldColor.RenderTarget;
     }
 
-    private (uint Width, uint Height) GetSourceSize()
+    private Vector2Int GetSourceSize()
     {
         var desc = worldRenderTextureSystem.WorldColor.Handle.GetDesc();
 
-        return (desc.Width, desc.Height);
+        return new Vector2Int((int)desc.Width, (int)desc.Height);
     }
 }
