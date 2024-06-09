@@ -229,7 +229,7 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
                 using (downUniformBuffer.Map(MapType.Write, MapFlags.Discard, out var downUniformData))
                 {
                     var textureDesc = currentTexture.Handle.GetDesc();
-                    downUniformData[0].FilterStep = new Vector2(1f / textureDesc.Width, 1f / textureDesc.Height);
+                    downUniformData[0].FilterStep = Vector2.One / textureDesc.GetSize();
                 }
 
                 deviceContext.SetRenderTargets(renderTargets, null, ResourceStateTransitionMode.Transition);
@@ -364,8 +364,6 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
 
     private Vector2Int GetSourceSize()
     {
-        var desc = worldRenderTextureSystem.WorldColor.Handle.GetDesc();
-
-        return new Vector2Int((int)desc.Width, (int)desc.Height);
+        return worldRenderTextureSystem.WorldColor.Handle.GetDesc().GetSize();
     }
 }
