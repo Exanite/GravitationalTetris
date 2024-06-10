@@ -58,14 +58,8 @@ public class Game1 : Game
         // Rendering
         builder.RegisterType<RendererContext>().SingleInstance();
 
-        // Time
-        builder.RegisterType<SimulationTime>().SingleInstance();
-
         // Input
         builder.RegisterType<Input>().SingleInstance();
-
-        // UI
-        builder.RegisterModule<AvaloniaModule<App>>();
 
         // Shared data
         builder.RegisterType<GameTilemapData>().SingleInstance();
@@ -80,8 +74,10 @@ public class Game1 : Game
         builder.RegisterType<EcsGameLoop>().AsSelf().AsImplementedInterfaces().SingleInstance();
         builder.RegisterModule(CreateSystemSchedulerConfig());
 
-        // Resources
+        // Modules
+        builder.RegisterModule<AvaloniaModule<App>>();
         builder.RegisterModule<ResourcesModule>();
+        builder.RegisterModule<TimeModule>();
 
         return builder;
     }
@@ -92,7 +88,7 @@ public class Game1 : Game
 
         config.Register<WindowSystem>();
 
-        config.Register<SimulationTimeSystem>();
+        config.Register<TimeSystem>();
         config.Register<InputSystem>();
 
         config.Register<CreateEntitiesSystem>();
