@@ -106,7 +106,7 @@ public class Game1 : Game
         config.Register<FmodAudioSystem>();
 
         config.Register<ResizeSwapChainSystem>();
-        config.Register<ClearMainRenderTargetSystem>();
+        config.Register<ClearSwapchainSystem>();
         {
             config.Register<SetClearColorSystem>();
             config.Register<CameraProjectionSystem>();
