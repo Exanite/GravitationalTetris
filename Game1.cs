@@ -4,12 +4,14 @@ using Autofac;
 using Exanite.Ecs.Systems;
 using Exanite.Engine;
 using Exanite.Engine.Avalonia;
+using Exanite.Engine.Avalonia.Systems;
 using Exanite.Engine.GameLoops;
 using Exanite.Engine.Inputs;
 using Exanite.Engine.Inputs.Systems;
 using Exanite.Engine.Lifecycles.Systems;
 using Exanite.Engine.Rendering;
 using Exanite.Engine.Rendering.Systems;
+using Exanite.Engine.Threading;
 using Exanite.Engine.Time;
 using Exanite.Engine.Time.Systems;
 using Exanite.Engine.Windowing;
@@ -27,6 +29,7 @@ using Exanite.GravitationalTetris.Features.Tiles;
 using Exanite.GravitationalTetris.Features.Tiles.Systems;
 using Exanite.GravitationalTetris.Features.UserInterface;
 using Exanite.Logging;
+using Exanite.ResourceManagement;
 using EcsWorld = Arch.Core.World;
 using PhysicsWorld = nkast.Aether.Physics2D.Dynamics.World;
 
@@ -77,6 +80,7 @@ public class Game1 : Game
         // Modules
         builder.RegisterModule<AvaloniaModule<App>>();
         builder.RegisterModule<ResourcesModule>();
+        builder.RegisterModule<ThreadingModule>();
         builder.RegisterModule<TimeModule>();
 
         return builder;
@@ -122,6 +126,21 @@ public class Game1 : Game
             config.Register<ToneMappingSystem>();
 
             config.Register<RenderWorldToMainSystem>();
+
+            config.Register<AvaloniaRenderSystem>();
+            config.Register<AvaloniaCopyTextureSystem>((container, system) =>
+            {
+                var renderSystem = container.Resolve<AvaloniaRenderSystem>();
+                var resourceManager = container.Resolve<IResourceManager>();
+
+                system.GetSourceTexture = () =>
+                {
+                    return renderSystem.TopLevel.Impl.Surface.Texture;
+                };
+
+                system.ScreenShader = resourceManager.GetResource(RenderingMod.ScreenShader);
+                system.PassthroughShader = resourceManager.GetResource(RenderingMod.PassthroughShader);
+            });
 
             config.Register<TetrisUiSystem>();
         }
