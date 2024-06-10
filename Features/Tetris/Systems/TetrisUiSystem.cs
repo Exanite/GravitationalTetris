@@ -1,5 +1,6 @@
 using Exanite.Ecs.Systems;
 using Exanite.Engine.Avalonia.Systems;
+using Exanite.Engine.Windowing;
 using Exanite.GravitationalTetris.Features.UserInterface.ViewModels;
 
 namespace Exanite.GravitationalTetris.Features.Tetris.Systems;
@@ -10,11 +11,13 @@ public class TetrisUiSystem : EcsSystem, ISetupSystem, IRenderSystem
 
     private readonly AvaloniaRenderSystem avaloniaRenderSystem;
     private readonly TetrisSystem tetrisSystem;
+    private readonly Window window;
 
-    public TetrisUiSystem(AvaloniaRenderSystem avaloniaRenderSystem, TetrisSystem tetrisSystem)
+    public TetrisUiSystem(AvaloniaRenderSystem avaloniaRenderSystem, TetrisSystem tetrisSystem, Window window)
     {
         this.avaloniaRenderSystem = avaloniaRenderSystem;
         this.tetrisSystem = tetrisSystem;
+        this.window = window;
     }
 
     public void Setup()
@@ -24,6 +27,19 @@ public class TetrisUiSystem : EcsSystem, ISetupSystem, IRenderSystem
 
     public void Render()
     {
+        var scaleFactor = 1f;
+        if (window.Size.X > 1920)
+        {
+            scaleFactor = 1.5f;
+        }
+
+        if (window.Size.X > 2560)
+        {
+            scaleFactor = 2f;
+        }
+
+        avaloniaRenderSystem.TopLevel.Impl.RenderScaling = scaleFactor;
+
         viewModel.ScoreText = $"{(int)tetrisSystem.Score}";
         viewModel.PreviousScoreText = $"{(int)tetrisSystem.PreviousScore}";
         {
