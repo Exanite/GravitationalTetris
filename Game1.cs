@@ -107,7 +107,7 @@ public class Game1 : Game
         config.Register<FmodAudioSystem>();
 
         config.Register<ResizeSwapChainSystem>();
-        config.Register<ClearSwapchainSystem>((_, system) => system.ClearColor = Vector4.Zero);
+        config.Register<ClearSwapChainSystem>((_, system) => system.ClearColor = Vector4.Zero);
         {
             config.Register<CameraProjectionSystem>();
             config.Register<SpriteBatchSystem>();
@@ -121,7 +121,7 @@ public class Game1 : Game
             // Main RT
             config.Register<BloomSystem>();
 
-            config.Register<UseMainRenderTargetSystem>();
+            config.Register<UseSwapChainAsRenderTargetSystem>();
 
             config.Register<ToneMappingSystem>();
 
