@@ -2,6 +2,7 @@
 using Autofac;
 using Exanite.Ecs.Systems;
 using Exanite.Engine;
+using Exanite.Engine.Avalonia;
 using Exanite.Engine.GameLoops;
 using Exanite.Engine.Inputs;
 using Exanite.Engine.Inputs.Systems;
@@ -23,6 +24,7 @@ using Exanite.GravitationalTetris.Features.Sprites.Systems;
 using Exanite.GravitationalTetris.Features.Tetris.Systems;
 using Exanite.GravitationalTetris.Features.Tiles;
 using Exanite.GravitationalTetris.Features.Tiles.Systems;
+using Exanite.GravitationalTetris.Features.UserInterface;
 using Exanite.Logging;
 using EcsWorld = Arch.Core.World;
 using PhysicsWorld = nkast.Aether.Physics2D.Dynamics.World;
@@ -62,7 +64,7 @@ public class Game1 : Game
         builder.RegisterType<Input>().SingleInstance();
 
         // UI
-        builder.RegisterModule<UiModule>();
+        builder.RegisterModule<AvaloniaModule<App>>();
 
         // Shared data
         builder.RegisterType<GameTilemapData>().SingleInstance();
