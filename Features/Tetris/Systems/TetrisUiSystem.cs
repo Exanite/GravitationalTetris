@@ -1,14 +1,13 @@
 using Exanite.Ecs.Systems;
 using Exanite.Engine.Avalonia.Systems;
-using Exanite.GravitationalTetris.Features.UserInterface;
-using Exanite.ResourceManagement;
-using MainView = Exanite.GravitationalTetris.Features.UserInterface.Views.MainView;
-using Window = Exanite.Engine.Windowing.Window;
+using Exanite.GravitationalTetris.Features.UserInterface.ViewModels;
 
 namespace Exanite.GravitationalTetris.Features.Tetris.Systems;
 
-public class TetrisUiSystem : EcsSystem, ISetupSystem, IUpdateSystem, IRenderSystem
+public class TetrisUiSystem : EcsSystem, ISetupSystem, IRenderSystem
 {
+    private readonly MainViewModel viewModel = new MainViewModel();
+
     private readonly AvaloniaRenderSystem avaloniaRenderSystem;
     private readonly TetrisSystem tetrisSystem;
 
@@ -20,128 +19,30 @@ public class TetrisUiSystem : EcsSystem, ISetupSystem, IUpdateSystem, IRenderSys
 
     public void Setup()
     {
-        avaloniaRenderSystem.TopLevel.Content = new MainView();
-    }
-
-    public void Update()
-    {
-        // var mainGrid = new Grid
-        // {
-        //     RowSpacing = 8,
-        //     ColumnSpacing = 8,
-        //     Padding = new Thickness(16),
-        // };
-        //
-        // mainGrid.ColumnsProportions.Add(new Proportion(ProportionType.Auto));
-        // mainGrid.RowsProportions.Add(new Proportion(ProportionType.Auto)); // 0
-        // mainGrid.RowsProportions.Add(new Proportion(ProportionType.Auto)); // 1
-        // mainGrid.RowsProportions.Add(new Proportion(ProportionType.Auto)); // 2
-        // mainGrid.RowsProportions.Add(new Proportion(ProportionType.Fill)); // 3
-        // mainGrid.RowsProportions.Add(new Proportion(ProportionType.Auto)); // 4
-        // mainGrid.RowsProportions.Add(new Proportion(ProportionType.Auto)); // 5
-        //
-        // // Todo Hack for now, need to research how to get screen scaling / DPI
-        // var fontScaling = 1f;
-        // if (window.Size.X > 1920)
-        // {
-        //     fontScaling = 1.5f;
-        // }
-        //
-        // if (window.Size.X > 2560)
-        // {
-        //     fontScaling = 2f;
-        // }
-        //
-        // {
-        //     var score = new Label
-        //     {
-        //         Text = $"Score: {(int)tetrisSystem.Score}",
-        //         Font = resourceManager.GetResource<FontSystem>("Base:FieryTurk.ttf").Value.GetFont(32 * fontScaling),
-        //     };
-        //
-        //     mainGrid.Widgets.Add(score);
-        //     Grid.SetRow(score, 0);
-        //     Grid.SetColumn(score, 0);
-        // }
-        //
-        // {
-        //     var previousScore = new Label
-        //     {
-        //         Text = $"Previous score: {(int)tetrisSystem.PreviousScore}\n",
-        //         Font = resourceManager.GetResource<FontSystem>("Base:FieryTurk.ttf").Value.GetFont(20 * fontScaling),
-        //     };
-        //
-        //     mainGrid.Widgets.Add(previousScore);
-        //     Grid.SetRow(previousScore, 1);
-        //     Grid.SetColumn(previousScore, 0);
-        // }
-        //
-        // {
-        //     var leaderboardTitle = new Label
-        //     {
-        //         Text = "Leaderboard:",
-        //         Font = resourceManager.GetResource<FontSystem>("Base:FieryTurk.ttf").Value.GetFont(28 * fontScaling),
-        //     };
-        //
-        //     mainGrid.Widgets.Add(leaderboardTitle);
-        //     Grid.SetRow(leaderboardTitle, 2);
-        //     Grid.SetColumn(leaderboardTitle, 0);
-        // }
-        //
-        // {
-        //     var text = string.Empty;
-        //     for (var i = 0; i < 10; i++)
-        //     {
-        //         if (i != 0)
-        //         {
-        //             text += "\n";
-        //         }
-        //
-        //         var score = tetrisSystem.HighScores.Count > i ? tetrisSystem.HighScores[i] : 0;
-        //
-        //         text += $"{i + 1}. {(int)score}";
-        //     }
-        //
-        //     var leaderboardEntries = new Label
-        //     {
-        //         Text = text,
-        //         Font = resourceManager.GetResource<FontSystem>("Base:FieryTurk.ttf").Value.GetFont(20 * fontScaling),
-        //     };
-        //
-        //     mainGrid.Widgets.Add(leaderboardEntries);
-        //     Grid.SetRow(leaderboardEntries, 3);
-        //     Grid.SetColumn(leaderboardEntries, 0);
-        // }
-        //
-        // {
-        //     var speed = new Label
-        //     {
-        //         Text = $"Speed: {tetrisSystem.SpeedMultiplier:F2}x",
-        //         Font = resourceManager.GetResource<FontSystem>("Base:FieryTurk.ttf").Value.GetFont(24 * fontScaling),
-        //     };
-        //
-        //     mainGrid.Widgets.Add(speed);
-        //     Grid.SetRow(speed, 4);
-        //     Grid.SetColumn(speed, 0);
-        // }
-        //
-        // {
-        //     var speed = new Label
-        //     {
-        //         Text = $"Score multiplier: {tetrisSystem.ScoreMultiplier:F1}x",
-        //         Font = resourceManager.GetResource<FontSystem>("Base:FieryTurk.ttf").Value.GetFont(28 * fontScaling),
-        //     };
-        //
-        //     mainGrid.Widgets.Add(speed);
-        //     Grid.SetRow(speed, 5);
-        //     Grid.SetColumn(speed, 0);
-        // }
-        //
-        // desktop.Root = mainGrid;
+        avaloniaRenderSystem.TopLevel.Content = viewModel;
     }
 
     public void Render()
     {
-        // desktop.Render();
+        viewModel.ScoreText = $"{(int)tetrisSystem.Score}";
+        viewModel.PreviousScoreText = $"{(int)tetrisSystem.PreviousScore}";
+        {
+            var leaderboardContentText = string.Empty;
+            for (var i = 0; i < 10; i++)
+            {
+                if (i != 0)
+                {
+                    leaderboardContentText += "\n";
+                }
+
+                var score = tetrisSystem.HighScores.Count > i ? tetrisSystem.HighScores[i] : 0;
+
+                leaderboardContentText += $"{i + 1}. {(int)score}";
+            }
+
+            viewModel.LeaderboardContentText = leaderboardContentText;
+        }
+        viewModel.SpeedText = $"{tetrisSystem.SpeedMultiplier:F2}x";
+        viewModel.ScoreMultiplierText = $"{tetrisSystem.ScoreMultiplier:F1}x";
     }
 }
