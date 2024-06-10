@@ -31,8 +31,8 @@ public class RenderWorldToMainSystem : ISetupSystem, IRenderSystem, ITeardownSys
     {
         var renderDevice = rendererContext.RenderDevice;
 
-        var vShader = resourceManager.GetResource<Shader>("Rendering:Screen.v.hlsl");
-        var pShaderPassthrough = resourceManager.GetResource<Shader>("Rendering:Passthrough.p.hlsl");
+        var vShader = resourceManager.GetResource(RenderingMod.ScreenShader);
+        var pShaderPassthrough = resourceManager.GetResource(RenderingMod.PassthroughShader);
 
         passthroughPipeline = renderDevice.CreateGraphicsPipelineState(new GraphicsPipelineStateCreateInfo
         {

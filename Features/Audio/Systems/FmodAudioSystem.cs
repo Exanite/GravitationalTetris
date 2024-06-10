@@ -37,8 +37,8 @@ public class FmodAudioSystem : ISetupSystem, IUpdateSystem, IDisposable
             extradriverdata: IntPtr.Zero
         );
 
-        LoadBank("Base:Tetris.bank");
-        LoadBank("Base:Tetris.strings.bank");
+        LoadBank("/Base/Tetris.bank");
+        LoadBank("/Base/Tetris.strings.bank");
     }
 
     public void Play(string eventName)

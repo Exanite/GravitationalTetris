@@ -34,8 +34,8 @@ public class ToneMappingSystem : ISetupSystem, IRenderSystem, ITeardownSystem
     {
         var renderDevice = rendererContext.RenderDevice;
 
-        var vShader = resourceManager.GetResource<Shader>("Rendering:Screen.v.hlsl");
-        var pShader = resourceManager.GetResource<Shader>("Rendering:ToneMap.p.hlsl");
+        var vShader = resourceManager.GetResource(RenderingMod.ScreenShader);
+        var pShader = resourceManager.GetResource(RenderingMod.ToneMapShader);
 
         uniformBuffer = new Buffer<ToneMapUniformData>("Tone Map Uniform Buffer", rendererContext, new BufferDesc
         {
