@@ -29,7 +29,7 @@
                 <TextBlock Text="{Binding ScoreText}"/>
             </TextBlock>
             <TextBlock FontSize="12" Margin="0 0 0 20">
-                PreviousScore:
+                Previous Score:
                 <TextBlock Text="{Binding PreviousScoreText}"/>
             </TextBlock>
             <TextBlock FontSize="16" Margin="0 0 0 8">
@@ -46,7 +46,7 @@
                 <TextBlock Text="{Binding SpeedText}"/>
             </TextBlock>
             <TextBlock FontSize="16">
-                ScoreMultiplier:
+                Score Multiplier:
                 <TextBlock Text="{Binding ScoreMultiplierText}"/>
             </TextBlock>
         </StackPanel>
