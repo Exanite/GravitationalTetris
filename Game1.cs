@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 using Autofac;
 using Exanite.Ecs.Systems;
 using Exanite.Engine;
@@ -106,9 +107,8 @@ public class Game1 : Game
         config.Register<FmodAudioSystem>();
 
         config.Register<ResizeSwapChainSystem>();
-        config.Register<ClearSwapchainSystem>();
+        config.Register<ClearSwapchainSystem>((_, system) => system.ClearColor = Vector4.Zero);
         {
-            config.Register<SetClearColorSystem>();
             config.Register<CameraProjectionSystem>();
             config.Register<SpriteBatchSystem>();
 
