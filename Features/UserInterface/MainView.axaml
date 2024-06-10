@@ -4,5 +4,46 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="Exanite.GravitationalTetris.Features.UserInterface.MainView">
-    Welcome to Avalonia!
+    <Grid RowDefinitions="Auto, *, Auto">
+        <StackPanel>
+            <Grid.Row>0</Grid.Row>
+
+            <TextBlock>
+                Score:
+                <TextBlock Name="ScoreText">500</TextBlock>
+            </TextBlock>
+            <TextBlock>
+                PreviousScore:
+                <TextBlock Name="PreviousScoreText">250</TextBlock>
+            </TextBlock>
+            <TextBlock>
+                Leaderboard:
+            </TextBlock>
+            <TextBlock MaxLines="234">
+                1. 1000<LineBreak/>
+                2. 1000<LineBreak/>
+                3. 1000<LineBreak/>
+                4. 1000<LineBreak/>
+                5. 1000<LineBreak/>
+                6. 1000<LineBreak/>
+                7. 1000<LineBreak/>
+                8. 1000<LineBreak/>
+                9. 1000<LineBreak/>
+                10. 1000
+            </TextBlock>
+        </StackPanel>
+
+        <StackPanel>
+            <Grid.Row>2</Grid.Row>
+
+            <TextBlock>
+                Speed:
+                <TextBlock Name="SpeedText">1.00x</TextBlock>
+            </TextBlock>
+            <TextBlock>
+                ScoreMultiplier:
+                <TextBlock Name="ScoreMultiplierText">2.0x</TextBlock>
+            </TextBlock>
+        </StackPanel>
+    </Grid>
 </UserControl>
