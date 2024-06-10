@@ -23,8 +23,6 @@ using Exanite.GravitationalTetris.Features.Sprites.Systems;
 using Exanite.GravitationalTetris.Features.Tetris.Systems;
 using Exanite.GravitationalTetris.Features.Tiles;
 using Exanite.GravitationalTetris.Features.Tiles.Systems;
-using Exanite.GravitationalTetris.Features.Ui;
-using Exanite.GravitationalTetris.Features.Ui.Systems;
 using Exanite.Logging;
 using EcsWorld = Arch.Core.World;
 using PhysicsWorld = nkast.Aether.Physics2D.Dynamics.World;
@@ -127,7 +125,6 @@ public class Game1 : Game
 
             config.Register<RenderWorldToMainSystem>();
 
-            config.Register<MyraUiSystem>();
             config.Register<TetrisUiSystem>();
         }
         config.Register<PresentSwapChainSystem>();
