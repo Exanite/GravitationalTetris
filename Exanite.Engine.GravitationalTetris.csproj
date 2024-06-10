@@ -42,4 +42,11 @@
   <ItemGroup>
     <AvaloniaResource Include="Content/Base/FieryTurk.ttf"/>
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Features\UserInterface\Views\MainView.axaml.cs">
+      <DependentUpon>MainView.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
 </Project>

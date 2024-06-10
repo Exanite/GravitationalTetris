@@ -2,6 +2,7 @@ using Exanite.Ecs.Systems;
 using Exanite.Engine.Avalonia.Systems;
 using Exanite.GravitationalTetris.Features.UserInterface;
 using Exanite.ResourceManagement;
+using MainView = Exanite.GravitationalTetris.Features.UserInterface.Views.MainView;
 using Window = Exanite.Engine.Windowing.Window;
 
 namespace Exanite.GravitationalTetris.Features.Tetris.Systems;
@@ -9,22 +10,17 @@ namespace Exanite.GravitationalTetris.Features.Tetris.Systems;
 public class TetrisUiSystem : EcsSystem, ISetupSystem, IUpdateSystem, IRenderSystem
 {
     private readonly AvaloniaRenderSystem avaloniaRenderSystem;
-    private readonly ResourceManager resourceManager;
     private readonly TetrisSystem tetrisSystem;
-    private readonly Window window;
 
-    public TetrisUiSystem(AvaloniaRenderSystem avaloniaRenderSystem, ResourceManager resourceManager, TetrisSystem tetrisSystem, Window window)
+    public TetrisUiSystem(AvaloniaRenderSystem avaloniaRenderSystem, TetrisSystem tetrisSystem)
     {
         this.avaloniaRenderSystem = avaloniaRenderSystem;
-        this.resourceManager = resourceManager;
         this.tetrisSystem = tetrisSystem;
-        this.window = window;
     }
 
     public void Setup()
     {
         avaloniaRenderSystem.TopLevel.Content = new MainView();
-        // desktop = new Desktop();
     }
 
     public void Update()

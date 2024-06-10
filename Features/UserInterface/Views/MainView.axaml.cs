@@ -1,6 +1,6 @@
 using Avalonia.Controls;
 
-namespace Exanite.GravitationalTetris.Features.UserInterface;
+namespace Exanite.GravitationalTetris.Features.UserInterface.Views;
 
 public partial class MainView : UserControl
 {

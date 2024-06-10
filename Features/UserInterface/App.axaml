@@ -1,8 +1,13 @@
 <Application
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:userInterface="clr-namespace:Exanite.GravitationalTetris.Features.UserInterface"
     x:Class="Exanite.GravitationalTetris.Features.UserInterface.App"
     RequestedThemeVariant="Dark">
+
+    <Application.DataTemplates>
+        <userInterface:ViewLocator/>
+    </Application.DataTemplates>
 
     <Application.Styles>
         <FluentTheme/>
