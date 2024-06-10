@@ -38,4 +38,8 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <AvaloniaResource Include="Content/Base/FieryTurk.ttf"/>
+  </ItemGroup>
 </Project>

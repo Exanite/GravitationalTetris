@@ -5,6 +5,16 @@
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="Exanite.GravitationalTetris.Features.UserInterface.MainView">
 
+    <UserControl.Resources>
+        <FontFamily x:Key="Font" >/Content/Base/FieryTurk.ttf#</FontFamily>
+    </UserControl.Resources>
+
+    <UserControl.Styles>
+        <Style Selector="TextBlock">
+            <Setter Property="FontFamily" Value="{StaticResource Font}"/>
+        </Style>
+    </UserControl.Styles>
+
     <Grid RowDefinitions="Auto, *, Auto" Margin="12">
         <StackPanel>
             <Grid.Row>0</Grid.Row>
