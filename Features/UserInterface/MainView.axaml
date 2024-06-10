@@ -4,22 +4,23 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="Exanite.GravitationalTetris.Features.UserInterface.MainView">
-    <Grid RowDefinitions="Auto, *, Auto">
+
+    <Grid RowDefinitions="Auto, *, Auto" Margin="12">
         <StackPanel>
             <Grid.Row>0</Grid.Row>
 
-            <TextBlock>
+            <TextBlock FontSize="20" Margin="0 0 0 8">
                 Score:
                 <TextBlock Name="ScoreText">500</TextBlock>
             </TextBlock>
-            <TextBlock>
+            <TextBlock FontSize="12" Margin="0 0 0 20">
                 PreviousScore:
                 <TextBlock Name="PreviousScoreText">250</TextBlock>
             </TextBlock>
-            <TextBlock>
+            <TextBlock FontSize="16" Margin="0 0 0 8">
                 Leaderboard:
             </TextBlock>
-            <TextBlock MaxLines="234">
+            <TextBlock Name="LeaderboardContentText" FontSize="12">
                 1. 1000<LineBreak/>
                 2. 1000<LineBreak/>
                 3. 1000<LineBreak/>
@@ -36,11 +37,11 @@
         <StackPanel>
             <Grid.Row>2</Grid.Row>
 
-            <TextBlock>
+            <TextBlock FontSize="14" Margin="0 0 0 8">
                 Speed:
                 <TextBlock Name="SpeedText">1.00x</TextBlock>
             </TextBlock>
-            <TextBlock>
+            <TextBlock FontSize="16">
                 ScoreMultiplier:
                 <TextBlock Name="ScoreMultiplierText">2.0x</TextBlock>
             </TextBlock>
