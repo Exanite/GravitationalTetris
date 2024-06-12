@@ -203,7 +203,7 @@ public partial class TetrisSystem : EcsSystem, ISetupSystem, IUpdateSystem
 
         Score += ScorePerSecond * ScoreMultiplier * time.DeltaTime;
 
-        if (currentShapeRoot.IsAlive() && currentShapeRoot.Entity.Has<TetrisRootComponent>() && input.GetKeyDown(SDL.SDL_Scancode.SDL_SCANCODE_Q))
+        if (currentShapeRoot.IsAlive() && currentShapeRoot.Entity.Has<TetrisRootComponent>() && (input.GetKeyDown(SDL.SDL_Scancode.SDL_SCANCODE_Q) || input.GetKeyDown(KeyCode.MouseRight) || input.GetKeyDown(KeyCode.MouseForward)))
         {
             audioSystem.Play(FmodAudioSystem.RotateShape);
 
@@ -211,7 +211,7 @@ public partial class TetrisSystem : EcsSystem, ISetupSystem, IUpdateSystem
             tetrisRootComponent.Rotation = (TetrisRotation)(((int)tetrisRootComponent.Rotation + 1) % 4);
         }
 
-        if (currentShapeRoot.IsAlive() && currentShapeRoot.Entity.Has<TetrisRootComponent>() && input.GetKeyDown(SDL.SDL_Scancode.SDL_SCANCODE_E))
+        if (currentShapeRoot.IsAlive() && currentShapeRoot.Entity.Has<TetrisRootComponent>() && input.GetKeyDown(SDL.SDL_Scancode.SDL_SCANCODE_E) || input.GetKeyDown(KeyCode.MouseBackward))
         {
             audioSystem.Play(FmodAudioSystem.RotateShape);
 
@@ -223,7 +223,7 @@ public partial class TetrisSystem : EcsSystem, ISetupSystem, IUpdateSystem
         {
             PlaceShape();
         }
-        else if (input.GetKeyDown(SDL.SDL_Scancode.SDL_SCANCODE_SPACE) || input.GetKeyDown(KeyCode.Mouse0) || World.CountEntities(ShouldShouldPlaceTetris_QueryDescription) > 0)
+        else if (input.GetKeyDown(SDL.SDL_Scancode.SDL_SCANCODE_SPACE) || input.GetKeyDown(KeyCode.MouseLeft) || World.CountEntities(ShouldShouldPlaceTetris_QueryDescription) > 0)
         {
             audioSystem.Play(FmodAudioSystem.SwitchGravity);
 
