@@ -322,6 +322,7 @@ public partial class TetrisSystem : EcsSystem, ISetupSystem, IUpdateSystem
         {
             case TetrisRotation.R0:
             {
+                // ReSharper disable once UselessBinaryOperation - For better readability
                 minX = minX + root.Shape.PivotX;
                 maxX = maxX + root.Shape.PivotX - root.Shape.Shape.GetLength(0) + 1;
 
@@ -343,6 +344,7 @@ public partial class TetrisSystem : EcsSystem, ISetupSystem, IUpdateSystem
             }
             case TetrisRotation.R270:
             {
+                // ReSharper disable once UselessBinaryOperation - For better readability
                 minX = minX + root.Shape.PivotY;
                 maxX = maxX + root.Shape.PivotY - root.Shape.Shape.GetLength(1) + 1;
 
@@ -459,7 +461,7 @@ public partial class TetrisSystem : EcsSystem, ISetupSystem, IUpdateSystem
     }
 
     [Query]
-    private void PlaceBlocks(Entity entity, ref TetrisRootComponent root)
+    private void PlaceBlocks(ref TetrisRootComponent root)
     {
         foreach (var (x, y) in root.PredictedBlockPositions)
         {
@@ -482,7 +484,7 @@ public partial class TetrisSystem : EcsSystem, ISetupSystem, IUpdateSystem
         new(0, -1),
     };
 
-    private bool[,]? IsBlockRooted;
+    private bool[,]? isBlockRooted;
 
     private void RemoveMatchingBlockTiles(ref TetrisRootComponent root)
     {
@@ -563,12 +565,12 @@ public partial class TetrisSystem : EcsSystem, ISetupSystem, IUpdateSystem
         // If there were any movements, this will return true, meaning that this function should be ran again
         bool TryApplyBlockGravity()
         {
-            if (IsBlockRooted == null || IsBlockRooted.GetLength(0) != tilemap.Tiles.GetLength(0) || IsBlockRooted.GetLength(1) != tilemap.Tiles.GetLength(1))
+            if (isBlockRooted == null || isBlockRooted.GetLength(0) != tilemap.Tiles.GetLength(0) || isBlockRooted.GetLength(1) != tilemap.Tiles.GetLength(1))
             {
-                IsBlockRooted = new bool[tilemap.Tiles.GetLength(0), tilemap.Tiles.GetLength(1)];
+                isBlockRooted = new bool[tilemap.Tiles.GetLength(0), tilemap.Tiles.GetLength(1)];
             }
 
-            Array.Clear(IsBlockRooted);
+            Array.Clear(isBlockRooted);
 
             // Mark first row
             for (var x = 0; x < tilemap.Tiles.GetLength(0); x++)
@@ -585,7 +587,7 @@ public partial class TetrisSystem : EcsSystem, ISetupSystem, IUpdateSystem
             {
                 for (var y = 1; y < tilemap.Tiles.GetLength(1); y++)
                 {
-                    if (IsBlockRooted[x, y] || !tilemap.Tiles[x, y].IsWall)
+                    if (isBlockRooted[x, y] || !tilemap.Tiles[x, y].IsWall)
                     {
                         continue;
                     }
@@ -610,7 +612,7 @@ public partial class TetrisSystem : EcsSystem, ISetupSystem, IUpdateSystem
                 return;
             }
 
-            if (IsBlockRooted[position.X, position.Y])
+            if (isBlockRooted[position.X, position.Y])
             {
                 return;
             }
@@ -620,7 +622,7 @@ public partial class TetrisSystem : EcsSystem, ISetupSystem, IUpdateSystem
                 return;
             }
 
-            IsBlockRooted[position.X, position.Y] = true;
+            isBlockRooted[position.X, position.Y] = true;
 
             foreach (var direction in Directions)
             {
