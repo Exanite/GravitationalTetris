@@ -18,7 +18,6 @@ public static class Program
         {
             try
             {
-                LoggingUtility.RemoveProgramCrashLog(GameDirectories.LogsDirectory);
                 Thread.CurrentThread.Name = "Main";
 
                 await using var game = new Game1();
