@@ -72,7 +72,7 @@ public class RenderWorldToMainSystem : ISetupSystem, IRenderSystem, ITeardownSys
                 PrimitiveTopology = PrimitiveTopology.TriangleStrip,
 
                 NumRenderTargets = 1,
-                RTVFormats = new[] { CommonTextureFormats.HdrTextureFormat },
+                RTVFormats = new[] { CommonTextureFormats.SrgbTextureFormat },
 
                 RasterizerDesc = new RasterizerStateDesc { CullMode = CullMode.None },
                 DepthStencilDesc = new DepthStencilStateDesc { DepthEnable = false },
