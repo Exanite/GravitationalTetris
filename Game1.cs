@@ -115,15 +115,15 @@ public class Game1 : Game
             // World RT
             config.Register<WorldRenderTextureSystem>();
 
-            config.Register<TilemapRenderSystem>();
-            config.Register<SpriteRenderSystem>();
+            config.Register<TilemapRenderSystem>(); // Todo This system causes Vulkan validation errors
+            config.Register<SpriteRenderSystem>(); // Todo This system causes Vulkan validation errors
 
             // Main RT
-            config.Register<BloomSystem>();
+            config.Register<BloomSystem>(); // Todo This system causes Vulkan validation errors
 
             config.Register<UseSwapChainAsRenderTargetSystem>();
 
-            config.Register<ToneMappingSystem>();
+            config.Register<ToneMappingSystem>(); // Todo This system causes Vulkan validation errors
 
             config.Register<RenderWorldToMainSystem>();
 
