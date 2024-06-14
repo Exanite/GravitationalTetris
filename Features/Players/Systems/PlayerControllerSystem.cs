@@ -57,14 +57,11 @@ public partial class PlayerControllerSystem : EcsSystem, IUpdateSystem
     [All<PlayerComponent>]
     private void UpdateMovement(ref VelocityComponent velocity, ref PlayerMovement movement, ref MovementSpeedComponent movementSpeed)
     {
-        var movementInput = Vector2.Zero;
-        movementInput.X -= input.IsHeld(SDL.SDL_Scancode.SDL_SCANCODE_A) ? 1 : 0;
-        movementInput.X += input.IsHeld(SDL.SDL_Scancode.SDL_SCANCODE_D) ? 1 : 0;
-        movementInput.Y -= input.IsHeld(SDL.SDL_Scancode.SDL_SCANCODE_W) ? 1 : 0;
-        movementInput.Y += input.IsHeld(SDL.SDL_Scancode.SDL_SCANCODE_S) ? 1 : 0;
-        movementInput = movementInput.AsNormalizedSafe();
+        var movementInput = 0f;
+        movementInput -= input.IsHeld(SDL.SDL_Scancode.SDL_SCANCODE_A) ? 1 : 0;
+        movementInput += input.IsHeld(SDL.SDL_Scancode.SDL_SCANCODE_D) ? 1 : 0;
 
-        velocity.Velocity.X = MathUtility.SmoothDamp(velocity.Velocity.X, movementInput.X * movementSpeed.MovementSpeed, movement.SmoothTime, time.DeltaTime, ref movement.SmoothVelocity.X);
+        velocity.Velocity.X = MathUtility.SmoothDamp(velocity.Velocity.X, movementInput * movementSpeed.MovementSpeed, movement.SmoothTime, time.DeltaTime, ref movement.SmoothVelocity.X);
     }
 
     [Query]
