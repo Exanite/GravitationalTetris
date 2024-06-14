@@ -60,6 +60,11 @@ public class Game1 : Game
 
         // Rendering
         builder.RegisterType<RendererContext>().SingleInstance();
+        builder.Register(_ => new RendererContextSettings
+            {
+                EnableValidation = false,
+            })
+            .SingleInstance();
 
         // Input
         builder.RegisterType<Input>().SingleInstance();
