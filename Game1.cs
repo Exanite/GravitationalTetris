@@ -94,6 +94,7 @@ public class Game1 : Game
 
         config.Register<TimeSystem>();
         config.Register<InputSystem>();
+        config.Register<InputActionSystem>();
 
         config.Register<CreateEntitiesSystem>();
 

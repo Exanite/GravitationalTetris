@@ -8,6 +8,8 @@ using Arch.System;
 using Arch.System.SourceGenerator;
 using Exanite.Ecs.Systems;
 using Exanite.Engine.Inputs;
+using Exanite.Engine.Inputs.Actions;
+using Exanite.Engine.Inputs.Systems;
 using Exanite.Engine.Lifecycles.Components;
 using Exanite.Engine.Time;
 using Exanite.GravitationalTetris.Features.Audio.Systems;
@@ -47,17 +49,21 @@ public partial class TetrisSystem : EcsSystem, ISetupSystem, IUpdateSystem
     private readonly float blockHorizontalSpeed = 2f;
     private EntityReference currentShapeRoot;
 
+    private IInputAction<bool> placeShapeAction = null!;
+    private IInputAction<bool> rotateLeftAction = null!;
+    private IInputAction<bool> rotateRightAction = null!;
+
     private readonly List<TetrisShapeDefinition> shapes = new();
 
     private readonly ResourceManager resourceManager;
     private readonly Random random;
     private readonly SimulationTime time;
-    private readonly Input input;
+    private readonly InputActionSystem input;
     private readonly GameTilemapData tilemap;
     private readonly PlayerControllerSystem playerControllerSystem;
     private readonly FmodAudioSystem audioSystem;
 
-    public TetrisSystem(ResourceManager resourceManager, Random random, SimulationTime time, Input input, PlayerControllerSystem playerControllerSystem, GameTilemapData tilemap, FmodAudioSystem audioSystem)
+    public TetrisSystem(ResourceManager resourceManager, Random random, SimulationTime time, InputActionSystem input, PlayerControllerSystem playerControllerSystem, GameTilemapData tilemap, FmodAudioSystem audioSystem)
     {
         this.resourceManager = resourceManager;
         this.random = random;
@@ -70,6 +76,22 @@ public partial class TetrisSystem : EcsSystem, ISetupSystem, IUpdateSystem
 
     public void Setup()
     {
+        placeShapeAction = input.RegisterAction(new OrInputAction(
+            new ButtonInputAction(SDL.SDL_Scancode.SDL_SCANCODE_SPACE),
+            new ButtonInputAction(KeyCode.MouseLeft)
+        ));
+
+        rotateLeftAction = input.RegisterAction(new OrInputAction(
+            new ButtonInputAction(SDL.SDL_Scancode.SDL_SCANCODE_Q),
+            new ButtonInputAction(KeyCode.MouseBackward)
+        ));
+
+        rotateRightAction = input.RegisterAction(new OrInputAction(
+            new ButtonInputAction(SDL.SDL_Scancode.SDL_SCANCODE_E),
+            new ButtonInputAction(KeyCode.MouseForward),
+            new ButtonInputAction(KeyCode.MouseRight)
+        ));
+
         if (File.Exists(ScoresFilePath))
         {
             using (var streamReader = File.OpenText(ScoresFilePath))
@@ -203,7 +225,7 @@ public partial class TetrisSystem : EcsSystem, ISetupSystem, IUpdateSystem
 
         Score += ScorePerSecond * ScoreMultiplier * time.DeltaTime;
 
-        if (currentShapeRoot.IsAlive() && currentShapeRoot.Entity.Has<TetrisRootComponent>() && (input.IsPressed(SDL.SDL_Scancode.SDL_SCANCODE_Q) || input.IsPressed(KeyCode.MouseRight) || input.IsPressed(KeyCode.MouseForward)))
+        if (currentShapeRoot.IsAlive() && currentShapeRoot.Entity.Has<TetrisRootComponent>() && rotateLeftAction.IsPressed())
         {
             audioSystem.Play(FmodAudioSystem.RotateShape);
 
@@ -211,7 +233,7 @@ public partial class TetrisSystem : EcsSystem, ISetupSystem, IUpdateSystem
             tetrisRootComponent.Rotation = (TetrisRotation)(((int)tetrisRootComponent.Rotation + 1) % 4);
         }
 
-        if (currentShapeRoot.IsAlive() && currentShapeRoot.Entity.Has<TetrisRootComponent>() && input.IsPressed(SDL.SDL_Scancode.SDL_SCANCODE_E) || input.IsPressed(KeyCode.MouseBackward))
+        if (currentShapeRoot.IsAlive() && currentShapeRoot.Entity.Has<TetrisRootComponent>() && rotateRightAction.IsPressed())
         {
             audioSystem.Play(FmodAudioSystem.RotateShape);
 
@@ -223,8 +245,9 @@ public partial class TetrisSystem : EcsSystem, ISetupSystem, IUpdateSystem
         {
             PlaceShape();
         }
-        else if (input.IsPressed(SDL.SDL_Scancode.SDL_SCANCODE_SPACE) || input.IsPressed(KeyCode.MouseLeft) || World.CountEntities(ShouldShouldPlaceTetris_QueryDescription) > 0)
+        else if (placeShapeAction.IsPressed() || World.CountEntities(ShouldShouldPlaceTetris_QueryDescription) > 0)
         {
+            playerControllerSystem.FlipGravity();
             audioSystem.Play(FmodAudioSystem.SwitchGravity);
 
             PlaceShape();

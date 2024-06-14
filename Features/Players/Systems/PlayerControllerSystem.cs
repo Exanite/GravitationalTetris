@@ -1,10 +1,10 @@
 using System;
-using System.Numerics;
 using Arch.System;
 using Arch.System.SourceGenerator;
 using Exanite.Core.Utilities;
 using Exanite.Ecs.Systems;
-using Exanite.Engine.Inputs;
+using Exanite.Engine.Inputs.Actions;
+using Exanite.Engine.Inputs.Systems;
 using Exanite.Engine.Time;
 using Exanite.GravitationalTetris.Features.Physics.Components;
 using Exanite.GravitationalTetris.Features.Players.Components;
@@ -14,31 +14,44 @@ using PhysicsWorld = nkast.Aether.Physics2D.Dynamics.World;
 
 namespace Exanite.GravitationalTetris.Features.Players.Systems;
 
-public partial class PlayerControllerSystem : EcsSystem, IUpdateSystem
+public partial class PlayerControllerSystem : EcsSystem, ISetupSystem, IUpdateSystem
 {
     private bool isGravityDown = true;
 
+    private IInputAction<float> movementAction = null!;
+
     private readonly PhysicsWorld physicsWorld;
-    private readonly Input input;
+    private readonly InputActionSystem input;
     private readonly SimulationTime time;
 
-    public PlayerControllerSystem(PhysicsWorld physicsWorld, Input input, SimulationTime time)
+    public PlayerControllerSystem(PhysicsWorld physicsWorld, InputActionSystem input, SimulationTime time)
     {
         this.physicsWorld = physicsWorld;
         this.input = input;
         this.time = time;
     }
 
+    public void Setup()
+    {
+        movementAction = input.RegisterAction(() =>
+        {
+            var action = new CompositeFloatInputAction();
+            action.AddPositive(new ButtonInputAction(SDL.SDL_Scancode.SDL_SCANCODE_D));
+            action.AddNegative(new ButtonInputAction(SDL.SDL_Scancode.SDL_SCANCODE_A));
+
+            return action;
+        });
+    }
+
     public void Update()
     {
         UpdateMovementQuery(World);
-
-        if (input.IsPressed(SDL.SDL_Scancode.SDL_SCANCODE_SPACE))
-        {
-            SetIsGravityDown(!isGravityDown);
-        }
-
         ClampPlayerVelocityQuery(World);
+    }
+
+    public void FlipGravity()
+    {
+        SetIsGravityDown(!isGravityDown);
     }
 
     public void SetIsGravityDown(bool isGravityDown)
@@ -57,11 +70,7 @@ public partial class PlayerControllerSystem : EcsSystem, IUpdateSystem
     [All<PlayerComponent>]
     private void UpdateMovement(ref VelocityComponent velocity, ref PlayerMovement movement, ref MovementSpeedComponent movementSpeed)
     {
-        var movementInput = 0f;
-        movementInput -= input.IsHeld(SDL.SDL_Scancode.SDL_SCANCODE_A) ? 1 : 0;
-        movementInput += input.IsHeld(SDL.SDL_Scancode.SDL_SCANCODE_D) ? 1 : 0;
-
-        velocity.Velocity.X = MathUtility.SmoothDamp(velocity.Velocity.X, movementInput * movementSpeed.MovementSpeed, movement.SmoothTime, time.DeltaTime, ref movement.SmoothVelocity.X);
+        velocity.Velocity.X = MathUtility.SmoothDamp(velocity.Velocity.X, movementAction.CurrentValue * movementSpeed.MovementSpeed, movement.SmoothTime, time.DeltaTime, ref movement.SmoothVelocity.X);
     }
 
     [Query]
