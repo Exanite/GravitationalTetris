@@ -62,7 +62,7 @@ public class Game1 : Game
         builder.RegisterType<RendererContext>().SingleInstance();
         builder.Register(_ => new RendererContextSettings
             {
-                EnableValidation = false,
+                EnableValidation = false, // Todo Enable
             })
             .SingleInstance();
 
