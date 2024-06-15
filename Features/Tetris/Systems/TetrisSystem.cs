@@ -230,7 +230,7 @@ public partial class TetrisSystem : EcsSystem, ISetupSystem, IUpdateSystem
             audioSystem.Play(FmodAudioSystem.RotateShape);
 
             ref var tetrisRootComponent = ref currentShapeRoot.Entity.Get<TetrisRootComponent>();
-            tetrisRootComponent.Rotation = (TetrisRotation)(((int)tetrisRootComponent.Rotation + 1) % 4);
+            tetrisRootComponent.Rotation = (TetrisRotation)(((int)tetrisRootComponent.Rotation + 3) % 4);
         }
 
         if (currentShapeRoot.IsAlive() && currentShapeRoot.Entity.Has<TetrisRootComponent>() && rotateRightAction.IsPressed())
