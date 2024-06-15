@@ -4,7 +4,7 @@ using Arch.Core.Extensions;
 using Arch.System;
 using Arch.System.SourceGenerator;
 using Exanite.Core.HighPerformance;
-using Exanite.Ecs.Systems;
+using Exanite.Engine.Ecs.Systems;
 using Exanite.Engine.Lifecycles.Components;
 using Exanite.Engine.Time;
 using Exanite.GravitationalTetris.Features.Physics.Components;

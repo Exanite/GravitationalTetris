@@ -6,7 +6,7 @@ using Arch.Core;
 using Arch.Core.Extensions;
 using Arch.System;
 using Arch.System.SourceGenerator;
-using Exanite.Ecs.Systems;
+using Exanite.Engine.Ecs.Systems;
 using Exanite.Engine.Inputs;
 using Exanite.Engine.Inputs.Actions;
 using Exanite.Engine.Inputs.Systems;

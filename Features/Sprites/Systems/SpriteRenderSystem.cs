@@ -1,7 +1,7 @@
 using System.Numerics;
 using Arch.System;
 using Arch.System.SourceGenerator;
-using Exanite.Ecs.Systems;
+using Exanite.Engine.Ecs.Systems;
 using Exanite.GravitationalTetris.Features.Cameras.Components;
 using Exanite.GravitationalTetris.Features.Sprites.Components;
 using Exanite.GravitationalTetris.Features.Transforms.Components;

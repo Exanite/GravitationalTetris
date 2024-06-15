@@ -1,4 +1,4 @@
-using Exanite.Ecs.Systems;
+using Exanite.Engine.Ecs.Systems;
 using World = nkast.Aether.Physics2D.Dynamics.World;
 
 namespace Exanite.GravitationalTetris.Features.Physics.Systems;

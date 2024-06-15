@@ -1,5 +1,5 @@
 using Diligent;
-using Exanite.Ecs.Systems;
+using Exanite.Engine.Ecs.Systems;
 using Exanite.Engine.Rendering;
 using Exanite.Engine.Windowing;
 using Exanite.ResourceManagement;
