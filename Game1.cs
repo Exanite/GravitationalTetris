@@ -66,9 +66,6 @@ public class Game1 : Game
             })
             .SingleInstance();
 
-        // Input
-        builder.RegisterType<Input>().SingleInstance();
-
         // Shared data
         builder.RegisterType<GameTilemapData>().SingleInstance();
 
@@ -84,6 +81,7 @@ public class Game1 : Game
 
         // Modules
         builder.RegisterModule<AvaloniaModule<App>>();
+        builder.RegisterModule<InputModule>();
         builder.RegisterModule<ResourcesModule>();
         builder.RegisterModule<ThreadingModule>();
         builder.RegisterModule<TimeModule>();

@@ -8,7 +8,6 @@ using Exanite.Engine.Ecs.Queries;
 using Exanite.Engine.Ecs.Systems;
 using Exanite.Engine.Inputs;
 using Exanite.Engine.Inputs.Actions;
-using Exanite.Engine.Inputs.Systems;
 using Exanite.Engine.Lifecycles.Components;
 using Exanite.Engine.Time;
 using Exanite.GravitationalTetris.Features.Audio.Systems;
@@ -57,12 +56,12 @@ public partial class TetrisSystem : EcsSystem, ISetupSystem, IUpdateSystem
     private readonly ResourceManager resourceManager;
     private readonly Random random;
     private readonly SimulationTime time;
-    private readonly InputActionSystem input;
+    private readonly InputActionManager input;
     private readonly GameTilemapData tilemap;
     private readonly PlayerControllerSystem playerControllerSystem;
     private readonly FmodAudioSystem audioSystem;
 
-    public TetrisSystem(ResourceManager resourceManager, Random random, SimulationTime time, InputActionSystem input, PlayerControllerSystem playerControllerSystem, GameTilemapData tilemap, FmodAudioSystem audioSystem)
+    public TetrisSystem(ResourceManager resourceManager, Random random, SimulationTime time, InputActionManager input, PlayerControllerSystem playerControllerSystem, GameTilemapData tilemap, FmodAudioSystem audioSystem)
     {
         this.resourceManager = resourceManager;
         this.random = random;
