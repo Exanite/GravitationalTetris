@@ -1,9 +1,8 @@
 using System.Numerics;
 using Arch.Core;
 using Arch.Core.Extensions;
-using Arch.System;
-using Arch.System.SourceGenerator;
 using Exanite.Core.HighPerformance;
+using Exanite.Engine.Ecs.Queries;
 using Exanite.Engine.Ecs.Systems;
 using Exanite.Engine.Lifecycles.Components;
 using Exanite.Engine.Time;

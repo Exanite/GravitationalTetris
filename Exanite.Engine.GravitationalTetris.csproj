@@ -30,7 +30,7 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Aether.Physics2D\Aether.Physics2D.csproj"/>
-    <ProjectReference Include="..\Arch.Extended\Arch.System.SourceGenerator\Arch.System.SourceGenerator.csproj" OutputItemType="Analyzer"/>
+    <ProjectReference Include="..\Exanite.Engine.Analyzers\Exanite.Engine.Analyzers.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false"/>
     <ProjectReference Include="..\Exanite.Engine\Exanite.Engine.csproj"/>
   </ItemGroup>
 

@@ -1,5 +1,5 @@
 using System.Numerics;
-using Arch.System;
+using Exanite.Engine.Ecs.Queries;
 using Exanite.Engine.Ecs.Systems;
 using Exanite.Engine.Windowing;
 using Exanite.GravitationalTetris.Features.Cameras.Components;
