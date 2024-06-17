@@ -22,7 +22,7 @@ public partial class SpriteRenderSystem : EcsSystem, IRenderSystem
     }
 
     [Query]
-    [All<CameraComponent>]
+    [Include<CameraComponent>]
     private void Draw(ref CameraProjectionComponent cameraProjection)
     {
         spriteBatchSystem.Begin(new SpriteBeginDrawOptions

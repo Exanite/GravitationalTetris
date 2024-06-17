@@ -1,10 +1,10 @@
-using Arch.Core;
+using Myriad.ECS;
 
 namespace Exanite.GravitationalTetris.Features.Tetris.Components;
 
-public struct TetrisBlockComponent
+public struct TetrisBlockComponent : IComponent
 {
-    public required EntityReference Root;
+    public required Entity Root;
 
     public required TetrisShapeDefinition Definition;
     public required int LocalX;

@@ -1,8 +1,9 @@
 using System.Numerics;
+using Myriad.ECS;
 
 namespace Exanite.GravitationalTetris.Features.Transforms.Components;
 
-public struct TransformComponent
+public struct TransformComponent : IComponent
 {
     public Vector2 Position;
     public Vector2 Size;

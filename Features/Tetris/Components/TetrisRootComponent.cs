@@ -1,8 +1,9 @@
 using System.Collections.Generic;
+using Myriad.ECS;
 
 namespace Exanite.GravitationalTetris.Features.Tetris.Components;
 
-public struct TetrisRootComponent
+public struct TetrisRootComponent : IComponent
 {
     public required TetrisShapeDefinition Shape;
     public required TetrisRotation Rotation;

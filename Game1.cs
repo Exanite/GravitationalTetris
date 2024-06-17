@@ -30,7 +30,7 @@ using Exanite.GravitationalTetris.Features.Tiles.Systems;
 using Exanite.GravitationalTetris.Features.UserInterface;
 using Exanite.Logging;
 using Exanite.ResourceManagement;
-using EcsWorld = Arch.Core.World;
+using Myriad.ECS.Worlds;
 using PhysicsWorld = nkast.Aether.Physics2D.Dynamics.World;
 
 namespace Exanite.GravitationalTetris;
@@ -73,7 +73,7 @@ public class Game1 : Game
         builder.RegisterType<PhysicsWorld>().SingleInstance();
 
         // ECS world
-        builder.Register(_ => EcsWorld.Create()).SingleInstance();
+        builder.Register(_ => new WorldBuilder().Build()).SingleInstance();
 
         // Game loop
         builder.RegisterType<EcsGameLoop>().AsSelf().AsImplementedInterfaces().SingleInstance();
@@ -102,7 +102,6 @@ public class Game1 : Game
         config.Register<CreateEntitiesSystem>();
 
         config.Register<PhysicsSimulationSystem>();
-        config.Register<PhysicsContactSystem>();
 
         config.Register<PlayerControllerSystem>();
         config.Register<TetrisSystem>();

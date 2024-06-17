@@ -1,6 +1,4 @@
 using System.Numerics;
-using Arch.Core;
-using Arch.Core.Extensions;
 using Exanite.Core.HighPerformance;
 using Exanite.Engine.Ecs.Queries;
 using Exanite.Engine.Ecs.Systems;
@@ -8,6 +6,7 @@ using Exanite.Engine.Lifecycles.Components;
 using Exanite.Engine.Time;
 using Exanite.GravitationalTetris.Features.Physics.Components;
 using Exanite.GravitationalTetris.Features.Transforms.Components;
+using Myriad.ECS;
 using World = nkast.Aether.Physics2D.Dynamics.World;
 
 namespace Exanite.GravitationalTetris.Features.Physics.Systems;
@@ -57,7 +56,7 @@ public partial class PhysicsSimulationSystem : EcsSystem, IStartSystem, IUpdateS
         if (rigidbody.Body.World == null)
         {
             physicsWorld.Add(rigidbody.Body);
-            rigidbody.Body.Tag = new BoxedValue<EntityReference>(entity.Reference());
+            rigidbody.Body.Tag = new BoxedValue<Entity>(entity);
         }
     }
 
@@ -100,7 +99,7 @@ public partial class PhysicsSimulationSystem : EcsSystem, IStartSystem, IUpdateS
     }
 
     [Query]
-    [All<DestroyedComponent>]
+    [Include<DestroyedComponent>]
     private void RemoveRigidbodies(ref RigidbodyComponent rigidbody)
     {
         var body = rigidbody.Body;

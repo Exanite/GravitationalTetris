@@ -1,8 +1,9 @@
 using System.Numerics;
+using Myriad.ECS;
 
 namespace Exanite.GravitationalTetris.Features.Cameras.Components;
 
-public struct CameraProjectionComponent
+public struct CameraProjectionComponent : IComponent
 {
     public Matrix4x4 View;
     public Matrix4x4 Projection;

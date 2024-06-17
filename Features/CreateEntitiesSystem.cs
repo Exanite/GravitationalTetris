@@ -6,6 +6,7 @@ using Exanite.GravitationalTetris.Features.Players.Components;
 using Exanite.GravitationalTetris.Features.Sprites.Components;
 using Exanite.GravitationalTetris.Features.Transforms.Components;
 using Exanite.ResourceManagement;
+using Myriad.ECS.Command;
 using nkast.Aether.Physics2D.Dynamics;
 
 namespace Exanite.GravitationalTetris.Features;
@@ -21,14 +22,18 @@ public class CreateEntitiesSystem : EcsSystem, IStartSystem
 
     public void Start()
     {
+        var commandBuffer = new CommandBuffer(World);
+
+
+
         // Camera
-        World.Create(
-            new CameraComponent(20),
-            new TransformComponent
+        commandBuffer.Create()
+            .Set(new CameraComponent(20))
+            .Set(new TransformComponent
             {
                 Position = new Vector2(5f - 0.5f, 10f - 0.5f),
-            },
-            new CameraProjectionComponent());
+            })
+            .Set(new CameraProjectionComponent());
 
         // Player
         var playerBody = new Body();
@@ -48,18 +53,18 @@ public class CreateEntitiesSystem : EcsSystem, IStartSystem
         var feet = playerBody.CreateCircle(2f / 16f, 1, new Vector2(0, 6f / 16f));
         feet.Restitution = 0;
 
-        World.Create(
-            new PlayerComponent(),
-            new TransformComponent
+        commandBuffer.Create()
+            .Set(new PlayerComponent())
+            .Set(new TransformComponent
             {
                 Position = new Vector2(4f, 0),
                 Size = new Vector2(1, 1),
-            },
-            new SpriteComponent(resourceManager.GetResource(BaseMod.Player)),
-            new RigidbodyComponent(playerBody),
-            new VelocityComponent(),
-            new MovementSpeedComponent(5),
-            new PlayerMovement
+            })
+            .Set(new SpriteComponent(resourceManager.GetResource(BaseMod.Player)))
+            .Set(new RigidbodyComponent(playerBody))
+            .Set(new VelocityComponent())
+            .Set(new MovementSpeedComponent(5))
+            .Set(new PlayerMovement
             {
                 SmoothTime = 0.05f,
             });
@@ -71,6 +76,8 @@ public class CreateEntitiesSystem : EcsSystem, IStartSystem
         wallBody.CreateRectangle(1, 60, 1, new Vector2(-2, 15));
         wallBody.CreateRectangle(1, 60, 1, new Vector2(11, 15));
 
-        World.Create(new RigidbodyComponent(wallBody));
+        commandBuffer.Create().Set(new RigidbodyComponent(wallBody));
+
+        commandBuffer.Playback();
     }
 }

@@ -1,3 +1,5 @@
+using Myriad.ECS;
+
 namespace Exanite.GravitationalTetris.Features.Players.Components;
 
-public struct PlayerComponent {}
+public struct PlayerComponent : IComponent {}

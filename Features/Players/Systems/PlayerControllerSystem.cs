@@ -65,28 +65,28 @@ public partial class PlayerControllerSystem : EcsSystem, ISetupSystem, IUpdateSy
     }
 
     [Query]
-    [All<PlayerComponent>]
+    [Include<PlayerComponent>]
     private void UpdateMovement(ref VelocityComponent velocity, ref PlayerMovement movement, ref MovementSpeedComponent movementSpeed)
     {
         velocity.Velocity.X = MathUtility.SmoothDamp(velocity.Velocity.X, movementAction.CurrentValue * movementSpeed.MovementSpeed, movement.SmoothTime, time.DeltaTime, ref movement.SmoothVelocity.X);
     }
 
     [Query]
-    [All<PlayerComponent>]
+    [Include<PlayerComponent>]
     private void ZeroVelocityY(ref VelocityComponent velocity)
     {
         velocity.Velocity.Y = 0;
     }
 
     [Query]
-    [All<PlayerComponent>]
+    [Include<PlayerComponent>]
     private void SetPlayerRotation(ref TransformComponent transform)
     {
         transform.Rotation = isGravityDown ? 0 : float.Pi;
     }
 
     [Query]
-    [All<PlayerComponent>]
+    [Include<PlayerComponent>]
     private void ClampPlayerVelocity(ref VelocityComponent velocity)
     {
         velocity.Velocity.Y = Math.Clamp(velocity.Velocity.Y, -4, 4);

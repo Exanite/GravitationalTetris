@@ -47,7 +47,7 @@ public partial class TilemapRenderSystem : EcsSystem, IRenderSystem, ISetupSyste
     }
 
     [Query]
-    [All<CameraComponent>]
+    [Include<CameraComponent>]
     private void ForEachCamera(ref CameraProjectionComponent cameraProjection)
     {
         spriteBatchSystem.Begin(new SpriteBeginDrawOptions
