@@ -78,6 +78,6 @@ public class CreateEntitiesSystem : EcsSystem, IStartSystem
 
         commandBuffer.Create().Set(new RigidbodyComponent(wallBody));
 
-        commandBuffer.Playback();
+        commandBuffer.Playback().Dispose();
     }
 }

@@ -29,7 +29,7 @@ public partial class TilemapColliderSystem : EcsSystem, IStartSystem, IUpdateSys
         commandBuffer = new CommandBuffer(World);
 
         commandBuffer.Create().Set(new UpdateTilemapCollidersEventComponent());
-        commandBuffer.Playback();
+        commandBuffer.Playback().Dispose();
     }
 
     public void Update()
@@ -41,7 +41,7 @@ public partial class TilemapColliderSystem : EcsSystem, IStartSystem, IUpdateSys
 
             UpdateTilemapColliders();
 
-            commandBuffer.Playback();
+            commandBuffer.Playback().Dispose();
         }
     }
 
