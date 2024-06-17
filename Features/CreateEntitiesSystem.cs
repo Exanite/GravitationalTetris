@@ -24,8 +24,6 @@ public class CreateEntitiesSystem : EcsSystem, IStartSystem
     {
         var commandBuffer = new CommandBuffer(World);
 
-
-
         // Camera
         commandBuffer.Create()
             .Set(new CameraComponent(20))
