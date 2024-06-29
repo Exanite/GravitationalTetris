@@ -11,7 +11,7 @@ namespace Exanite.GravitationalTetris.Features.Rendering.Systems;
 public class ToneMappingSystem : ISetupSystem, IRenderSystem, ITeardownSystem
 {
     private Buffer<ToneMapUniformData> uniformBuffer = null!;
-    private Reloadable<IPipelineState> pipeline = null!;
+    private ReloadableHandle<IPipelineState> pipeline = null!;
     private IShaderResourceBinding shaderResourceBinding = null!;
     private IShaderResourceVariable? textureVariable;
 
@@ -44,7 +44,7 @@ public class ToneMappingSystem : ISetupSystem, IRenderSystem, ITeardownSystem
             CPUAccessFlags = CpuAccessFlags.Write,
         });
 
-        pipeline = new Reloadable<IPipelineState>((List<IHandle> dependencies, out IPipelineState resource, out Action<IPipelineState> unloadAction) =>
+        pipeline = new ReloadableHandle<IPipelineState>((List<IHandle> dependencies, out IPipelineState resource, out Action<IPipelineState> unloadAction) =>
         {
             dependencies.Add(vShader);
             dependencies.Add(pShader);
