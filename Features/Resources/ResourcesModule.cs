@@ -63,7 +63,7 @@ public class ResourcesModule : Module
 
                     var shader = new Shader(loadOperation.Key, reader.ReadToEnd(), type, rendererContext);
                     loadOperation.Fulfill(shader);
-                }, false);
+                });
 
                 resourceManager.RegisterLoader<Texture2D>(loadOperation =>
                 {
