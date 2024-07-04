@@ -56,67 +56,67 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
         var pShaderUp = resourceManager.GetResource(RenderingMod.BloomUpShader);
 
         {
-            downUniformBuffer = new Buffer<BloomDownUniformData>("Bloom Down Uniform Buffer", rendererContext, new BufferDesc
+            downUniformBuffer = new Buffer<BloomDownUniformData>("Bloom Down Uniform Buffer", rendererContext, new BufferDesc()
             {
                 Usage = Usage.Dynamic,
                 BindFlags = BindFlags.UniformBuffer,
                 CPUAccessFlags = CpuAccessFlags.Write,
             });
 
-            downPipeline = renderDevice.CreateGraphicsPipelineState(new GraphicsPipelineStateCreateInfo
+            downPipeline = renderDevice.CreateGraphicsPipelineState(new GraphicsPipelineStateCreateInfo()
             {
-                PSODesc = new PipelineStateDesc
+                PSODesc = new PipelineStateDesc()
                 {
                     Name = "Bloom Down Shader Pipeline",
-                    ResourceLayout = new PipelineResourceLayoutDesc
+                    ResourceLayout = new PipelineResourceLayoutDesc()
                     {
                         DefaultVariableType = ShaderResourceVariableType.Static,
-                        Variables = new ShaderResourceVariableDesc[]
-                        {
-                            new()
+                        Variables =
+                        [
+                            new ShaderResourceVariableDesc()
                             {
                                 ShaderStages = ShaderType.Pixel,
                                 Name = "Texture",
                                 Type = ShaderResourceVariableType.Mutable,
                             },
-                        },
-                        ImmutableSamplers = new ImmutableSamplerDesc[]
-                        {
-                            new()
+                        ],
+                        ImmutableSamplers =
+                        [
+                            new ImmutableSamplerDesc()
                             {
                                 SamplerOrTextureName = "TextureSampler",
                                 ShaderStages = ShaderType.Pixel,
-                                Desc = new SamplerDesc
+                                Desc = new SamplerDesc()
                                 {
                                     MinFilter = FilterType.Linear, MagFilter = FilterType.Linear, MipFilter = FilterType.Linear,
                                     AddressU = TextureAddressMode.Clamp, AddressV = TextureAddressMode.Clamp, AddressW = TextureAddressMode.Clamp,
                                 },
                             },
-                        },
+                        ],
                     },
                 },
 
-                GraphicsPipeline = new GraphicsPipelineDesc
+                GraphicsPipeline = new GraphicsPipelineDesc()
                 {
                     PrimitiveTopology = PrimitiveTopology.TriangleStrip,
 
                     NumRenderTargets = 1,
                     RTVFormats = [CommonTextureFormats.HdrTextureFormat],
 
-                    RasterizerDesc = new RasterizerStateDesc { CullMode = CullMode.None },
-                    DepthStencilDesc = new DepthStencilStateDesc { DepthEnable = false },
+                    RasterizerDesc = new RasterizerStateDesc() { CullMode = CullMode.None },
+                    DepthStencilDesc = new DepthStencilStateDesc() { DepthEnable = false },
 
-                    BlendDesc = new BlendStateDesc
+                    BlendDesc = new BlendStateDesc()
                     {
-                        RenderTargets = new RenderTargetBlendDesc[]
-                        {
-                            new()
+                        RenderTargets =
+                        [
+                            new RenderTargetBlendDesc
                             {
                                 BlendEnable = true,
                                 SrcBlend = BlendFactor.One,
                                 DestBlend = BlendFactor.Zero,
                             },
-                        },
+                        ],
                     },
                 },
 
@@ -131,67 +131,67 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
         }
 
         {
-            upUniformBuffer = new Buffer<BloomUpUniformData>("Bloom Up Uniform Buffer", rendererContext, new BufferDesc
+            upUniformBuffer = new Buffer<BloomUpUniformData>("Bloom Up Uniform Buffer", rendererContext, new BufferDesc()
             {
                 Usage = Usage.Dynamic,
                 BindFlags = BindFlags.UniformBuffer,
                 CPUAccessFlags = CpuAccessFlags.Write,
             });
 
-            upPipeline = renderDevice.CreateGraphicsPipelineState(new GraphicsPipelineStateCreateInfo
+            upPipeline = renderDevice.CreateGraphicsPipelineState(new GraphicsPipelineStateCreateInfo()
             {
-                PSODesc = new PipelineStateDesc
+                PSODesc = new PipelineStateDesc()
                 {
                     Name = "Bloom Up Shader Pipeline",
-                    ResourceLayout = new PipelineResourceLayoutDesc
+                    ResourceLayout = new PipelineResourceLayoutDesc()
                     {
                         DefaultVariableType = ShaderResourceVariableType.Static,
-                        Variables = new ShaderResourceVariableDesc[]
-                        {
-                            new()
+                        Variables =
+                        [
+                            new ShaderResourceVariableDesc()
                             {
                                 ShaderStages = ShaderType.Pixel,
                                 Name = "Texture",
                                 Type = ShaderResourceVariableType.Mutable,
                             },
-                        },
-                        ImmutableSamplers = new ImmutableSamplerDesc[]
-                        {
-                            new()
+                        ],
+                        ImmutableSamplers =
+                        [
+                            new ImmutableSamplerDesc()
                             {
                                 SamplerOrTextureName = "TextureSampler",
                                 ShaderStages = ShaderType.Pixel,
-                                Desc = new SamplerDesc
+                                Desc = new SamplerDesc()
                                 {
                                     MinFilter = FilterType.Linear, MagFilter = FilterType.Linear, MipFilter = FilterType.Linear,
                                     AddressU = TextureAddressMode.Clamp, AddressV = TextureAddressMode.Clamp, AddressW = TextureAddressMode.Clamp,
                                 },
                             },
-                        },
+                        ],
                     },
                 },
 
-                GraphicsPipeline = new GraphicsPipelineDesc
+                GraphicsPipeline = new GraphicsPipelineDesc()
                 {
                     PrimitiveTopology = PrimitiveTopology.TriangleStrip,
 
                     NumRenderTargets = 1,
                     RTVFormats = [CommonTextureFormats.HdrTextureFormat],
 
-                    RasterizerDesc = new RasterizerStateDesc { CullMode = CullMode.None },
-                    DepthStencilDesc = new DepthStencilStateDesc { DepthEnable = false },
+                    RasterizerDesc = new RasterizerStateDesc() { CullMode = CullMode.None },
+                    DepthStencilDesc = new DepthStencilStateDesc() { DepthEnable = false },
 
-                    BlendDesc = new BlendStateDesc
+                    BlendDesc = new BlendStateDesc()
                     {
-                        RenderTargets = new RenderTargetBlendDesc[]
-                        {
-                            new()
+                        RenderTargets =
+                        [
+                            new RenderTargetBlendDesc()
                             {
                                 BlendEnable = true,
                                 SrcBlend = BlendFactor.One,
                                 DestBlend = BlendFactor.One,
                             },
-                        },
+                        ],
                     },
                 },
 
@@ -211,7 +211,6 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
         ResizeRenderTextures();
 
         var deviceContext = rendererContext.DeviceContext;
-        var swapChain = window.SwapChain;
 
         if (renderTextures.Count != 0)
         {
@@ -234,7 +233,7 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
 
                 deviceContext.SetRenderTargets(renderTargets, null, ResourceStateTransitionMode.Transition);
                 deviceContext.CommitShaderResources(downResources, ResourceStateTransitionMode.Transition);
-                deviceContext.Draw(new DrawAttribs
+                deviceContext.Draw(new DrawAttribs()
                 {
                     NumVertices = 4,
                     Flags = DrawFlags.VerifyAll,
@@ -266,7 +265,7 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
 
                 deviceContext.SetRenderTargets(renderTargets, null, ResourceStateTransitionMode.Transition);
                 deviceContext.CommitShaderResources(upResources, ResourceStateTransitionMode.Transition);
-                deviceContext.Draw(new DrawAttribs
+                deviceContext.Draw(new DrawAttribs()
                 {
                     NumVertices = 4,
                     Flags = DrawFlags.VerifyAll,
@@ -287,7 +286,7 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
 
             upTextureVariable?.Set(renderTextures[0].RenderTarget, SetShaderResourceFlags.AllowOverwrite);
             deviceContext.CommitShaderResources(upResources, ResourceStateTransitionMode.Transition);
-            deviceContext.Draw(new DrawAttribs
+            deviceContext.Draw(new DrawAttribs()
             {
                 NumVertices = 4,
                 Flags = DrawFlags.VerifyAll,

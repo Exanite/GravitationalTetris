@@ -50,7 +50,7 @@ public partial class TilemapRenderSystem : EcsSystem, IRenderSystem, ISetupSyste
     [Include<CameraComponent>]
     private void ForEachCamera(ref CameraProjectionComponent cameraProjection)
     {
-        spriteBatchSystem.Begin(new SpriteBeginDrawOptions
+        spriteBatchSystem.Begin(new SpriteBeginDrawOptions()
         {
             View = cameraProjection.View,
             Projection = cameraProjection.Projection,
@@ -83,7 +83,7 @@ public partial class TilemapRenderSystem : EcsSystem, IRenderSystem, ISetupSyste
 
                 var world = Matrix4x4.CreateTranslation(x, y, 0);
 
-                spriteBatchSystem.Draw(new SpriteDrawOptions
+                spriteBatchSystem.Draw(new SpriteDrawOptions()
                 {
                     Texture = texture.Value,
                     World = world,
@@ -105,7 +105,7 @@ public partial class TilemapRenderSystem : EcsSystem, IRenderSystem, ISetupSyste
 
             var world = Matrix4x4.CreateTranslation(blockPosition.X, blockPosition.Y, 0);
 
-            spriteBatchSystem.Draw(new SpriteDrawOptions
+            spriteBatchSystem.Draw(new SpriteDrawOptions()
             {
                 Texture = texture,
                 World = world,

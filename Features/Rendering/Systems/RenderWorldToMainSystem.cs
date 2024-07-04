@@ -34,48 +34,48 @@ public class RenderWorldToMainSystem : ISetupSystem, IRenderSystem, ITeardownSys
         var vShader = resourceManager.GetResource(RenderingMod.ScreenShader);
         var pShaderPassthrough = resourceManager.GetResource(RenderingMod.PassthroughShader);
 
-        passthroughPipeline = renderDevice.CreateGraphicsPipelineState(new GraphicsPipelineStateCreateInfo
+        passthroughPipeline = renderDevice.CreateGraphicsPipelineState(new GraphicsPipelineStateCreateInfo()
         {
-            PSODesc = new PipelineStateDesc
+            PSODesc = new PipelineStateDesc()
             {
                 Name = "Passthrough Shader Pipeline",
-                ResourceLayout = new PipelineResourceLayoutDesc
+                ResourceLayout = new PipelineResourceLayoutDesc()
                 {
                     DefaultVariableType = ShaderResourceVariableType.Static,
-                    Variables = new ShaderResourceVariableDesc[]
-                    {
-                        new()
+                    Variables =
+                    [
+                        new ShaderResourceVariableDesc()
                         {
                             ShaderStages = ShaderType.Pixel,
                             Name = "Texture",
                             Type = ShaderResourceVariableType.Mutable,
                         },
-                    },
-                    ImmutableSamplers = new ImmutableSamplerDesc[]
-                    {
-                        new()
+                    ],
+                    ImmutableSamplers =
+                    [
+                        new ImmutableSamplerDesc()
                         {
                             SamplerOrTextureName = "TextureSampler",
                             ShaderStages = ShaderType.Pixel,
-                            Desc = new SamplerDesc
+                            Desc = new SamplerDesc()
                             {
                                 MinFilter = FilterType.Point, MagFilter = FilterType.Point, MipFilter = FilterType.Point,
                                 AddressU = TextureAddressMode.Clamp, AddressV = TextureAddressMode.Clamp, AddressW = TextureAddressMode.Clamp,
                             },
                         },
-                    },
+                    ],
                 },
             },
 
-            GraphicsPipeline = new GraphicsPipelineDesc
+            GraphicsPipeline = new GraphicsPipelineDesc()
             {
                 PrimitiveTopology = PrimitiveTopology.TriangleStrip,
 
                 NumRenderTargets = 1,
                 RTVFormats = [CommonTextureFormats.SrgbTextureFormat],
 
-                RasterizerDesc = new RasterizerStateDesc { CullMode = CullMode.None },
-                DepthStencilDesc = new DepthStencilStateDesc { DepthEnable = false },
+                RasterizerDesc = new RasterizerStateDesc() { CullMode = CullMode.None },
+                DepthStencilDesc = new DepthStencilStateDesc() { DepthEnable = false },
             },
 
             Vs = vShader.Value.Handle,
@@ -98,7 +98,7 @@ public class RenderWorldToMainSystem : ISetupSystem, IRenderSystem, ITeardownSys
 
         deviceContext.SetPipelineState(passthroughPipeline);
         deviceContext.CommitShaderResources(passthroughResources, ResourceStateTransitionMode.Transition);
-        deviceContext.Draw(new DrawAttribs
+        deviceContext.Draw(new DrawAttribs()
         {
             NumVertices = 4,
             Flags = DrawFlags.VerifyAll,

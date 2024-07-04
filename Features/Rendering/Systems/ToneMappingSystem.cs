@@ -37,7 +37,7 @@ public class ToneMappingSystem : ISetupSystem, IRenderSystem, ITeardownSystem
         var vShader = resourceManager.GetResource(RenderingMod.ScreenShader);
         var pShader = resourceManager.GetResource(RenderingMod.ToneMapShader);
 
-        uniformBuffer = new Buffer<ToneMapUniformData>("Tone Map Uniform Buffer", rendererContext, new BufferDesc
+        uniformBuffer = new Buffer<ToneMapUniformData>("Tone Map Uniform Buffer", rendererContext, new BufferDesc()
         {
             Usage = Usage.Dynamic,
             BindFlags = BindFlags.UniformBuffer,
@@ -49,48 +49,48 @@ public class ToneMappingSystem : ISetupSystem, IRenderSystem, ITeardownSystem
             dependencies.Add(vShader);
             dependencies.Add(pShader);
 
-            resource = renderDevice.CreateGraphicsPipelineState(new GraphicsPipelineStateCreateInfo
+            resource = renderDevice.CreateGraphicsPipelineState(new GraphicsPipelineStateCreateInfo()
             {
-                PSODesc = new PipelineStateDesc
+                PSODesc = new PipelineStateDesc()
                 {
                     Name = "Post Process Shader Pipeline",
-                    ResourceLayout = new PipelineResourceLayoutDesc
+                    ResourceLayout = new PipelineResourceLayoutDesc()
                     {
                         DefaultVariableType = ShaderResourceVariableType.Static,
-                        Variables = new ShaderResourceVariableDesc[]
-                        {
-                            new()
+                        Variables =
+                        [
+                            new ShaderResourceVariableDesc()
                             {
                                 ShaderStages = ShaderType.Pixel,
                                 Name = "Texture",
                                 Type = ShaderResourceVariableType.Mutable,
                             },
-                        },
-                        ImmutableSamplers = new ImmutableSamplerDesc[]
-                        {
-                            new()
+                        ],
+                        ImmutableSamplers =
+                        [
+                            new ImmutableSamplerDesc()
                             {
                                 SamplerOrTextureName = "TextureSampler",
                                 ShaderStages = ShaderType.Pixel,
-                                Desc = new SamplerDesc
+                                Desc = new SamplerDesc()
                                 {
                                     MinFilter = FilterType.Point, MagFilter = FilterType.Point, MipFilter = FilterType.Point,
                                     AddressU = TextureAddressMode.Clamp, AddressV = TextureAddressMode.Clamp, AddressW = TextureAddressMode.Clamp,
                                 },
                             },
-                        },
+                        ],
                     },
                 },
 
-                GraphicsPipeline = new GraphicsPipelineDesc
+                GraphicsPipeline = new GraphicsPipelineDesc()
                 {
                     PrimitiveTopology = PrimitiveTopology.TriangleStrip,
 
                     NumRenderTargets = 1,
                     RTVFormats = [CommonTextureFormats.HdrTextureFormat],
 
-                    RasterizerDesc = new RasterizerStateDesc { CullMode = CullMode.None },
-                    DepthStencilDesc = new DepthStencilStateDesc { DepthEnable = false },
+                    RasterizerDesc = new RasterizerStateDesc() { CullMode = CullMode.None },
+                    DepthStencilDesc = new DepthStencilStateDesc() { DepthEnable = false },
                 },
 
                 Vs = vShader.Value.Handle,
@@ -130,7 +130,7 @@ public class ToneMappingSystem : ISetupSystem, IRenderSystem, ITeardownSystem
 
         deviceContext.SetPipelineState(pipeline.Value);
         deviceContext.CommitShaderResources(shaderResourceBinding, ResourceStateTransitionMode.Transition);
-        deviceContext.Draw(new DrawAttribs
+        deviceContext.Draw(new DrawAttribs()
         {
             NumVertices = 4,
             Flags = DrawFlags.VerifyAll,

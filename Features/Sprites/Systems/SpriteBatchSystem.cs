@@ -44,14 +44,14 @@ public class SpriteBatchSystem : ISetupSystem, IRenderSystem, IDisposable
     {
         var renderDevice = rendererContext.RenderDevice;
 
-        uniformBuffer = new Buffer<SpriteUniformData>("Sprite Uniform Buffer", rendererContext, new BufferDesc
+        uniformBuffer = new Buffer<SpriteUniformData>("Sprite Uniform Buffer", rendererContext, new BufferDesc()
         {
             Usage = Usage.Dynamic,
             BindFlags = BindFlags.UniformBuffer,
             CPUAccessFlags = CpuAccessFlags.Write,
         });
 
-        instanceBuffer = new Buffer<SpriteInstanceData>("Sprite Instance Buffer", rendererContext, new BufferDesc
+        instanceBuffer = new Buffer<SpriteInstanceData>("Sprite Instance Buffer", rendererContext, new BufferDesc()
         {
             Usage = Usage.Dynamic,
             BindFlags = BindFlags.VertexBuffer,
@@ -63,40 +63,40 @@ public class SpriteBatchSystem : ISetupSystem, IRenderSystem, IDisposable
         var vShader = resourceManager.GetResource(BaseMod.SpriteVShader);
         var pShader = resourceManager.GetResource(BaseMod.SpritePShader);
 
-        pipeline = renderDevice.CreateGraphicsPipelineState(new GraphicsPipelineStateCreateInfo
+        pipeline = renderDevice.CreateGraphicsPipelineState(new GraphicsPipelineStateCreateInfo()
         {
-            PSODesc = new PipelineStateDesc
+            PSODesc = new PipelineStateDesc()
             {
                 Name = "Sprite Shader Pipeline",
-                ResourceLayout = new PipelineResourceLayoutDesc
+                ResourceLayout = new PipelineResourceLayoutDesc()
                 {
                     DefaultVariableType = ShaderResourceVariableType.Static,
-                    Variables = new ShaderResourceVariableDesc[]
-                    {
-                        new()
+                    Variables =
+                    [
+                        new ShaderResourceVariableDesc()
                         {
                             ShaderStages = ShaderType.Pixel,
                             Name = "Texture",
                             Type = ShaderResourceVariableType.Mutable,
                         },
-                    },
-                    ImmutableSamplers = new ImmutableSamplerDesc[]
-                    {
-                        new()
+                    ],
+                    ImmutableSamplers =
+                    [
+                        new ImmutableSamplerDesc()
                         {
                             SamplerOrTextureName = "TextureSampler",
                             ShaderStages = ShaderType.Pixel,
-                            Desc = new SamplerDesc
+                            Desc = new SamplerDesc()
                             {
                                 MinFilter = FilterType.Point, MagFilter = FilterType.Point, MipFilter = FilterType.Point,
                                 AddressU = TextureAddressMode.Clamp, AddressV = TextureAddressMode.Clamp, AddressW = TextureAddressMode.Clamp,
                             },
                         },
-                    },
+                    ],
                 },
             },
 
-            GraphicsPipeline = new GraphicsPipelineDesc
+            GraphicsPipeline = new GraphicsPipelineDesc()
             {
                 InputLayout = SpriteInstanceData.Layout,
                 PrimitiveTopology = PrimitiveTopology.TriangleStrip,
@@ -105,10 +105,10 @@ public class SpriteBatchSystem : ISetupSystem, IRenderSystem, IDisposable
                 RTVFormats = [CommonTextureFormats.HdrTextureFormat],
                 DSVFormat = CommonTextureFormats.DepthTextureFormat,
 
-                RasterizerDesc = new RasterizerStateDesc { CullMode = CullMode.None },
-                DepthStencilDesc = new DepthStencilStateDesc { DepthEnable = true },
+                RasterizerDesc = new RasterizerStateDesc() { CullMode = CullMode.None },
+                DepthStencilDesc = new DepthStencilStateDesc() { DepthEnable = true },
 
-                BlendDesc = new BlendStateDesc
+                BlendDesc = new BlendStateDesc()
                 {
                     RenderTargets = new RenderTargetBlendDesc[]
                     {
@@ -216,7 +216,7 @@ public class SpriteBatchSystem : ISetupSystem, IRenderSystem, IDisposable
         deviceContext.SetPipelineState(pipeline);
         deviceContext.SetVertexBuffers(0, vertexBuffers, vertexOffsets, ResourceStateTransitionMode.Transition);
         deviceContext.CommitShaderResources(shaderResourceBinding, ResourceStateTransitionMode.Transition);
-        deviceContext.Draw(new DrawAttribs
+        deviceContext.Draw(new DrawAttribs()
         {
             NumVertices = 4,
             NumInstances = (uint)spritesDrawnThisBatch,
