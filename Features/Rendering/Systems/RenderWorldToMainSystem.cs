@@ -72,7 +72,7 @@ public class RenderWorldToMainSystem : ISetupSystem, IRenderSystem, ITeardownSys
                 PrimitiveTopology = PrimitiveTopology.TriangleStrip,
 
                 NumRenderTargets = 1,
-                RTVFormats = new[] { CommonTextureFormats.SrgbTextureFormat },
+                RTVFormats = [CommonTextureFormats.SrgbTextureFormat],
 
                 RasterizerDesc = new RasterizerStateDesc { CullMode = CullMode.None },
                 DepthStencilDesc = new DepthStencilStateDesc { DepthEnable = false },
@@ -91,7 +91,7 @@ public class RenderWorldToMainSystem : ISetupSystem, IRenderSystem, ITeardownSys
         var deviceContext = rendererContext.DeviceContext;
         var swapChain = window.SwapChain;
 
-        renderTargets[0] = swapChain.GetCurrentBackBufferRTV();
+        renderTargets[0] = swapChain.Handle.GetCurrentBackBufferRTV();
         deviceContext.SetRenderTargets(renderTargets, null, ResourceStateTransitionMode.Transition);
 
         passthroughTextureVariable?.Set(worldRenderTextureSystem.WorldColor.RenderTarget, SetShaderResourceFlags.AllowOverwrite);
@@ -104,7 +104,7 @@ public class RenderWorldToMainSystem : ISetupSystem, IRenderSystem, ITeardownSys
             Flags = DrawFlags.VerifyAll,
         });
 
-        deviceContext.SetRenderTargets(renderTargets, swapChain.GetDepthBufferDSV(), ResourceStateTransitionMode.Transition);
+        deviceContext.SetRenderTargets(renderTargets, swapChain.Handle.GetDepthBufferDSV(), ResourceStateTransitionMode.Transition);
     }
 
     public void Teardown()

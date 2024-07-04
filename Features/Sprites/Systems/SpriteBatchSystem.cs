@@ -102,7 +102,7 @@ public class SpriteBatchSystem : ISetupSystem, IRenderSystem, IDisposable
                 PrimitiveTopology = PrimitiveTopology.TriangleStrip,
 
                 NumRenderTargets = 1,
-                RTVFormats = new[] { CommonTextureFormats.HdrTextureFormat },
+                RTVFormats = [CommonTextureFormats.HdrTextureFormat],
                 DSVFormat = CommonTextureFormats.DepthTextureFormat,
 
                 RasterizerDesc = new RasterizerStateDesc { CullMode = CullMode.None },

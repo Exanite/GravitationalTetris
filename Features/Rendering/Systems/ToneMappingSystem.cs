@@ -87,7 +87,7 @@ public class ToneMappingSystem : ISetupSystem, IRenderSystem, ITeardownSystem
                     PrimitiveTopology = PrimitiveTopology.TriangleStrip,
 
                     NumRenderTargets = 1,
-                    RTVFormats = new[] { CommonTextureFormats.HdrTextureFormat },
+                    RTVFormats = [CommonTextureFormats.HdrTextureFormat],
 
                     RasterizerDesc = new RasterizerStateDesc { CullMode = CullMode.None },
                     DepthStencilDesc = new DepthStencilStateDesc { DepthEnable = false },

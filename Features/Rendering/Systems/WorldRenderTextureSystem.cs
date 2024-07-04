@@ -40,20 +40,16 @@ public class WorldRenderTextureSystem : ISetupSystem, IRenderSystem, ITeardownSy
         deviceContext.ClearDepthStencil(WorldDepth.DepthStencil, ClearDepthStencilFlags.Depth, 1, 0, ResourceStateTransitionMode.Transition);
     }
 
-    private void ResizeRenderTextures()
-    {
-        var size = window.SwapChain.GetDesc().GetSize();
-
-        WorldColor.ResizeIfNeeded(size);
-        WorldDepth.ResizeIfNeeded(size);
-    }
-
     private void CreateRenderTextures()
     {
-        var size = window.SwapChain.GetDesc().GetSize();
+        WorldColor = new ColorRenderTexture2D(rendererContext, "World Color", window.Size);
+        WorldDepth = new DepthRenderTexture2D(rendererContext, "World Depth", window.Size);
+    }
 
-        WorldColor = new ColorRenderTexture2D(rendererContext, "World Color", size);
-        WorldDepth = new DepthRenderTexture2D(rendererContext, "World Depth", size);
+    private void ResizeRenderTextures()
+    {
+        WorldColor.ResizeIfNeeded(window.Size);
+        WorldDepth.ResizeIfNeeded(window.Size);
     }
 
     public void Teardown()
