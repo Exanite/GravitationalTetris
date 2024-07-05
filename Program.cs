@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Autofac;
 using Avalonia;
 using Exanite.Engine.Avalonia;
-using Exanite.GravitationalTetris.Features.UserInterface;
 using Exanite.Logging;
 
 namespace Exanite.GravitationalTetris;
@@ -46,6 +45,6 @@ public static class Program
     // Avalonia configuration, don't remove; also used by visual designer.
     public static AppBuilder BuildAvaloniaApp()
     {
-        return new Game1().Container.Resolve<AvaloniaBuilder<App>>().Start(true);
+        return new Game1().Container.Resolve<AvaloniaBuilder>().Start(true);
     }
 }
