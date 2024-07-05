@@ -74,7 +74,7 @@ public class RenderWorldToMainSystem : ISetupSystem, IRenderSystem, ITeardownSys
                 NumRenderTargets = 1,
                 RTVFormats = [CommonTextureFormats.SrgbTextureFormat],
 
-                RasterizerDesc = new RasterizerStateDesc() { CullMode = CullMode.None },
+                RasterizerDesc = new RasterizerStateDesc() { CullMode = CullMode.Back, FrontCounterClockwise = true},
                 DepthStencilDesc = new DepthStencilStateDesc() { DepthEnable = false },
             },
 

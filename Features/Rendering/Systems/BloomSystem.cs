@@ -103,7 +103,7 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
                     NumRenderTargets = 1,
                     RTVFormats = [CommonTextureFormats.HdrTextureFormat],
 
-                    RasterizerDesc = new RasterizerStateDesc() { CullMode = CullMode.None },
+                    RasterizerDesc = new RasterizerStateDesc() { CullMode = CullMode.Back, FrontCounterClockwise = true},
                     DepthStencilDesc = new DepthStencilStateDesc() { DepthEnable = false },
 
                     BlendDesc = new BlendStateDesc()
@@ -178,7 +178,7 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
                     NumRenderTargets = 1,
                     RTVFormats = [CommonTextureFormats.HdrTextureFormat],
 
-                    RasterizerDesc = new RasterizerStateDesc() { CullMode = CullMode.None },
+                    RasterizerDesc = new RasterizerStateDesc() { CullMode = CullMode.Back, FrontCounterClockwise = true},
                     DepthStencilDesc = new DepthStencilStateDesc() { DepthEnable = false },
 
                     BlendDesc = new BlendStateDesc()
