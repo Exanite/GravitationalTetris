@@ -2,6 +2,7 @@ using Exanite.Engine.Avalonia.Systems;
 using Exanite.Engine.Ecs.Systems;
 using Exanite.Engine.Windowing;
 using Exanite.GravitationalTetris.Features.UserInterface.ViewModels;
+using Exanite.GravitationalTetris.Features.UserInterface.Views;
 
 namespace Exanite.GravitationalTetris.Features.Tetris.Systems;
 
@@ -22,7 +23,10 @@ public class TetrisUiSystem : EcsSystem, ISetupSystem, IRenderSystem
 
     public void Setup()
     {
-        avaloniaRenderSystem.TopLevel.Content = viewModel;
+        var view = new MainView();
+        view.DataContext = viewModel;
+
+        avaloniaRenderSystem.TopLevel.Content = view;
     }
 
     public void Render()
