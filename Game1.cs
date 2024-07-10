@@ -141,8 +141,8 @@ public class Game1 : Game
                     return renderSystem.TopLevel.Impl.Surface.Texture;
                 };
 
-                system.ScreenShader = resourceManager.GetResource(RenderingMod.ScreenShader);
-                system.PassthroughShader = resourceManager.GetResource(RenderingMod.PassthroughShader);
+                system.VShader = resourceManager.GetResource(RenderingMod.ScreenShader);
+                system.PShader = resourceManager.GetResource(RenderingMod.PassthroughShader);
             });
 
             config.Register<TetrisUiSystem>();
