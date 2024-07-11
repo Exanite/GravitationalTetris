@@ -138,7 +138,7 @@ public class Game1 : Game
 
                 system.GetSourceTexture = () =>
                 {
-                    return renderSystem.TopLevel.Impl.Surface.Texture;
+                    return renderSystem.Instance.Texture;
                 };
 
                 system.VShader = resourceManager.GetResource(RenderingMod.ScreenShader);
