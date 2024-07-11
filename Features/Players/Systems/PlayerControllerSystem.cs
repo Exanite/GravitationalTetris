@@ -2,12 +2,12 @@ using System;
 using Exanite.Core.Utilities;
 using Exanite.Engine.Ecs.Queries;
 using Exanite.Engine.Ecs.Systems;
+using Exanite.Engine.Inputs;
 using Exanite.Engine.Inputs.Actions;
 using Exanite.Engine.Time;
 using Exanite.GravitationalTetris.Features.Physics.Components;
 using Exanite.GravitationalTetris.Features.Players.Components;
 using Exanite.GravitationalTetris.Features.Transforms.Components;
-using SDL2;
 using PhysicsWorld = nkast.Aether.Physics2D.Dynamics.World;
 
 namespace Exanite.GravitationalTetris.Features.Players.Systems;
@@ -34,8 +34,8 @@ public partial class PlayerControllerSystem : EcsSystem, ISetupSystem, IUpdateSy
         movementAction = input.RegisterAction(() =>
         {
             var action = new CompositeFloatInputAction();
-            action.AddPositive(new ButtonInputAction(SDL.SDL_Scancode.SDL_SCANCODE_D));
-            action.AddNegative(new ButtonInputAction(SDL.SDL_Scancode.SDL_SCANCODE_A));
+            action.AddPositive(new ButtonInputAction(KeyCode.D));
+            action.AddNegative(new ButtonInputAction(KeyCode.A));
 
             return action;
         });

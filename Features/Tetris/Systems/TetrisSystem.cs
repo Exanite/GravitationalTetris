@@ -21,7 +21,6 @@ using Exanite.ResourceManagement;
 using Myriad.ECS;
 using Myriad.ECS.Command;
 using nkast.Aether.Physics2D.Dynamics;
-using SDL2;
 
 namespace Exanite.GravitationalTetris.Features.Tetris.Systems;
 
@@ -79,17 +78,17 @@ public partial class TetrisSystem : EcsSystem, ISetupSystem, IUpdateSystem
         commandBuffer = new CommandBuffer(World);
 
         placeShapeAction = input.RegisterAction(new OrInputAction(
-            new ButtonInputAction(SDL.SDL_Scancode.SDL_SCANCODE_SPACE),
+            new ButtonInputAction(KeyCode.Space),
             new ButtonInputAction(KeyCode.MouseLeft)
         ));
 
         rotateLeftAction = input.RegisterAction(new OrInputAction(
-            new ButtonInputAction(SDL.SDL_Scancode.SDL_SCANCODE_Q),
+            new ButtonInputAction(KeyCode.Q),
             new ButtonInputAction(KeyCode.MouseBackward)
         ));
 
         rotateRightAction = input.RegisterAction(new OrInputAction(
-            new ButtonInputAction(SDL.SDL_Scancode.SDL_SCANCODE_E),
+            new ButtonInputAction(KeyCode.E),
             new ButtonInputAction(KeyCode.MouseForward),
             new ButtonInputAction(KeyCode.MouseRight)
         ));
