@@ -79,18 +79,18 @@ public partial class TetrisSystem : EcsSystem, ISetupSystem, IUpdateSystem
 
         placeShapeAction = input.RegisterAction(new OrInputAction(
             new ButtonInputAction(KeyCode.Space),
-            new ButtonInputAction(KeyCode.MouseLeft)
+            new ButtonInputAction(KeyCode.LeftMouse)
         ));
 
         rotateLeftAction = input.RegisterAction(new OrInputAction(
             new ButtonInputAction(KeyCode.Q),
-            new ButtonInputAction(KeyCode.MouseBackward)
+            new ButtonInputAction(KeyCode.BackwardMouse)
         ));
 
         rotateRightAction = input.RegisterAction(new OrInputAction(
             new ButtonInputAction(KeyCode.E),
-            new ButtonInputAction(KeyCode.MouseForward),
-            new ButtonInputAction(KeyCode.MouseRight)
+            new ButtonInputAction(KeyCode.ForwardMouse),
+            new ButtonInputAction(KeyCode.RightMouse)
         ));
 
         if (File.Exists(ScoresFilePath))
