@@ -10,13 +10,13 @@ public class TetrisUiSystem : EcsSystem, ISetupSystem, IRenderSystem
 {
     private readonly MainViewModel viewModel = new MainViewModel();
 
-    private readonly AvaloniaRenderSystem avaloniaRenderSystem;
+    private readonly SimpleAvaloniaSystem avaloniaSystem;
     private readonly TetrisSystem tetrisSystem;
     private readonly Window window;
 
-    public TetrisUiSystem(AvaloniaRenderSystem avaloniaRenderSystem, TetrisSystem tetrisSystem, Window window)
+    public TetrisUiSystem(SimpleAvaloniaSystem avaloniaSystem, TetrisSystem tetrisSystem, Window window)
     {
-        this.avaloniaRenderSystem = avaloniaRenderSystem;
+        this.avaloniaSystem = avaloniaSystem;
         this.tetrisSystem = tetrisSystem;
         this.window = window;
     }
@@ -26,7 +26,7 @@ public class TetrisUiSystem : EcsSystem, ISetupSystem, IRenderSystem
         var view = new MainView();
         view.DataContext = viewModel;
 
-        avaloniaRenderSystem.Instance.Content = view;
+        avaloniaSystem.Instance.Content = view;
     }
 
     public void Render()
@@ -42,7 +42,7 @@ public class TetrisUiSystem : EcsSystem, ISetupSystem, IRenderSystem
             scaleFactor = 2f;
         }
 
-        avaloniaRenderSystem.Instance.RenderScaling = scaleFactor;
+        avaloniaSystem.Instance.RenderScaling = scaleFactor;
 
         viewModel.ScoreText = $"{(int)tetrisSystem.Score}";
         viewModel.PreviousScoreText = $"{(int)tetrisSystem.PreviousScore}";

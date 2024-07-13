@@ -130,10 +130,10 @@ public class Game1 : Game
 
             config.Register<RenderWorldToMainSystem>();
 
-            config.Register<AvaloniaRenderSystem>();
+            config.Register<SimpleAvaloniaSystem>();
             config.Register<AvaloniaCopyTextureSystem>((container, system) =>
             {
-                var renderSystem = container.Resolve<AvaloniaRenderSystem>();
+                var renderSystem = container.Resolve<SimpleAvaloniaSystem>();
                 var resourceManager = container.Resolve<IResourceManager>();
 
                 system.GetSourceTexture = () =>
