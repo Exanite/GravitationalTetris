@@ -105,17 +105,17 @@ public struct SpriteInstanceData
     public Vector2 Offset;
     public Vector2 Size;
 
+    public required Matrix4x4 World
+    {
+        get => Matrix4x4.Transpose(world);
+        set => world = Matrix4x4.Transpose(value);
+    }
+
     public SpriteInstanceData()
     {
         Color = Vector4.One;
 
         Offset = Vector2.Zero;
         Size = Vector2.One;
-    }
-
-    public required Matrix4x4 World
-    {
-        get => Matrix4x4.Transpose(world);
-        set => world = Matrix4x4.Transpose(value);
     }
 }
