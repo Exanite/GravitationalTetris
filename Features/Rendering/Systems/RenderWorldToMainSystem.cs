@@ -38,7 +38,6 @@ public class RenderWorldToMainSystem : ISetupSystem, IRenderSystem, ITeardownSys
         {
             PSODesc = new PipelineStateDesc()
             {
-                Name = "Passthrough Shader Pipeline",
                 ResourceLayout = new PipelineResourceLayoutDesc()
                 {
                     DefaultVariableType = ShaderResourceVariableType.Static,

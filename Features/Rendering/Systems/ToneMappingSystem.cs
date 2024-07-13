@@ -37,7 +37,7 @@ public class ToneMappingSystem : ISetupSystem, IRenderSystem, ITeardownSystem
         var vShader = resourceManager.GetResource(RenderingMod.ScreenShader);
         var pShader = resourceManager.GetResource(RenderingMod.ToneMapShader);
 
-        uniformBuffer = new Buffer<ToneMapUniformData>("Tone Map Uniform Buffer", rendererContext, new BufferDesc()
+        uniformBuffer = new Buffer<ToneMapUniformData>(rendererContext, new BufferDesc()
         {
             Usage = Usage.Dynamic,
             BindFlags = BindFlags.UniformBuffer,
@@ -53,7 +53,6 @@ public class ToneMappingSystem : ISetupSystem, IRenderSystem, ITeardownSystem
             {
                 PSODesc = new PipelineStateDesc()
                 {
-                    Name = "Post Process Shader Pipeline",
                     ResourceLayout = new PipelineResourceLayoutDesc()
                     {
                         DefaultVariableType = ShaderResourceVariableType.Static,

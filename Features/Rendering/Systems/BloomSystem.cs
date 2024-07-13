@@ -56,7 +56,7 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
         var pShaderUp = resourceManager.GetResource(RenderingMod.BloomUpShader);
 
         {
-            downUniformBuffer = new Buffer<BloomDownUniformData>("Bloom Down Uniform Buffer", rendererContext, new BufferDesc()
+            downUniformBuffer = new Buffer<BloomDownUniformData>(rendererContext, new BufferDesc()
             {
                 Usage = Usage.Dynamic,
                 BindFlags = BindFlags.UniformBuffer,
@@ -67,7 +67,6 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
             {
                 PSODesc = new PipelineStateDesc()
                 {
-                    Name = "Bloom Down Shader Pipeline",
                     ResourceLayout = new PipelineResourceLayoutDesc()
                     {
                         DefaultVariableType = ShaderResourceVariableType.Static,
@@ -131,7 +130,7 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
         }
 
         {
-            upUniformBuffer = new Buffer<BloomUpUniformData>("Bloom Up Uniform Buffer", rendererContext, new BufferDesc()
+            upUniformBuffer = new Buffer<BloomUpUniformData>(rendererContext, new BufferDesc()
             {
                 Usage = Usage.Dynamic,
                 BindFlags = BindFlags.UniformBuffer,
@@ -142,7 +141,6 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
             {
                 PSODesc = new PipelineStateDesc()
                 {
-                    Name = "Bloom Up Shader Pipeline",
                     ResourceLayout = new PipelineResourceLayoutDesc()
                     {
                         DefaultVariableType = ShaderResourceVariableType.Static,
@@ -348,7 +346,7 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
                 return;
             }
 
-            renderTextures.Add(new ColorRenderTexture2D(rendererContext, $"Bloom Render Texture {i + 1}/{renderTextures.Count}", new Vector2Int(iWidth, iHeight), CommonTextureFormats.HdrTextureFormat));
+            renderTextures.Add(new ColorRenderTexture2D(rendererContext, new Vector2Int(iWidth, iHeight), CommonTextureFormats.HdrTextureFormat));
 
             width /= 2;
             height /= 2;

@@ -42,8 +42,8 @@ public class WorldRenderTextureSystem : ISetupSystem, IRenderSystem, ITeardownSy
 
     private void CreateRenderTextures()
     {
-        WorldColor = new ColorRenderTexture2D(rendererContext, "World Color", window.Size);
-        WorldDepth = new DepthRenderTexture2D(rendererContext, "World Depth", window.Size);
+        WorldColor = new ColorRenderTexture2D(rendererContext, window.Size);
+        WorldDepth = new DepthRenderTexture2D(rendererContext, window.Size);
     }
 
     private void ResizeRenderTextures()

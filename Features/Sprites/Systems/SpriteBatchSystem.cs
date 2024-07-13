@@ -44,14 +44,14 @@ public class SpriteBatchSystem : ISetupSystem, IRenderSystem, IDisposable
     {
         var renderDevice = rendererContext.RenderDevice;
 
-        uniformBuffer = new Buffer<SpriteUniformData>("Sprite Uniform Buffer", rendererContext, new BufferDesc()
+        uniformBuffer = new Buffer<SpriteUniformData>(rendererContext, new BufferDesc()
         {
             Usage = Usage.Dynamic,
             BindFlags = BindFlags.UniformBuffer,
             CPUAccessFlags = CpuAccessFlags.Write,
         });
 
-        instanceBuffer = new Buffer<SpriteInstanceData>("Sprite Instance Buffer", rendererContext, new BufferDesc()
+        instanceBuffer = new Buffer<SpriteInstanceData>(rendererContext, new BufferDesc()
         {
             Usage = Usage.Dynamic,
             BindFlags = BindFlags.VertexBuffer,
@@ -67,7 +67,6 @@ public class SpriteBatchSystem : ISetupSystem, IRenderSystem, IDisposable
         {
             PSODesc = new PipelineStateDesc()
             {
-                Name = "Sprite Shader Pipeline",
                 ResourceLayout = new PipelineResourceLayoutDesc()
                 {
                     DefaultVariableType = ShaderResourceVariableType.Static,

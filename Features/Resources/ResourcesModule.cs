@@ -61,7 +61,7 @@ public class ResourcesModule : Module
                         throw new NotSupportedException($"Failed to load {loadOperation.Key} as a shader. The key does not end in a valid extension.");
                     }
 
-                    var shader = new Shader(loadOperation.Key, reader.ReadToEnd(), type, rendererContext);
+                    var shader = new Shader(reader.ReadToEnd(), type, rendererContext);
                     loadOperation.Fulfill(shader);
                 });
 
@@ -69,7 +69,7 @@ public class ResourcesModule : Module
                 {
                     using var stream = loadOperation.Open(loadOperation.Key);
 
-                    var texture = new Texture2D(rendererContext, loadOperation.Key, stream);
+                    var texture = new Texture2D(rendererContext, stream);
                     loadOperation.Fulfill(texture);
                 });
             });
