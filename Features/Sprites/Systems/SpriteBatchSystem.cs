@@ -183,7 +183,7 @@ public class SpriteBatchSystem : ISetupSystem, IRenderSystem, IDisposable
 
         instanceDataCache[spritesDrawnThisBatch] = new SpriteInstanceData
         {
-            World = options.World,
+            LocalToWorld = options.World,
 
             Color = options.Color,
             Offset = options.Offset,

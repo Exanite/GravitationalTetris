@@ -98,17 +98,17 @@ public struct SpriteInstanceData
         },
     };
 
-    private Matrix4x4 world;
+    private Matrix4x4 localToWorld;
 
     public Vector4 Color;
 
     public Vector2 Offset;
     public Vector2 Size;
 
-    public required Matrix4x4 World
+    public required Matrix4x4 LocalToWorld
     {
-        get => Matrix4x4.Transpose(world);
-        set => world = Matrix4x4.Transpose(value);
+        get => Matrix4x4.Transpose(localToWorld);
+        set => localToWorld = Matrix4x4.Transpose(value);
     }
 
     public SpriteInstanceData()
