@@ -5,21 +5,18 @@
 
     <OutputType>WinExe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 
-    <!-- Recommended settings from: https://docs.monogame.net/articles/packaging_games.html -->
+    <AnalysisLevel>latest</AnalysisLevel>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <EnableTrimAnalzyer>true</EnableTrimAnalzyer>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+
+    <!-- Recommended settings for games in general: https://docs.monogame.net/articles/packaging_games.html -->
     <PublishReadyToRun>false</PublishReadyToRun>
     <TieredCompilation>false</TieredCompilation>
     <SingleFilePublish>false</SingleFilePublish>
-
-    <!-- Enable nullables -->
-    <Nullable>enable</Nullable>
-
-    <!-- Always generate debug symbols -->
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-
-    <!-- Allow unsafe code -->
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 
     <!-- Only support 64 bit computers - Required by DiligentEngine -->
     <Configurations>Release;Debug</Configurations>
