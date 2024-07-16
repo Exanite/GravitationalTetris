@@ -4,6 +4,8 @@ using Autofac;
 using Exanite.Engine;
 using Exanite.Engine.Avalonia;
 using Exanite.Engine.Avalonia.Systems;
+using Exanite.Engine.Clipboards;
+using Exanite.Engine.Cursors;
 using Exanite.Engine.Ecs.Systems;
 using Exanite.Engine.GameLoops;
 using Exanite.Engine.Inputs;
@@ -81,6 +83,8 @@ public class Game1 : Game
 
         // Modules
         builder.RegisterModule<AvaloniaModule<App>>();
+        builder.RegisterModule<ClipboardModule>();
+        builder.RegisterModule<CursorModule>();
         builder.RegisterModule<InputModule>();
         builder.RegisterModule<ResourcesModule>();
         builder.RegisterModule<ThreadingModule>();
