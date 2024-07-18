@@ -1,8 +1,7 @@
-using System;
 using System.IO;
 using Autofac;
-using Diligent;
 using Exanite.Engine.Rendering;
+using Exanite.Engine.Resources.Loaders;
 using Exanite.ResourceManagement;
 using Exanite.ResourceManagement.FileSystems;
 using Serilog;
@@ -22,9 +21,7 @@ public class ResourcesModule : Module
                 return new ResourceManager(new ResourceManagerSettings
                 {
                     Logger = logger,
-
                     EnableHotReload = true,
-                    EnableImmediateHotReload = true,
                 });
             })
             .SingleInstance()
@@ -42,36 +39,8 @@ public class ResourcesModule : Module
 
                 resourceManager.Mount("/Rendering/", new DirectoryFileSystem(Path.Join(GameDirectories.ContentDirectory, "Rendering")), true);
 
-                resourceManager.RegisterLoader<Shader>(loadOperation =>
-                {
-                    using var stream = loadOperation.Open(loadOperation.Key);
-                    using var reader = new StreamReader(stream);
-
-                    ShaderType type;
-                    if (loadOperation.Key.EndsWith(".v.hlsl"))
-                    {
-                        type = ShaderType.Vertex;
-                    }
-                    else if (loadOperation.Key.EndsWith(".p.hlsl"))
-                    {
-                        type = ShaderType.Pixel;
-                    }
-                    else
-                    {
-                        throw new NotSupportedException($"Failed to load {loadOperation.Key} as a shader. The key does not end in a valid extension.");
-                    }
-
-                    var shader = new Shader(reader.ReadToEnd(), type, rendererContext);
-                    loadOperation.Fulfill(shader);
-                });
-
-                resourceManager.RegisterLoader<Texture2D>(loadOperation =>
-                {
-                    using var stream = loadOperation.Open(loadOperation.Key);
-
-                    var texture = new Texture2D(rendererContext, stream);
-                    loadOperation.Fulfill(texture);
-                });
+                resourceManager.RegisterLoader(new ShaderLoader(rendererContext));
+                resourceManager.RegisterLoader(new Texture2DLoader(rendererContext));
             });
     }
 }
