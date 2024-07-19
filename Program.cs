@@ -26,14 +26,14 @@ public static class Program
                 }
                 catch (Exception e)
                 {
-                    LoggingUtility.LogProgramCrash(GameDirectories.LogsDirectory, typeof(Program), e);
+                    LoggingUtility.LogProgramCrash(GameFolders.LogsFolder, typeof(Program), e);
 
                     exitCode = 1;
                 }
             }
             catch (Exception e)
             {
-                LoggingUtility.LogProgramCrash(GameDirectories.LogsDirectory, typeof(Program), e);
+                LoggingUtility.LogProgramCrash(GameFolders.LogsFolder, typeof(Program), e);
 
                 exitCode = 1;
             }
