@@ -24,6 +24,8 @@
 
     <!-- Support high DPI -->
     <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
+
+    <ExaniteEngine_HasContentFolder/>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Aether.Physics2D\Aether.Physics2D.csproj"/>
