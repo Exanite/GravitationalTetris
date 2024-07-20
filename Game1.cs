@@ -83,14 +83,6 @@ public class Game1 : EngineGame
         builder.RegisterFolderFileSystem("GravitationalTetris", "/Winter/", "Winter/Content");
         builder.RegisterFolderFileSystem("GravitationalTetris", "/Base/", "Winter/Overrides/Base");
         builder.RegisterFolderFileSystem("GravitationalTetris", "/Rendering/", "Rendering");
-
-        // Modules
-        builder.RegisterModule<AvaloniaModule<App>>();
-        builder.RegisterModule<ClipboardModule>();
-        builder.RegisterModule<CursorModule>();
-        builder.RegisterModule<InputModule>();
-        builder.RegisterModule<ThreadingModule>();
-        builder.RegisterModule<TimeModule>();
     }
 
     private SystemScheduler.Config CreateSystemSchedulerConfig()
