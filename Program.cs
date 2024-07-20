@@ -43,9 +43,6 @@ public static class Program
     public static AppBuilder BuildAvaloniaApp()
     {
         var config = new EngineConfig(CompanyName, GameName);
-        var game = new Game1(config);
-        game.Initialize();
-
-        return game.Container.Resolve<AvaloniaContext>().Start(true);
+        return new Game1(config).Initialize().Resolve<AvaloniaContext>().Start(true);
     }
 }
