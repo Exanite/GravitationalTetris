@@ -20,7 +20,7 @@ public static class Program
         var exitCode = 0;
         {
             Thread.CurrentThread.Name = "Main";
-            var config = new EngineConfig(CompanyName, GameName);
+            var config = new EngineSettings(CompanyName, GameName);
 
             await using var game = new Game1(config);
 
@@ -42,7 +42,7 @@ public static class Program
 
     public static AppBuilder BuildAvaloniaApp()
     {
-        var config = new EngineConfig(CompanyName, GameName);
+        var config = new EngineSettings(CompanyName, GameName);
         return new Game1(config).Initialize().Resolve<AvaloniaContext>().Start(true);
     }
 }

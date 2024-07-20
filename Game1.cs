@@ -38,7 +38,7 @@ namespace Exanite.GravitationalTetris;
 
 public class Game1 : EngineGame
 {
-    public Game1(EngineConfig config) : base(config) {}
+    public Game1(EngineSettings settings) : base(settings) {}
 
     protected override void Register(ContainerBuilder builder)
     {
