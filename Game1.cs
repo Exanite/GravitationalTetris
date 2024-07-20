@@ -1,20 +1,13 @@
 ﻿using System;
 using System.Numerics;
 using Autofac;
-using Exanite.Engine.Avalonia;
 using Exanite.Engine.Avalonia.Systems;
-using Exanite.Engine.Clipboards;
-using Exanite.Engine.Cursors;
 using Exanite.Engine.Ecs.Systems;
 using Exanite.Engine.EngineUsage;
-using Exanite.Engine.GameLoops;
-using Exanite.Engine.Inputs;
 using Exanite.Engine.Inputs.Systems;
 using Exanite.Engine.Lifecycles.Systems;
 using Exanite.Engine.Rendering;
 using Exanite.Engine.Rendering.Systems;
-using Exanite.Engine.Threading;
-using Exanite.Engine.Time;
 using Exanite.Engine.Time.Systems;
 using Exanite.Engine.Windowing;
 using Exanite.Engine.Windowing.Systems;
@@ -28,7 +21,6 @@ using Exanite.GravitationalTetris.Features.Sprites.Systems;
 using Exanite.GravitationalTetris.Features.Tetris.Systems;
 using Exanite.GravitationalTetris.Features.Tiles;
 using Exanite.GravitationalTetris.Features.Tiles.Systems;
-using Exanite.GravitationalTetris.Features.UserInterface;
 using Exanite.ResourceManagement;
 using Myriad.ECS.Worlds;
 using PhysicsWorld = nkast.Aether.Physics2D.Dynamics.World;
@@ -74,10 +66,6 @@ public class Game1 : EngineGame
         // ECS world
         builder.Register(_ => new WorldBuilder().Build()).SingleInstance();
 
-        // Game loop
-        builder.RegisterType<EcsGameLoop>().AsSelf().AsImplementedInterfaces().SingleInstance();
-        builder.RegisterModule(CreateSystemSchedulerConfig());
-
         // Resources
         builder.RegisterFolderFileSystem("GravitationalTetris", "/Base/", "Base");
         builder.RegisterFolderFileSystem("GravitationalTetris", "/Winter/", "Winter/Content");
@@ -85,9 +73,9 @@ public class Game1 : EngineGame
         builder.RegisterFolderFileSystem("GravitationalTetris", "/Rendering/", "Rendering");
     }
 
-    private SystemScheduler.Config CreateSystemSchedulerConfig()
+    protected override void ConfigureSystemScheduler(SystemScheduler.Config config)
     {
-        var config = new SystemScheduler.Config();
+        base.ConfigureSystemScheduler(config);
 
         config.Register<WindowSystem>();
 
@@ -146,13 +134,5 @@ public class Game1 : EngineGame
         config.Register<PresentSwapChainSystem>();
 
         config.Register<RemoveDestroyedSystem>();
-
-        return config;
-    }
-
-    public override void Run()
-    {
-        var gameLoop = Container.Resolve<EcsGameLoop>();
-        gameLoop.Run();
     }
 }
