@@ -20,9 +20,9 @@ public static class Program
         var exitCode = 0;
         {
             Thread.CurrentThread.Name = "Main";
-            var config = new EngineSettings(CompanyName, GameName);
+            var settings = new EngineSettings(CompanyName, GameName);
 
-            await using var game = new Game1(config);
+            await using var game = new Game1(settings);
 
             try
             {
@@ -31,7 +31,7 @@ public static class Program
             }
             catch (Exception e)
             {
-                LoggingUtility.LogProgramCrash(config.Paths.LogsFolder, typeof(Program), e);
+                LoggingUtility.LogProgramCrash(settings.Paths.LogsFolder, typeof(Program), e);
 
                 exitCode = 1;
             }
@@ -42,7 +42,7 @@ public static class Program
 
     public static AppBuilder BuildAvaloniaApp()
     {
-        var config = new EngineSettings(CompanyName, GameName);
-        return new Game1(config).Initialize().Resolve<AvaloniaContext>().Start(true);
+        var settings = new EngineSettings(CompanyName, GameName);
+        return new Game1(settings).Initialize().Resolve<AvaloniaContext>().Start(true);
     }
 }
