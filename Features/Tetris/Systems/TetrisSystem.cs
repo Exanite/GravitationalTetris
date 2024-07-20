@@ -4,6 +4,7 @@ using System.IO;
 using System.Numerics;
 using Exanite.Engine.Ecs.Queries;
 using Exanite.Engine.Ecs.Systems;
+using Exanite.Engine.EngineUsage;
 using Exanite.Engine.Inputs;
 using Exanite.Engine.Inputs.Actions;
 using Exanite.Engine.Lifecycles.Components;
@@ -26,8 +27,6 @@ namespace Exanite.GravitationalTetris.Features.Tetris.Systems;
 
 public partial class TetrisSystem : EcsSystem, ISetupSystem, IUpdateSystem
 {
-    public static readonly string ScoresFilePath = Path.Join(GamePaths.PersistentDataFolder, "Scores.txt");
-
     public float SpeedMultiplier = 1;
     public float ScoreMultiplier => SpeedMultiplier * 2;
 
@@ -61,8 +60,19 @@ public partial class TetrisSystem : EcsSystem, ISetupSystem, IUpdateSystem
     private readonly GameTilemapData tilemap;
     private readonly PlayerControllerSystem playerControllerSystem;
     private readonly FmodAudioSystem audioSystem;
+    private readonly EnginePaths paths;
 
-    public TetrisSystem(ResourceManager resourceManager, Random random, SimulationTime time, InputActionManager input, PlayerControllerSystem playerControllerSystem, GameTilemapData tilemap, FmodAudioSystem audioSystem)
+    private string ScoresFilePath => Path.Join(paths.PersistentDataFolder, "Scores.txt");
+
+    public TetrisSystem(
+        ResourceManager resourceManager,
+        Random random,
+        SimulationTime time,
+        InputActionManager input,
+        PlayerControllerSystem playerControllerSystem,
+        GameTilemapData tilemap,
+        FmodAudioSystem audioSystem,
+        EnginePaths paths)
     {
         this.resourceManager = resourceManager;
         this.random = random;
@@ -71,6 +81,7 @@ public partial class TetrisSystem : EcsSystem, ISetupSystem, IUpdateSystem
         this.playerControllerSystem = playerControllerSystem;
         this.tilemap = tilemap;
         this.audioSystem = audioSystem;
+        this.paths = paths;
     }
 
     public void Setup()
@@ -728,7 +739,7 @@ public partial class TetrisSystem : EcsSystem, ISetupSystem, IUpdateSystem
 
         commandBuffer.Create().Set(new UpdateTilemapCollidersEventComponent());
 
-        Directory.CreateDirectory(GamePaths.PersistentDataFolder);
+        Directory.CreateDirectory(paths.PersistentDataFolder);
         using (var stream = new FileStream(ScoresFilePath, FileMode.Append))
         using (var streamWriter = new StreamWriter(stream))
         {

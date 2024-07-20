@@ -19,11 +19,11 @@ public static class Program
     {
         var exitCode = 0;
         {
+            Thread.CurrentThread.Name = "Main";
+            var config = new EngineConfig(CompanyName, GameName);
+
             try
             {
-                Thread.CurrentThread.Name = "Main";
-
-                var config = new EngineConfig(CompanyName, GameName);
                 await using var game = new Game1(config);
                 try
                 {
@@ -31,14 +31,14 @@ public static class Program
                 }
                 catch (Exception e)
                 {
-                    LoggingUtility.LogProgramCrash(GamePaths.LogsFolder, typeof(Program), e);
+                    LoggingUtility.LogProgramCrash(config.Paths.LogsFolder, typeof(Program), e);
 
                     exitCode = 1;
                 }
             }
             catch (Exception e)
             {
-                LoggingUtility.LogProgramCrash(GamePaths.LogsFolder, typeof(Program), e);
+                LoggingUtility.LogProgramCrash(config.Paths.LogsFolder, typeof(Program), e);
 
                 exitCode = 1;
             }

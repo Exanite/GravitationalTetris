@@ -50,7 +50,7 @@ public class Game1 : EngineGame
         builder.RegisterType<Random>().InstancePerDependency();
 
         // Logging
-        builder.RegisterModule(new LoggingModule(GamePaths.LogsFolder));
+        builder.RegisterModule(new LoggingModule(EngineConfig.Paths.LogsFolder));
 
         // Windowing
         builder.Register(_ => new WindowSettings()
