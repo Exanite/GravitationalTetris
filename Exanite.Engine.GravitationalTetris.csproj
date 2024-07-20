@@ -43,5 +43,5 @@
     <AvaloniaResource Include="Content/Base/FieryTurk.ttf"/>
   </ItemGroup>
 
-  <Import Project="..\Exanite.Engine.Building\LinkUnpackagedContent.targets"/>
+  <Import Project="..\Exanite.Engine.Building\LinkRawContent.targets"/>
 </Project>
