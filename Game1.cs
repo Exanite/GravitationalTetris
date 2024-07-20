@@ -30,7 +30,6 @@ using Exanite.GravitationalTetris.Features.Tetris.Systems;
 using Exanite.GravitationalTetris.Features.Tiles;
 using Exanite.GravitationalTetris.Features.Tiles.Systems;
 using Exanite.GravitationalTetris.Features.UserInterface;
-using Exanite.Logging;
 using Exanite.ResourceManagement;
 using Myriad.ECS.Worlds;
 using PhysicsWorld = nkast.Aether.Physics2D.Dynamics.World;
@@ -50,9 +49,6 @@ public class Game1 : EngineGame
 
         // Misc
         builder.RegisterType<Random>().InstancePerDependency();
-
-        // Logging
-        builder.RegisterModule(new LoggingModule(EngineConfig.Paths.LogsFolder));
 
         // Windowing
         builder.Register(_ => new WindowSettings()
