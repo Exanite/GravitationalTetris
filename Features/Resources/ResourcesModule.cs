@@ -22,7 +22,7 @@ public class ResourcesModule : Module
                 return new ResourceManager(new ResourceManagerSettings
                 {
                     Logger = logger,
-                    HotReloadSupport = true,
+                    EnableHotReload = true,
                 });
             })
             .SingleInstance()
@@ -34,12 +34,12 @@ public class ResourcesModule : Module
                 var rendererContext = e.Context.Resolve<RendererContext>();
                 var paths = e.Context.Resolve<EnginePaths>();
 
-                resourceManager.Mount("/Base/", new FolderFileSystem(Path.Join(paths.ContentFolder, "Base")), true);
+                resourceManager.Mount("/Base/", new FolderFileSystem(Path.Join(paths.ContentFolder, "Base")));
 
-                resourceManager.Mount("/Winter/", new FolderFileSystem(Path.Join(paths.ContentFolder, "Winter", "Content")), true);
-                resourceManager.Mount("/Base/", new FolderFileSystem(Path.Join(paths.ContentFolder, "Winter", "Overrides", "Base")), true);
+                resourceManager.Mount("/Winter/", new FolderFileSystem(Path.Join(paths.ContentFolder, "Winter", "Content")));
+                resourceManager.Mount("/Base/", new FolderFileSystem(Path.Join(paths.ContentFolder, "Winter", "Overrides", "Base")));
 
-                resourceManager.Mount("/Rendering/", new FolderFileSystem(Path.Join(paths.ContentFolder, "Rendering")), true);
+                resourceManager.Mount("/Rendering/", new FolderFileSystem(Path.Join(paths.ContentFolder, "Rendering")));
 
                 resourceManager.RegisterLoader(new ShaderLoader(rendererContext));
                 resourceManager.RegisterLoader(new Texture2DLoader(rendererContext));
