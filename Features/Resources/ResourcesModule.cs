@@ -22,7 +22,7 @@ public class ResourcesModule : Module
                 return new ResourceManager(new ResourceManagerSettings
                 {
                     Logger = logger,
-                    EnableHotReload = true,
+                    HotReloadSupport = true,
                 });
             })
             .SingleInstance()
