@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Numerics;
 using Autofac;
-using Exanite.Engine;
 using Exanite.Engine.Avalonia;
 using Exanite.Engine.Avalonia.Systems;
 using Exanite.Engine.Clipboards;
 using Exanite.Engine.Cursors;
 using Exanite.Engine.Ecs.Systems;
+using Exanite.Engine.EngineUsage;
 using Exanite.Engine.GameLoops;
 using Exanite.Engine.Inputs;
 using Exanite.Engine.Inputs.Systems;
@@ -37,12 +37,12 @@ using PhysicsWorld = nkast.Aether.Physics2D.Dynamics.World;
 
 namespace Exanite.GravitationalTetris;
 
-public class Game1 : Game
+public class Game1 : EngineGame
 {
-    protected override ContainerBuilder CreateContainer()
-    {
-        var builder = new ContainerBuilder();
+    public Game1(EngineConfig config) : base(config) {}
 
+    protected override void Register(ContainerBuilder builder)
+    {
         // Game
         builder.RegisterInstance(this).SingleInstance();
 
@@ -50,7 +50,7 @@ public class Game1 : Game
         builder.RegisterType<Random>().InstancePerDependency();
 
         // Logging
-        builder.RegisterModule(new LoggingModule(GameFolders.LogsFolder));
+        builder.RegisterModule(new LoggingModule(GamePaths.LogsFolder));
 
         // Windowing
         builder.Register(_ => new WindowSettings()
@@ -89,8 +89,6 @@ public class Game1 : Game
         builder.RegisterModule<ResourcesModule>();
         builder.RegisterModule<ThreadingModule>();
         builder.RegisterModule<TimeModule>();
-
-        return builder;
     }
 
     private SystemScheduler.Config CreateSystemSchedulerConfig()

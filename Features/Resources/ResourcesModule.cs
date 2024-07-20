@@ -32,12 +32,12 @@ public class ResourcesModule : Module
                 var resourceManager = e.Instance;
                 var rendererContext = e.Context.Resolve<RendererContext>();
 
-                resourceManager.Mount("/Base/", new FolderFileSystem(Path.Join(GameFolders.ContentFolder, "Base")), true);
+                resourceManager.Mount("/Base/", new FolderFileSystem(Path.Join(GamePaths.ContentFolder, "Base")), true);
 
-                resourceManager.Mount("/Winter/", new FolderFileSystem(Path.Join(GameFolders.ContentFolder, "Winter", "Content")), true);
-                resourceManager.Mount("/Base/", new FolderFileSystem(Path.Join(GameFolders.ContentFolder, "Winter", "Overrides", "Base")), true);
+                resourceManager.Mount("/Winter/", new FolderFileSystem(Path.Join(GamePaths.ContentFolder, "Winter", "Content")), true);
+                resourceManager.Mount("/Base/", new FolderFileSystem(Path.Join(GamePaths.ContentFolder, "Winter", "Overrides", "Base")), true);
 
-                resourceManager.Mount("/Rendering/", new FolderFileSystem(Path.Join(GameFolders.ContentFolder, "Rendering")), true);
+                resourceManager.Mount("/Rendering/", new FolderFileSystem(Path.Join(GamePaths.ContentFolder, "Rendering")), true);
 
                 resourceManager.RegisterLoader(new ShaderLoader(rendererContext));
                 resourceManager.RegisterLoader(new Texture2DLoader(rendererContext));

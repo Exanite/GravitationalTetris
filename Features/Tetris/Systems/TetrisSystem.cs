@@ -26,7 +26,7 @@ namespace Exanite.GravitationalTetris.Features.Tetris.Systems;
 
 public partial class TetrisSystem : EcsSystem, ISetupSystem, IUpdateSystem
 {
-    public static readonly string ScoresFilePath = Path.Join(GameFolders.PersistentDataFolder, "Scores.txt");
+    public static readonly string ScoresFilePath = Path.Join(GamePaths.PersistentDataFolder, "Scores.txt");
 
     public float SpeedMultiplier = 1;
     public float ScoreMultiplier => SpeedMultiplier * 2;
@@ -728,7 +728,7 @@ public partial class TetrisSystem : EcsSystem, ISetupSystem, IUpdateSystem
 
         commandBuffer.Create().Set(new UpdateTilemapCollidersEventComponent());
 
-        Directory.CreateDirectory(GameFolders.PersistentDataFolder);
+        Directory.CreateDirectory(GamePaths.PersistentDataFolder);
         using (var stream = new FileStream(ScoresFilePath, FileMode.Append))
         using (var streamWriter = new StreamWriter(stream))
         {

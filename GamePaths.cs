@@ -3,7 +3,7 @@ using System.IO;
 
 namespace Exanite.GravitationalTetris;
 
-public static class GameFolders
+public static class GamePaths
 {
     public static string InstallFolder => AppContext.BaseDirectory;
 
