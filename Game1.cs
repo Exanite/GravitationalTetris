@@ -24,7 +24,6 @@ using Exanite.GravitationalTetris.Features.Cameras.Systems;
 using Exanite.GravitationalTetris.Features.Physics.Systems;
 using Exanite.GravitationalTetris.Features.Players.Systems;
 using Exanite.GravitationalTetris.Features.Rendering.Systems;
-using Exanite.GravitationalTetris.Features.Resources;
 using Exanite.GravitationalTetris.Features.Sprites.Systems;
 using Exanite.GravitationalTetris.Features.Tetris.Systems;
 using Exanite.GravitationalTetris.Features.Tiles;
@@ -79,12 +78,17 @@ public class Game1 : EngineGame
         builder.RegisterType<EcsGameLoop>().AsSelf().AsImplementedInterfaces().SingleInstance();
         builder.RegisterModule(CreateSystemSchedulerConfig());
 
+        // Resources
+        builder.RegisterFolderFileSystem("GravitationalTetris", "/Base/", "Base");
+        builder.RegisterFolderFileSystem("GravitationalTetris", "/Winter/", "Winter/Content");
+        builder.RegisterFolderFileSystem("GravitationalTetris", "/Base/", "Winter/Overrides/Base");
+        builder.RegisterFolderFileSystem("GravitationalTetris", "/Rendering/", "Rendering");
+
         // Modules
         builder.RegisterModule<AvaloniaModule<App>>();
         builder.RegisterModule<ClipboardModule>();
         builder.RegisterModule<CursorModule>();
         builder.RegisterModule<InputModule>();
-        builder.RegisterModule<ResourcesModule>();
         builder.RegisterModule<ThreadingModule>();
         builder.RegisterModule<TimeModule>();
     }
