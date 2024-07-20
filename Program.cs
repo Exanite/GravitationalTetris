@@ -22,19 +22,12 @@ public static class Program
             Thread.CurrentThread.Name = "Main";
             var config = new EngineConfig(CompanyName, GameName);
 
+            await using var game = new Game1(config);
+
             try
             {
-                await using var game = new Game1(config);
-                try
-                {
-                    game.Run();
-                }
-                catch (Exception e)
-                {
-                    LoggingUtility.LogProgramCrash(config.Paths.LogsFolder, typeof(Program), e);
-
-                    exitCode = 1;
-                }
+                game.Initialize();
+                game.Run();
             }
             catch (Exception e)
             {
@@ -50,6 +43,9 @@ public static class Program
     public static AppBuilder BuildAvaloniaApp()
     {
         var config = new EngineConfig(CompanyName, GameName);
-        return new Game1(config).Container.Resolve<AvaloniaContext>().Start(true);
+        var game = new Game1(config);
+        game.Initialize();
+
+        return game.Container.Resolve<AvaloniaContext>().Start(true);
     }
 }
