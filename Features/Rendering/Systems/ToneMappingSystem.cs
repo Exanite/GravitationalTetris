@@ -42,7 +42,7 @@ public class ToneMappingSystem : ISetupSystem, IRenderSystem, ITeardownSystem
             Usage = Usage.Dynamic,
             BindFlags = BindFlags.UniformBuffer,
             CPUAccessFlags = CpuAccessFlags.Write,
-        });
+        }, 1);
 
         pipeline = new ReloadableHandle<IPipelineState>((List<IHandle> dependencies, out IPipelineState resource, out Action<IPipelineState> unloadAction) =>
         {

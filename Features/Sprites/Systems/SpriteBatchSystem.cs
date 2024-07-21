@@ -49,7 +49,7 @@ public class SpriteBatchSystem : ISetupSystem, IRenderSystem, IDisposable
             Usage = Usage.Dynamic,
             BindFlags = BindFlags.UniformBuffer,
             CPUAccessFlags = CpuAccessFlags.Write,
-        });
+        }, 1);
 
         instanceBuffer = new Buffer<SpriteInstanceData>(rendererContext, new BufferDesc()
         {

@@ -61,7 +61,7 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
                 Usage = Usage.Dynamic,
                 BindFlags = BindFlags.UniformBuffer,
                 CPUAccessFlags = CpuAccessFlags.Write,
-            });
+            }, 1);
 
             downPipeline = renderDevice.CreateGraphicsPipelineState(new GraphicsPipelineStateCreateInfo()
             {
@@ -135,7 +135,7 @@ public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
                 Usage = Usage.Dynamic,
                 BindFlags = BindFlags.UniformBuffer,
                 CPUAccessFlags = CpuAccessFlags.Write,
-            });
+            }, 1);
 
             upPipeline = renderDevice.CreateGraphicsPipelineState(new GraphicsPipelineStateCreateInfo()
             {
