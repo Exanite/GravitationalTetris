@@ -4,7 +4,7 @@ using Exanite.Core.Utilities;
 using Exanite.Engine.Ecs.Queries;
 using Exanite.Engine.Ecs.Systems;
 using Exanite.Engine.Rendering;
-using Exanite.Engine.Time;
+using Exanite.Engine.Timing;
 using Exanite.GravitationalTetris.Features.Cameras.Components;
 using Exanite.GravitationalTetris.Features.Sprites;
 using Exanite.GravitationalTetris.Features.Sprites.Systems;
@@ -17,7 +17,7 @@ public partial class TilemapRenderSystem : EcsSystem, IRenderSystem, ISetupSyste
 {
     private readonly GameTilemapData tilemap;
     private readonly ResourceManager resourceManager;
-    private readonly SimulationTime time;
+    private readonly ITime time;
     private readonly SpriteBatchSystem spriteBatchSystem;
 
     private IResourceHandle<Texture2D> emptyTileTexture = null!;
@@ -26,7 +26,7 @@ public partial class TilemapRenderSystem : EcsSystem, IRenderSystem, ISetupSyste
     public TilemapRenderSystem(
         GameTilemapData tilemap,
         ResourceManager resourceManager,
-        SimulationTime time,
+        ITime time,
         SpriteBatchSystem spriteBatchSystem)
     {
         this.tilemap = tilemap;

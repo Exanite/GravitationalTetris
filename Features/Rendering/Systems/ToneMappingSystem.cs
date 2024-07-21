@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Diligent;
 using Exanite.Engine.Ecs.Systems;
 using Exanite.Engine.Rendering;
-using Exanite.Engine.Time;
+using Exanite.Engine.Timing;
 using Exanite.ResourceManagement;
 
 namespace Exanite.GravitationalTetris.Features.Rendering.Systems;
@@ -20,9 +20,9 @@ public class ToneMappingSystem : ISetupSystem, IRenderSystem, ITeardownSystem
     private readonly RendererContext rendererContext;
     private readonly IResourceManager resourceManager;
     private readonly WorldRenderTextureSystem worldRenderTextureSystem;
-    private readonly SimulationTime time;
+    private readonly ITime time;
 
-    public ToneMappingSystem(RendererContext rendererContext, IResourceManager resourceManager, WorldRenderTextureSystem worldRenderTextureSystem, SimulationTime time)
+    public ToneMappingSystem(RendererContext rendererContext, IResourceManager resourceManager, WorldRenderTextureSystem worldRenderTextureSystem, ITime time)
     {
         this.rendererContext = rendererContext;
         this.resourceManager = resourceManager;

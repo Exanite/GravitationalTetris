@@ -4,7 +4,7 @@ using Exanite.Engine.Ecs.Queries;
 using Exanite.Engine.Ecs.Systems;
 using Exanite.Engine.Inputs;
 using Exanite.Engine.Inputs.Actions;
-using Exanite.Engine.Time;
+using Exanite.Engine.Timing;
 using Exanite.GravitationalTetris.Features.Physics.Components;
 using Exanite.GravitationalTetris.Features.Players.Components;
 using Exanite.GravitationalTetris.Features.Transforms.Components;
@@ -20,9 +20,9 @@ public partial class PlayerControllerSystem : EcsSystem, ISetupSystem, IUpdateSy
 
     private readonly PhysicsWorld physicsWorld;
     private readonly InputActionManager input;
-    private readonly SimulationTime time;
+    private readonly ITime time;
 
-    public PlayerControllerSystem(PhysicsWorld physicsWorld, InputActionManager input, SimulationTime time)
+    public PlayerControllerSystem(PhysicsWorld physicsWorld, InputActionManager input, ITime time)
     {
         this.physicsWorld = physicsWorld;
         this.input = input;

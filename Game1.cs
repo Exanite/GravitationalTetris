@@ -8,7 +8,7 @@ using Exanite.Engine.Inputs.Systems;
 using Exanite.Engine.Lifecycles.Systems;
 using Exanite.Engine.Rendering;
 using Exanite.Engine.Rendering.Systems;
-using Exanite.Engine.Time.Systems;
+using Exanite.Engine.Timing.Systems;
 using Exanite.Engine.Windowing;
 using Exanite.Engine.Windowing.Systems;
 using Exanite.GravitationalTetris.Features;
@@ -79,7 +79,7 @@ public class Game1 : EngineGame
 
         config.Register<WindowSystem>();
 
-        config.Register<TimeSystem>();
+        config.Register<SimpleTimeSystem>();
         config.Register<InputSystem>();
         config.Register<InputActionSystem>();
 

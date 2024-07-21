@@ -3,7 +3,7 @@ using Exanite.Core.HighPerformance;
 using Exanite.Engine.Ecs.Queries;
 using Exanite.Engine.Ecs.Systems;
 using Exanite.Engine.Lifecycles.Components;
-using Exanite.Engine.Time;
+using Exanite.Engine.Timing;
 using Exanite.GravitationalTetris.Features.Physics.Components;
 using Exanite.GravitationalTetris.Features.Transforms.Components;
 using Myriad.ECS;
@@ -14,9 +14,9 @@ namespace Exanite.GravitationalTetris.Features.Physics.Systems;
 public partial class PhysicsSimulationSystem : EcsSystem, IStartSystem, IUpdateSystem, ICleanupSystem
 {
     private readonly World physicsWorld;
-    private readonly SimulationTime time;
+    private readonly ITime time;
 
-    public PhysicsSimulationSystem(World physicsWorld, SimulationTime time)
+    public PhysicsSimulationSystem(World physicsWorld, ITime time)
     {
         this.physicsWorld = physicsWorld;
         this.time = time;
