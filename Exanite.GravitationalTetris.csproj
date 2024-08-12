@@ -22,9 +22,6 @@
     <Configurations>Release;Debug</Configurations>
     <Platforms>x64</Platforms>
 
-    <!-- Support high DPI -->
-    <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
-
     <ExaniteEngine_HasContentFolder/>
   </PropertyGroup>
   <ItemGroup>
@@ -33,11 +30,6 @@
     <ProjectReference Include="..\Exanite.Engine.Building\Exanite.Engine.Building.csproj"/>
     <ProjectReference Include="..\Exanite.Engine\Exanite.Engine.csproj"/>
   </ItemGroup>
-
-  <PropertyGroup>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
-    <ApplicationIcon>Icon.ico</ApplicationIcon>
-  </PropertyGroup>
 
   <ItemGroup>
     <AvaloniaResource Include="Content/Base/FieryTurk.ttf"/>
