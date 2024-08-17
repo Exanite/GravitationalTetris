@@ -42,9 +42,15 @@ public class Game1 : EngineGame
         builder.RegisterType<Random>().InstancePerDependency();
 
         // Windowing
-        builder.Register(_ => new WindowSettings()
+        builder.Register(ctx =>
         {
-            Name = "Gravitational Tetris",
+            var resourceManager = ctx.Resolve<IResourceManager>();
+
+            return new WindowSettings()
+            {
+                Name = "Gravitational Tetris",
+                Icon = resourceManager.GetResource(BaseMod.WindowIcon).Value,
+            };
         }).SingleInstance();
 
         builder.RegisterType<Window>().SingleInstance();
