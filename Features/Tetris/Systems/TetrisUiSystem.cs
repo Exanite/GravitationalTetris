@@ -31,18 +31,18 @@ public class TetrisUiSystem : EcsSystem, ISetupSystem, IRenderSystem
 
     public void Render()
     {
-        var scaleFactor = 1f;
+        var renderScaling = 1f;
         if (window.Size.X > 1920)
         {
-            scaleFactor = 1.5f;
+            renderScaling = 1.5f;
         }
 
         if (window.Size.X > 2560)
         {
-            scaleFactor = 2f;
+            renderScaling = 2f;
         }
 
-        avaloniaSystem.Instance.RenderScaling = scaleFactor;
+        avaloniaSystem.Instance.RenderScaling = renderScaling;
 
         viewModel.ScoreText = $"{(int)tetrisSystem.Score}";
         viewModel.PreviousScoreText = $"{(int)tetrisSystem.PreviousScore}";
