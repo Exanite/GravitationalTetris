@@ -22,8 +22,8 @@ public partial class SpriteRenderSystem : EcsSystem, IRenderSystem
     }
 
     [Query]
-    [Include<CameraComponent>]
-    private void Draw(ref CameraProjectionComponent cameraProjection)
+    [Include<ComponentCamera>]
+    private void Draw(ref ComponentCameraProjection cameraProjection)
     {
         spriteBatchSystem.Begin(new SpriteBeginDrawOptions()
         {
@@ -37,7 +37,7 @@ public partial class SpriteRenderSystem : EcsSystem, IRenderSystem
     }
 
     [Query]
-    private void DrawSprites(ref SpriteComponent sprite, ref TransformComponent transform)
+    private void DrawSprites(ref ComponentSprite sprite, ref ComponentTransform transform)
     {
         var texture = sprite.Texture.Value;
         var world = Matrix4x4.CreateRotationZ(transform.Rotation) * Matrix4x4.CreateTranslation(transform.Position.X, transform.Position.Y, 0);

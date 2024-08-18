@@ -5,12 +5,12 @@ using Myriad.ECS;
 
 namespace Exanite.GravitationalTetris.Features.Sprites.Components;
 
-public struct SpriteComponent : IComponent
+public struct ComponentSprite : IComponent
 {
     public required IResourceHandle<Texture2D> Texture;
 
     [SetsRequiredMembers]
-    public SpriteComponent(IResourceHandle<Texture2D> texture)
+    public ComponentSprite(IResourceHandle<Texture2D> texture)
     {
         Texture = texture;
     }

@@ -51,7 +51,7 @@ public partial class PhysicsSimulationSystem : EcsSystem, IStartSystem, IUpdateS
     }
 
     [Query]
-    private void AddRigidbodies(Entity entity, ref RigidbodyComponent rigidbody)
+    private void AddRigidbodies(Entity entity, ref ComponentRigidbody rigidbody)
     {
         if (rigidbody.Body.World == null)
         {
@@ -61,46 +61,46 @@ public partial class PhysicsSimulationSystem : EcsSystem, IStartSystem, IUpdateS
     }
 
     [Query]
-    private void SyncTransformsToPhysics(ref TransformComponent transform, ref RigidbodyComponent rigidbody)
+    private void SyncTransformsToPhysics(ref ComponentTransform transform, ref ComponentRigidbody rigidbody)
     {
         rigidbody.Body.Position = transform.Position;
         rigidbody.Body.Rotation = transform.Rotation;
     }
 
     [Query]
-    private void SyncVelocitiesToPhysics(ref VelocityComponent velocity, ref RigidbodyComponent rigidbody)
+    private void SyncVelocitiesToPhysics(ref ComponentVelocity velocity, ref ComponentRigidbody rigidbody)
     {
         rigidbody.Body.LinearVelocity = velocity.Velocity;
     }
 
     [Query]
-    private void SyncAngularVelocitiesToPhysics(ref AngularVelocityComponent angularVelocity, ref RigidbodyComponent rigidbody)
+    private void SyncAngularVelocitiesToPhysics(ref ComponentAngularVelocity angularVelocity, ref ComponentRigidbody rigidbody)
     {
         rigidbody.Body.AngularVelocity = angularVelocity.AngularVelocity;
     }
 
     [Query]
-    private void SyncTransformsFromPhysics(ref TransformComponent transform, ref RigidbodyComponent rigidbody)
+    private void SyncTransformsFromPhysics(ref ComponentTransform transform, ref ComponentRigidbody rigidbody)
     {
         transform.Position = rigidbody.Body.Position;
         transform.Rotation = rigidbody.Body.Rotation;
     }
 
     [Query]
-    private void SyncVelocitiesFromPhysics(ref VelocityComponent velocity, ref RigidbodyComponent rigidbody)
+    private void SyncVelocitiesFromPhysics(ref ComponentVelocity velocity, ref ComponentRigidbody rigidbody)
     {
         velocity.Velocity = rigidbody.Body.LinearVelocity;
     }
 
     [Query]
-    private void SyncAngularVelocitiesFromPhysics(ref AngularVelocityComponent angularVelocity, ref RigidbodyComponent rigidbody)
+    private void SyncAngularVelocitiesFromPhysics(ref ComponentAngularVelocity angularVelocity, ref ComponentRigidbody rigidbody)
     {
         angularVelocity.AngularVelocity = rigidbody.Body.AngularVelocity;
     }
 
     [Query]
-    [Include<DestroyedComponent>]
-    private void RemoveRigidbodies(ref RigidbodyComponent rigidbody)
+    [Include<ComponentDestroyed>]
+    private void RemoveRigidbodies(ref ComponentRigidbody rigidbody)
     {
         var body = rigidbody.Body;
         if (body.World != null)

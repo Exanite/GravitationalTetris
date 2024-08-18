@@ -3,11 +3,11 @@ using nkast.Aether.Physics2D.Dynamics;
 
 namespace Exanite.GravitationalTetris.Features.Physics.Components;
 
-public struct RigidbodyComponent : IComponent
+public struct ComponentRigidbody : IComponent
 {
     public Body Body;
 
-    public RigidbodyComponent(Body body)
+    public ComponentRigidbody(Body body)
     {
         Body = body;
     }

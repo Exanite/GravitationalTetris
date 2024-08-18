@@ -47,8 +47,8 @@ public partial class TilemapRenderSystem : EcsSystem, IRenderSystem, ISetupSyste
     }
 
     [Query]
-    [Include<CameraComponent>]
-    private void ForEachCamera(ref CameraProjectionComponent cameraProjection)
+    [Include<ComponentCamera>]
+    private void ForEachCamera(ref ComponentCameraProjection cameraProjection)
     {
         spriteBatchSystem.Begin(new SpriteBeginDrawOptions()
         {
@@ -93,7 +93,7 @@ public partial class TilemapRenderSystem : EcsSystem, IRenderSystem, ISetupSyste
     }
 
     [Query]
-    private void DrawPlaceholders(ref TetrisRootComponent tetrisRoot)
+    private void DrawPlaceholders(ref ComponentTetrisRoot tetrisRoot)
     {
         foreach (var blockPosition in tetrisRoot.PredictedBlockPositions)
         {

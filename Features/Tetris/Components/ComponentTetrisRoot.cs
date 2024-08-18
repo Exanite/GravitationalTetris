@@ -3,7 +3,7 @@ using Myriad.ECS;
 
 namespace Exanite.GravitationalTetris.Features.Tetris.Components;
 
-public struct TetrisRootComponent : IComponent
+public struct ComponentTetrisRoot : IComponent
 {
     public required TetrisShapeDefinition Shape;
     public required TetrisRotation Rotation;
@@ -11,7 +11,7 @@ public struct TetrisRootComponent : IComponent
     public readonly List<TetrisVector2Int> BlockPositions;
     public readonly List<TetrisVector2Int> PredictedBlockPositions;
 
-    public TetrisRootComponent()
+    public ComponentTetrisRoot()
     {
         BlockPositions = new List<TetrisVector2Int>();
         PredictedBlockPositions = new List<TetrisVector2Int>();

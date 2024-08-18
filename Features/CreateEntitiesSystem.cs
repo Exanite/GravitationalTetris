@@ -26,12 +26,12 @@ public class CreateEntitiesSystem : EcsSystem, IStartSystem
 
         // Camera
         commandBuffer.Create()
-            .Set(new CameraComponent(20))
-            .Set(new TransformComponent
+            .Set(new ComponentCamera(20))
+            .Set(new ComponentTransform
             {
                 Position = new Vector2(5f - 0.5f, 10f - 0.5f),
             })
-            .Set(new CameraProjectionComponent());
+            .Set(new ComponentCameraProjection());
 
         // Player
         var playerBody = new Body();
@@ -52,17 +52,17 @@ public class CreateEntitiesSystem : EcsSystem, IStartSystem
         feet.Restitution = 0;
 
         commandBuffer.Create()
-            .Set(new PlayerComponent())
-            .Set(new TransformComponent
+            .Set(new ComponentPlayer())
+            .Set(new ComponentTransform
             {
                 Position = new Vector2(4f, 0),
                 Size = new Vector2(1, 1),
             })
-            .Set(new SpriteComponent(resourceManager.GetResource(BaseMod.Player)))
-            .Set(new RigidbodyComponent(playerBody))
-            .Set(new VelocityComponent())
-            .Set(new MovementSpeedComponent(5))
-            .Set(new PlayerMovement
+            .Set(new ComponentSprite(resourceManager.GetResource(BaseMod.Player)))
+            .Set(new ComponentRigidbody(playerBody))
+            .Set(new ComponentVelocity())
+            .Set(new ComponentMovementSpeed(5))
+            .Set(new ComponentPlayerMovement
             {
                 SmoothTime = 0.05f,
             });
@@ -74,7 +74,7 @@ public class CreateEntitiesSystem : EcsSystem, IStartSystem
         wallBody.CreateRectangle(1, 60, 1, new Vector2(-2, 15));
         wallBody.CreateRectangle(1, 60, 1, new Vector2(11, 15));
 
-        commandBuffer.Create().Set(new RigidbodyComponent(wallBody));
+        commandBuffer.Create().Set(new ComponentRigidbody(wallBody));
 
         commandBuffer.Playback().Dispose();
     }

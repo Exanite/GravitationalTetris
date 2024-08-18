@@ -2,11 +2,11 @@ using Myriad.ECS;
 
 namespace Exanite.GravitationalTetris.Features.Cameras.Components;
 
-public struct CameraComponent : IComponent
+public struct ComponentCamera : IComponent
 {
     public float VerticalHeight;
 
-    public CameraComponent(float verticalHeight)
+    public ComponentCamera(float verticalHeight)
     {
         VerticalHeight = verticalHeight;
     }

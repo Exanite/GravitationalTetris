@@ -22,7 +22,7 @@ public partial class CameraProjectionSystem : EcsSystem, IRenderSystem
     }
 
     [Query]
-    private void Update(ref CameraComponent camera, ref TransformComponent transform, ref CameraProjectionComponent cameraProjection)
+    private void Update(ref ComponentCamera camera, ref ComponentTransform transform, ref ComponentCameraProjection cameraProjection)
     {
         cameraProjection.View = Matrix4x4.CreateRotationZ(transform.Rotation) * Matrix4x4.CreateTranslation(-transform.Position.X, -transform.Position.Y, -10);
         cameraProjection.Projection = Matrix4x4.CreateOrthographic(camera.VerticalHeight * window.AspectRatio, camera.VerticalHeight, 0.001f, 1000f) * Matrix4x4.CreateRotationZ(float.Pi) * Matrix4x4.CreateScale(-1, 1, 1);
