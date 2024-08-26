@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Autofac;
 using Avalonia;
 using Exanite.Engine.Avalonia;
-using Exanite.Engine.EngineUsage;
+using Exanite.Engine.Framework;
 using Exanite.Logging;
 
 namespace Exanite.GravitationalTetris;

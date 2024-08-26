@@ -3,7 +3,7 @@ using System.Numerics;
 using Autofac;
 using Exanite.Engine.Avalonia.Systems;
 using Exanite.Engine.Ecs.Systems;
-using Exanite.Engine.EngineUsage;
+using Exanite.Engine.Framework;
 using Exanite.Engine.Inputs.Systems;
 using Exanite.Engine.Lifecycles.Systems;
 using Exanite.Engine.Rendering;
