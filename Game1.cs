@@ -79,7 +79,7 @@ public class Game1 : EngineGame
         builder.RegisterFolderFileSystem("GravitationalTetris", "/Rendering/", "Rendering");
     }
 
-    protected override void ConfigureSystemScheduler(SystemScheduler.Config config)
+    protected override void ConfigureSystemScheduler(SystemSchedulerConfig config)
     {
         base.ConfigureSystemScheduler(config);
 
