@@ -302,7 +302,7 @@ public partial class TetrisSystem : EcsSystem, ISetupSystem, IUpdateSystem
             });
 
         using var resolver = commandBuffer.Playback();
-        currentShapeRoot = currentShapeRootEntity.Resolve(resolver);
+        currentShapeRoot = currentShapeRootEntity.Resolve();
 
         for (var x = 0; x < shape.Shape.GetLength(0); x++)
         {
