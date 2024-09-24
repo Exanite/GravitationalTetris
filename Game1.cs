@@ -100,7 +100,7 @@ public class Game1 : EngineGame
         config.Register<FmodAudioSystem>();
 
         config.Register<ResizeSwapChainSystem>();
-        config.Register<ClearSwapChainSystem>((_, system) => system.ClearColor = Vector4.Zero);
+        config.Register<ClearSwapChainSystem>().OnInstantiated((_, system) => system.ClearColor = Vector4.Zero);
         {
             config.Register<CameraProjectionSystem>();
             config.Register<SpriteBatchSystem>();
@@ -121,7 +121,7 @@ public class Game1 : EngineGame
             config.Register<RenderWorldToMainSystem>();
 
             config.Register<SimpleAvaloniaSystem>();
-            config.Register<AvaloniaCopyTextureSystem>((container, system) =>
+            config.Register<AvaloniaCopyTextureSystem>().OnInstantiated((container, system) =>
             {
                 var renderSystem = container.Resolve<SimpleAvaloniaSystem>();
                 var resourceManager = container.Resolve<IResourceManager>();
