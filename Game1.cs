@@ -35,9 +35,6 @@ public class Game1 : EngineGame
     {
         base.Register(builder);
 
-        // Game
-        builder.RegisterInstance(this).SingleInstance();
-
         // Misc
         builder.RegisterType<Random>().InstancePerDependency();
 
