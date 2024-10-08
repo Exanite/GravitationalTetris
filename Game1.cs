@@ -62,6 +62,7 @@ public class Game1 : EngineGame
                 EnableValidation = false, // Todo Enable
             })
             .SingleInstance();
+        builder.RegisterType<SwapChain>().SingleInstance();
 
         // Shared data
         builder.RegisterType<GameTilemapData>().SingleInstance();
