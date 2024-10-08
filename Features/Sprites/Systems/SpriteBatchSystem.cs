@@ -7,7 +7,7 @@ using FilterType = Diligent.FilterType;
 
 namespace Exanite.GravitationalTetris.Features.Sprites.Systems;
 
-public class SpriteBatchSystem : ISetupSystem, IRenderSystem, IDisposable
+public class SpriteBatchSystem : EcsSystem, ISetupSystem, IRenderSystem, IDisposable
 {
     private const int MaxSpritesPerBatch = 128;
 

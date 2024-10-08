@@ -6,7 +6,7 @@ using Exanite.Engine.Windowing;
 
 namespace Exanite.GravitationalTetris.Features.Rendering.Systems;
 
-public class WorldRenderTextureSystem : ISetupSystem, IRenderSystem, ITeardownSystem
+public class WorldRenderTextureSystem : EcsSystem, ISetupSystem, IRenderSystem, ITeardownSystem
 {
     public ColorRenderTexture2D WorldColor = null!;
     public DepthRenderTexture2D WorldDepth = null!;

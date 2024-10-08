@@ -9,7 +9,7 @@ using Exanite.ResourceManagement;
 
 namespace Exanite.GravitationalTetris.Features.Rendering.Systems;
 
-public class BloomSystem : ISetupSystem, IRenderSystem, ITeardownSystem
+public class BloomSystem : EcsSystem, ISetupSystem, IRenderSystem, ITeardownSystem
 {
     private float referenceResolutionHeight = 1080;
 

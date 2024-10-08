@@ -6,7 +6,7 @@ using Exanite.ResourceManagement;
 
 namespace Exanite.GravitationalTetris.Features.Rendering.Systems;
 
-public class RenderWorldToMainSystem : ISetupSystem, IRenderSystem, ITeardownSystem
+public class RenderWorldToMainSystem : EcsSystem, ISetupSystem, IRenderSystem, ITeardownSystem
 {
     private IPipelineState passthroughPipeline = null!;
     private IShaderResourceBinding passthroughResources = null!;
