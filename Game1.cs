@@ -39,6 +39,8 @@ public class Game1 : EngineGame
         builder.RegisterType<Random>().InstancePerDependency();
 
         // Windowing
+        builder.RegisterType<Window>().SingleInstance();
+        builder.RegisterType<SwapChain>().SingleInstance();
         builder.Register(ctx =>
         {
             var resourceManager = ctx.Resolve<IResourceManager>();
@@ -50,8 +52,6 @@ public class Game1 : EngineGame
             };
         }).SingleInstance();
 
-        builder.RegisterType<Window>().SingleInstance();
-
         // Rendering
         builder.RegisterType<RendererContext>().SingleInstance();
         builder.Register(_ => new RendererContextSettings
@@ -59,7 +59,6 @@ public class Game1 : EngineGame
                 EnableValidation = false, // Todo Enable
             })
             .SingleInstance();
-        builder.RegisterType<SwapChain>().SingleInstance();
 
         // Shared data
         builder.RegisterType<GameTilemapData>().SingleInstance();
