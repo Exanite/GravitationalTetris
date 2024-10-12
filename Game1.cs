@@ -22,7 +22,6 @@ using Exanite.GravitationalTetris.Features.Tetris.Systems;
 using Exanite.GravitationalTetris.Features.Tiles;
 using Exanite.GravitationalTetris.Features.Tiles.Systems;
 using Exanite.ResourceManagement;
-using Myriad.ECS.Worlds;
 using PhysicsWorld = nkast.Aether.Physics2D.Dynamics.World;
 
 namespace Exanite.GravitationalTetris;
@@ -65,9 +64,6 @@ public class Game1 : EngineGame
 
         // Physics
         builder.RegisterType<PhysicsWorld>().SingleInstance();
-
-        // ECS world
-        builder.Register(_ => new WorldBuilder().Build()).SingleInstance();
 
         // Resources
         builder.RegisterFolderFileSystem("GravitationalTetris", "/Base/", "Base");
