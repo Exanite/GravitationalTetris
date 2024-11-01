@@ -88,21 +88,21 @@ public partial class TetrisSystem : EcsSystem, ISetupSystem, IUpdateSystem
     {
         commandBuffer = new CommandBuffer(World);
 
-        placeShapeAction = input.RegisterAction(new OrInputAction(
+        placeShapeAction = input.RegisterAction(new OrInputAction([
             new ButtonInputAction(KeyCode.Space),
-            new ButtonInputAction(KeyCode.LeftMouse)
-        ));
+            new ButtonInputAction(KeyCode.LeftMouse),
+        ]));
 
-        rotateLeftAction = input.RegisterAction(new OrInputAction(
+        rotateLeftAction = input.RegisterAction(new OrInputAction([
             new ButtonInputAction(KeyCode.Q),
-            new ButtonInputAction(KeyCode.BackwardMouse)
-        ));
+            new ButtonInputAction(KeyCode.BackwardMouse),
+        ]));
 
-        rotateRightAction = input.RegisterAction(new OrInputAction(
+        rotateRightAction = input.RegisterAction(new OrInputAction([
             new ButtonInputAction(KeyCode.E),
             new ButtonInputAction(KeyCode.ForwardMouse),
-            new ButtonInputAction(KeyCode.RightMouse)
-        ));
+            new ButtonInputAction(KeyCode.RightMouse),
+        ]));
 
         if (File.Exists(ScoresFilePath))
         {
