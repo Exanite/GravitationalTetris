@@ -1,5 +1,5 @@
 using System.Numerics;
-using Exanite.Core.HighPerformance;
+using Exanite.Core.Runtime;
 using Exanite.Engine.Ecs.Queries;
 using Exanite.Engine.Ecs.Systems;
 using Exanite.Engine.Lifecycles.Components;
