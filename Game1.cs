@@ -55,7 +55,7 @@ public class Game1 : EngineGame
         builder.RegisterType<RendererContext>().SingleInstance();
         builder.Register(_ => new RendererContextSettings
             {
-                EnableValidation = false, // Todo Enable
+                EnableValidation = false, // TODO: Enable
             })
             .SingleInstance();
 
@@ -101,15 +101,15 @@ public class Game1 : EngineGame
             // World RT
             config.Register<WorldRenderTextureSystem>();
 
-            config.Register<TilemapRenderSystem>(); // Todo This system causes Vulkan validation errors
-            config.Register<SpriteRenderSystem>(); // Todo This system causes Vulkan validation errors
+            config.Register<TilemapRenderSystem>(); // TODO: This system causes Vulkan validation errors
+            config.Register<SpriteRenderSystem>(); // TODO: This system causes Vulkan validation errors
 
             // Main RT
-            config.Register<BloomSystem>(); // Todo This system causes Vulkan validation errors
+            config.Register<BloomSystem>(); // TODO: This system causes Vulkan validation errors
 
             config.Register<UseSwapChainAsRenderTargetSystem>();
 
-            config.Register<ToneMappingSystem>(); // Todo This system causes Vulkan validation errors
+            config.Register<ToneMappingSystem>(); // TODO: This system causes Vulkan validation errors
 
             config.Register<RenderWorldToMainSystem>();
 
