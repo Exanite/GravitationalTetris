@@ -123,7 +123,7 @@ public partial class TetrisSystem : EcsSystem, ISetupSystem, IUpdateSystem
 
         shapes.Add(new TetrisShapeDefinition
         {
-            Shape = new bool[,]
+            Shape = new[,]
             {
                 { true, true, true, true },
             },
@@ -137,7 +137,7 @@ public partial class TetrisSystem : EcsSystem, ISetupSystem, IUpdateSystem
 
         shapes.Add(new TetrisShapeDefinition
         {
-            Shape = new bool[,]
+            Shape = new[,]
             {
                 { true, false, false },
                 { true, true, true },
@@ -152,7 +152,7 @@ public partial class TetrisSystem : EcsSystem, ISetupSystem, IUpdateSystem
 
         shapes.Add(new TetrisShapeDefinition
         {
-            Shape = new bool[,]
+            Shape = new[,]
             {
                 { false, false, true },
                 { true, true, true },
@@ -167,7 +167,7 @@ public partial class TetrisSystem : EcsSystem, ISetupSystem, IUpdateSystem
 
         shapes.Add(new TetrisShapeDefinition
         {
-            Shape = new bool[,]
+            Shape = new[,]
             {
                 { true, true },
                 { true, true },
@@ -182,7 +182,7 @@ public partial class TetrisSystem : EcsSystem, ISetupSystem, IUpdateSystem
 
         shapes.Add(new TetrisShapeDefinition
         {
-            Shape = new bool[,]
+            Shape = new[,]
             {
                 { false, true, true },
                 { true, true, false },
@@ -197,7 +197,7 @@ public partial class TetrisSystem : EcsSystem, ISetupSystem, IUpdateSystem
 
         shapes.Add(new TetrisShapeDefinition
         {
-            Shape = new bool[,]
+            Shape = new[,]
             {
                 { false, true, false },
                 { true, true, true },
@@ -212,7 +212,7 @@ public partial class TetrisSystem : EcsSystem, ISetupSystem, IUpdateSystem
 
         shapes.Add(new TetrisShapeDefinition
         {
-            Shape = new bool[,]
+            Shape = new[,]
             {
                 { true, true, false },
                 { false, true, true },

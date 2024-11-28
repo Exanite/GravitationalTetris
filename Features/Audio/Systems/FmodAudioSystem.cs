@@ -2,9 +2,9 @@ using System;
 using System.IO;
 using Exanite.Engine.Ecs.Systems;
 using Exanite.ResourceManagement;
+using FMOD.Studio;
 using Fmod = FMOD.System;
 using FmodStudio = FMOD.Studio.System;
-using FMOD.Studio;
 
 namespace Exanite.GravitationalTetris.Features.Audio.Systems;
 

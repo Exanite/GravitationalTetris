@@ -217,7 +217,7 @@ public class BloomSystem : EcsSystem, ISetupSystem, IRenderSystem, ITeardownSyst
             for (var i = 0; i < renderTextures.Count; i++)
             {
                 var previousRenderTarget = i > 0 ? renderTextures[i - 1].RenderTarget : GetSourceRenderTexture().RenderTarget;
-                var currentRenderTarget = renderTextures[i].RenderTarget ;
+                var currentRenderTarget = renderTextures[i].RenderTarget;
                 var currentTexture = renderTextures[i];
 
                 downTextureVariable?.Set(previousRenderTarget, SetShaderResourceFlags.AllowOverwrite);

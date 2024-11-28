@@ -8,7 +8,7 @@ namespace Exanite.GravitationalTetris.Features.Tetris.Systems;
 
 public class TetrisUiSystem : EcsSystem, ISetupSystem, IRenderSystem
 {
-    private readonly MainViewModel viewModel = new MainViewModel();
+    private readonly MainViewModel viewModel = new();
 
     private readonly SimpleAvaloniaSystem avaloniaSystem;
     private readonly TetrisSystem tetrisSystem;
