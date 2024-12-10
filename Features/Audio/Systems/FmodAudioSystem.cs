@@ -34,7 +34,7 @@ public class FmodAudioSystem : EcsSystem, ISetupSystem, IUpdateSystem, IDisposab
             maxchannels: 128,
             studioflags: INITFLAGS.NORMAL,
             flags: FMOD.INITFLAGS.NORMAL,
-            extradriverdata: IntPtr.Zero
+            extradriverdata: nint.Zero
         );
 
         LoadBank("/Base/Tetris.bank");
