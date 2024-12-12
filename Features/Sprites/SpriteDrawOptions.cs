@@ -1,5 +1,5 @@
 using System.Numerics;
-using Exanite.Engine.Rendering;
+using Exanite.Engine.OldRendering;
 
 namespace Exanite.GravitationalTetris.Features.Sprites;
 

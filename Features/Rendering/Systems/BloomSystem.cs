@@ -3,7 +3,7 @@ using System.Numerics;
 using Diligent;
 using Exanite.Core.Numerics;
 using Exanite.Engine.Ecs.Systems;
-using Exanite.Engine.Rendering;
+using Exanite.Engine.OldRendering;
 using Exanite.Engine.Windowing;
 using Exanite.ResourceManagement;
 

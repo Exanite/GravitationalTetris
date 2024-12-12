@@ -1,7 +1,7 @@
 using System;
 using Diligent;
 using Exanite.Engine.Ecs.Systems;
-using Exanite.Engine.Rendering;
+using Exanite.Engine.OldRendering;
 using Exanite.ResourceManagement;
 using FilterType = Diligent.FilterType;
 

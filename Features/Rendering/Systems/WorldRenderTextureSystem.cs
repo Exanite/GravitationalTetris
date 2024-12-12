@@ -1,7 +1,7 @@
 using System.Numerics;
 using Diligent;
 using Exanite.Engine.Ecs.Systems;
-using Exanite.Engine.Rendering;
+using Exanite.Engine.OldRendering;
 using Exanite.Engine.Windowing;
 
 namespace Exanite.GravitationalTetris.Features.Rendering.Systems;
