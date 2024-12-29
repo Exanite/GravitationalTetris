@@ -124,8 +124,8 @@ public class Game1 : EngineGame
                     return renderSystem.Instance.Texture;
                 };
 
-                system.VShader = resourceManager.GetResource(RenderingMod.ScreenShader);
-                system.PShader = resourceManager.GetResource(RenderingMod.PassthroughShader);
+                system.VertexModule = resourceManager.GetResource(RenderingMod.ScreenShader);
+                system.FragmentModule = resourceManager.GetResource(RenderingMod.PassthroughShader);
             });
 
             config.Register<TetrisUiSystem>();
