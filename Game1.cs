@@ -37,7 +37,7 @@ public class Game1 : EngineGame
 
         // Windowing
         builder.RegisterType<Window>().SingleInstance();
-        builder.RegisterType<SwapChain>().SingleInstance();
+        builder.RegisterType<Swapchain>().SingleInstance();
         builder.Register(ctx =>
         {
             var resourceManager = ctx.Resolve<IResourceManager>();
@@ -117,7 +117,7 @@ public class Game1 : EngineGame
 
             config.Register<TetrisUiSystem>();
 
-            config.Register<PresentSwapChainSystem>();
+            config.Register<PresentSwapchainSystem>();
         }
 
         config.Register<RemoveDestroyedSystem>();

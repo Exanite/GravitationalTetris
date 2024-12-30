@@ -16,14 +16,14 @@ public class RenderWorldToMainSystem : EcsSystem, ISetupSystem, IRenderSystem, I
     private readonly RenderingContext renderingContext;
     private readonly IResourceManager resourceManager;
     private readonly RenderingResourcesSystem renderingResourcesSystem;
-    private readonly SwapChain swapChain;
+    private readonly Swapchain swapchain;
 
-    public RenderWorldToMainSystem(RenderingContext renderingContext, IResourceManager resourceManager, RenderingResourcesSystem renderingResourcesSystem, SwapChain swapChain)
+    public RenderWorldToMainSystem(RenderingContext renderingContext, IResourceManager resourceManager, RenderingResourcesSystem renderingResourcesSystem, Swapchain swapchain)
     {
         this.renderingContext = renderingContext;
         this.resourceManager = resourceManager;
         this.renderingResourcesSystem = renderingResourcesSystem;
-        this.swapChain = swapChain;
+        this.swapchain = swapchain;
     }
 
     public void Setup()
@@ -58,7 +58,7 @@ public class RenderWorldToMainSystem : EcsSystem, ISetupSystem, IRenderSystem, I
     {
         var deviceContext = renderingContext.DeviceContext;
 
-        renderTargets[0] = swapChain.Handle.GetCurrentBackBufferRTV();
+        renderTargets[0] = swapchain.Handle.GetCurrentBackBufferRTV();
         deviceContext.SetRenderTargets(renderTargets, null, ResourceStateTransitionMode.Transition);
 
         passthroughTextureVariable?.Set(renderingResourcesSystem.WorldColor.RenderTarget, SetShaderResourceFlags.AllowOverwrite);
@@ -71,7 +71,7 @@ public class RenderWorldToMainSystem : EcsSystem, ISetupSystem, IRenderSystem, I
             Flags = DrawFlags.VerifyAll,
         });
 
-        deviceContext.SetRenderTargets(renderTargets, swapChain.Handle.GetDepthBufferDSV(), ResourceStateTransitionMode.Transition);
+        deviceContext.SetRenderTargets(renderTargets, swapchain.Handle.GetDepthBufferDSV(), ResourceStateTransitionMode.Transition);
     }
 
     public void Teardown()

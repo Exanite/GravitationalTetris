@@ -13,21 +13,21 @@ public class RenderingResourcesSystem : EcsSystem, ISetupSystem, IRenderSystem, 
 
     private readonly RenderingContext renderingContext;
     private readonly Window window;
-    private readonly SwapChain swapChain;
+    private readonly Swapchain swapchain;
 
-    public RenderingResourcesSystem(RenderingContext renderingContext, Window window, SwapChain swapChain)
+    public RenderingResourcesSystem(RenderingContext renderingContext, Window window, Swapchain swapchain)
     {
         this.renderingContext = renderingContext;
         this.window = window;
-        this.swapChain = swapChain;
+        this.swapchain = swapchain;
     }
 
     public void Setup()
     {
         WorldColor = new Texture2D(renderingContext, new TextureDesc2D()
         {
-            Format = swapChain.Desc.Format,
-            Size = swapChain.Desc.Size,
+            Format = swapchain.Desc.Format,
+            Size = swapchain.Current.Texture.Desc.Size,
             Usages = ImageUsageFlags.ColorAttachmentBit,
         }, new TextureViewDesc2D()
         {
@@ -36,8 +36,8 @@ public class RenderingResourcesSystem : EcsSystem, ISetupSystem, IRenderSystem, 
 
         WorldDepth = new Texture2D(renderingContext, new TextureDesc2D()
         {
-            Format = swapChain.Desc.Format,
-            Size = swapChain.Desc.Size,
+            Format = swapchain.Desc.Format,
+            Size = swapchain.Current.Texture.Desc.Size,
             Usages = ImageUsageFlags.DepthStencilAttachmentBit,
         }, new TextureViewDesc2D()
         {
