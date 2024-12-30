@@ -61,36 +61,6 @@ public class SpriteBatchSystem : EcsSystem, ISetupSystem, IRenderSystem, IDispos
 
         pipeline = renderDevice.CreateGraphicsPipelineState(new GraphicsPipelineStateCreateInfo()
         {
-            PSODesc = new PipelineStateDesc()
-            {
-                ResourceLayout = new PipelineResourceLayoutDesc()
-                {
-                    DefaultVariableType = ShaderResourceVariableType.Static,
-                    Variables =
-                    [
-                        new ShaderResourceVariableDesc()
-                        {
-                            ShaderStages = ShaderType.Pixel,
-                            Name = "Texture",
-                            Type = ShaderResourceVariableType.Mutable,
-                        },
-                    ],
-                    ImmutableSamplers =
-                    [
-                        new ImmutableSamplerDesc()
-                        {
-                            SamplerOrTextureName = "TextureSampler",
-                            ShaderStages = ShaderType.Pixel,
-                            Desc = new SamplerDesc()
-                            {
-                                MinFilter = FilterType.Point, MagFilter = FilterType.Point, MipFilter = FilterType.Point,
-                                AddressU = TextureAddressMode.Clamp, AddressV = TextureAddressMode.Clamp, AddressW = TextureAddressMode.Clamp,
-                            },
-                        },
-                    ],
-                },
-            },
-
             GraphicsPipeline = new GraphicsPipelineDesc()
             {
                 InputLayout = SpriteInstanceData.Layout,
