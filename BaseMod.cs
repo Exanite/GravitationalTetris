@@ -1,5 +1,5 @@
 using Exanite.Core.Properties;
-using Exanite.Engine.OldRendering;
+using Exanite.Engine.Rendering;
 using Exanite.Engine.Windowing;
 
 namespace Exanite.GravitationalTetris;
@@ -8,8 +8,8 @@ public static class BaseMod
 {
     public static PropertyDefinition<WindowIcon> WindowIcon = new("/Base/Icon.png");
 
-    public static PropertyDefinition<Shader> SpriteVShader = new("/Base/Sprite.v.hlsl");
-    public static PropertyDefinition<Shader> SpritePShader = new("/Base/Sprite.p.hlsl");
+    public static PropertyDefinition<ShaderModule> SpriteVertexModule = new("/Base/Sprite.vertex.hlsl");
+    public static PropertyDefinition<ShaderModule> SpriteFragmentModule = new("/Base/Sprite.fragment.hlsl");
 
     public static PropertyDefinition<Texture2D> White = new("/Base/White.png");
 

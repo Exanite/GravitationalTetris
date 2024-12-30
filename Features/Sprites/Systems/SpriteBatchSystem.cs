@@ -31,27 +31,27 @@ public class SpriteBatchSystem : EcsSystem, ISetupSystem, IRenderSystem, IDispos
     private readonly IBuffer[] vertexBuffers = new IBuffer[1];
     private readonly ulong[] vertexOffsets = new ulong[1];
 
-    private readonly RendererContext rendererContext;
+    private readonly RenderingContext renderingContext;
     private readonly ResourceManager resourceManager;
 
-    public SpriteBatchSystem(RendererContext rendererContext, ResourceManager resourceManager)
+    public SpriteBatchSystem(RenderingContext renderingContext, ResourceManager resourceManager)
     {
-        this.rendererContext = rendererContext;
+        this.renderingContext = renderingContext;
         this.resourceManager = resourceManager;
     }
 
     public void Setup()
     {
-        var renderDevice = rendererContext.RenderDevice;
+        var renderDevice = renderingContext.RenderDevice;
 
-        uniformBuffer = new Buffer<SpriteUniformData>(rendererContext, new BufferDesc()
+        uniformBuffer = new Buffer<SpriteUniformData>(renderingContext, new BufferDesc()
         {
             Usage = Usage.Dynamic,
             BindFlags = BindFlags.UniformBuffer,
             CPUAccessFlags = CpuAccessFlags.Write,
         }, 1);
 
-        instanceBuffer = new Buffer<SpriteInstanceData>(rendererContext, new BufferDesc()
+        instanceBuffer = new Buffer<SpriteInstanceData>(renderingContext, new BufferDesc()
         {
             Usage = Usage.Dynamic,
             BindFlags = BindFlags.VertexBuffer,
@@ -60,8 +60,8 @@ public class SpriteBatchSystem : EcsSystem, ISetupSystem, IRenderSystem, IDispos
 
         vertexBuffers[0] = instanceBuffer.Handle;
 
-        var vShader = resourceManager.GetResource(BaseMod.SpriteVShader);
-        var pShader = resourceManager.GetResource(BaseMod.SpritePShader);
+        var vShader = resourceManager.GetResource(BaseMod.SpriteVertexModule);
+        var pShader = resourceManager.GetResource(BaseMod.SpriteFragmentModule);
 
         pipeline = renderDevice.CreateGraphicsPipelineState(new GraphicsPipelineStateCreateInfo()
         {
@@ -202,7 +202,7 @@ public class SpriteBatchSystem : EcsSystem, ISetupSystem, IRenderSystem, IDispos
             return;
         }
 
-        var deviceContext = rendererContext.DeviceContext;
+        var deviceContext = renderingContext.DeviceContext;
 
         using (instanceBuffer.Map(MapType.Write, MapFlags.Discard, out var instanceData))
         {

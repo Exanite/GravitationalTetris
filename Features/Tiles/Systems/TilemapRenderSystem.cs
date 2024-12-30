@@ -3,7 +3,7 @@ using System.Numerics;
 using Exanite.Core.Utilities;
 using Exanite.Engine.Ecs.Queries;
 using Exanite.Engine.Ecs.Systems;
-using Exanite.Engine.OldRendering;
+using Exanite.Engine.Rendering;
 using Exanite.Engine.Timing;
 using Exanite.GravitationalTetris.Features.Cameras.Components;
 using Exanite.GravitationalTetris.Features.Sprites;

@@ -32,16 +32,16 @@ public class BloomSystem : EcsSystem, ISetupSystem, IRenderSystem, ITeardownSyst
 
     private readonly List<ColorRenderTexture2D> renderTextures = new();
 
-    private readonly RendererContext rendererContext;
+    private readonly RenderingContext renderingContext;
     private readonly IResourceManager resourceManager;
-    private readonly WorldRenderTextureSystem worldRenderTextureSystem;
+    private readonly RenderingResourcesSystem renderingResourcesSystem;
     private readonly Window window;
 
-    public BloomSystem(RendererContext rendererContext, IResourceManager resourceManager, WorldRenderTextureSystem worldRenderTextureSystem, Window window)
+    public BloomSystem(RenderingContext renderingContext, IResourceManager resourceManager, RenderingResourcesSystem renderingResourcesSystem, Window window)
     {
-        this.rendererContext = rendererContext;
+        this.renderingContext = renderingContext;
         this.resourceManager = resourceManager;
-        this.worldRenderTextureSystem = worldRenderTextureSystem;
+        this.renderingResourcesSystem = renderingResourcesSystem;
         this.window = window;
     }
 
@@ -49,14 +49,14 @@ public class BloomSystem : EcsSystem, ISetupSystem, IRenderSystem, ITeardownSyst
     {
         ResizeRenderTextures();
 
-        var renderDevice = rendererContext.RenderDevice;
+        var renderDevice = renderingContext.RenderDevice;
 
-        var vShader = resourceManager.GetResource(RenderingMod.ScreenShader);
-        var pShaderDown = resourceManager.GetResource(RenderingMod.BloomDownShader);
-        var pShaderUp = resourceManager.GetResource(RenderingMod.BloomUpShader);
+        var vShader = resourceManager.GetResource(RenderingMod.ScreenVertexModule);
+        var pShaderDown = resourceManager.GetResource(RenderingMod.BloomDownFragmentModule);
+        var pShaderUp = resourceManager.GetResource(RenderingMod.BloomUpFragmentModule);
 
         {
-            downUniformBuffer = new Buffer<BloomDownUniformData>(rendererContext, new BufferDesc()
+            downUniformBuffer = new Buffer<BloomDownUniformData>(renderingContext, new BufferDesc()
             {
                 Usage = Usage.Dynamic,
                 BindFlags = BindFlags.UniformBuffer,
@@ -130,7 +130,7 @@ public class BloomSystem : EcsSystem, ISetupSystem, IRenderSystem, ITeardownSyst
         }
 
         {
-            upUniformBuffer = new Buffer<BloomUpUniformData>(rendererContext, new BufferDesc()
+            upUniformBuffer = new Buffer<BloomUpUniformData>(renderingContext, new BufferDesc()
             {
                 Usage = Usage.Dynamic,
                 BindFlags = BindFlags.UniformBuffer,
@@ -208,7 +208,7 @@ public class BloomSystem : EcsSystem, ISetupSystem, IRenderSystem, ITeardownSyst
     {
         ResizeRenderTextures();
 
-        var deviceContext = rendererContext.DeviceContext;
+        var deviceContext = renderingContext.DeviceContext;
 
         if (renderTextures.Count != 0)
         {
@@ -346,7 +346,7 @@ public class BloomSystem : EcsSystem, ISetupSystem, IRenderSystem, ITeardownSyst
                 return;
             }
 
-            renderTextures.Add(new ColorRenderTexture2D(rendererContext, new Vector2Int(iWidth, iHeight), CommonTextureFormats.HdrTextureFormat));
+            renderTextures.Add(new ColorRenderTexture2D(renderingContext, new Vector2Int(iWidth, iHeight), CommonTextureFormats.HdrTextureFormat));
 
             width /= 2;
             height /= 2;
@@ -356,11 +356,11 @@ public class BloomSystem : EcsSystem, ISetupSystem, IRenderSystem, ITeardownSyst
     // Temporary - Used to reduce coupling
     private ColorRenderTexture2D GetSourceRenderTexture()
     {
-        return worldRenderTextureSystem.WorldColor;
+        return renderingResourcesSystem.WorldColor;
     }
 
     private Vector2Int GetSourceSize()
     {
-        return worldRenderTextureSystem.WorldColor.Handle.GetDesc().GetSize();
+        return renderingResourcesSystem.WorldColor.Handle.GetDesc().GetSize();
     }
 }

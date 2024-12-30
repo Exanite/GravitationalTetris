@@ -6,8 +6,7 @@ using Exanite.Engine.Ecs.Scheduling;
 using Exanite.Engine.Framework;
 using Exanite.Engine.Inputs.Systems;
 using Exanite.Engine.Lifecycles.Systems;
-using Exanite.Engine.OldRendering;
-using Exanite.Engine.OldRendering.Systems;
+using Exanite.Engine.Rendering;
 using Exanite.Engine.Timing.Systems;
 using Exanite.Engine.Windowing;
 using Exanite.Engine.Windowing.Systems;
@@ -51,14 +50,6 @@ public class Game1 : EngineGame
             };
         }).SingleInstance();
 
-        // Rendering
-        builder.RegisterType<RendererContext>().SingleInstance();
-        builder.Register(_ => new RendererContextSettings
-            {
-                EnableValidation = false, // TODO: Enable
-            })
-            .SingleInstance();
-
         // Shared data
         builder.RegisterType<GameTilemapData>().SingleInstance();
 
@@ -99,7 +90,7 @@ public class Game1 : EngineGame
             config.Register<SpriteBatchSystem>();
 
             // World RT
-            config.Register<WorldRenderTextureSystem>();
+            config.Register<RenderingResourcesSystem>();
 
             config.Register<TilemapRenderSystem>(); // TODO: This system causes Vulkan validation errors
             config.Register<SpriteRenderSystem>(); // TODO: This system causes Vulkan validation errors
@@ -124,8 +115,8 @@ public class Game1 : EngineGame
                     return renderSystem.Instance.Texture;
                 };
 
-                system.VertexModule = resourceManager.GetResource(RenderingMod.ScreenShader);
-                system.FragmentModule = resourceManager.GetResource(RenderingMod.PassthroughShader);
+                system.VertexModule = resourceManager.GetResource(RenderingMod.ScreenVertexModule);
+                system.FragmentModule = resourceManager.GetResource(RenderingMod.PassthroughFragmentModule);
             });
 
             config.Register<TetrisUiSystem>();

@@ -17,27 +17,27 @@ public class ToneMappingSystem : EcsSystem, ISetupSystem, IRenderSystem, ITeardo
 
     private readonly ITextureView[] renderTargets = new ITextureView[1];
 
-    private readonly RendererContext rendererContext;
+    private readonly RenderingContext renderingContext;
     private readonly IResourceManager resourceManager;
-    private readonly WorldRenderTextureSystem worldRenderTextureSystem;
+    private readonly RenderingResourcesSystem renderingResourcesSystem;
     private readonly ITime time;
 
-    public ToneMappingSystem(RendererContext rendererContext, IResourceManager resourceManager, WorldRenderTextureSystem worldRenderTextureSystem, ITime time)
+    public ToneMappingSystem(RenderingContext renderingContext, IResourceManager resourceManager, RenderingResourcesSystem renderingResourcesSystem, ITime time)
     {
-        this.rendererContext = rendererContext;
+        this.renderingContext = renderingContext;
         this.resourceManager = resourceManager;
-        this.worldRenderTextureSystem = worldRenderTextureSystem;
+        this.renderingResourcesSystem = renderingResourcesSystem;
         this.time = time;
     }
 
     public void Setup()
     {
-        var renderDevice = rendererContext.RenderDevice;
+        var renderDevice = renderingContext.RenderDevice;
 
-        var vShader = resourceManager.GetResource(RenderingMod.ScreenShader);
-        var pShader = resourceManager.GetResource(RenderingMod.ToneMapShader);
+        var vShader = resourceManager.GetResource(RenderingMod.ScreenVertexModule);
+        var pShader = resourceManager.GetResource(RenderingMod.ToneMapFragmentModule);
 
-        uniformBuffer = new Buffer<ToneMapUniformData>(rendererContext, new BufferDesc()
+        uniformBuffer = new Buffer<ToneMapUniformData>(renderingContext, new BufferDesc()
         {
             Usage = Usage.Dynamic,
             BindFlags = BindFlags.UniformBuffer,
@@ -113,17 +113,17 @@ public class ToneMappingSystem : EcsSystem, ISetupSystem, IRenderSystem, ITeardo
 
     public void Render()
     {
-        var deviceContext = rendererContext.DeviceContext;
+        var deviceContext = renderingContext.DeviceContext;
 
-        renderTargets[0] = worldRenderTextureSystem.WorldColor.RenderTarget;
-        deviceContext.SetRenderTargets(renderTargets, worldRenderTextureSystem.WorldDepth.DepthStencil, ResourceStateTransitionMode.Transition);
+        renderTargets[0] = renderingResourcesSystem.WorldColor.RenderTarget;
+        deviceContext.SetRenderTargets(renderTargets, renderingResourcesSystem.WorldDepth.DepthStencil, ResourceStateTransitionMode.Transition);
 
         using (uniformBuffer.Map(MapType.Write, MapFlags.Discard, out var uniformData))
         {
             uniformData[0].Time = time.Time;
         }
 
-        textureVariable?.Set(worldRenderTextureSystem.WorldColor.RenderTarget, SetShaderResourceFlags.AllowOverwrite);
+        textureVariable?.Set(renderingResourcesSystem.WorldColor.RenderTarget, SetShaderResourceFlags.AllowOverwrite);
 
         deviceContext.SetPipelineState(pipeline.Value);
         deviceContext.CommitShaderResources(shaderResourceBinding, ResourceStateTransitionMode.Transition);

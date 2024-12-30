@@ -1,13 +1,49 @@
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using Diligent;
+using Exanite.Engine.Rendering;
+using Silk.NET.Vulkan;
 
 namespace Exanite.GravitationalTetris.Features.Sprites;
 
 [StructLayout(LayoutKind.Sequential)]
-public struct SpriteInstanceData
+public struct SpriteInstanceData : IVertex
 {
     public static InputLayoutDesc Layout { get; } = new()
+    {
+        Stride = Unsafe.SizeOf<SpriteInstanceData>(),
+        Elements =
+        [
+            // LocalToWorld
+            new InputElementDesc()
+            {
+                Offset = 0,
+                Format = Format.R32G32B32A32Sfloat,
+            },
+            new InputElementDesc()
+            {
+                Offset = 4 * 4,
+                Format = Format.R32G32B32A32Sfloat,
+            },
+            new InputElementDesc()
+            {
+                Offset = 4 * 8,
+                Format = Format.R32G32B32A32Sfloat,
+            },
+            new InputElementDesc()
+            {
+                Offset = 4 * 12,
+                Format = Format.R32G32B32A32Sfloat,
+            },
+            new InputElementDesc()
+            {
+                Offset = 4 * 16,
+                Format = Format.R32G32B32A32Sfloat,
+            },
+        ],
+    };
+
+    new()
     {
         LayoutElements = new LayoutElement[]
         {
