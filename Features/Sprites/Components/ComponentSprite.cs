@@ -1,5 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
-using Exanite.Engine.OldRendering;
+using Exanite.Engine.Rendering;
 using Exanite.ResourceManagement;
 using Myriad.ECS;
 

@@ -27,9 +27,6 @@ public class SpriteBatchSystem : EcsSystem, ISetupSystem, IRenderSystem, IDispos
     private SpriteBeginDrawOptions currentBeginDrawOptions;
     private Texture2D? currentTexture;
 
-    private readonly IBuffer[] vertexBuffers = new IBuffer[1];
-    private readonly ulong[] vertexOffsets = new ulong[1];
-
     private readonly RenderingContext renderingContext;
     private readonly ResourceManager resourceManager;
 
