@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Numerics;
 using Autofac;
 using Exanite.Engine.Avalonia.Systems;
 using Exanite.Engine.Ecs.Scheduling;
@@ -83,24 +82,21 @@ public class Game1 : EngineGame
 
         config.Register<FmodAudioSystem>();
 
-        config.Register<ResizeSwapChainSystem>();
-        config.Register<ClearSwapChainSystem>().OnInstantiated((_, system) => system.ClearColor = Vector4.Zero);
         {
+            // Rendering resources
+            config.Register<RenderingResourcesSystem>();
+
+            // Update data
             config.Register<CameraProjectionSystem>();
             config.Register<SpriteBatchSystem>();
 
             // World RT
-            config.Register<RenderingResourcesSystem>();
-
-            config.Register<TilemapRenderSystem>(); // TODO: This system causes Vulkan validation errors
-            config.Register<SpriteRenderSystem>(); // TODO: This system causes Vulkan validation errors
+            config.Register<TilemapRenderSystem>();
+            config.Register<SpriteRenderSystem>();
 
             // Main RT
-            config.Register<BloomSystem>(); // TODO: This system causes Vulkan validation errors
-
-            config.Register<UseSwapChainAsRenderTargetSystem>();
-
-            config.Register<ToneMappingSystem>(); // TODO: This system causes Vulkan validation errors
+            config.Register<BloomSystem>();
+            config.Register<ToneMappingSystem>();
 
             config.Register<RenderWorldToMainSystem>();
 
@@ -120,8 +116,9 @@ public class Game1 : EngineGame
             });
 
             config.Register<TetrisUiSystem>();
+
+            config.Register<PresentSwapChainSystem>();
         }
-        config.Register<PresentSwapChainSystem>();
 
         config.Register<RemoveDestroyedSystem>();
     }

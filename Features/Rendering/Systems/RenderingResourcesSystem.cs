@@ -2,6 +2,7 @@ using System.Numerics;
 using Exanite.Engine.Ecs.Systems;
 using Exanite.Engine.Rendering;
 using Exanite.Engine.Windowing;
+using Silk.NET.Vulkan;
 
 namespace Exanite.GravitationalTetris.Features.Rendering.Systems;
 
@@ -12,21 +13,42 @@ public class RenderingResourcesSystem : EcsSystem, ISetupSystem, IRenderSystem, 
 
     private readonly RenderingContext renderingContext;
     private readonly Window window;
+    private readonly SwapChain swapChain;
 
-    public RenderingResourcesSystem(RenderingContext renderingContext, Window window)
+    public RenderingResourcesSystem(RenderingContext renderingContext, Window window, SwapChain swapChain)
     {
         this.renderingContext = renderingContext;
         this.window = window;
+        this.swapChain = swapChain;
     }
 
     public void Setup()
     {
-        WorldColor = new Texture2D(renderingContext, window.Size);
-        WorldDepth = new Texture2D(renderingContext, window.Size);
+        WorldColor = new Texture2D(renderingContext, new TextureDesc2D()
+        {
+            Format = swapChain.Desc.Format,
+            Size = swapChain.Desc.Size,
+            Usages = ImageUsageFlags.ColorAttachmentBit,
+        }, new TextureViewDesc2D()
+        {
+            Aspects = ImageAspectFlags.ColorBit,
+        });
+
+        WorldDepth = new Texture2D(renderingContext, new TextureDesc2D()
+        {
+            Format = swapChain.Desc.Format,
+            Size = swapChain.Desc.Size,
+            Usages = ImageUsageFlags.DepthStencilAttachmentBit,
+        }, new TextureViewDesc2D()
+        {
+            Aspects = ImageAspectFlags.DepthBit,
+        });
     }
 
     public void Render()
     {
+        var vk = renderingContext.Vk;
+
         WorldColor.ResizeIfNeeded(window.Size);
         WorldDepth.ResizeIfNeeded(window.Size);
 

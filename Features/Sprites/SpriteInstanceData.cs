@@ -17,121 +17,43 @@ public struct SpriteInstanceData : IVertex
             // LocalToWorld
             new InputElementDesc()
             {
-                Offset = 0,
+                ByteCount = 16,
                 Format = Format.R32G32B32A32Sfloat,
             },
             new InputElementDesc()
             {
-                Offset = 4 * 4,
+                ByteCount = 16,
                 Format = Format.R32G32B32A32Sfloat,
             },
             new InputElementDesc()
             {
-                Offset = 4 * 8,
+                ByteCount = 16,
                 Format = Format.R32G32B32A32Sfloat,
             },
             new InputElementDesc()
             {
-                Offset = 4 * 12,
+                ByteCount = 16,
                 Format = Format.R32G32B32A32Sfloat,
             },
+            // Color
             new InputElementDesc()
             {
-                Offset = 4 * 16,
+                ByteCount = 16,
                 Format = Format.R32G32B32A32Sfloat,
+            },
+            // Offset
+            new InputElementDesc()
+            {
+                ByteCount = 8,
+                Format = Format.R32G32Sfloat,
+            },
+            // Size
+            new InputElementDesc()
+            {
+                ByteCount = 8,
+                Format = Format.R32G32Sfloat,
             },
         ],
-    };
-
-    new()
-    {
-        LayoutElements = new LayoutElement[]
-        {
-            new()
-            {
-                HLSLSemantic = "ATTRIB",
-                InputIndex = 0,
-
-                NumComponents = 4,
-                ValueType = ValueType.Float32,
-
-                IsNormalized = false,
-
-                Frequency = InputElementFrequency.PerInstance,
-            },
-            new()
-            {
-                HLSLSemantic = "ATTRIB",
-                InputIndex = 1,
-
-                NumComponents = 4,
-                ValueType = ValueType.Float32,
-
-                IsNormalized = false,
-
-                Frequency = InputElementFrequency.PerInstance,
-            },
-            new()
-            {
-                HLSLSemantic = "ATTRIB",
-                InputIndex = 2,
-
-                NumComponents = 4,
-                ValueType = ValueType.Float32,
-
-                IsNormalized = false,
-
-                Frequency = InputElementFrequency.PerInstance,
-            },
-            new()
-            {
-                HLSLSemantic = "ATTRIB",
-                InputIndex = 3,
-
-                NumComponents = 4,
-                ValueType = ValueType.Float32,
-
-                IsNormalized = false,
-
-                Frequency = InputElementFrequency.PerInstance,
-            },
-            new()
-            {
-                HLSLSemantic = "ATTRIB",
-                InputIndex = 4,
-
-                NumComponents = 4,
-                ValueType = ValueType.Float32,
-
-                IsNormalized = false,
-
-                Frequency = InputElementFrequency.PerInstance,
-            },
-            new()
-            {
-                HLSLSemantic = "ATTRIB",
-                InputIndex = 5,
-
-                NumComponents = 2,
-                ValueType = ValueType.Float32,
-
-                IsNormalized = false,
-
-                Frequency = InputElementFrequency.PerInstance,
-            },
-            new()
-            {
-                HLSLSemantic = "ATTRIB",
-                InputIndex = 6,
-
-                NumComponents = 2,
-                ValueType = ValueType.Float32,
-
-                IsNormalized = false,
-
-                Frequency = InputElementFrequency.PerInstance,
-            },
-        },
     };
 
     private Matrix4x4 localToWorld;
