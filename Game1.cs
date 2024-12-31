@@ -106,7 +106,7 @@ public class Game1 : EngineGame
                 var renderSystem = container.Resolve<SimpleAvaloniaSystem>();
                 var resourceManager = container.Resolve<IResourceManager>();
 
-                system.GetSourceTexture = () =>
+                system.GetColorSource = () =>
                 {
                     return renderSystem.Instance.Texture;
                 };
