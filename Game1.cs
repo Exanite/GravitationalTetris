@@ -38,6 +38,7 @@ public class Game1 : EngineGame
         // Windowing
         builder.RegisterType<Window>().SingleInstance();
         builder.RegisterType<Swapchain>().SingleInstance();
+        builder.Register(_ => new SwapchainDesc()).SingleInstance();
         builder.Register(ctx =>
         {
             var resourceManager = ctx.Resolve<IResourceManager>();
