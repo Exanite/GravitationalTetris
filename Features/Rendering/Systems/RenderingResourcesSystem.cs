@@ -27,7 +27,7 @@ public class RenderingResourcesSystem : EcsSystem, ISetupSystem, IRenderSystem, 
         WorldColor = new Texture2D(renderingContext, new TextureDesc2D()
         {
             Format = swapchain.Desc.Format,
-            Size = swapchain.Current.Texture.Desc.Size,
+            Size = swapchain.Texture.Desc.Size,
             Usages = ImageUsageFlags.ColorAttachmentBit,
         }, new TextureViewDesc2D()
         {
@@ -37,7 +37,7 @@ public class RenderingResourcesSystem : EcsSystem, ISetupSystem, IRenderSystem, 
         WorldDepth = new Texture2D(renderingContext, new TextureDesc2D()
         {
             Format = swapchain.Desc.Format,
-            Size = swapchain.Current.Texture.Desc.Size,
+            Size = swapchain.Texture.Desc.Size,
             Usages = ImageUsageFlags.DepthStencilAttachmentBit,
         }, new TextureViewDesc2D()
         {
