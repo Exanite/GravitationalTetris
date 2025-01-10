@@ -7,7 +7,7 @@ cbuffer Uniforms
 struct Input
 {
     // Per vertex
-    uint VertexId : SV_VertexID;
+    uint VertexId : SV_VERTEXID;
 
     // Per instance
     float4 WorldR1 : ATTRIB0;

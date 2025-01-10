@@ -1,6 +1,6 @@
 struct Input
 {
-    uint VertexId : SV_VertexID;
+    uint VertexId : SV_VERTEXID;
 };
 
 struct Output
