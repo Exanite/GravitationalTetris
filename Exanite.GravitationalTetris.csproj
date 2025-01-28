@@ -19,10 +19,6 @@
     <TieredCompilation>false</TieredCompilation>
     <SingleFilePublish>false</SingleFilePublish>
 
-    <!-- Only support 64 bit computers - Required by DiligentEngine -->
-    <Configurations>Release;Debug</Configurations>
-    <Platforms>x64</Platforms>
-
     <ExaniteEngine_HasContentFolder/>
   </PropertyGroup>
   <ItemGroup>
