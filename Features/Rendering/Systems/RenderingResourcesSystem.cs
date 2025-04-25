@@ -1,6 +1,6 @@
 using System.Numerics;
 using Exanite.Engine.Ecs.Systems;
-using Exanite.Engine.Rendering;
+using Exanite.Engine.Graphics;
 using Exanite.Engine.Windowing;
 using Silk.NET.Vulkan;
 

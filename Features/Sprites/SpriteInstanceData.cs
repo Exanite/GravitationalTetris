@@ -1,7 +1,7 @@
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using Exanite.Engine.Rendering;
+using Exanite.Engine.Graphics;
 using Silk.NET.Vulkan;
 
 namespace Exanite.GravitationalTetris.Features.Sprites;

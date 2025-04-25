@@ -1,5 +1,5 @@
 using Exanite.Core.Properties;
-using Exanite.Engine.Rendering;
+using Exanite.Engine.Graphics;
 using Exanite.Engine.Windowing;
 
 namespace Exanite.GravitationalTetris;
