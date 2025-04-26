@@ -42,7 +42,7 @@ public class TetrisUiSystem : EcsSystem, ISetupSystem, IRenderSystem
             renderScaling = 2f;
         }
 
-        avaloniaSystem.Instance.RenderScaling = renderScaling;
+        avaloniaSystem.Instance.ContentScale = renderScaling;
 
         viewModel.ScoreText = $"{(int)tetrisSystem.Score}";
         viewModel.PreviousScoreText = $"{(int)tetrisSystem.PreviousScore}";
