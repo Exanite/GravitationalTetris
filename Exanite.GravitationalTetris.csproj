@@ -27,6 +27,7 @@
     <NoWarn>$(NoWarn);CS9195;</NoWarn> <!-- Minor issue and doesn't show up in the IDE for some reason: Argument should be passed with 'in' -->
     <NoWarn>$(NoWarn);CS9193;</NoWarn> <!-- Minor issue and doesn't show up in the IDE for some reason: Argument should be a variable because it is passed to a 'ref readonly' parameter -->
   </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\Aether.Physics2D\Aether.Physics2D.csproj"/>
     <ProjectReference Include="..\Exanite.Engine.Analyzers\Exanite.Engine.Analyzers.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false"/>
