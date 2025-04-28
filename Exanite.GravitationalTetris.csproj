@@ -9,11 +9,6 @@
     <Nullable>enable</Nullable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 
-    <AnalysisLevel>latest</AnalysisLevel>
-    <EnableNETAnalyzers>true</EnableNETAnalyzers>
-    <EnableTrimAnalzyer>true</EnableTrimAnalzyer>
-    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
-
     <!-- Recommended settings for games in general: https://docs.monogame.net/articles/packaging_games.html -->
     <PublishReadyToRun>false</PublishReadyToRun>
     <TieredCompilation>false</TieredCompilation>
@@ -21,6 +16,18 @@
 
     <ExaniteEngine_HasContentFolder/>
   </PropertyGroup>
+  <PropertyGroup>
+    <AnalysisLevel>latest</AnalysisLevel>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <EnableTrimAnalzyer>true</EnableTrimAnalzyer>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+
+    <NoWarn>$(NoWarn);CS0067;</NoWarn> <!-- False positive: Event is never used -->
+    <NoWarn>$(NoWarn);CS9192;</NoWarn> <!-- Minor issue and doesn't show up in the IDE for some reason: Argument should be passed with 'ref' or 'in' -->
+    <NoWarn>$(NoWarn);CS9195;</NoWarn> <!-- Minor issue and doesn't show up in the IDE for some reason: Argument should be passed with 'in' -->
+    <NoWarn>$(NoWarn);CS9193;</NoWarn> <!-- Minor issue and doesn't show up in the IDE for some reason: Argument should be a variable because it is passed to a 'ref readonly' parameter -->
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\Aether.Physics2D\Aether.Physics2D.csproj"/>
     <ProjectReference Include="..\Exanite.Engine.Analyzers\Exanite.Engine.Analyzers.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false"/>
