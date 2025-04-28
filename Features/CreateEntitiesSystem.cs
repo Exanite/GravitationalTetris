@@ -11,7 +11,7 @@ using nkast.Aether.Physics2D.Dynamics;
 
 namespace Exanite.GravitationalTetris.Features;
 
-public class CreateEntitiesSystem : EcsSystem, IStartSystem
+public class CreateEntitiesSystem : GameSystem, IStartSystem
 {
     private readonly ResourceManager resourceManager;
 

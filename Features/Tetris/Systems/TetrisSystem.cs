@@ -25,7 +25,7 @@ using nkast.Aether.Physics2D.Dynamics;
 
 namespace Exanite.GravitationalTetris.Features.Tetris.Systems;
 
-public partial class TetrisSystem : EcsSystem, ISetupSystem, IUpdateSystem
+public partial class TetrisSystem : GameSystem, ISetupSystem, IUpdateSystem
 {
     public float SpeedMultiplier = 1;
     public float ScoreMultiplier => SpeedMultiplier * 2;

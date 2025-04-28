@@ -6,7 +6,7 @@ using Exanite.GravitationalTetris.Features.UserInterface.Views;
 
 namespace Exanite.GravitationalTetris.Features.Tetris.Systems;
 
-public class TetrisUiSystem : EcsSystem, ISetupSystem, IRenderSystem
+public class TetrisUiSystem : GameSystem, ISetupSystem, IRenderSystem
 {
     private readonly MainViewModel viewModel = new();
 

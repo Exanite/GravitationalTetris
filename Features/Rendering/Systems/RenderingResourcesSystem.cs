@@ -6,7 +6,7 @@ using Silk.NET.Vulkan;
 
 namespace Exanite.GravitationalTetris.Features.Rendering.Systems;
 
-public class RenderingResourcesSystem : EcsSystem, ISetupSystem, IRenderSystem, ITeardownSystem
+public class RenderingResourcesSystem : GameSystem, ISetupSystem, IRenderSystem, ITeardownSystem
 {
     public Texture2D WorldColor = null!;
     public Texture2D WorldDepth = null!;

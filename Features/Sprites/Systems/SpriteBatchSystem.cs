@@ -6,7 +6,7 @@ using ImageMagick;
 
 namespace Exanite.GravitationalTetris.Features.Sprites.Systems;
 
-public class SpriteBatchSystem : EcsSystem, ISetupSystem, IRenderSystem, IDisposable
+public class SpriteBatchSystem : GameSystem, ISetupSystem, IRenderSystem, IDisposable
 {
     private const int MaxSpritesPerBatch = 128;
 

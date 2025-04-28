@@ -13,7 +13,7 @@ using Exanite.ResourceManagement;
 
 namespace Exanite.GravitationalTetris.Features.Tiles.Systems;
 
-public partial class TilemapRenderSystem : EcsSystem, IRenderSystem, ISetupSystem
+public partial class TilemapRenderSystem : GameSystem, IRenderSystem, ISetupSystem
 {
     private readonly GameTilemapData tilemap;
     private readonly ResourceManager resourceManager;

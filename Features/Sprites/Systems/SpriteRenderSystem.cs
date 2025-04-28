@@ -7,7 +7,7 @@ using Exanite.GravitationalTetris.Features.Transforms.Components;
 
 namespace Exanite.GravitationalTetris.Features.Sprites.Systems;
 
-public partial class SpriteRenderSystem : EcsSystem, IRenderSystem
+public partial class SpriteRenderSystem : GameSystem, IRenderSystem
 {
     private readonly SpriteBatchSystem spriteBatchSystem;
 

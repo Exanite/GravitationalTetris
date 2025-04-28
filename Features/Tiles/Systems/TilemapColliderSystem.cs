@@ -13,7 +13,7 @@ using nkast.Aether.Physics2D.Dynamics;
 
 namespace Exanite.GravitationalTetris.Features.Tiles.Systems;
 
-public partial class TilemapColliderSystem : EcsSystem, IStartSystem, IUpdateSystem
+public partial class TilemapColliderSystem : GameSystem, IStartSystem, IUpdateSystem
 {
     private CommandBuffer commandBuffer = null!;
 

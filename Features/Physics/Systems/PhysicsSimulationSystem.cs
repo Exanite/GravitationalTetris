@@ -11,7 +11,7 @@ using World = nkast.Aether.Physics2D.Dynamics.World;
 
 namespace Exanite.GravitationalTetris.Features.Physics.Systems;
 
-public partial class PhysicsSimulationSystem : EcsSystem, IStartSystem, IUpdateSystem, ICleanupSystem
+public partial class PhysicsSimulationSystem : GameSystem, IStartSystem, IUpdateSystem, ICleanupSystem
 {
     private readonly World physicsWorld;
     private readonly ITime time;

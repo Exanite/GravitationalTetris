@@ -8,7 +8,7 @@ using Exanite.ResourceManagement;
 
 namespace Exanite.GravitationalTetris.Features.Rendering.Systems;
 
-public class ToneMappingSystem : EcsSystem, ISetupSystem, IRenderSystem, ITeardownSystem
+public class ToneMappingSystem : GameSystem, ISetupSystem, IRenderSystem, ITeardownSystem
 {
     private Buffer<ToneMapUniformData> uniformBuffer = null!;
     private ReloadableHandle<IPipelineState> pipeline = null!;
