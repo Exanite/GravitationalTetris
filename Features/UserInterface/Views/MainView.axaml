@@ -11,7 +11,7 @@
     </Design.DataContext>
 
     <UserControl.Resources>
-        <FontFamily x:Key="Font">/Content/Base/FieryTurk.ttf#</FontFamily>
+        <FontFamily x:Key="Font">/Content/Base/FieryTurk.ttf#Fiery Turk</FontFamily>
     </UserControl.Resources>
 
     <UserControl.Styles>
