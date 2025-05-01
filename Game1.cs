@@ -63,46 +63,46 @@ public class Game1 : EngineGame
         builder.RegisterFolderFileSystem("GravitationalTetris", "/Rendering/", "Rendering");
     }
 
-    protected override void ConfigureSystemScheduler(SystemSchedulerConfig config)
+    protected override void ConfigureSystemScheduler(SystemScheduler scheduler)
     {
-        base.ConfigureSystemScheduler(config);
+        base.ConfigureSystemScheduler(scheduler);
 
-        config.Register<WindowSystem>();
+        scheduler.DefaultGroup.RegisterSystem<WindowSystem>();
 
-        config.Register<SimpleTimeSystem>();
-        config.Register<InputSystem>();
-        config.Register<InputActionSystem>();
+        scheduler.DefaultGroup.RegisterSystem<SimpleTimeSystem>();
+        scheduler.DefaultGroup.RegisterSystem<InputSystem>();
+        scheduler.DefaultGroup.RegisterSystem<InputActionSystem>();
 
-        config.Register<CreateEntitiesSystem>();
+        scheduler.DefaultGroup.RegisterSystem<CreateEntitiesSystem>();
 
-        config.Register<PhysicsSimulationSystem>();
+        scheduler.DefaultGroup.RegisterSystem<PhysicsSimulationSystem>();
 
-        config.Register<PlayerControllerSystem>();
-        config.Register<TetrisSystem>();
-        config.Register<TilemapColliderSystem>();
+        scheduler.DefaultGroup.RegisterSystem<PlayerControllerSystem>();
+        scheduler.DefaultGroup.RegisterSystem<TetrisSystem>();
+        scheduler.DefaultGroup.RegisterSystem<TilemapColliderSystem>();
 
-        config.Register<FmodAudioSystem>();
+        scheduler.DefaultGroup.RegisterSystem<FmodAudioSystem>();
 
         {
             // Rendering resources
-            config.Register<RenderingResourcesSystem>();
+            scheduler.DefaultGroup.RegisterSystem<RenderingResourcesSystem>();
 
             // Update data
-            config.Register<CameraProjectionSystem>();
-            config.Register<SpriteBatchSystem>();
+            scheduler.DefaultGroup.RegisterSystem<CameraProjectionSystem>();
+            scheduler.DefaultGroup.RegisterSystem<SpriteBatchSystem>();
 
             // World RT
-            config.Register<TilemapRenderSystem>();
-            config.Register<SpriteRenderSystem>();
+            scheduler.DefaultGroup.RegisterSystem<TilemapRenderSystem>();
+            scheduler.DefaultGroup.RegisterSystem<SpriteRenderSystem>();
 
             // Main RT
-            config.Register<BloomSystem>();
-            config.Register<ToneMappingSystem>();
+            scheduler.DefaultGroup.RegisterSystem<BloomSystem>();
+            scheduler.DefaultGroup.RegisterSystem<ToneMappingSystem>();
 
-            config.Register<RenderWorldToMainSystem>();
+            scheduler.DefaultGroup.RegisterSystem<RenderWorldToMainSystem>();
 
-            config.Register<SimpleAvaloniaSystem>();
-            config.Register<AvaloniaCopyTextureSystem>().OnInstantiated((container, system) =>
+            scheduler.DefaultGroup.RegisterSystem<SimpleAvaloniaSystem>();
+            scheduler.DefaultGroup.RegisterSystem<AvaloniaCopyTextureSystem>().OnInstantiated((container, system) =>
             {
                 var renderSystem = container.Resolve<SimpleAvaloniaSystem>();
                 var resourceManager = container.Resolve<IResourceManager>();
@@ -116,11 +116,11 @@ public class Game1 : EngineGame
                 system.FragmentModule = resourceManager.GetResource(RenderingMod.PassthroughFragmentModule);
             });
 
-            config.Register<TetrisUiSystem>();
+            scheduler.DefaultGroup.RegisterSystem<TetrisUiSystem>();
 
-            config.Register<PresentSwapchainSystem>();
+            scheduler.DefaultGroup.RegisterSystem<PresentSwapchainSystem>();
         }
 
-        config.Register<RemoveDestroyedSystem>();
+        scheduler.DefaultGroup.RegisterSystem<RemoveDestroyedSystem>();
     }
 }
