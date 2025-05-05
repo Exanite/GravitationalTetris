@@ -28,9 +28,9 @@ namespace Exanite.GravitationalTetris;
 
 public class GravitationalTetrisGameModule : GameModule
 {
-    public override void Register(ContainerBuilder builder)
+    public override void ConfigureContainer(ContainerBuilder builder)
     {
-        base.Register(builder);
+        base.ConfigureContainer(builder);
 
         // Misc
         builder.RegisterType<Random>().InstancePerDependency();
@@ -63,9 +63,9 @@ public class GravitationalTetrisGameModule : GameModule
         builder.RegisterFolderFileSystem("GravitationalTetris", "/Rendering/", "Rendering");
     }
 
-    public override void ConfigureSystemScheduler(SystemScheduler scheduler)
+    public override void ConfigureSystems(SystemScheduler scheduler)
     {
-        base.ConfigureSystemScheduler(scheduler);
+        base.ConfigureSystems(scheduler);
 
         scheduler.DefaultGroup.RegisterSystem<WindowSystem>();
 
