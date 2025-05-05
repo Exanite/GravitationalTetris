@@ -15,9 +15,9 @@ public static class Program
         return new EngineGame(settings, [new GravitationalTetrisGameModule()]);
     });
 
-    public static async Task Main(string[] args)
+    public static Task Main(string[] args)
     {
-        await Host.Run(args);
+        return Host.Run(args);
     }
 
     public static AppBuilder BuildAvaloniaApp()
