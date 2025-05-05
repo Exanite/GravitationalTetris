@@ -20,10 +20,8 @@ public static class Program
         var exitCode = 0;
         {
             Thread.CurrentThread.Name = "Main";
-            var settings = new EngineSettings(CompanyName, GameName);
 
-            await using var game = new Game1(settings);
-
+            await using var game = CreateGame();
             try
             {
                 game.Initialize();
@@ -31,7 +29,7 @@ public static class Program
             }
             catch (Exception e)
             {
-                LoggingUtility.LogProgramCrash(settings.Paths.LogsFolder, typeof(Program), e);
+                LoggingUtility.LogProgramCrash(game.EngineSettings.Paths.LogsFolder, typeof(Program), e);
 
                 exitCode = 1;
             }
@@ -40,9 +38,15 @@ public static class Program
         Environment.Exit(exitCode);
     }
 
-    public static AppBuilder BuildAvaloniaApp()
+    private static EngineGame CreateGame()
     {
         var settings = new EngineSettings(CompanyName, GameName);
-        return new Game1(settings).Initialize().Resolve<AvaloniaContext>().Start(true);
+        return new EngineGame(settings, [new GravitationalTetrisGameModule()]);
+    }
+
+    public static AppBuilder BuildAvaloniaApp()
+    {
+        var game = CreateGame();
+        return game.Initialize().Resolve<AvaloniaContext>().Start(true);
     }
 }

@@ -4,8 +4,10 @@ using Exanite.Engine.Avalonia.Systems;
 using Exanite.Engine.Ecs.Scheduling;
 using Exanite.Engine.Framework;
 using Exanite.Engine.Graphics;
+using Exanite.Engine.Graphics.Systems;
 using Exanite.Engine.Inputs.Systems;
 using Exanite.Engine.Lifecycles.Systems;
+using Exanite.Engine.Modding;
 using Exanite.Engine.Timing.Systems;
 using Exanite.Engine.Windowing;
 using Exanite.Engine.Windowing.Systems;
@@ -24,11 +26,9 @@ using PhysicsWorld = nkast.Aether.Physics2D.Dynamics.World;
 
 namespace Exanite.GravitationalTetris;
 
-public class Game1 : EngineGame
+public class GravitationalTetrisGameModule : GameModule
 {
-    public Game1(EngineSettings settings) : base(settings) {}
-
-    protected override void Register(ContainerBuilder builder)
+    public override void Register(ContainerBuilder builder)
     {
         base.Register(builder);
 
@@ -63,7 +63,7 @@ public class Game1 : EngineGame
         builder.RegisterFolderFileSystem("GravitationalTetris", "/Rendering/", "Rendering");
     }
 
-    protected override void ConfigureSystemScheduler(SystemScheduler scheduler)
+    public override void ConfigureSystemScheduler(SystemScheduler scheduler)
     {
         base.ConfigureSystemScheduler(scheduler);
 
@@ -102,7 +102,7 @@ public class Game1 : EngineGame
             scheduler.DefaultGroup.RegisterSystem<RenderWorldToMainSystem>();
 
             scheduler.DefaultGroup.RegisterSystem<SimpleAvaloniaSystem>();
-            scheduler.DefaultGroup.RegisterSystem<AvaloniaCopyTextureSystem>().OnInstantiated((container, system) =>
+            scheduler.DefaultGroup.RegisterSystem<CopyTextureSystem>().OnInstantiated((container, system) =>
             {
                 var renderSystem = container.Resolve<SimpleAvaloniaSystem>();
                 var resourceManager = container.Resolve<IResourceManager>();
