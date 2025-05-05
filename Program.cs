@@ -14,7 +14,6 @@ public static class Program
     public const string CompanyName = "Exanite";
     public const string GameName = "GravitationalTetris";
 
-    [STAThread]
     public static async Task Main(string[] args)
     {
         var exitCode = 0;
