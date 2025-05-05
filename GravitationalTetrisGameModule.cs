@@ -69,7 +69,7 @@ public class GravitationalTetrisGameModule : GameModule
 
         scheduler.DefaultGroup.RegisterSystem<WindowSystem>();
 
-        scheduler.DefaultGroup.RegisterSystem<SimpleTimeSystem>();
+        scheduler.DefaultGroup.RegisterSystem<EngineTimeSystem>();
         scheduler.DefaultGroup.RegisterSystem<InputSystem>();
         scheduler.DefaultGroup.RegisterSystem<InputActionSystem>();
 
