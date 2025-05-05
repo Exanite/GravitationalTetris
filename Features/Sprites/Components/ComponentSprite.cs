@@ -1,7 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using Exanite.Engine.Graphics;
 using Exanite.ResourceManagement;
-using Myriad.ECS;
+using Myriad.Ecs;
 
 namespace Exanite.GravitationalTetris.Features.Sprites.Components;
 

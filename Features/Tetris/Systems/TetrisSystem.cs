@@ -19,8 +19,8 @@ using Exanite.GravitationalTetris.Features.Tiles;
 using Exanite.GravitationalTetris.Features.Tiles.Components;
 using Exanite.GravitationalTetris.Features.Transforms.Components;
 using Exanite.ResourceManagement;
-using Myriad.ECS;
-using Myriad.ECS.Command;
+using Myriad.Ecs;
+using Myriad.Ecs.Command;
 using nkast.Aether.Physics2D.Dynamics;
 
 namespace Exanite.GravitationalTetris.Features.Tetris.Systems;

@@ -6,7 +6,7 @@ using Exanite.Engine.Lifecycles.Components;
 using Exanite.Engine.Timing;
 using Exanite.GravitationalTetris.Features.Physics.Components;
 using Exanite.GravitationalTetris.Features.Transforms.Components;
-using Myriad.ECS;
+using Myriad.Ecs;
 using World = nkast.Aether.Physics2D.Dynamics.World;
 
 namespace Exanite.GravitationalTetris.Features.Physics.Systems;

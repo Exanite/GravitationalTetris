@@ -6,8 +6,8 @@ using Exanite.Engine.Lifecycles.Components;
 using Exanite.GravitationalTetris.Features.Physics.Components;
 using Exanite.GravitationalTetris.Features.Tiles.Components;
 using Exanite.GravitationalTetris.Features.Transforms.Components;
-using Myriad.ECS;
-using Myriad.ECS.Command;
+using Myriad.Ecs;
+using Myriad.Ecs.Command;
 using nkast.Aether.Physics2D.Common;
 using nkast.Aether.Physics2D.Dynamics;
 
