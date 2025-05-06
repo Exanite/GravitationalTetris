@@ -6,7 +6,7 @@ using Exanite.GravitationalTetris.Features.Players.Components;
 using Exanite.GravitationalTetris.Features.Sprites.Components;
 using Exanite.GravitationalTetris.Features.Transforms.Components;
 using Exanite.ResourceManagement;
-using Myriad.Ecs.Command;
+using Myriad.Ecs.CommandBuffers;
 using nkast.Aether.Physics2D.Dynamics;
 
 namespace Exanite.GravitationalTetris.Features;
