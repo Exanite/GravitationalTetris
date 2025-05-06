@@ -45,7 +45,7 @@ public partial class TetrisSystem : GameSystem, ISetupSystem, IUpdateSystem
     private readonly float blockHorizontalSpeed = 2f;
     private Entity currentShapeRoot;
 
-    private CommandBuffer commandBuffer = null!;
+    private EcsCommandBuffer commandBuffer = null!;
 
     private IInputAction<bool> placeShapeAction = null!;
     private IInputAction<bool> rotateLeftAction = null!;
@@ -86,7 +86,7 @@ public partial class TetrisSystem : GameSystem, ISetupSystem, IUpdateSystem
 
     public void Setup()
     {
-        commandBuffer = new CommandBuffer(World);
+        commandBuffer = new EcsCommandBuffer(World);
 
         placeShapeAction = input.RegisterAction(new OrInputAction([
             new ButtonInputAction(KeyCode.Space),

@@ -22,7 +22,7 @@ public class CreateEntitiesSystem : GameSystem, IStartSystem
 
     public void Start()
     {
-        var commandBuffer = new CommandBuffer(World);
+        var commandBuffer = new EcsCommandBuffer(World);
 
         // Camera
         commandBuffer.Create()
