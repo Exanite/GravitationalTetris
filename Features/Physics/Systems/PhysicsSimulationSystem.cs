@@ -56,7 +56,7 @@ public partial class PhysicsSimulationSystem : GameSystem, IStartSystem, IUpdate
         if (rigidbody.Body.World == null)
         {
             physicsWorld.Add(rigidbody.Body);
-            rigidbody.Body.Tag = new BoxedValue<Entity>(entity);
+            rigidbody.Body.Tag = new ValueBox<Entity>(entity);
         }
     }
 
