@@ -2,7 +2,6 @@ using System;
 using Exanite.Engine.Ecs.Systems;
 using Exanite.Engine.Graphics;
 using Exanite.ResourceManagement;
-using ImageMagick;
 
 namespace Exanite.GravitationalTetris.Features.Sprites.Systems;
 

@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Diligent;
 using Exanite.Engine.Ecs.Systems;
-using Exanite.Engine.OldRendering;
 using Exanite.Engine.Timing;
 using Exanite.ResourceManagement;
 

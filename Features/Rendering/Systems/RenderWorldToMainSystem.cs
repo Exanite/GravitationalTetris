@@ -1,6 +1,4 @@
-using Diligent;
 using Exanite.Engine.Ecs.Systems;
-using Exanite.Engine.OldRendering;
 using Exanite.ResourceManagement;
 
 namespace Exanite.GravitationalTetris.Features.Rendering.Systems;

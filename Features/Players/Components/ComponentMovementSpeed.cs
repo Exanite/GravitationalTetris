@@ -1,4 +1,4 @@
-using Myriad.Ecs;
+using Exanite.Myriad.Ecs;
 
 namespace Exanite.GravitationalTetris.Features.Players.Components;
 
