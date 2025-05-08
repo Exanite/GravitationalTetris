@@ -281,7 +281,7 @@ public partial class TetrisSystem : GameSystem, ISetupSystem, IUpdateSystem
             }
         }
 
-        commandBuffer.Playback().Dispose();
+        commandBuffer.Execute().Dispose();
     }
 
     private void PlaceShape()
@@ -301,7 +301,7 @@ public partial class TetrisSystem : GameSystem, ISetupSystem, IUpdateSystem
                 Position = new Vector2(5, 20),
             });
 
-        using var resolver = commandBuffer.Playback();
+        using var resolver = commandBuffer.Execute();
         currentShapeRoot = currentShapeRootEntity.Resolve();
 
         for (var x = 0; x < shape.Shape.GetLength(0); x++)
@@ -338,7 +338,7 @@ public partial class TetrisSystem : GameSystem, ISetupSystem, IUpdateSystem
             }
         }
 
-        commandBuffer.Playback().Dispose();
+        commandBuffer.Execute().Dispose();
     }
 
     [Query]

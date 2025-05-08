@@ -76,6 +76,6 @@ public class CreateEntitiesSystem : GameSystem, IStartSystem
 
         commandBuffer.Create().Set(new ComponentRigidbody(wallBody));
 
-        commandBuffer.Playback().Dispose();
+        commandBuffer.Execute().Dispose();
     }
 }
