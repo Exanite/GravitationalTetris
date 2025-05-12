@@ -237,7 +237,7 @@ public partial class TetrisSystem : GameSystem, ISetupSystem, IUpdateSystem
 
         Score += ScorePerSecond * ScoreMultiplier * time.DeltaTime;
 
-        if (currentShapeRoot.IsAlive() && currentShapeRoot.HasComponent<ComponentTetrisRoot>() && rotateLeftAction.IsPressed())
+        if (currentShapeRoot.IsAlive && currentShapeRoot.HasComponent<ComponentTetrisRoot>() && rotateLeftAction.IsPressed())
         {
             audioSystem.Play(FmodAudioSystem.RotateShape);
 
@@ -245,7 +245,7 @@ public partial class TetrisSystem : GameSystem, ISetupSystem, IUpdateSystem
             tetrisRootComponent.Rotation = (TetrisRotation)(((int)tetrisRootComponent.Rotation + 3) % 4);
         }
 
-        if (currentShapeRoot.IsAlive() && currentShapeRoot.HasComponent<ComponentTetrisRoot>() && rotateRightAction.IsPressed())
+        if (currentShapeRoot.IsAlive && currentShapeRoot.HasComponent<ComponentTetrisRoot>() && rotateRightAction.IsPressed())
         {
             audioSystem.Play(FmodAudioSystem.RotateShape);
 
@@ -253,7 +253,7 @@ public partial class TetrisSystem : GameSystem, ISetupSystem, IUpdateSystem
             tetrisRootComponent.Rotation = (TetrisRotation)(((int)tetrisRootComponent.Rotation + 1) % 4);
         }
 
-        if (!currentShapeRoot.IsAlive())
+        if (!currentShapeRoot.IsAlive)
         {
             PlaceShape();
         }
@@ -482,7 +482,7 @@ public partial class TetrisSystem : GameSystem, ISetupSystem, IUpdateSystem
     [Query]
     private void UpdateBlockPositions(ref ComponentTetrisBlock block, ref ComponentTransform transform)
     {
-        if (!block.Root.IsAlive())
+        if (!block.Root.IsAlive)
         {
             return;
         }
