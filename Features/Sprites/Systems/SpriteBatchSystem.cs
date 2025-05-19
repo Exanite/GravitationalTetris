@@ -26,27 +26,27 @@ public class SpriteBatchSystem : GameSystem, ISetupSystem, IRenderSystem, IDispo
     private SpriteBeginDrawOptions currentBeginDrawOptions;
     private Texture2D? currentTexture;
 
-    private readonly RenderingContext renderingContext;
+    private readonly GraphicsContext graphicsContext;
     private readonly ResourceManager resourceManager;
 
-    public SpriteBatchSystem(RenderingContext renderingContext, ResourceManager resourceManager)
+    public SpriteBatchSystem(GraphicsContext graphicsContext, ResourceManager resourceManager)
     {
-        this.renderingContext = renderingContext;
+        this.graphicsContext = graphicsContext;
         this.resourceManager = resourceManager;
     }
 
     public void Setup()
     {
-        var renderDevice = renderingContext.RenderDevice;
+        var renderDevice = graphicsContext.RenderDevice;
 
-        uniformBuffer = new Buffer<SpriteUniformData>(renderingContext, new BufferDesc()
+        uniformBuffer = new Buffer<SpriteUniformData>(graphicsContext, new BufferDesc()
         {
             Usage = Usage.Dynamic,
             BindFlags = BindFlags.UniformBuffer,
             CPUAccessFlags = CpuAccessFlags.Write,
         }, 1);
 
-        instanceBuffer = new Buffer<SpriteInstanceData>(renderingContext, new BufferDesc()
+        instanceBuffer = new Buffer<SpriteInstanceData>(graphicsContext, new BufferDesc()
         {
             Usage = Usage.Dynamic,
             BindFlags = BindFlags.VertexBuffer,
@@ -167,7 +167,7 @@ public class SpriteBatchSystem : GameSystem, ISetupSystem, IRenderSystem, IDispo
             return;
         }
 
-        var deviceContext = renderingContext.DeviceContext;
+        var deviceContext = graphicsContext.DeviceContext;
 
         using (instanceBuffer.Map(MapType.Write, MapFlags.Discard, out var instanceData))
         {

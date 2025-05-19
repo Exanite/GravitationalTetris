@@ -11,20 +11,20 @@ public class RenderingResourcesSystem : GameSystem, ISetupSystem, IRenderSystem,
     public Texture2D WorldColor = null!;
     public Texture2D WorldDepth = null!;
 
-    private readonly RenderingContext renderingContext;
+    private readonly GraphicsContext graphicsContext;
     private readonly Window window;
     private readonly Swapchain swapchain;
 
-    public RenderingResourcesSystem(RenderingContext renderingContext, Window window, Swapchain swapchain)
+    public RenderingResourcesSystem(GraphicsContext graphicsContext, Window window, Swapchain swapchain)
     {
-        this.renderingContext = renderingContext;
+        this.graphicsContext = graphicsContext;
         this.window = window;
         this.swapchain = swapchain;
     }
 
     public void Setup()
     {
-        WorldColor = new Texture2D(renderingContext, new TextureDesc2D()
+        WorldColor = new Texture2D(graphicsContext, new TextureDesc2D()
         {
             Format = swapchain.Desc.Format,
             Size = swapchain.Texture.Desc.Size,
@@ -34,7 +34,7 @@ public class RenderingResourcesSystem : GameSystem, ISetupSystem, IRenderSystem,
             Aspects = ImageAspectFlags.ColorBit,
         });
 
-        WorldDepth = new Texture2D(renderingContext, new TextureDesc2D()
+        WorldDepth = new Texture2D(graphicsContext, new TextureDesc2D()
         {
             Format = swapchain.Desc.Format,
             Size = swapchain.Texture.Desc.Size,
@@ -47,7 +47,7 @@ public class RenderingResourcesSystem : GameSystem, ISetupSystem, IRenderSystem,
 
     public void Render()
     {
-        var vk = renderingContext.Vk;
+        var vk = graphicsContext.Vk;
 
         WorldColor.ResizeIfNeeded(window.Size);
         WorldDepth.ResizeIfNeeded(window.Size);
