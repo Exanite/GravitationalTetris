@@ -8,8 +8,8 @@ public static class BaseMod
 {
     public static PropertyDefinition<WindowIcon> WindowIcon = new("/Base/Icon.png");
 
-    public static PropertyDefinition<ShaderModule> SpriteVertexModule = new("/Base/Sprite.vertex.hlsl");
-    public static PropertyDefinition<ShaderModule> SpriteFragmentModule = new("/Base/Sprite.fragment.hlsl");
+    public static PropertyDefinition<ShaderModule> SpriteVertexModule = new("/Base/Sprite.vertex.slang");
+    public static PropertyDefinition<ShaderModule> SpriteFragmentModule = new("/Base/Sprite.fragment.slang");
 
     public static PropertyDefinition<Texture2D> White = new("/Base/White.png");
 
