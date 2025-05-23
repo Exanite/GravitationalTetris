@@ -237,27 +237,26 @@ public partial class TetrisSystem : GameSystem, ISetupSystem, IUpdateSystem
 
         Score += ScorePerSecond * ScoreMultiplier * time.DeltaTime;
 
-        if (currentShapeRoot.IsAlive && currentShapeRoot.HasComponent<ComponentTetrisRoot>() && rotateLeftAction.IsPressed())
+        if (currentShapeRoot.IsAlive && currentShapeRoot.TryGetComponent<ComponentTetrisRoot>(out var tetrisRoot))
         {
-            audioSystem.Play(FmodAudioSystem.RotateShape);
+            if (rotateLeftAction.IsPressed())
+            {
+                audioSystem.Play(FmodAudioSystem.RotateShape);
+                tetrisRoot.Value.Rotation = (TetrisRotation)(((int)tetrisRoot.Value.Rotation + 3) % 4);
+            }
 
-            ref var tetrisRootComponent = ref currentShapeRoot.GetComponentRef<ComponentTetrisRoot>();
-            tetrisRootComponent.Rotation = (TetrisRotation)(((int)tetrisRootComponent.Rotation + 3) % 4);
-        }
-
-        if (currentShapeRoot.IsAlive && currentShapeRoot.HasComponent<ComponentTetrisRoot>() && rotateRightAction.IsPressed())
-        {
-            audioSystem.Play(FmodAudioSystem.RotateShape);
-
-            ref var tetrisRootComponent = ref currentShapeRoot.GetComponentRef<ComponentTetrisRoot>();
-            tetrisRootComponent.Rotation = (TetrisRotation)(((int)tetrisRootComponent.Rotation + 1) % 4);
+            if (rotateRightAction.IsPressed())
+            {
+                audioSystem.Play(FmodAudioSystem.RotateShape);
+                tetrisRoot.Value.Rotation = (TetrisRotation)(((int)tetrisRoot.Value.Rotation + 1) % 4);
+            }
         }
 
         if (!currentShapeRoot.IsAlive)
         {
             PlaceShape();
         }
-        else if (placeShapeAction.IsPressed() || World.Count(ShouldShouldPlaceTetrisQueryDescription(World)) > 0)
+        else if (placeShapeAction.IsPressed() || ShouldShouldPlaceTetrisQueryDescription(World).Count() > 0)
         {
             playerControllerSystem.FlipGravity();
             audioSystem.Play(FmodAudioSystem.SwitchGravity);
@@ -281,7 +280,7 @@ public partial class TetrisSystem : GameSystem, ISetupSystem, IUpdateSystem
             }
         }
 
-        commandBuffer.Execute().Dispose();
+        commandBuffer.Execute();
     }
 
     private void PlaceShape()
@@ -301,7 +300,7 @@ public partial class TetrisSystem : GameSystem, ISetupSystem, IUpdateSystem
                 Position = new Vector2(5, 20),
             });
 
-        using var resolver = commandBuffer.Execute();
+        commandBuffer.Execute();
         currentShapeRoot = currentShapeRootEntity.Resolve();
 
         for (var x = 0; x < shape.Shape.GetLength(0); x++)
@@ -338,7 +337,7 @@ public partial class TetrisSystem : GameSystem, ISetupSystem, IUpdateSystem
             }
         }
 
-        commandBuffer.Execute().Dispose();
+        commandBuffer.Execute();
     }
 
     [Query]
@@ -493,8 +492,8 @@ public partial class TetrisSystem : GameSystem, ISetupSystem, IUpdateSystem
             return;
         }
 
-        ref var root = ref rootEntity.GetComponentRef<ComponentTetrisRoot>();
-        ref var rootTransform = ref rootEntity.GetComponentRef<ComponentTransform>();
+        ref var root = ref rootEntity.GetComponent<ComponentTetrisRoot>();
+        ref var rootTransform = ref rootEntity.GetComponent<ComponentTransform>();
 
         var localPosition = new Vector2(block.LocalX, block.LocalY);
         transform.Position = Vector2.Transform(localPosition, Matrix4x4.CreateRotationZ(float.Pi / 2 * (int)root.Rotation) * Matrix4x4.CreateTranslation(rootTransform.Position.X, rootTransform.Position.Y, 0));
