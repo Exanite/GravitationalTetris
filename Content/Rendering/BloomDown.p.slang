@@ -3,8 +3,8 @@ cbuffer Uniforms
     float2 FilterStep;
 }
 
-Texture2D Texture;
-SamplerState TextureSampler;
+[[vk::binding(0, 0)]] Texture2D Texture;
+[[vk::binding(1, 0)]] SamplerState TextureSampler;
 
 struct Input
 {
