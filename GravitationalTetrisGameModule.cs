@@ -111,7 +111,5 @@ public class GravitationalTetrisGameModule : GameModule
 
             scheduler.DefaultGroup.RegisterSystem<PresentSwapchainSystem>();
         }
-
-        scheduler.DefaultGroup.RegisterSystem<RemoveDestroyedSystem>();
     }
 }
