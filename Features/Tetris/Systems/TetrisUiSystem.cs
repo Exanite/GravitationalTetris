@@ -26,7 +26,7 @@ public class TetrisUiSystem : GameSystem, ISetupSystem, IRenderSystem
         var view = new MainView();
         view.DataContext = viewModel;
 
-        avaloniaSystem.Instance.Content = view;
+        avaloniaSystem.Root.Content = view;
     }
 
     public void Render()
@@ -42,7 +42,7 @@ public class TetrisUiSystem : GameSystem, ISetupSystem, IRenderSystem
             renderScaling = 2f;
         }
 
-        avaloniaSystem.Instance.ContentScale = renderScaling;
+        avaloniaSystem.Root.ContentScale = renderScaling;
 
         viewModel.ScoreText = $"{(int)tetrisSystem.Score}";
         viewModel.PreviousScoreText = $"{(int)tetrisSystem.PreviousScore}";

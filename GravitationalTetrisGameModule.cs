@@ -99,7 +99,7 @@ public class GravitationalTetrisGameModule : GameModule
 
                 system.GetColorSource = () =>
                 {
-                    return renderSystem.Instance.Texture;
+                    return renderSystem.Root.Texture;
                 };
 
                 system.VertexModule = resourceManager.GetResource(RenderingMod.ScreenVertexModule);
