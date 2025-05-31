@@ -5,7 +5,6 @@ using Exanite.Engine.Ecs.Scheduling;
 using Exanite.Engine.Framework;
 using Exanite.Engine.Graphics;
 using Exanite.Engine.Graphics.Systems;
-using Exanite.Engine.Lifecycles.Systems;
 using Exanite.Engine.Modding;
 using Exanite.Engine.Windowing;
 using Exanite.GravitationalTetris.Features;
