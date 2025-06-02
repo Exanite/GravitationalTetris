@@ -348,11 +348,11 @@ public partial class TetrisSystem : GameSystem, ISetupSystem, IUpdateSystem
     [Include<ComponentPlayer>]
     private void UpdateRootPositions(ref ComponentTransform playerTransform)
     {
-        UpdateRootPositions_1Query(World, ref playerTransform);
+        UpdateRootPositions2Query(World, ref playerTransform);
     }
 
     [Query]
-    private void UpdateRootPositions_1([Data] ref ComponentTransform playerTransform, ref ComponentTetrisRoot root, ref ComponentTransform transform)
+    private void UpdateRootPositions2([Data] ref ComponentTransform playerTransform, ref ComponentTetrisRoot root, ref ComponentTransform transform)
     {
         var minX = 0;
         var maxX = 9;
