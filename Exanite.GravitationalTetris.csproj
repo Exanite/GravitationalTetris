@@ -2,7 +2,6 @@
   <PropertyGroup>
     <AssemblyName>GravitationalTetris</AssemblyName>
     <RootNamespace>Exanite.GravitationalTetris</RootNamespace>
-    <OutputPath>bin\$(MSBuildProjectName)\$(Configuration)</OutputPath>
 
     <OutputType>Exe</OutputType>
     <OutputType Condition="$(Configuration) == Release">WinExe</OutputType>
