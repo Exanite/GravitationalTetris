@@ -13,7 +13,7 @@ using nkast.Aether.Physics2D.Dynamics;
 
 namespace Exanite.GravitationalTetris.Features.Tiles.Systems;
 
-public partial class TilemapColliderSystem : GameSystem, IStartSystem, IUpdateSystem
+public partial class TilemapColliderSystem : GameSystem, IStartSystem, IFrameUpdateSystem
 {
     private EcsCommandBuffer commandBuffer = null!;
 
@@ -32,7 +32,7 @@ public partial class TilemapColliderSystem : GameSystem, IStartSystem, IUpdateSy
         commandBuffer.Execute().Dispose();
     }
 
-    public void Update()
+    public void FrameUpdate()
     {
         if (World.Count(RemoveUpdateTilemapCollidersEventQueryDescription(World)) > 0)
         {

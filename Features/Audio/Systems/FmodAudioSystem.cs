@@ -8,7 +8,7 @@ using FmodStudio = FMOD.Studio.System;
 
 namespace Exanite.GravitationalTetris.Features.Audio.Systems;
 
-public class FmodAudioSystem : GameSystem, ISetupSystem, IUpdateSystem, IDisposable
+public class FmodAudioSystem : GameSystem, ISetupSystem, IFrameUpdateSystem, IDisposable
 {
     public const string SwitchGravity = "event:/SwitchGravity";
     public const string RotateShape = "event:/RotateShape";
@@ -49,7 +49,7 @@ public class FmodAudioSystem : GameSystem, ISetupSystem, IUpdateSystem, IDisposa
         eventInstance.release();
     }
 
-    public void Update()
+    public void FrameUpdate()
     {
         fmodStudio.update();
     }

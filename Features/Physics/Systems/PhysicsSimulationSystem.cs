@@ -11,7 +11,7 @@ using World = nkast.Aether.Physics2D.Dynamics.World;
 
 namespace Exanite.GravitationalTetris.Features.Physics.Systems;
 
-public partial class PhysicsSimulationSystem : GameSystem, IStartSystem, IUpdateSystem, ICleanupSystem
+public partial class PhysicsSimulationSystem : GameSystem, IStartSystem, IFrameUpdateSystem, IFrameCleanupSystem
 {
     private readonly World physicsWorld;
     private readonly ITime time;
@@ -27,7 +27,7 @@ public partial class PhysicsSimulationSystem : GameSystem, IStartSystem, IUpdate
         physicsWorld.Gravity = Vector2.UnitY * 4f;
     }
 
-    public void Update()
+    public void FrameUpdate()
     {
         AddRigidbodiesQuery(World);
 
@@ -40,7 +40,7 @@ public partial class PhysicsSimulationSystem : GameSystem, IStartSystem, IUpdate
         SyncVelocitiesFromPhysicsQuery(World);
     }
 
-    public void Cleanup()
+    public void FrameCleanup()
     {
         RemoveRigidbodiesQuery(World);
     }
