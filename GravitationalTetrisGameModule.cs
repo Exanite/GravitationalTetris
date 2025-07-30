@@ -94,16 +94,11 @@ public class GravitationalTetrisGameModule : GameModule
             scheduler.DefaultGroup.RegisterSystem<AvaloniaDisplaySystem>();
             scheduler.DefaultGroup.RegisterSystem<CopyTextureSystem>().OnInstantiated((container, system) =>
             {
-                var renderSystem = container.Resolve<AvaloniaDisplaySystem>();
-                var resourceManager = container.Resolve<IResourceManager>();
+                var uiSystem = container.Resolve<TetrisUiSystem>();
+                var swapchain = container.Resolve<Swapchain>();
 
-                system.GetColorSource = () =>
-                {
-                    return renderSystem.Root.Texture;
-                };
-
-                system.VertexModule = resourceManager.GetResource(RenderingMod.ScreenVertexModule);
-                system.FragmentModule = resourceManager.GetResource(RenderingMod.PassthroughFragmentModule);
+                system.GetColorSource = () => uiSystem.UiRoot.Texture;
+                system.GetColorTarget = () => swapchain.Texture;
             });
 
             scheduler.DefaultGroup.RegisterSystem<TetrisUiSystem>();

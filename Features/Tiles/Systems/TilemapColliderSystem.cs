@@ -29,19 +29,19 @@ public partial class TilemapColliderSystem : GameSystem, IStartSystem, IFrameUpd
         commandBuffer = new EcsCommandBuffer(World);
 
         commandBuffer.Create().Set(new ComponentUpdateTilemapCollidersEvent());
-        commandBuffer.Execute().Dispose();
+        commandBuffer.Execute();
     }
 
     public void FrameUpdate()
     {
-        if (World.Count(RemoveUpdateTilemapCollidersEventQueryDescription(World)) > 0)
+        if (RemoveUpdateTilemapCollidersEventQueryDescription(World).Count() > 0)
         {
             RemoveUpdateTilemapCollidersEventQuery(World);
             RemoveTilemapCollidersQuery(World);
 
             UpdateTilemapColliders();
 
-            commandBuffer.Execute().Dispose();
+            commandBuffer.Execute();
         }
     }
 

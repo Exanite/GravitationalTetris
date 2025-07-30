@@ -1,48 +1,66 @@
-using Exanite.Engine.Avalonia.Systems;
+using Exanite.Engine.Avalonia;
+using Exanite.Engine.Avalonia.Components;
+using Exanite.Engine.Cameras.Components;
 using Exanite.Engine.Ecs.Systems;
-using Exanite.Engine.Windowing;
+using Exanite.Engine.Graphics;
 using Exanite.GravitationalTetris.Features.UserInterface.ViewModels;
 using Exanite.GravitationalTetris.Features.UserInterface.Views;
+using Exanite.Myriad.Ecs.CommandBuffers;
 
 namespace Exanite.GravitationalTetris.Features.Tetris.Systems;
 
 public class TetrisUiSystem : GameSystem, ISetupSystem, IRenderSystem
 {
+    private EcsCommandBuffer commandBuffer = null!;
+
     private readonly MainViewModel viewModel = new();
 
-    private readonly AvaloniaDisplaySystem avaloniaDisplaySystem;
-    private readonly TetrisSystem tetrisSystem;
-    private readonly Window window;
+    private readonly AvaloniaContext avaloniaContext;
 
-    public TetrisUiSystem(AvaloniaDisplaySystem avaloniaDisplaySystem, TetrisSystem tetrisSystem, Window window)
+    private readonly TetrisSystem tetrisSystem;
+    private readonly Swapchain swapchain;
+
+    public AvaloniaRootElement UiRoot { get; private set; } = null!;
+
+    public TetrisUiSystem(TetrisSystem tetrisSystem, Swapchain swapchain, AvaloniaContext avaloniaContext)
     {
-        this.avaloniaDisplaySystem = avaloniaDisplaySystem;
         this.tetrisSystem = tetrisSystem;
-        this.window = window;
+        this.swapchain = swapchain;
+        this.avaloniaContext = avaloniaContext;
     }
 
     public void Setup()
     {
-        var view = new MainView();
-        view.DataContext = viewModel;
+        commandBuffer = new EcsCommandBuffer(World);
 
-        avaloniaDisplaySystem.Root.Content = view;
+        // UI
+        UiRoot = avaloniaContext.CreateRootElement();
+        UiRoot.Content = new MainView()
+        {
+            DataContext = viewModel,
+        };
+
+        commandBuffer.Create()
+            .Set(new ComponentAvaloniaDisplay(UiRoot))
+            .Set(new ComponentWindowViewport(swapchain));
+
+        commandBuffer.Execute();
     }
 
     public void Render()
     {
         var renderScaling = 1f;
-        if (window.Size.X > 1920)
+        if (swapchain.Texture.Desc.Size.X > 1920)
         {
             renderScaling = 1.5f;
         }
 
-        if (window.Size.X > 2560)
+        if (swapchain.Texture.Desc.Size.X > 2560)
         {
             renderScaling = 2f;
         }
 
-        avaloniaDisplaySystem.Root.ContentScale = renderScaling;
+        UiRoot.ContentScale = renderScaling;
 
         viewModel.ScoreText = $"{(int)tetrisSystem.Score}";
         viewModel.PreviousScoreText = $"{(int)tetrisSystem.PreviousScore}";
