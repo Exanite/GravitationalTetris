@@ -72,6 +72,8 @@ public class GravitationalTetrisGameModule : GameModule
         scheduler.DefaultGroup.RegisterSystem<FmodAudioSystem>();
 
         {
+            scheduler.DefaultGroup.RegisterSystem<AcquireSwapchainSystem>();
+
             // Rendering resources
             // scheduler.DefaultGroup.RegisterSystem<RenderingResourcesSystem>();
 
