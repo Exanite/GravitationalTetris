@@ -12,8 +12,6 @@ using Exanite.GravitationalTetris.Features.Audio.Systems;
 using Exanite.GravitationalTetris.Features.Cameras.Systems;
 using Exanite.GravitationalTetris.Features.Physics.Systems;
 using Exanite.GravitationalTetris.Features.Players.Systems;
-using Exanite.GravitationalTetris.Features.Rendering.Systems;
-using Exanite.GravitationalTetris.Features.Sprites.Systems;
 using Exanite.GravitationalTetris.Features.Tetris.Systems;
 using Exanite.GravitationalTetris.Features.Tiles;
 using Exanite.GravitationalTetris.Features.Tiles.Systems;
@@ -75,21 +73,21 @@ public class GravitationalTetrisGameModule : GameModule
 
         {
             // Rendering resources
-            scheduler.DefaultGroup.RegisterSystem<RenderingResourcesSystem>();
+            // scheduler.DefaultGroup.RegisterSystem<RenderingResourcesSystem>();
 
             // Update data
             scheduler.DefaultGroup.RegisterSystem<CameraProjectionSystem>();
-            scheduler.DefaultGroup.RegisterSystem<SpriteBatchSystem>();
+            // scheduler.DefaultGroup.RegisterSystem<SpriteBatchSystem>();
 
             // World RT
-            scheduler.DefaultGroup.RegisterSystem<TilemapRenderSystem>();
-            scheduler.DefaultGroup.RegisterSystem<SpriteRenderSystem>();
+            // scheduler.DefaultGroup.RegisterSystem<TilemapRenderSystem>();
+            // scheduler.DefaultGroup.RegisterSystem<SpriteRenderSystem>();
 
             // Main RT
-            scheduler.DefaultGroup.RegisterSystem<BloomSystem>();
-            scheduler.DefaultGroup.RegisterSystem<ToneMappingSystem>();
+            // scheduler.DefaultGroup.RegisterSystem<BloomSystem>();
+            // scheduler.DefaultGroup.RegisterSystem<ToneMappingSystem>();
 
-            scheduler.DefaultGroup.RegisterSystem<RenderWorldToMainSystem>();
+            // scheduler.DefaultGroup.RegisterSystem<RenderWorldToMainSystem>();
 
             scheduler.DefaultGroup.RegisterSystem<AvaloniaDisplaySystem>();
             scheduler.DefaultGroup.RegisterSystem<CopyTextureSystem>().OnInstantiated((container, system) =>
