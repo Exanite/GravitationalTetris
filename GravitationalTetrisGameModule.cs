@@ -31,7 +31,7 @@ public class GravitationalTetrisGameModule : GameModule
 
         // Windowing
         builder.RegisterType<Window>().SingleInstance();
-        builder.RegisterType<Swapchain>().SingleInstance();
+        builder.RegisterType<Swapchain>().AsSelf().As<IGraphicsCommandBufferProvider>().SingleInstance();
         builder.Register(_ => new SwapchainDesc()).SingleInstance();
         builder.Register(ctx =>
         {
@@ -92,7 +92,7 @@ public class GravitationalTetrisGameModule : GameModule
             // scheduler.DefaultGroup.RegisterSystem<RenderWorldToMainSystem>();
 
             scheduler.DefaultGroup.RegisterSystem<AvaloniaDisplaySystem>();
-            scheduler.DefaultGroup.RegisterSystem<CopyTextureSystem>().OnInstantiated((container, system) =>
+            scheduler.DefaultGroup.RegisterSystem<CopyColorTextureSystem>().OnInstantiated((container, system) =>
             {
                 var uiSystem = container.Resolve<TetrisUiSystem>();
                 var swapchain = container.Resolve<Swapchain>();
