@@ -14,7 +14,7 @@ public struct SpriteInstanceData : IVertex
         Stride = Unsafe.SizeOf<SpriteInstanceData>(),
         Elements =
         [
-            // LocalToWorld
+            // Model
             new InputElementDesc()
             {
                 ByteCount = 16,
@@ -41,39 +41,41 @@ public struct SpriteInstanceData : IVertex
                 ByteCount = 16,
                 Format = Format.R32G32B32A32Sfloat,
             },
-            // Offset
+            // UvOffset
             new InputElementDesc()
             {
                 ByteCount = 8,
                 Format = Format.R32G32Sfloat,
             },
-            // Size
+            // UvSize
             new InputElementDesc()
             {
                 ByteCount = 8,
                 Format = Format.R32G32Sfloat,
+            },
+            // TextureIndex
+            new InputElementDesc()
+            {
+                ByteCount = 4,
+                Format = Format.R32Uint,
             },
         ],
     };
 
-    private Matrix4x4 localToWorld;
+    public Matrix4x4 Model;
 
     public Vector4 Color;
 
-    public Vector2 Offset;
-    public Vector2 Size;
+    public Vector2 UvOffset;
+    public Vector2 UvSize;
 
-    public required Matrix4x4 LocalToWorld
-    {
-        get => Matrix4x4.Transpose(localToWorld);
-        set => localToWorld = Matrix4x4.Transpose(value);
-    }
+    public required uint TextureIndex;
 
     public SpriteInstanceData()
     {
         Color = Vector4.One;
 
-        Offset = Vector2.Zero;
-        Size = Vector2.One;
+        UvOffset = Vector2.Zero;
+        UvSize = Vector2.One;
     }
 }
