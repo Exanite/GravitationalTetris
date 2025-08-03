@@ -35,10 +35,11 @@ void main(
     in Input input,
     out Output output)
 {
+    // This is intentionally out of order for compatibility purposes
     float4 positionUvs[4];
     positionUvs[0] = float4(-0.5f, -0.5f, 0, 0);
-    positionUvs[1] = float4(0.5f, -0.5f, 1, 0);
-    positionUvs[2] = float4(-0.5f, 0.5f, 0, 1);
+    positionUvs[2] = float4(0.5f, -0.5f, 1, 0);
+    positionUvs[1] = float4(-0.5f, 0.5f, 0, 1);
     positionUvs[3] = float4(0.5f, 0.5f, 1, 1);
 
     float4 position = float4(positionUvs[input.VertexId].xy, 0, 1);
