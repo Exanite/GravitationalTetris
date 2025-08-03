@@ -1,36 +1,65 @@
 using System;
 using System.Numerics;
+using Exanite.Core.Runtime;
 using Exanite.Engine.Ecs.Queries;
 using Exanite.Engine.Ecs.Systems;
 using Exanite.Engine.Graphics;
+using Exanite.Engine.Graphics.Passes;
 using Exanite.Engine.Windowing;
 using Exanite.GravitationalTetris.Features.Cameras.Components;
 using Exanite.GravitationalTetris.Features.Sprites;
+using Exanite.GravitationalTetris.Features.Tetris.Systems;
 using Exanite.ResourceManagement;
 using Silk.NET.Vulkan;
 
 namespace Exanite.GravitationalTetris.Features.Rendering.Systems;
 
-public partial class RendererSystem : GameSystem, ISetupSystem, IRenderSystem, ITeardownSystem, IDisposable
+public partial class RendererSystem : GameSystem, ISetupSystem, IRenderSystem, ITeardownSystem
 {
     public Texture2D WorldColor = null!;
     public Texture2D WorldDepth = null!;
 
     private readonly SpriteBatcher spriteBatcher;
+    private readonly CopyColorTexturePass copyWorldPass;
+    private readonly CopyColorTexturePass copyUiPass;
+
+    private DisposableCollection disposables = new();
 
     private readonly GraphicsContext graphicsContext;
     private readonly ResourceManager resourceManager;
     private readonly Window window;
     private readonly Swapchain swapchain;
+    private readonly TetrisUiSystem tetrisUiSystem;
 
-    public RendererSystem(GraphicsContext graphicsContext, ResourceManager resourceManager, Window window, Swapchain swapchain)
+    public RendererSystem(GraphicsContext graphicsContext, ResourceManager resourceManager, Window window, Swapchain swapchain, TetrisUiSystem tetrisUiSystem)
     {
         this.graphicsContext = graphicsContext;
         this.resourceManager = resourceManager;
         this.window = window;
         this.swapchain = swapchain;
+        this.tetrisUiSystem = tetrisUiSystem;
 
-        spriteBatcher = new SpriteBatcher(graphicsContext, resourceManager);
+        spriteBatcher = new SpriteBatcher(graphicsContext, resourceManager).AddTo(disposables);
+
+        copyWorldPass = new CopyColorTexturePass(graphicsContext, resourceManager)
+        {
+            // TODO: This is a hack to make world color actually copy over
+            // Currently all alpha values in the world color texture are 0 and this should be fixed
+            Blend = new ShaderPipelineColorAttachmentBlendDesc()
+            {
+                EnableBlend = true,
+
+                ColorBlendOp = BlendOp.Add,
+                SrcColorBlendFactor = BlendFactor.One,
+                DstColorBlendFactor = BlendFactor.Zero,
+
+                AlphaBlendOp = BlendOp.Add,
+                SrcAlphaBlendFactor = BlendFactor.Zero,
+                DstAlphaBlendFactor = BlendFactor.One,
+            },
+        }.AddTo(disposables);
+
+        copyUiPass = new CopyColorTexturePass(graphicsContext, resourceManager).AddTo(disposables);
     }
 
     public void Setup()
@@ -39,11 +68,11 @@ public partial class RendererSystem : GameSystem, ISetupSystem, IRenderSystem, I
         {
             Format = Format.R32G32B32A32Sfloat,
             Size = swapchain.Texture.Desc.Size,
-            Usages = ImageUsageFlags.ColorAttachmentBit,
+            Usages = ImageUsageFlags.ColorAttachmentBit | ImageUsageFlags.SampledBit,
         }, new TextureViewDesc()
         {
             Aspects = ImageAspectFlags.ColorBit,
-        });
+        }).AddTo(disposables);
 
         WorldDepth = new Texture2D(graphicsContext, new TextureDesc2D()
         {
@@ -53,12 +82,11 @@ public partial class RendererSystem : GameSystem, ISetupSystem, IRenderSystem, I
         }, new TextureViewDesc()
         {
             Aspects = ImageAspectFlags.DepthBit,
-        });
+        }).AddTo(disposables);
     }
 
     public void Render()
     {
-        var vk = graphicsContext.Vk;
         var commandBuffer = swapchain.CommandBuffer;
 
         // Resize world render targets
@@ -96,8 +124,15 @@ public partial class RendererSystem : GameSystem, ISetupSystem, IRenderSystem, I
             commandBuffer.ClearDepthAttachment(0);
         }
 
+        // Render world
         RenderCameraQuery(World, commandBuffer);
-    }
+
+        // Copy world to swapchain
+        copyWorldPass.Copy(commandBuffer, WorldColor, swapchain.Texture);
+
+        // Copy UI to swapchain
+        copyUiPass.Copy(commandBuffer, tetrisUiSystem.UiRoot.Texture, swapchain.Texture);
+     }
 
     [Query]
     private void RenderCamera([Data] GraphicsCommandBuffer commandBuffer, ref ComponentCameraProjection cameraProjection)
@@ -122,12 +157,6 @@ public partial class RendererSystem : GameSystem, ISetupSystem, IRenderSystem, I
 
     public void Teardown()
     {
-        WorldColor.Dispose();
-        WorldDepth.Dispose();
-    }
-
-    public void Dispose()
-    {
-        spriteBatcher.Dispose();
+        disposables.Dispose();
     }
 }

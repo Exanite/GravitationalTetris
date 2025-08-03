@@ -77,8 +77,10 @@ public class GravitationalTetrisGameModule : GameModule
 
             // Update data
             scheduler.DefaultGroup.RegisterSystem<CameraProjectionSystem>();
+            scheduler.DefaultGroup.RegisterSystem<TetrisUiSystem>();
 
             // Render
+            scheduler.DefaultGroup.RegisterSystem<AvaloniaDisplaySystem>();
             scheduler.DefaultGroup.RegisterSystem<RendererSystem>();
 
             // World RT
@@ -91,18 +93,6 @@ public class GravitationalTetrisGameModule : GameModule
             // scheduler.DefaultGroup.RegisterSystem<ToneMappingSystem>();
 
             // scheduler.DefaultGroup.RegisterSystem<RenderWorldToMainSystem>();
-
-            scheduler.DefaultGroup.RegisterSystem<AvaloniaDisplaySystem>();
-            scheduler.DefaultGroup.RegisterSystem<CopyColorTextureSystem>().OnInstantiated((container, system) =>
-            {
-                var uiSystem = container.Resolve<TetrisUiSystem>();
-                var swapchain = container.Resolve<Swapchain>();
-
-                system.GetColorSource = () => uiSystem.UiRoot.Texture;
-                system.GetColorTarget = () => swapchain.Texture;
-            });
-
-            scheduler.DefaultGroup.RegisterSystem<TetrisUiSystem>();
 
             scheduler.DefaultGroup.RegisterSystem<PresentSwapchainSystem>();
         }
