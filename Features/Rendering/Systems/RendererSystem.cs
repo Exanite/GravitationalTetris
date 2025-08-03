@@ -10,9 +10,11 @@ using Exanite.Engine.Timing;
 using Exanite.Engine.Windowing;
 using Exanite.GravitationalTetris.Features.Cameras.Components;
 using Exanite.GravitationalTetris.Features.Sprites;
+using Exanite.GravitationalTetris.Features.Sprites.Components;
 using Exanite.GravitationalTetris.Features.Tetris.Components;
 using Exanite.GravitationalTetris.Features.Tetris.Systems;
 using Exanite.GravitationalTetris.Features.Tiles;
+using Exanite.GravitationalTetris.Features.Transforms.Components;
 using Exanite.ResourceManagement;
 using Silk.NET.Vulkan;
 
@@ -158,7 +160,6 @@ public partial class RendererSystem : GameSystem, ISetupSystem, IRenderSystem, I
     [Query]
     private void RenderCamera([Data] GraphicsCommandBuffer commandBuffer, ref ComponentCameraProjection cameraProjection)
     {
-        // Render a test sprite
         using (var batch = spriteBatcher.Acquire(new SpriteUniformDrawSettings()
                {
                    CommandBuffer = commandBuffer,
@@ -168,14 +169,9 @@ public partial class RendererSystem : GameSystem, ISetupSystem, IRenderSystem, I
                    Projection = cameraProjection.Projection,
                }))
         {
-            batch.Draw(new SpriteInstanceDrawSettings()
-            {
-                Texture = resourceManager.GetResource(BaseMod.Player).Value,
-                Model = Matrix4x4.Identity,
-            });
-
             DrawTiles(batch);
             DrawPlaceholdersQuery(World, batch);
+            DrawSpritesQuery(World, batch);
         }
     }
 
@@ -229,18 +225,33 @@ public partial class RendererSystem : GameSystem, ISetupSystem, IRenderSystem, I
                 Color = new Vector4(1, 1, 1, alpha),
             });
         }
-    }
 
-    private float EaseInOutCubic(float t)
-    {
-        t = MathUtility.Wrap(t, 0, 2);
-        if (t > 1)
+        return;
+
+        float EaseInOutCubic(float t)
         {
-            t = 2 - t;
-        }
+            t = MathUtility.Wrap(t, 0, 2);
+            if (t > 1)
+            {
+                t = 2 - t;
+            }
 
-        return (float)(t < 0.5 ? 4 * t * t * t : 1 - Math.Pow(-2 * t + 2, 3) / 2);
+            return (float)(t < 0.5 ? 4 * t * t * t : 1 - Math.Pow(-2 * t + 2, 3) / 2);
+        }
     }
+
+     [Query]
+     private void DrawSprites([Data] SpriteBatcher.Batch batch, ref ComponentSprite sprite, ref ComponentTransform transform)
+     {
+         var texture = sprite.Texture.Value;
+         var model = Matrix4x4.CreateRotationZ(transform.Rotation) * Matrix4x4.CreateTranslation(transform.Position.X, transform.Position.Y, 0);
+
+         batch.Draw(new SpriteInstanceDrawSettings()
+         {
+             Texture = texture,
+             Model = model,
+         });
+     }
 
     public void Teardown()
     {

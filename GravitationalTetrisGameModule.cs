@@ -84,8 +84,6 @@ public class GravitationalTetrisGameModule : GameModule
             scheduler.DefaultGroup.RegisterSystem<RendererSystem>();
 
             // World RT
-
-            // scheduler.DefaultGroup.RegisterSystem<TilemapRenderSystem>();
             // scheduler.DefaultGroup.RegisterSystem<SpriteRenderSystem>();
 
             // Main RT
