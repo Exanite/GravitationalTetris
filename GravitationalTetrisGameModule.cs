@@ -12,6 +12,7 @@ using Exanite.GravitationalTetris.Features.Audio.Systems;
 using Exanite.GravitationalTetris.Features.Cameras.Systems;
 using Exanite.GravitationalTetris.Features.Physics.Systems;
 using Exanite.GravitationalTetris.Features.Players.Systems;
+using Exanite.GravitationalTetris.Features.Rendering.Systems;
 using Exanite.GravitationalTetris.Features.Tetris.Systems;
 using Exanite.GravitationalTetris.Features.Tiles;
 using Exanite.GravitationalTetris.Features.Tiles.Systems;
@@ -74,14 +75,14 @@ public class GravitationalTetrisGameModule : GameModule
         {
             scheduler.DefaultGroup.RegisterSystem<AcquireSwapchainSystem>();
 
-            // Rendering resources
-            // scheduler.DefaultGroup.RegisterSystem<RenderingResourcesSystem>();
-
             // Update data
             scheduler.DefaultGroup.RegisterSystem<CameraProjectionSystem>();
-            // scheduler.DefaultGroup.RegisterSystem<SpriteBatchSystem>();
+
+            // Render
+            scheduler.DefaultGroup.RegisterSystem<RendererSystem>();
 
             // World RT
+
             // scheduler.DefaultGroup.RegisterSystem<TilemapRenderSystem>();
             // scheduler.DefaultGroup.RegisterSystem<SpriteRenderSystem>();
 
