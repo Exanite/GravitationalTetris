@@ -51,15 +51,42 @@ public class RendererSystem : GameSystem, ISetupSystem, IRenderSystem, ITeardown
     public void Render()
     {
         var vk = graphicsContext.Vk;
+        var commandBuffer = swapchain.CommandBuffer;
 
+        // Resize world render targets
         WorldColor.ResizeIfNeeded(window.Size);
         WorldDepth.ResizeIfNeeded(window.Size);
 
-        // renderTargets[0] = WorldColor.RenderTarget;
-        //
-        // deviceContext.SetRenderTargets(renderTargets, WorldDepth.DepthStencil, ResourceStateTransitionMode.Transition);
-        // deviceContext.ClearRenderTarget(WorldColor.RenderTarget, Vector4.Zero, ResourceStateTransitionMode.Transition);
-        // deviceContext.ClearDepthStencil(WorldDepth.DepthStencil, ClearDepthStencilFlags.Depth, 1, 0, ResourceStateTransitionMode.Transition);
+        // Clear world render targets
+        commandBuffer.AddBarrier(new TextureBarrier(WorldColor)
+        {
+            SrcStages = PipelineStageFlags2.ColorAttachmentOutputBit,
+            SrcAccesses = AccessFlags2.ColorAttachmentWriteBit,
+
+            DstStages = PipelineStageFlags2.ColorAttachmentOutputBit,
+            DstAccesses = AccessFlags2.ColorAttachmentReadBit | AccessFlags2.ColorAttachmentWriteBit,
+
+            SrcLayout = ImageLayout.Undefined,
+            DstLayout = ImageLayout.AttachmentOptimal,
+        });
+
+        commandBuffer.AddBarrier(new TextureBarrier(WorldDepth)
+        {
+            SrcStages = PipelineStageFlags2.LateFragmentTestsBit,
+            SrcAccesses = AccessFlags2.DepthStencilAttachmentWriteBit,
+
+            DstStages = PipelineStageFlags2.EarlyFragmentTestsBit,
+            DstAccesses = AccessFlags2.DepthStencilAttachmentReadBit | AccessFlags2.DepthStencilAttachmentWriteBit,
+
+            SrcLayout = ImageLayout.Undefined,
+            DstLayout = ImageLayout.AttachmentOptimal,
+        });
+
+        using (commandBuffer.BeginRenderPass(new RenderPassDesc([WorldColor], WorldDepth)))
+        {
+            commandBuffer.ClearColorAttachment(Vector4.Zero);
+            commandBuffer.ClearDepthAttachment(0);
+        }
     }
 
     public void Teardown()
