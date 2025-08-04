@@ -1,8 +1,3 @@
-cbuffer Uniforms
-{
-    float Time;
-}
-
 [[vk::binding(0, 0)]] Texture2D Texture;
 [[vk::binding(1, 0)]] SamplerState TextureSampler;
 

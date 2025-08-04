@@ -14,7 +14,6 @@ public class ToneMappingPass : ITrackedDisposable
 
     private const Format ColorTargetFormat = Format.R32G32B32A32Sfloat;
 
-    private readonly CycledBuffer<ToneMapUniformData> uniformBuffer;
     private readonly ReloadableHandle<ShaderPipeline> pipeline;
     private ShaderPipelineLayout pipelineLayout = null!;
     private ShaderPipelineVariable uniformsVariable = null!;
@@ -34,11 +33,7 @@ public class ToneMappingPass : ITrackedDisposable
         var vertexModule = resourceManager.GetResource(RenderingMod.ScreenVertexModule);
         var fragmentModule = resourceManager.GetResource(RenderingMod.ToneMapFragmentModule);
 
-        uniformBuffer = new CycledBuffer<ToneMapUniformData>(graphicsContext, new BufferDesc()
-        {
-            Usages = BufferUsageFlags.UniformBufferBit,
-            MapType = AllocationMapType.SequentialWrite,
-        }, 1).AddTo(disposables);
+        var sampler = new TextureSampler(graphicsContext, new TextureSamplerDesc(Filter.Linear));
 
         pipeline = new ReloadableHandle<ShaderPipeline>((List<IHandle> dependencies, out ShaderPipeline resource, out Action<ShaderPipeline> unloadAction) =>
         {
@@ -52,11 +47,25 @@ public class ToneMappingPass : ITrackedDisposable
                 Topology = PrimitiveTopology.TriangleList,
 
                 ColorAttachmentFormats = [ColorTargetFormat],
+                ColorAttachmentBlends =
+                [
+                    new ShaderPipelineColorAttachmentBlendDesc()
+                    {
+                        ColorBlendOp = BlendOp.Add,
+                        SrcColorBlendFactor = BlendFactor.One,
+                        DstColorBlendFactor = BlendFactor.Zero,
+
+                        AlphaBlendOp = BlendOp.Add,
+                        SrcAlphaBlendFactor = BlendFactor.Zero,
+                        DstAlphaBlendFactor = BlendFactor.One,
+                    },
+                ],
             });
 
             pipelineLayout = resource.Layout;
-            uniformsVariable = pipelineLayout.GetVariable("Uniforms");
+
             textureVariable = pipelineLayout.GetVariable("Texture");
+            pipelineLayout.GetVariable("TextureSampler").SetSampler(sampler);
 
             unloadAction = resource =>
             {
@@ -90,13 +99,6 @@ public class ToneMappingPass : ITrackedDisposable
 
         using (commandBuffer.BeginRenderPass(new RenderPassDesc([colorTarget])))
         {
-            uniformBuffer.Cycle();
-            using (uniformBuffer.Current.Map(out var data))
-            {
-                data[0].Time = time.Time;
-            }
-
-            uniformsVariable.SetBuffer(uniformBuffer.Current);
             textureVariable.SetTexture(colorSource);
 
             commandBuffer.BindPipeline(pipeline.Value);
