@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using Exanite.Engine.Ecs.Systems;
 using Exanite.ResourceManagement;
 

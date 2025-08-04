@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Exanite.Core.Runtime;
 using Exanite.Engine.Framework;
 using Exanite.Engine.Graphics;
-using Exanite.Engine.Timing;
 using Exanite.ResourceManagement;
 using Silk.NET.Vulkan;
 
