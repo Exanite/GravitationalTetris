@@ -122,18 +122,18 @@ public class BloomPass : ITrackedDisposable
                         {
                             ColorBlendOp = BlendOp.Add,
                             SrcColorBlendFactor = BlendFactor.One,
-                            DstColorBlendFactor = BlendFactor.Zero,
+                            DstColorBlendFactor = BlendFactor.One,
 
                             AlphaBlendOp = BlendOp.Add,
                             SrcAlphaBlendFactor = BlendFactor.One,
-                            DstAlphaBlendFactor = BlendFactor.Zero,
+                            DstAlphaBlendFactor = BlendFactor.One,
                         },
                     ],
                 });
 
                 upPipelineLayout = resource.Layout;
-                upUniformsVariable = downPipelineLayout.GetVariable("Uniforms");
-                upTextureVariable = downPipelineLayout.GetVariable("Texture");
+                upUniformsVariable = upPipelineLayout.GetVariable("Uniforms");
+                upTextureVariable = upPipelineLayout.GetVariable("Texture");
                 upPipelineLayout.GetVariable("TextureSampler").SetSampler(sampler);
 
                 action = resource =>
@@ -166,7 +166,7 @@ public class BloomPass : ITrackedDisposable
                     DstStages = PipelineStageFlags2.ColorAttachmentOutputBit,
                     DstAccesses = AccessFlags2.ColorAttachmentReadBit | AccessFlags2.ColorAttachmentWriteBit,
 
-                    SrcLayout = currentTarget.Desc.Layout,
+                    SrcLayout = ImageLayout.Undefined,
                     DstLayout = ImageLayout.AttachmentOptimal,
                 });
 
@@ -184,6 +184,8 @@ public class BloomPass : ITrackedDisposable
 
                 using (commandBuffer.BeginRenderPass(new RenderPassDesc([currentTarget])))
                 {
+                    commandBuffer.ClearColorAttachment(Vector4.Zero);
+
                     commandBuffer.BindPipeline(downPipeline.Value);
 
                     downUniformBuffer.Cycle();
