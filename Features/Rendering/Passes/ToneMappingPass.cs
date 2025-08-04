@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Exanite.Core.Runtime;
+using Exanite.Engine.Framework;
 using Exanite.Engine.Graphics;
 using Exanite.Engine.Timing;
 using Exanite.ResourceManagement;
@@ -16,21 +17,15 @@ public class ToneMappingPass : ITrackedDisposable
 
     private readonly ReloadableHandle<ShaderPipeline> pipeline;
     private ShaderPipelineLayout pipelineLayout = null!;
-    private ShaderPipelineVariable uniformsVariable = null!;
     private ShaderPipelineVariable textureVariable = null!;
 
     private readonly DisposableCollection disposables = new();
 
-    private readonly ITime time;
-
     public ToneMappingPass(
         GraphicsContext graphicsContext,
-        IResourceManager resourceManager,
-        ITime time)
+        IResourceManager resourceManager)
     {
-        this.time = time;
-
-        var vertexModule = resourceManager.GetResource(RenderingMod.ScreenVertexModule);
+        var vertexModule = resourceManager.GetResource(EngineResources.ScreenTriVertexModule);
         var fragmentModule = resourceManager.GetResource(RenderingMod.ToneMapFragmentModule);
 
         var sampler = new TextureSampler(graphicsContext, new TextureSamplerDesc(Filter.Linear));
@@ -71,7 +66,6 @@ public class ToneMappingPass : ITrackedDisposable
             {
                 resource.Dispose();
                 pipelineLayout = null!;
-                uniformsVariable = null!;
                 textureVariable = null!;
             };
         }).AddTo(disposables);
