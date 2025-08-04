@@ -6,6 +6,7 @@ using Exanite.Engine.Framework;
 using Exanite.Engine.Graphics;
 using Exanite.Engine.Graphics.Systems;
 using Exanite.Engine.Modding;
+using Exanite.Engine.Resources.Systems;
 using Exanite.Engine.Windowing;
 using Exanite.GravitationalTetris.Features;
 using Exanite.GravitationalTetris.Features.Audio.Systems;
@@ -61,6 +62,8 @@ public class GravitationalTetrisGameModule : GameModule
     protected override void OnConfigureSystems(SystemScheduler scheduler)
     {
         base.OnConfigureSystems(scheduler);
+
+        scheduler.DefaultGroup.RegisterSystem<ResourceHotReloadSystem>();
 
         scheduler.DefaultGroup.RegisterSystem<CreateEntitiesSystem>();
 
