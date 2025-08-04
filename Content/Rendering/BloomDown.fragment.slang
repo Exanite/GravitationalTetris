@@ -1,10 +1,11 @@
-cbuffer Uniforms
+struct UniformData
 {
     float2 FilterStep;
 }
 
 [[vk::binding(0, 0)]] Texture2D Texture;
 [[vk::binding(1, 0)]] SamplerState TextureSampler;
+[[vk::binding(1, 0)]] ConstantBuffer<UniformData> Uniforms;
 
 struct Input
 {
@@ -24,8 +25,8 @@ void main(
 {
     float2 uv = float2(input.Uv.x, 1 - input.Uv.y);
 
-    float x = FilterStep.x;
-    float y = FilterStep.y;
+    float x = Uniforms.FilterStep.x;
+    float y = Uniforms.FilterStep.y;
 
     // Take 13 samples around current texel
     float3 a = Texture.Sample(TextureSampler, float2(uv.x - 2 * x, uv.y + 2 * y)).rgb;

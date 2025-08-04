@@ -34,6 +34,7 @@ public partial class RendererSystem : GameSystem, ISetupSystem, IRenderSystem, I
     private IResourceHandle<Texture2D> placeholderTileTexture;
 
     private readonly SpriteBatcher spriteBatcher;
+    private readonly BloomPass bloomPass;
     private readonly ToneMapPass toneMapPass;
     private readonly CopyColorTexturePass copyWorldPass;
     private readonly CopyColorTexturePass copyUiPass;
@@ -69,6 +70,8 @@ public partial class RendererSystem : GameSystem, ISetupSystem, IRenderSystem, I
         placeholderTileTexture = resourceManager.GetResource(BaseMod.TilePlaceholder);
 
         spriteBatcher = new SpriteBatcher(graphicsContext, resourceManager).AddTo(disposables);
+
+        bloomPass = new BloomPass(graphicsContext, resourceManager).AddTo(disposables);
 
         toneMapPass = new ToneMapPass(graphicsContext, resourceManager).AddTo(disposables);
 
@@ -161,6 +164,8 @@ public partial class RendererSystem : GameSystem, ISetupSystem, IRenderSystem, I
         RenderCameraQuery(World, commandBuffer);
 
         // Post process
+        bloomPass.Render(commandBuffer, ActiveWorldColor);
+
         toneMapPass.Render(commandBuffer, ActiveWorldColor, InactiveWorldColor);
         SwapWorldColor();
 

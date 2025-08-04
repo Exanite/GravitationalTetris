@@ -1,4 +1,4 @@
-cbuffer Uniforms
+struct UniformData
 {
     float2 FilterStep;
     float Alpha;
@@ -6,6 +6,7 @@ cbuffer Uniforms
 
 [[vk::binding(0, 0)]] Texture2D Texture;
 [[vk::binding(1, 0)]] SamplerState TextureSampler;
+[[vk::binding(1, 0)]] ConstantBuffer<UniformData> Uniforms;
 
 struct Input
 {
@@ -25,8 +26,8 @@ void main(
 {
     float2 uv = float2(input.Uv.x, 1 - input.Uv.y);
 
-    float x = FilterStep.x;
-    float y = FilterStep.y;
+    float x = Uniforms.FilterStep.x;
+    float y = Uniforms.FilterStep.y;
 
     // Take 9 samples around current texel
     float3 a = Texture.Sample(TextureSampler, float2(uv.x - x, uv.y + y)).rgb;
@@ -48,5 +49,5 @@ void main(
     outputColor += (a + c + g + i);
     outputColor *= 1.0 / 16.0;
 
-    output.Color = float4(outputColor * Alpha, 0); // Alpha channel is ignored by pipeline
+    output.Color = float4(outputColor * Uniforms.Alpha, 0); // Alpha channel is ignored by pipeline
 }
