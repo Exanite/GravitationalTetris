@@ -34,7 +34,7 @@ public partial class RendererSystem : GameSystem, ISetupSystem, IRenderSystem, I
     private IResourceHandle<Texture2D> placeholderTileTexture;
 
     private readonly SpriteBatcher spriteBatcher;
-    private readonly ToneMappingPass toneMappingPass;
+    private readonly ToneMapPass toneMapPass;
     private readonly CopyColorTexturePass copyWorldPass;
     private readonly CopyColorTexturePass copyUiPass;
 
@@ -70,7 +70,7 @@ public partial class RendererSystem : GameSystem, ISetupSystem, IRenderSystem, I
 
         spriteBatcher = new SpriteBatcher(graphicsContext, resourceManager).AddTo(disposables);
 
-        toneMappingPass = new ToneMappingPass(graphicsContext, resourceManager).AddTo(disposables);
+        toneMapPass = new ToneMapPass(graphicsContext, resourceManager).AddTo(disposables);
 
         copyWorldPass = new CopyColorTexturePass(graphicsContext, resourceManager)
         {
@@ -161,7 +161,7 @@ public partial class RendererSystem : GameSystem, ISetupSystem, IRenderSystem, I
         RenderCameraQuery(World, commandBuffer);
 
         // Post process
-        toneMappingPass.Render(commandBuffer, ActiveWorldColor, InactiveWorldColor);
+        toneMapPass.Render(commandBuffer, ActiveWorldColor, InactiveWorldColor);
         SwapWorldColor();
 
         // Copy world to swapchain

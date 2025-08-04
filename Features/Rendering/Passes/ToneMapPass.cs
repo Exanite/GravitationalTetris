@@ -8,7 +8,7 @@ using Silk.NET.Vulkan;
 
 namespace Exanite.GravitationalTetris.Features.Rendering.Passes;
 
-public class ToneMappingPass : ITrackedDisposable
+public class ToneMapPass : ITrackedDisposable
 {
     public bool IsDisposed { get; private set; }
 
@@ -20,7 +20,7 @@ public class ToneMappingPass : ITrackedDisposable
 
     private readonly DisposableCollection disposables = new();
 
-    public ToneMappingPass(
+    public ToneMapPass(
         GraphicsContext graphicsContext,
         IResourceManager resourceManager)
     {
@@ -119,7 +119,7 @@ public class ToneMappingPass : ITrackedDisposable
         GC.SuppressFinalize(this);
     }
 
-    ~ToneMappingPass()
+    ~ToneMapPass()
     {
         ReleaseResources();
     }
