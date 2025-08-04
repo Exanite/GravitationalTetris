@@ -17,17 +17,17 @@ WASD to move. \
 QE to rotate. \
 Space to reverse gravity *and* place block.
 
-## 3rd party assets
+## 3rd party assets and libraries
 
-Custom game engine, gameplay code and art was created by me (Exanite).
+Custom game engine. Gameplay code and art was created by me (Exanite).
 
-Diligent Engine - Rendering Framework: https://github.com/DiligentGraphics/DiligentEngine
+Silk.NET - Bindings library: https://github.com/dotnet/Silk.NET
 
-SDL2 (C) - Windowing Library: https://github.com/libsdl-org/SDL
+Vulkan - Graphics API: https://www.vulkan.org/
 
-SDL2-CS (C#) - Windowing Library: https://github.com/flibitijibibo/SDL2-CS
+SDL3-CS - Platform abstraction: https://github.com/edwardgushchin/SDL3-CS/
 
-Arch ECS: https://github.com/genaray/Arch
+Myriad.ECS: https://github.com/martindevans/Myriad.ECS
 
 Aether.Physics2D: https://github.com/nkast/Aether.Physics2D
 
