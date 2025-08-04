@@ -93,9 +93,9 @@ public class ToneMappingPass : ITrackedDisposable
 
         using (commandBuffer.BeginRenderPass(new RenderPassDesc([colorTarget])))
         {
-            textureVariable.SetTexture(colorSource);
-
             commandBuffer.BindPipeline(pipeline.Value);
+
+            textureVariable.SetTexture(colorSource);
             commandBuffer.BindPipelineLayout(PipelineBindPoint.Graphics, pipelineLayout);
 
             commandBuffer.Draw(new DrawDesc(3));
