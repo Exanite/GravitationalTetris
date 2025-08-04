@@ -29,11 +29,11 @@ float3 TonemapAces(float3 color)
         -0.53108, 1.10813, -0.07276,
         -0.07367, -0.00605, 1.07602
     );
-    float3 v = m1 * color;
+    float3 v = mul(m1, color);
     float3 a = v * (v + 0.0245786) - 0.000090537;
     float3 b = v * (0.983729 * v + 0.4329510) + 0.238081;
 
-    return m2 * (a / b);
+    return mul(m2, (a / b));
 }
 
 void main(
