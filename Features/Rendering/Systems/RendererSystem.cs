@@ -9,6 +9,7 @@ using Exanite.Engine.Graphics.Passes;
 using Exanite.Engine.Timing;
 using Exanite.Engine.Windowing;
 using Exanite.GravitationalTetris.Features.Cameras.Components;
+using Exanite.GravitationalTetris.Features.Rendering.Passes;
 using Exanite.GravitationalTetris.Features.Sprites;
 using Exanite.GravitationalTetris.Features.Sprites.Components;
 using Exanite.GravitationalTetris.Features.Tetris.Components;
@@ -22,13 +23,18 @@ namespace Exanite.GravitationalTetris.Features.Rendering.Systems;
 
 public partial class RendererSystem : GameSystem, ISetupSystem, IRenderSystem, ITeardownSystem
 {
-    public Texture2D WorldColor = null!;
-    public Texture2D WorldDepth = null!;
+    // Array of size 2
+    private Texture2D[] worldColor = null!;
+    private Texture2D worldDepth = null!;
+
+    private Texture2D ActiveWorldColor => worldColor[0];
+    private Texture2D InactiveWorldColor => worldColor[1];
 
     private IResourceHandle<Texture2D> emptyTileTexture;
     private IResourceHandle<Texture2D> placeholderTileTexture;
 
     private readonly SpriteBatcher spriteBatcher;
+    private readonly ToneMappingPass toneMappingPass;
     private readonly CopyColorTexturePass copyWorldPass;
     private readonly CopyColorTexturePass copyUiPass;
 
@@ -64,6 +70,8 @@ public partial class RendererSystem : GameSystem, ISetupSystem, IRenderSystem, I
 
         spriteBatcher = new SpriteBatcher(graphicsContext, resourceManager).AddTo(disposables);
 
+        toneMappingPass = new ToneMappingPass(graphicsContext, resourceManager, time);
+
         copyWorldPass = new CopyColorTexturePass(graphicsContext, resourceManager)
         {
             // TODO: This is a hack to make world color actually copy over
@@ -85,17 +93,21 @@ public partial class RendererSystem : GameSystem, ISetupSystem, IRenderSystem, I
 
     public void Setup()
     {
-        WorldColor = new Texture2D(graphicsContext, new TextureDesc2D()
+        worldColor = new Texture2D[2];
+        for (var i = 0; i < worldColor.Length; i++)
         {
-            Format = Format.R32G32B32A32Sfloat,
-            Size = swapchain.Texture.Desc.Size,
-            Usages = ImageUsageFlags.ColorAttachmentBit | ImageUsageFlags.SampledBit,
-        }, new TextureViewDesc()
-        {
-            Aspects = ImageAspectFlags.ColorBit,
-        }).AddTo(disposables);
+            worldColor[i] = new Texture2D(graphicsContext, new TextureDesc2D()
+            {
+                Format = Format.R32G32B32A32Sfloat,
+                Size = swapchain.Texture.Desc.Size,
+                Usages = ImageUsageFlags.ColorAttachmentBit | ImageUsageFlags.SampledBit,
+            }, new TextureViewDesc()
+            {
+                Aspects = ImageAspectFlags.ColorBit,
+            }).AddTo(disposables);
+        }
 
-        WorldDepth = new Texture2D(graphicsContext, new TextureDesc2D()
+        worldDepth = new Texture2D(graphicsContext, new TextureDesc2D()
         {
             Format = Format.D32Sfloat,
             Size = swapchain.Texture.Desc.Size,
@@ -111,11 +123,11 @@ public partial class RendererSystem : GameSystem, ISetupSystem, IRenderSystem, I
         var commandBuffer = swapchain.CommandBuffer;
 
         // Resize world render targets
-        WorldColor.ResizeIfNeeded(window.Size);
-        WorldDepth.ResizeIfNeeded(window.Size);
+        ActiveWorldColor.ResizeIfNeeded(window.Size);
+        worldDepth.ResizeIfNeeded(window.Size);
 
         // Clear world render targets
-        commandBuffer.AddBarrier(new TextureBarrier(WorldColor)
+        commandBuffer.AddBarrier(new TextureBarrier(ActiveWorldColor)
         {
             SrcStages = PipelineStageFlags2.ColorAttachmentOutputBit,
             SrcAccesses = AccessFlags2.ColorAttachmentWriteBit,
@@ -127,7 +139,7 @@ public partial class RendererSystem : GameSystem, ISetupSystem, IRenderSystem, I
             DstLayout = ImageLayout.AttachmentOptimal,
         });
 
-        commandBuffer.AddBarrier(new TextureBarrier(WorldDepth)
+        commandBuffer.AddBarrier(new TextureBarrier(worldDepth)
         {
             SrcStages = PipelineStageFlags2.LateFragmentTestsBit,
             SrcAccesses = AccessFlags2.DepthStencilAttachmentWriteBit,
@@ -139,7 +151,7 @@ public partial class RendererSystem : GameSystem, ISetupSystem, IRenderSystem, I
             DstLayout = ImageLayout.AttachmentOptimal,
         });
 
-        using (commandBuffer.BeginRenderPass(new RenderPassDesc([WorldColor], WorldDepth)))
+        using (commandBuffer.BeginRenderPass(new RenderPassDesc([ActiveWorldColor], worldDepth)))
         {
             commandBuffer.ClearColorAttachment(Vector4.Zero);
             commandBuffer.ClearDepthAttachment(0);
@@ -148,8 +160,12 @@ public partial class RendererSystem : GameSystem, ISetupSystem, IRenderSystem, I
         // Render world
         RenderCameraQuery(World, commandBuffer);
 
+        // Post process
+        toneMappingPass.Render(commandBuffer, ActiveWorldColor, InactiveWorldColor);
+        SwapWorldColor();
+
         // Copy world to swapchain
-        copyWorldPass.Copy(commandBuffer, WorldColor, swapchain.Texture);
+        copyWorldPass.Copy(commandBuffer, ActiveWorldColor, swapchain.Texture);
 
         // Copy UI to swapchain
         copyUiPass.Copy(commandBuffer, tetrisUiSystem.UiRoot.Texture, swapchain.Texture);
@@ -161,8 +177,8 @@ public partial class RendererSystem : GameSystem, ISetupSystem, IRenderSystem, I
         using (var batch = spriteBatcher.Acquire(new SpriteUniformDrawSettings()
                {
                    CommandBuffer = commandBuffer,
-                   ColorTarget = WorldColor,
-                   DepthTarget = WorldDepth,
+                   ColorTarget = ActiveWorldColor,
+                   DepthTarget = worldDepth,
                    View = cameraProjection.View,
                    Projection = cameraProjection.Projection,
                }))
@@ -226,7 +242,7 @@ public partial class RendererSystem : GameSystem, ISetupSystem, IRenderSystem, I
 
         return;
 
-        float EaseInOutCubic(float t)
+        static float EaseInOutCubic(float t)
         {
             t = MathUtility.Wrap(t, 0, 2);
             if (t > 1)
@@ -238,18 +254,25 @@ public partial class RendererSystem : GameSystem, ISetupSystem, IRenderSystem, I
         }
     }
 
-     [Query]
-     private void DrawSprites([Data] SpriteBatcher.Batch batch, ref ComponentSprite sprite, ref ComponentTransform transform)
-     {
-         var texture = sprite.Texture.Value;
-         var model = Matrix4x4.CreateRotationZ(transform.Rotation) * Matrix4x4.CreateTranslation(transform.Position.X, transform.Position.Y, 0);
+    [Query]
+    private void DrawSprites([Data] SpriteBatcher.Batch batch, ref ComponentSprite sprite, ref ComponentTransform transform)
+    {
+        var texture = sprite.Texture.Value;
+        var model = Matrix4x4.CreateRotationZ(transform.Rotation) * Matrix4x4.CreateTranslation(transform.Position.X, transform.Position.Y, 0);
 
-         batch.Draw(new SpriteInstanceDrawSettings()
-         {
-             Texture = texture,
-             Model = model,
-         });
-     }
+        batch.Draw(new SpriteInstanceDrawSettings()
+        {
+            Texture = texture,
+            Model = model,
+        });
+    }
+    
+    private void SwapWorldColor()
+    {
+        var temp = worldColor[0];
+        worldColor[0] = worldColor[1];
+        worldColor[1] = temp;
+    }
 
     public void Teardown()
     {
