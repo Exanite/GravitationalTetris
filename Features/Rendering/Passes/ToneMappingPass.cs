@@ -28,7 +28,7 @@ public class ToneMappingPass : ITrackedDisposable
         var vertexModule = resourceManager.GetResource(EngineResources.ScreenTriVertexModule);
         var fragmentModule = resourceManager.GetResource(RenderingMod.ToneMapFragmentModule);
 
-        var sampler = new TextureSampler(graphicsContext, new TextureSamplerDesc(Filter.Linear));
+        var sampler = new TextureSampler(graphicsContext, new TextureSamplerDesc(Filter.Linear)).AddTo(disposables);
 
         pipeline = new ReloadableHandle<ShaderPipeline>((List<IHandle> dependencies, out ShaderPipeline resource, out Action<ShaderPipeline> unloadAction) =>
         {

@@ -70,7 +70,7 @@ public partial class RendererSystem : GameSystem, ISetupSystem, IRenderSystem, I
 
         spriteBatcher = new SpriteBatcher(graphicsContext, resourceManager).AddTo(disposables);
 
-        toneMappingPass = new ToneMappingPass(graphicsContext, resourceManager);
+        toneMappingPass = new ToneMappingPass(graphicsContext, resourceManager).AddTo(disposables);
 
         copyWorldPass = new CopyColorTexturePass(graphicsContext, resourceManager)
         {
