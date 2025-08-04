@@ -5,7 +5,7 @@ struct UniformData
 
 [[vk::binding(0, 0)]] Texture2D Texture;
 [[vk::binding(1, 0)]] SamplerState TextureSampler;
-[[vk::binding(1, 0)]] ConstantBuffer<UniformData> Uniforms;
+[[vk::binding(2, 0)]] ConstantBuffer<UniformData> Uniforms;
 
 struct Input
 {

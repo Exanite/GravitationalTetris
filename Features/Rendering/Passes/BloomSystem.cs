@@ -47,6 +47,8 @@ public class BloomPass : ITrackedDisposable
         var downFragmentModule = resourceManager.GetResource(RenderingMod.BloomDownFragmentModule);
         var upFragmentModule = resourceManager.GetResource(RenderingMod.BloomUpFragmentModule);
 
+        var sampler = new TextureSampler(graphicsContext, new TextureSamplerDesc(Filter.Linear)).AddTo(disposables);
+
         {
             downUniformBuffer = new CycledBuffer<BloomDownUniformData>(graphicsContext, new BufferDesc()
             {
@@ -84,10 +86,13 @@ public class BloomPass : ITrackedDisposable
                 downPipelineLayout = resource.Layout;
                 downUniformsVariable = downPipelineLayout.GetVariable("Uniforms");
                 downTextureVariable = downPipelineLayout.GetVariable("Texture");
+                downPipelineLayout.GetVariable("TextureSampler").SetSampler(sampler);
 
                 action = resource =>
                 {
                     resource.Dispose();
+                    downUniformsVariable = null!;
+                    downTextureVariable = null!;
                 };
             }).AddTo(disposables);
         }
@@ -129,10 +134,13 @@ public class BloomPass : ITrackedDisposable
                 upPipelineLayout = resource.Layout;
                 upUniformsVariable = downPipelineLayout.GetVariable("Uniforms");
                 upTextureVariable = downPipelineLayout.GetVariable("Texture");
+                upPipelineLayout.GetVariable("TextureSampler").SetSampler(sampler);
 
                 action = resource =>
                 {
                     resource.Dispose();
+                    upUniformsVariable = null!;
+                    upTextureVariable = null!;
                 };
             }).AddTo(disposables);
         }
@@ -145,88 +153,90 @@ public class BloomPass : ITrackedDisposable
         if (renderTextures.Count != 0)
         {
             // Down sample
-            deviceContext.SetPipelineState(downPipeline);
             for (var i = 0; i < renderTextures.Count; i++)
             {
-                var previousRenderTarget = i > 0 ? renderTextures[i - 1].RenderTarget : GetSourceRenderTexture().RenderTarget;
-                var currentRenderTarget = renderTextures[i].RenderTarget;
-                var currentTexture = renderTextures[i];
+                var previousTarget = i > 0 ? renderTextures[i - 1] : colorSourceAndTarget;
+                var currentTarget = renderTextures[i];
 
-                downTextureVariable?.Set(previousRenderTarget, SetShaderResourceFlags.AllowOverwrite);
-                renderTargets[0] = currentRenderTarget;
+                // TODO: Add barriers
 
-                using (downUniformBuffer.Map(MapType.Write, MapFlags.Discard, out var downUniformData))
+                using (commandBuffer.BeginRenderPass(new RenderPassDesc([currentTarget])))
                 {
-                    var textureDesc = currentTexture.Handle.GetDesc();
-                    downUniformData[0].FilterStep = Vector2.One / textureDesc.GetSize();
+                    commandBuffer.BindPipeline(downPipeline.Value);
+
+                    downUniformBuffer.Cycle();
+                    using (downUniformBuffer.Current.Map(out var downUniformData))
+                    {
+                        downUniformData[0].FilterStep = Vector2.One / currentTarget.Desc.Size;
+                    }
+
+                    downTextureVariable.SetTexture(previousTarget);
+                    downUniformsVariable.SetBuffer(downUniformBuffer.Current);
+                    commandBuffer.BindPipelineLayout(PipelineBindPoint.Graphics, downPipelineLayout);
+
+                    commandBuffer.Draw(new DrawDesc(3));
                 }
-
-                deviceContext.SetRenderTargets(renderTargets, null, ResourceStateTransitionMode.Transition);
-                deviceContext.CommitShaderResources(downPipelineLayout, ResourceStateTransitionMode.Transition);
-                deviceContext.Draw(new DrawAttribs()
-                {
-                    NumVertices = 4,
-                    Flags = DrawFlags.VerifyAll,
-                });
-            }
-
-            var aspectRatio = window.AspectRatio;
-            var step = 0.005f;
-            var localUpUniformData = new BloomUpUniformData
-            {
-                FilterStep = new Vector2(step / aspectRatio, step),
-                Alpha = 1,
-            };
-
-            using (upUniformBuffer.Map(MapType.Write, MapFlags.Discard, out var upUniformData))
-            {
-                upUniformData[0] = localUpUniformData;
             }
 
             // Up sample
-            deviceContext.SetPipelineState(upPipeline);
+            var aspectRatio = (float)colorSourceAndTarget.Desc.Size.X / colorSourceAndTarget.Desc.Size.Y;
+            var step = 0.005f;
+            var upFilterStep = new Vector2(step / aspectRatio, step);
+
+            upUniformBuffer.Cycle();
+            using (upUniformBuffer.Current.Map(out var upUniformData))
+            {
+                upUniformData[0] = new BloomUpUniformData
+                {
+                    FilterStep = upFilterStep,
+                    Alpha = 1,
+                };
+            }
+
             for (var i = renderTextures.Count - 2; i >= 0; i--)
             {
-                var previousRenderTarget = renderTextures[i + 1].RenderTarget;
-                var currentRenderTarget = renderTextures[i].RenderTarget;
+                var previousTarget = renderTextures[i + 1];
+                var currentTarget = renderTextures[i];
 
-                upTextureVariable?.Set(previousRenderTarget, SetShaderResourceFlags.AllowOverwrite);
-                renderTargets[0] = currentRenderTarget;
-
-                deviceContext.SetRenderTargets(renderTargets, null, ResourceStateTransitionMode.Transition);
-                deviceContext.CommitShaderResources(upPipelineLayout, ResourceStateTransitionMode.Transition);
-                deviceContext.Draw(new DrawAttribs()
+                using (commandBuffer.BeginRenderPass(new RenderPassDesc([currentTarget])))
                 {
-                    NumVertices = 4,
-                    Flags = DrawFlags.VerifyAll,
-                });
+                    commandBuffer.BindPipeline(upPipeline.Value);
+
+                    upTextureVariable.SetTexture(previousTarget);
+                    upUniformsVariable.SetBuffer(upUniformBuffer.Current);
+                    commandBuffer.BindPipelineLayout(PipelineBindPoint.Graphics, upPipelineLayout);
+
+                    commandBuffer.Draw(new DrawDesc(3));
+                }
             }
 
-            // Draw bloom to world RT
-            renderTargets[0] = GetSourceRenderTexture().RenderTarget;
-            deviceContext.SetRenderTargets(renderTargets, null, ResourceStateTransitionMode.Transition);
-
-            deviceContext.SetPipelineState(upPipeline);
-
-            localUpUniformData.Alpha = BloomIntensity;
-            using (upUniformBuffer.Map(MapType.Write, MapFlags.Discard, out var upUniformData))
+            // Composite bloom with source
+            using (commandBuffer.BeginRenderPass(new RenderPassDesc([colorSourceAndTarget])))
             {
-                upUniformData[0] = localUpUniformData;
+                commandBuffer.BindPipeline(upPipeline.Value);
+
+                upUniformBuffer.Cycle();
+                using (upUniformBuffer.Current.Map(out var upUniformData))
+                {
+                    upUniformData[0] = new BloomUpUniformData
+                    {
+                        FilterStep = upFilterStep,
+                        Alpha = BloomIntensity,
+                    };
+                }
+
+                upTextureVariable.SetTexture(renderTextures[0]);
+                upUniformsVariable.SetBuffer(upUniformBuffer.Current);
+                commandBuffer.BindPipelineLayout(PipelineBindPoint.Graphics, upPipelineLayout);
+
+                commandBuffer.Draw(new DrawDesc(3));
             }
-
-            upTextureVariable?.Set(renderTextures[0].RenderTarget, SetShaderResourceFlags.AllowOverwrite);
-            deviceContext.CommitShaderResources(upPipelineLayout, ResourceStateTransitionMode.Transition);
-            deviceContext.Draw(new DrawAttribs()
-            {
-                NumVertices = 4,
-                Flags = DrawFlags.VerifyAll,
-            });
         }
     }
 
     private void ResizeRenderTextures(Vector2Int size)
     {
-        if (currentSize != size)
+        if (currentSize == size)
         {
             return;
         }
