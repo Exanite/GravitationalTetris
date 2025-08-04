@@ -72,8 +72,6 @@ public class SpriteBatcher : IDisposable
                 [
                     new ShaderPipelineColorAttachmentBlendDesc()
                     {
-                        EnableBlend = true,
-
                         ColorBlendOp = BlendOp.Add,
                         SrcColorBlendFactor = BlendFactor.SrcAlpha,
                         DstColorBlendFactor = BlendFactor.OneMinusSrcAlpha,

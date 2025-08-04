@@ -70,8 +70,6 @@ public partial class RendererSystem : GameSystem, ISetupSystem, IRenderSystem, I
             // Currently all alpha values in the world color texture are 0 and this should be fixed
             Blend = new ShaderPipelineColorAttachmentBlendDesc()
             {
-                EnableBlend = true,
-
                 ColorBlendOp = BlendOp.Add,
                 SrcColorBlendFactor = BlendFactor.One,
                 DstColorBlendFactor = BlendFactor.Zero,
