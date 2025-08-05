@@ -88,10 +88,6 @@ public class GravitationalTetrisGameModule : GameModule
             scheduler.DefaultGroup.RegisterSystem<AvaloniaDisplaySystem>();
             scheduler.DefaultGroup.RegisterSystem<RendererSystem>();
 
-            // Main RT
-            // scheduler.DefaultGroup.RegisterSystem<BloomSystem>();
-            // scheduler.DefaultGroup.RegisterSystem<ToneMappingSystem>();
-
             scheduler.DefaultGroup.RegisterSystem<PresentSwapchainSystem>();
         }
     }
