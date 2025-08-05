@@ -1,9 +1,9 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Exanite.Core.Runtime;
 using Exanite.Engine.Ecs.Queries;
 using Exanite.Engine.Ecs.Systems;
+using Exanite.GravitationalTetris.Features.Audio.Components;
 using Exanite.Myriad.Ecs;
 using Exanite.Myriad.Ecs.CommandBuffers;
 using Exanite.ResourceManagement;
@@ -15,17 +15,6 @@ using SoundFlow.Providers;
 using SoundFlow.Structs;
 
 namespace Exanite.GravitationalTetris.Features.Audio.Systems;
-
-public struct ComponentAudioSource : IComponent
-{
-    public required SoundPlayer Player;
-
-    [SetsRequiredMembers]
-    public ComponentAudioSource(SoundPlayer player)
-    {
-        Player = player;
-    }
-}
 
 public partial class AudioSystem : GameSystem, IStartSystem, IStopSystem, IFrameUpdateSystem, IDisposable
 {
