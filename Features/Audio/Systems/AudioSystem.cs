@@ -4,7 +4,7 @@ using Exanite.ResourceManagement;
 
 namespace Exanite.GravitationalTetris.Features.Audio.Systems;
 
-public class FmodAudioSystem : GameSystem, ISetupSystem, IFrameUpdateSystem, IDisposable
+public class AudioSystem : GameSystem, ISetupSystem, IFrameUpdateSystem, IDisposable
 {
     public const string SwitchGravity = "event:/SwitchGravity";
     public const string RotateShape = "event:/RotateShape";
@@ -13,7 +13,7 @@ public class FmodAudioSystem : GameSystem, ISetupSystem, IFrameUpdateSystem, IDi
 
     private readonly ResourceManager resourceManager;
 
-    public FmodAudioSystem(ResourceManager resourceManager)
+    public AudioSystem(ResourceManager resourceManager)
     {
         this.resourceManager = resourceManager;
     }

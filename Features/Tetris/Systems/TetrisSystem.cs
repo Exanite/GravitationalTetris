@@ -59,7 +59,7 @@ public partial class TetrisSystem : GameSystem, ISetupSystem, IFrameUpdateSystem
     private readonly InputActionManager input;
     private readonly GameTilemapData tilemap;
     private readonly PlayerControllerSystem playerControllerSystem;
-    private readonly FmodAudioSystem audioSystem;
+    private readonly AudioSystem audioSystem;
     private readonly EnginePaths paths;
 
     private string ScoresFilePath => Path.Join(paths.PersistentDataFolder, "Scores.txt");
@@ -71,7 +71,7 @@ public partial class TetrisSystem : GameSystem, ISetupSystem, IFrameUpdateSystem
         InputActionManager input,
         PlayerControllerSystem playerControllerSystem,
         GameTilemapData tilemap,
-        FmodAudioSystem audioSystem,
+        AudioSystem audioSystem,
         EnginePaths paths)
     {
         this.resourceManager = resourceManager;
@@ -241,13 +241,13 @@ public partial class TetrisSystem : GameSystem, ISetupSystem, IFrameUpdateSystem
         {
             if (rotateLeftAction.IsPressed())
             {
-                audioSystem.Play(FmodAudioSystem.RotateShape);
+                audioSystem.Play(AudioSystem.RotateShape);
                 tetrisRoot.Value.Rotation = (TetrisRotation)(((int)tetrisRoot.Value.Rotation + 3) % 4);
             }
 
             if (rotateRightAction.IsPressed())
             {
-                audioSystem.Play(FmodAudioSystem.RotateShape);
+                audioSystem.Play(AudioSystem.RotateShape);
                 tetrisRoot.Value.Rotation = (TetrisRotation)(((int)tetrisRoot.Value.Rotation + 1) % 4);
             }
         }
@@ -259,7 +259,7 @@ public partial class TetrisSystem : GameSystem, ISetupSystem, IFrameUpdateSystem
         else if (placeShapeAction.IsPressed() || ShouldShouldPlaceTetrisQueryDescription(World).Count() > 0)
         {
             playerControllerSystem.FlipGravity();
-            audioSystem.Play(FmodAudioSystem.SwitchGravity);
+            audioSystem.Play(AudioSystem.SwitchGravity);
 
             PlaceShape();
         }
@@ -539,7 +539,7 @@ public partial class TetrisSystem : GameSystem, ISetupSystem, IFrameUpdateSystem
 
                     while (TryApplyBlockGravity()) {}
 
-                    audioSystem.Play(FmodAudioSystem.ClearTile);
+                    audioSystem.Play(AudioSystem.ClearTile);
 
                     return;
                 }
@@ -712,7 +712,7 @@ public partial class TetrisSystem : GameSystem, ISetupSystem, IFrameUpdateSystem
     [Include<ComponentPlayer>]
     private void ResetGame(ref ComponentTransform playerTransform, ref ComponentVelocity velocity)
     {
-        audioSystem.Play(FmodAudioSystem.Restart);
+        audioSystem.Play(AudioSystem.Restart);
 
         playerTransform.Position = new Vector2(4f, 0);
         velocity.Velocity = Vector2.Zero;
