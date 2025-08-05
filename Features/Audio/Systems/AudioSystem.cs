@@ -1,54 +1,101 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using Exanite.Core.Runtime;
+using Exanite.Engine.Ecs.Queries;
 using Exanite.Engine.Ecs.Systems;
+using Exanite.Myriad.Ecs;
+using Exanite.Myriad.Ecs.CommandBuffers;
 using Exanite.ResourceManagement;
+using SoundFlow.Abstracts.Devices;
+using SoundFlow.Backends.MiniAudio;
+using SoundFlow.Components;
+using SoundFlow.Enums;
+using SoundFlow.Providers;
+using SoundFlow.Structs;
 
 namespace Exanite.GravitationalTetris.Features.Audio.Systems;
 
-public class AudioSystem : GameSystem, ISetupSystem, IFrameUpdateSystem, IDisposable
+public struct ComponentAudioSource : IComponent
 {
-    public const string SwitchGravity = "event:/SwitchGravity";
-    public const string RotateShape = "event:/RotateShape";
-    public const string ClearTile = "event:/ClearTile";
-    public const string Restart = "event:/Restart";
+    public required SoundPlayer Player;
+
+    [SetsRequiredMembers]
+    public ComponentAudioSource(SoundPlayer player)
+    {
+        Player = player;
+    }
+}
+
+public partial class AudioSystem : GameSystem, IStartSystem, IStopSystem, IFrameUpdateSystem, IDisposable
+{
+    public const string SwitchGravity = "/Base/Audio/SwitchGravity.wav";
+    public const string RotateShape = "/Base/Audio/RotateShape.wav";
+    public const string ClearTile = "/Base/Audio/ClearTile.wav";
+    public const string Restart = "/Base/Audio/Restart.wav";
+
+    private readonly AudioFormat format = AudioFormat.Dvd;
+    private readonly MiniAudioEngine engine;
+    private readonly AudioPlaybackDevice playbackDevice;
+
+    private EcsCommandBuffer commandBuffer = null!;
+    private readonly DisposableCollection disposables = new();
 
     private readonly ResourceManager resourceManager;
 
     public AudioSystem(ResourceManager resourceManager)
     {
         this.resourceManager = resourceManager;
+
+        engine = new MiniAudioEngine().AddTo(disposables);
+
+        var device = engine.PlaybackDevices.FirstOrDefault(d => d.IsDefault);
+        playbackDevice = engine.InitializePlaybackDevice(device, format).AddTo(disposables);
     }
 
-    public void Setup()
+    public void Start()
     {
-        // FmodStudio.create(out fmodStudio);
-        // fmodStudio.getCoreSystem(out fmod);
-        //
-        // fmodStudio.initialize(
-        //     maxchannels: 128,
-        //     studioflags: INITFLAGS.NORMAL,
-        //     flags: FMOD.INITFLAGS.NORMAL,
-        //     extradriverdata: nint.Zero
-        // );
-        //
-        // LoadBank("/Base/Tetris.bank");
-        // LoadBank("/Base/Tetris.strings.bank");
+        commandBuffer = new EcsCommandBuffer(World);
+        playbackDevice.Start();
     }
 
-    public void Play(string eventName)
+    public void Stop()
     {
-        // fmodStudio.getEvent(eventName, out var eventDescription);
-        // eventDescription.createInstance(out var eventInstance);
-        // eventInstance.start();
-        // eventInstance.release();
+        playbackDevice.Stop();
     }
 
     public void FrameUpdate()
     {
-        // fmodStudio.update();
+        commandBuffer.Execute();
+        DestroyCompletedAudioSourcesQuery(World);
+        commandBuffer.Execute();
+    }
+
+    public void Play(string resourcePath)
+    {
+        // TODO Cache this
+        var data = new StreamDataProvider(engine, format, resourceManager.OpenFile(resourcePath));
+        var player = new SoundPlayer(engine, format, data);
+
+        playbackDevice.MasterMixer.AddComponent(player);
+        player.Play();
+
+        commandBuffer.Create()
+            .Set(new ComponentAudioSource(player));
+    }
+
+    [Query]
+    private void DestroyCompletedAudioSources(Entity entity, ref ComponentAudioSource audioSource)
+    {
+        if (audioSource.Player.State == PlaybackState.Stopped)
+        {
+            playbackDevice.MasterMixer.RemoveComponent(audioSource.Player);
+            commandBuffer.Destroy(entity);
+        }
     }
 
     public void Dispose()
     {
-        // fmodStudio.unloadAll();
+        disposables.Dispose();
     }
 }

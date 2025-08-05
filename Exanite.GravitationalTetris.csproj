@@ -34,6 +34,9 @@
     <ProjectReference Include="..\Exanite.Engine.Building\Exanite.Engine.Building.csproj"/>
     <ProjectReference Include="..\Exanite.Engine\Exanite.Engine.csproj"/>
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="SoundFlow" Version="1.2.0"/>
+  </ItemGroup>
 
   <ItemGroup>
     <AvaloniaResource Include="Content/Base/FieryTurk.ttf"/>
