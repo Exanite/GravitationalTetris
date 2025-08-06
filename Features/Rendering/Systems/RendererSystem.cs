@@ -33,6 +33,7 @@ public partial class RendererSystem : GameSystem, ISetupSystem, IRenderSystem, I
     private IResourceHandle<Texture2D> emptyTileTexture;
     private IResourceHandle<Texture2D> placeholderTileTexture;
 
+    private readonly ClearPass clearPass;
     private readonly SpriteBatcher spriteBatcher;
     private readonly BloomPass bloomPass;
     private readonly ToneMapPass toneMapPass;
@@ -42,7 +43,6 @@ public partial class RendererSystem : GameSystem, ISetupSystem, IRenderSystem, I
     private DisposableCollection disposables = new();
 
     private readonly GraphicsContext graphicsContext;
-    private readonly ResourceManager resourceManager;
     private readonly Window window;
     private readonly Swapchain swapchain;
     private readonly TetrisUiSystem tetrisUiSystem;
@@ -59,7 +59,6 @@ public partial class RendererSystem : GameSystem, ISetupSystem, IRenderSystem, I
         ITime time)
     {
         this.graphicsContext = graphicsContext;
-        this.resourceManager = resourceManager;
         this.window = window;
         this.swapchain = swapchain;
         this.tetrisUiSystem = tetrisUiSystem;
@@ -68,6 +67,8 @@ public partial class RendererSystem : GameSystem, ISetupSystem, IRenderSystem, I
 
         emptyTileTexture = resourceManager.GetResource(BaseMod.TileNone);
         placeholderTileTexture = resourceManager.GetResource(BaseMod.TilePlaceholder);
+
+        clearPass = new ClearPass();
 
         spriteBatcher = new SpriteBatcher(graphicsContext, resourceManager).AddTo(disposables);
 
@@ -130,35 +131,7 @@ public partial class RendererSystem : GameSystem, ISetupSystem, IRenderSystem, I
         worldDepth.ResizeIfNeeded(window.Size);
 
         // Clear world render targets
-        commandBuffer.AddBarrier(new TextureBarrier(ActiveWorldColor)
-        {
-            SrcStages = PipelineStageFlags2.ColorAttachmentOutputBit,
-            SrcAccesses = AccessFlags2.ColorAttachmentWriteBit,
-
-            DstStages = PipelineStageFlags2.ColorAttachmentOutputBit,
-            DstAccesses = AccessFlags2.ColorAttachmentReadBit | AccessFlags2.ColorAttachmentWriteBit,
-
-            SrcLayout = ImageLayout.Undefined,
-            DstLayout = ImageLayout.AttachmentOptimal,
-        });
-
-        commandBuffer.AddBarrier(new TextureBarrier(worldDepth)
-        {
-            SrcStages = PipelineStageFlags2.LateFragmentTestsBit,
-            SrcAccesses = AccessFlags2.DepthStencilAttachmentWriteBit,
-
-            DstStages = PipelineStageFlags2.EarlyFragmentTestsBit,
-            DstAccesses = AccessFlags2.DepthStencilAttachmentReadBit | AccessFlags2.DepthStencilAttachmentWriteBit,
-
-            SrcLayout = ImageLayout.Undefined,
-            DstLayout = ImageLayout.AttachmentOptimal,
-        });
-
-        using (commandBuffer.BeginRenderPass(new RenderPassDesc([ActiveWorldColor], worldDepth)))
-        {
-            commandBuffer.ClearColorAttachment(Vector4.Zero);
-            commandBuffer.ClearDepthAttachment(0);
-        }
+        clearPass.Clear(commandBuffer, [ActiveWorldColor], worldDepth);
 
         // Render world
         RenderCameraQuery(World, commandBuffer);
