@@ -10,6 +10,7 @@ using Exanite.Engine.Resources.Systems;
 using Exanite.Engine.Timing.Systems;
 using Exanite.Engine.Windowing;
 using Exanite.GravitationalTetris.Features;
+using Exanite.GravitationalTetris.Features.Audio.Modules;
 using Exanite.GravitationalTetris.Features.Audio.Systems;
 using Exanite.GravitationalTetris.Features.Cameras.Systems;
 using Exanite.GravitationalTetris.Features.Physics.Systems;
@@ -25,6 +26,13 @@ namespace Exanite.GravitationalTetris;
 
 public class GravitationalTetrisGameModule : GameModule
 {
+    protected override void OnRegisterSubModules(IRegisterGameModules gameModules)
+    {
+        base.OnRegisterSubModules(gameModules);
+
+        gameModules.RegisterGameModule<AudioModule>();
+    }
+
     protected override void OnConfigureContainer(ContainerBuilder builder)
     {
         base.OnConfigureContainer(builder);

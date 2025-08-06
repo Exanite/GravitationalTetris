@@ -23,23 +23,20 @@ public partial class AudioSystem : GameSystem, IStartSystem, IStopSystem, IFrame
     public const string ClearTile = "/Base/Audio/ClearTile.wav";
     public const string Restart = "/Base/Audio/Restart.wav";
 
-    private readonly AudioFormat format = AudioFormat.Dvd;
-    private readonly MiniAudioEngine engine;
-    private readonly AudioPlaybackDevice playbackDevice;
-
     private EcsCommandBuffer commandBuffer = null!;
+    private readonly AudioPlaybackDevice playbackDevice;
     private readonly DisposableCollection disposables = new();
 
     private readonly ResourceManager resourceManager;
+    private readonly MiniAudioEngine engine;
 
-    public AudioSystem(ResourceManager resourceManager)
+    public AudioSystem(ResourceManager resourceManager, MiniAudioEngine engine)
     {
         this.resourceManager = resourceManager;
-
-        engine = new MiniAudioEngine().AddTo(disposables);
+        this.engine = engine;
 
         var device = engine.PlaybackDevices.FirstOrDefault(d => d.IsDefault);
-        playbackDevice = engine.InitializePlaybackDevice(device, format).AddTo(disposables);
+        playbackDevice = engine.InitializePlaybackDevice(device, AudioConstants.DefaultFormat).AddTo(disposables);
     }
 
     public void Start()
@@ -60,12 +57,12 @@ public partial class AudioSystem : GameSystem, IStartSystem, IStopSystem, IFrame
         commandBuffer.Execute();
     }
 
-    public void Play(string resourcePath)
+    public void Play(string resourceKey)
     {
-        // TODO: Cache this
-        // TODO: data, player are both disposable
-        var data = new StreamDataProvider(engine, format, resourceManager.OpenFile(resourcePath));
-        var player = new SoundPlayer(engine, format, data);
+        var data = new StreamDataProvider(engine, AudioConstants.DefaultFormat, resourceManager.OpenFile(resourceKey));
+        var player = new SoundPlayer(engine, AudioConstants.DefaultFormat, data);
+        // var data = resourceManager.GetResource<AssetDataProvider>(resourceKey);
+        // var player = new SoundPlayer(engine, AudioConstants.DefaultFormat, data.Value);
 
         playbackDevice.MasterMixer.AddComponent(player);
         player.Play();
