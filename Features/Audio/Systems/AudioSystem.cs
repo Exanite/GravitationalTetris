@@ -58,8 +58,7 @@ public partial class AudioSystem : GameSystem, IStartSystem, IStopSystem, IFrame
 
     public void Play(string resourceKey)
     {
-        var data = resourceManager.GetResource<AudioData>(resourceKey);
-        var provider = new AssetDataProvider(engine, AudioConstants.DefaultFormat, data.Value.Data);
+        var provider = resourceManager.GetResource<AudioData>(resourceKey).Value.CreateProvider(engine);
         var player = new SoundPlayer(engine, AudioConstants.DefaultFormat, provider);
 
         playbackDevice.MasterMixer.AddComponent(player);
