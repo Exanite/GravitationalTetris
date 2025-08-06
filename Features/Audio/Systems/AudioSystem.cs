@@ -12,7 +12,6 @@ using SoundFlow.Backends.MiniAudio;
 using SoundFlow.Components;
 using SoundFlow.Enums;
 using SoundFlow.Providers;
-using SoundFlow.Structs;
 
 namespace Exanite.GravitationalTetris.Features.Audio.Systems;
 
@@ -59,10 +58,9 @@ public partial class AudioSystem : GameSystem, IStartSystem, IStopSystem, IFrame
 
     public void Play(string resourceKey)
     {
-        var data = new StreamDataProvider(engine, AudioConstants.DefaultFormat, resourceManager.OpenFile(resourceKey));
-        var player = new SoundPlayer(engine, AudioConstants.DefaultFormat, data);
-        // var data = resourceManager.GetResource<AssetDataProvider>(resourceKey);
-        // var player = new SoundPlayer(engine, AudioConstants.DefaultFormat, data.Value);
+        var data = resourceManager.GetResource<AudioData>(resourceKey);
+        var provider = new AssetDataProvider(engine, AudioConstants.DefaultFormat, data.Value.Data);
+        var player = new SoundPlayer(engine, AudioConstants.DefaultFormat, provider);
 
         playbackDevice.MasterMixer.AddComponent(player);
         player.Play();
@@ -77,6 +75,8 @@ public partial class AudioSystem : GameSystem, IStartSystem, IStopSystem, IFrame
         if (audioSource.Player.State == PlaybackState.Stopped)
         {
             playbackDevice.MasterMixer.RemoveComponent(audioSource.Player);
+            audioSource.Player.Dispose();
+
             commandBuffer.Destroy(entity);
         }
     }

@@ -1,23 +1,15 @@
+using Exanite.Core.Utilities;
 using Exanite.ResourceManagement;
-using SoundFlow.Backends.MiniAudio;
-using SoundFlow.Providers;
 
 namespace Exanite.GravitationalTetris.Features.Audio.Loaders;
 
-public class AudioDataLoader : SimpleResourceLoader<AssetDataProvider>
+public class AudioDataLoader : SimpleResourceLoader<AudioData>
 {
-    private readonly MiniAudioEngine engine;
-
-    public AudioDataLoader(MiniAudioEngine engine)
+    public override void Load(IResourceLoadOperation<AudioData> loadOperation)
     {
-        this.engine = engine;
-    }
+        var bytes = loadOperation.OpenFile(loadOperation.Key).ReadAsBytesAndDispose();
+        var data = new AudioData(bytes);
 
-    public override void Load(IResourceLoadOperation<AssetDataProvider> loadOperation)
-    {
-        using var stream = loadOperation.OpenFile(loadOperation.Key);
-        var provider = new AssetDataProvider(engine, AudioConstants.DefaultFormat, stream);
-
-        loadOperation.Fulfill(provider);
+        loadOperation.Fulfill(data);
     }
 }
