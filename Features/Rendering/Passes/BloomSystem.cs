@@ -14,10 +14,6 @@ public class BloomPass : ITrackedDisposable
 {
     public bool IsDisposed { get; private set; }
 
-    private const float ReferenceResolutionHeight = 1080;
-    private const int MaxIterationCount = 6;
-    private const float BloomIntensity = 0.05f;
-
     private CycledBuffer<BloomDownUniformData> downUniformBuffer;
     private ReloadableHandle<ShaderPipeline> downPipeline;
     private ShaderPipelineLayout downPipelineLayout = null!;
@@ -37,9 +33,42 @@ public class BloomPass : ITrackedDisposable
 
     private readonly GraphicsContext graphicsContext;
 
-    public BloomPass(
-        GraphicsContext graphicsContext,
-        IResourceManager resourceManager)
+    private float referenceResolutionHeight = 1080;
+    private int maxIterationCount = 6;
+
+    public float ReferenceResolutionHeight
+    {
+        get => referenceResolutionHeight;
+        set
+        {
+            if (referenceResolutionHeight.Equals(value))
+            {
+                return;
+            }
+            
+            referenceResolutionHeight = value;
+            RecreateRenderTextures(currentSize);
+        }
+    }
+
+    public int MaxIterationCount
+    {
+        get => maxIterationCount;
+        set
+        {
+            if (maxIterationCount == value)
+            {
+                return;
+            }
+            
+            maxIterationCount = value;
+            RecreateRenderTextures(currentSize);
+        }
+    }
+
+    public float BloomIntensity { get; set; } = 0.05f;
+
+    public BloomPass(GraphicsContext graphicsContext, IResourceManager resourceManager)
     {
         this.graphicsContext = graphicsContext;
         
@@ -313,6 +342,11 @@ public class BloomPass : ITrackedDisposable
             return;
         }
 
+        RecreateRenderTextures(size);
+    }
+
+    private void RecreateRenderTextures(Vector2Int size)
+    {
         foreach (var texture in renderTextures)
         {
             texture.Dispose();
