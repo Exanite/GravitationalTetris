@@ -34,9 +34,13 @@ public partial class RendererSystem : GameSystem, ISetupSystem, IRenderSystem, I
     private IResourceHandle<Texture2D> placeholderTileTexture;
 
     private readonly ClearPass clearPass;
-    private readonly SpriteBatcher spriteBatcher;
+
+    private readonly SpriteBatchPass spriteBatchPass;
+    private readonly SpriteBatch spriteBatch = new();
+
     private readonly BloomPass bloomPass;
     private readonly ToneMapPass toneMapPass;
+
     private readonly CopyColorTexturePass copyWorldPass;
     private readonly CopyColorTexturePass copyUiPass;
 
@@ -70,7 +74,7 @@ public partial class RendererSystem : GameSystem, ISetupSystem, IRenderSystem, I
 
         clearPass = new ClearPass();
 
-        spriteBatcher = new SpriteBatcher(graphicsContext, resourceManager).AddTo(disposables);
+        spriteBatchPass = new SpriteBatchPass(graphicsContext, resourceManager).AddTo(disposables);
 
         bloomPass = new BloomPass(graphicsContext, resourceManager).AddTo(disposables);
 
@@ -152,22 +156,21 @@ public partial class RendererSystem : GameSystem, ISetupSystem, IRenderSystem, I
     [Query]
     private void RenderCamera([Data] GraphicsCommandBuffer commandBuffer, ref ComponentCameraProjection cameraProjection)
     {
-        using (var batch = spriteBatcher.Acquire(new SpriteUniformDrawSettings()
-               {
-                   CommandBuffer = commandBuffer,
-                   ColorTarget = ActiveWorldColor,
-                   DepthTarget = worldDepth,
-                   View = cameraProjection.View,
-                   Projection = cameraProjection.Projection,
-               }))
+        spriteBatch.UniformSettings = new SpriteUniformDrawSettings()
         {
-            DrawTiles(batch);
-            DrawPlaceholdersQuery(World, batch);
-            DrawSpritesQuery(World, batch);
-        }
+            View = cameraProjection.View,
+            Projection = cameraProjection.Projection,
+        };
+
+        DrawTiles();
+        DrawPlaceholdersQuery(World);
+        DrawSpritesQuery(World);
+
+        spriteBatchPass.Render(commandBuffer, ActiveWorldColor, worldDepth, spriteBatch);
+        spriteBatch.Clear();
     }
 
-    private void DrawTiles(SpriteBatcher.Batch batch)
+    private void DrawTiles()
     {
         for (var x = 0; x < tilemap.Tiles.GetLength(0); x++)
         {
@@ -188,7 +191,7 @@ public partial class RendererSystem : GameSystem, ISetupSystem, IRenderSystem, I
 
                 var model = Matrix4x4.CreateTranslation(x, y, 0);
 
-                batch.Draw(new SpriteInstanceDrawSettings()
+                spriteBatch.Draw(new SpriteInstanceDrawSettings()
                 {
                     Texture = texture.Value,
                     Model = model,
@@ -198,7 +201,7 @@ public partial class RendererSystem : GameSystem, ISetupSystem, IRenderSystem, I
     }
 
     [Query]
-    private void DrawPlaceholders([Data] SpriteBatcher.Batch batch, ref ComponentTetrisRoot tetrisRoot)
+    private void DrawPlaceholders(ref ComponentTetrisRoot tetrisRoot)
     {
         foreach (var blockPosition in tetrisRoot.PredictedBlockPositions)
         {
@@ -210,7 +213,7 @@ public partial class RendererSystem : GameSystem, ISetupSystem, IRenderSystem, I
 
             var model = Matrix4x4.CreateTranslation(blockPosition.X, blockPosition.Y, 0);
 
-            batch.Draw(new SpriteInstanceDrawSettings()
+            spriteBatch.Draw(new SpriteInstanceDrawSettings()
             {
                 Texture = texture,
                 Model = model,
@@ -233,12 +236,12 @@ public partial class RendererSystem : GameSystem, ISetupSystem, IRenderSystem, I
     }
 
     [Query]
-    private void DrawSprites([Data] SpriteBatcher.Batch batch, ref ComponentSprite sprite, ref ComponentTransform transform)
+    private void DrawSprites(ref ComponentSprite sprite, ref ComponentTransform transform)
     {
         var texture = sprite.Texture.Value;
         var model = Matrix4x4.CreateRotationZ(transform.Rotation) * Matrix4x4.CreateTranslation(transform.Position.X, transform.Position.Y, 0);
 
-        batch.Draw(new SpriteInstanceDrawSettings()
+        spriteBatch.Draw(new SpriteInstanceDrawSettings()
         {
             Texture = texture,
             Model = model,
