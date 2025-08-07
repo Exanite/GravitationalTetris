@@ -102,6 +102,19 @@ public class SpriteBatchPass : ITrackedDisposable
             using var _ = ListPool<Texture2D>.Acquire(out var textures);
             using var __ = ListPool<SpriteInstanceData>.Acquire(out var sprites);
 
+            commandBuffer.BindPipeline(pipeline.Pipeline);
+
+            uniformBuffers.Cycle();
+            using (uniformBuffers.Current.Map(out var data))
+            {
+                data[0] = new SpriteUniformData()
+                {
+                    View = batch.UniformSettings.View,
+                    Projection = batch.UniformSettings.Projection,
+                };
+            }
+            pipeline.UniformsVariable.SetBuffer(uniformBuffers.Current);
+
             foreach (var sprite in batch.Sprites)
             {
                 // Sprites use bindless textures
@@ -123,7 +136,7 @@ public class SpriteBatchPass : ITrackedDisposable
                     if (textures.Count >= MaxTexturesPerBatch)
                     {
                         // Too many textures in this batch, split into new batch
-                        Submit(commandBuffer, pipeline, batch.UniformSettings, sprites, textures);
+                        Submit(commandBuffer, pipeline, sprites, textures);
                         sprites.Clear();
                         textures.Clear();
                     }
@@ -136,7 +149,7 @@ public class SpriteBatchPass : ITrackedDisposable
                 if (sprites.Count >= MaxSpritesPerBatch)
                 {
                     // Too many sprites in this batch, split into new batch
-                    Submit(commandBuffer, pipeline, batch.UniformSettings, sprites, textures);
+                    Submit(commandBuffer, pipeline, sprites, textures);
                     sprites.Clear();
                     textures.Clear();
                 }
@@ -156,27 +169,17 @@ public class SpriteBatchPass : ITrackedDisposable
             }
 
             // Submit any remaining sprites
-            Submit(commandBuffer, pipeline, batch.UniformSettings, sprites, textures);
+            Submit(commandBuffer, pipeline, sprites, textures);
             sprites.Clear();
             textures.Clear();
         }
     }
 
-    private void Submit(GraphicsCommandBuffer commandBuffer, PipelineCacheState pipeline, SpriteUniformDrawSettings settings, List<SpriteInstanceData> sprites, List<Texture2D> textures)
+    private void Submit(GraphicsCommandBuffer commandBuffer, PipelineCacheState pipeline, List<SpriteInstanceData> sprites, List<Texture2D> textures)
     {
         if (sprites.Count == 0)
         {
             return;
-        }
-
-        uniformBuffers.Cycle();
-        using (uniformBuffers.Current.Map(out var data))
-        {
-            data[0] = new SpriteUniformData()
-            {
-                View = settings.View,
-                Projection = settings.Projection,
-            };
         }
 
         instanceBuffers.Cycle();
@@ -184,12 +187,10 @@ public class SpriteBatchPass : ITrackedDisposable
         {
             sprites.AsSpan().CopyTo(data);
         }
-
-        commandBuffer.BindPipeline(pipeline.Pipeline);
         commandBuffer.BindVertexBuffer(instanceBuffers.Current);
 
         pipeline.TexturesVariable.SetTextures(textures.AsSpan());
-        pipeline.UniformsVariable.SetBuffer(uniformBuffers.Current);
+
         commandBuffer.BindPipelineLayout(PipelineBindPoint.Graphics, pipeline.Pipeline.Layout);
 
         commandBuffer.Draw(new DrawDesc(4, sprites.Count));
