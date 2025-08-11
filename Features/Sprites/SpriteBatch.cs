@@ -5,17 +5,12 @@ namespace Exanite.GravitationalTetris.Features.Sprites;
 public class SpriteBatch
 {
     /// <summary>
-    /// Draw settings that are the same for each submitted sprite.
-    /// </summary>
-    public SpriteUniformDrawSettings UniformSettings { get; set; }
-
-    /// <summary>
     /// The submitted sprites.
     /// </summary>
     public List<SpriteInstanceDrawSettings> Sprites { get; } = new();
 
     /// <summary>
-    /// Draws an individual sprite with the specified settings.
+    /// Adds an individual sprite with the specified settings to the batch.
     /// </summary>
     public void Draw(SpriteInstanceDrawSettings settings)
     {
@@ -23,7 +18,7 @@ public class SpriteBatch
     }
 
     /// <summary>
-    /// Clears all submitted sprites. Does not reset <see cref="UniformSettings"/>.
+    /// Clears all submitted sprites.
     /// </summary>
     public void Clear()
     {

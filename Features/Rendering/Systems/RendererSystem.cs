@@ -123,7 +123,13 @@ public partial class RendererSystem : GameSystem, ISetupSystem, IRenderSystem, I
         clearPass.Clear(commandBuffer, [ActiveWorldColor], worldDepth);
 
         // Render world
+        DrawTiles();
+        DrawPlaceholdersQuery(World);
+        DrawSpritesQuery(World);
+
         RenderCameraQuery(World, commandBuffer);
+
+        spriteBatch.Clear();
 
         // Post process
         bloomPass.Render(commandBuffer, ActiveWorldColor);
@@ -141,18 +147,15 @@ public partial class RendererSystem : GameSystem, ISetupSystem, IRenderSystem, I
     [Query]
     private void RenderCamera([Data] GraphicsCommandBuffer commandBuffer, ref ComponentCameraProjection cameraProjection)
     {
-        spriteBatch.UniformSettings = new SpriteUniformDrawSettings()
+        spriteBatchPass.Render(spriteBatch, new SpriteUniformDrawSettings()
         {
+            CommandBuffer = commandBuffer,
+            ColorTarget = ActiveWorldColor,
+            DepthTarget = worldDepth,
+
             View = cameraProjection.View,
             Projection = cameraProjection.Projection,
-        };
-
-        DrawTiles();
-        DrawPlaceholdersQuery(World);
-        DrawSpritesQuery(World);
-
-        spriteBatchPass.Render(commandBuffer, ActiveWorldColor, worldDepth, spriteBatch);
-        spriteBatch.Clear();
+        });
     }
 
     private void DrawTiles()

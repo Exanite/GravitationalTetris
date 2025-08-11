@@ -75,8 +75,12 @@ public class SpriteBatchPass : ITrackedDisposable
         }).AddTo(disposables);
     }
 
-    public void Render(GraphicsCommandBuffer commandBuffer, Texture2D colorTarget, Texture2D depthTarget, SpriteBatch batch)
+    public void Render(SpriteBatch batch, SpriteUniformDrawSettings uniformSettings)
     {
+        var commandBuffer = uniformSettings.CommandBuffer;
+        var colorTarget = uniformSettings.ColorTarget;
+        var depthTarget = uniformSettings.DepthTarget;
+
         var pipeline = pipelines.GetPipeline(new PipelineCacheKey(colorTarget.Desc.Format, depthTarget.Desc.Format));
 
         commandBuffer.AddBarrier(new Barrier()
@@ -109,8 +113,8 @@ public class SpriteBatchPass : ITrackedDisposable
             {
                 data[0] = new SpriteUniformData()
                 {
-                    View = batch.UniformSettings.View,
-                    Projection = batch.UniformSettings.Projection,
+                    View = uniformSettings.View,
+                    Projection = uniformSettings.Projection,
                 };
             }
             pipeline.UniformsVariable.SetBuffer(uniformBuffers.Current);
