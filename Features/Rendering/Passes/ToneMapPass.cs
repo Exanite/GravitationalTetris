@@ -20,9 +20,7 @@ public class ToneMapPass : ITrackedDisposable
 
     private readonly DisposableCollection disposables = new();
 
-    public ToneMapPass(
-        GraphicsContext graphicsContext,
-        IResourceManager resourceManager)
+    public ToneMapPass(GraphicsContext graphicsContext, IResourceManager resourceManager)
     {
         var vertexModule = resourceManager.GetResource(EngineResources.ScreenTriVertexModule);
         var fragmentModule = resourceManager.GetResource(RenderingMod.ToneMapFragmentModule);

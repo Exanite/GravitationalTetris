@@ -23,7 +23,7 @@ public class SpriteBatchPass : ITrackedDisposable
 
     private readonly DisposableCollection disposables = new();
 
-    public SpriteBatchPass(GraphicsContext graphicsContext, ResourceManager resourceManager)
+    public SpriteBatchPass(GraphicsContext graphicsContext, IResourceManager resourceManager)
     {
         uniformBuffers = new CycledBuffer<SpriteUniformData>(graphicsContext, new BufferDesc()
         {
