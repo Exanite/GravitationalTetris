@@ -12,6 +12,7 @@ using Exanite.GravitationalTetris.Features.Cameras.Components;
 using Exanite.GravitationalTetris.Features.Rendering.Passes;
 using Exanite.GravitationalTetris.Features.Sprites;
 using Exanite.GravitationalTetris.Features.Sprites.Components;
+using Exanite.GravitationalTetris.Features.Sprites.Passes;
 using Exanite.GravitationalTetris.Features.Tetris.Components;
 using Exanite.GravitationalTetris.Features.Tetris.Systems;
 using Exanite.GravitationalTetris.Features.Tiles;

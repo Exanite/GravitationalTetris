@@ -7,7 +7,7 @@ using Exanite.Engine.Graphics;
 using Exanite.ResourceManagement;
 using Silk.NET.Vulkan;
 
-namespace Exanite.GravitationalTetris.Features.Sprites;
+namespace Exanite.GravitationalTetris.Features.Sprites.Passes;
 
 public class SpriteBatchPass : ITrackedDisposable
 {
