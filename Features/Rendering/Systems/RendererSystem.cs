@@ -123,13 +123,18 @@ public partial class RendererSystem : GameSystem, ISetupSystem, IRenderSystem, I
         clearPass.Clear(commandBuffer, [ActiveWorldColor], worldDepth);
 
         // Render world
-        DrawTiles();
-        DrawPlaceholdersQuery(World);
-        DrawSpritesQuery(World);
+        {
+            // Gather data
+            DrawTiles();
+            DrawPlaceholdersQuery(World);
+            DrawSpritesQuery(World);
 
-        RenderCameraQuery(World, commandBuffer);
+            // Render
+            RenderCameraQuery(World, commandBuffer);
 
-        spriteBatch.Clear();
+            // Reset
+            spriteBatch.Clear();
+        }
 
         // Post process
         bloomPass.Render(commandBuffer, ActiveWorldColor);
