@@ -77,25 +77,9 @@ public partial class RendererSystem : GameSystem, ISetupSystem, IRenderSystem, I
         spriteBatchPass = new SpriteBatchPass(graphicsContext, resourceManager).AddTo(disposables);
 
         bloomPass = new BloomPass(graphicsContext, resourceManager).AddTo(disposables);
-
         toneMapPass = new ToneMapPass(graphicsContext, resourceManager).AddTo(disposables);
 
-        copyWorldPass = new CopyColorTexturePass(graphicsContext, resourceManager)
-        {
-            // TODO: This is a hack to make world color actually copy over
-            // Currently all alpha values in the world color texture are 0 and this should be fixed
-            Blend = new ShaderPipelineColorAttachmentBlendDesc()
-            {
-                ColorBlendOp = BlendOp.Add,
-                SrcColorBlendFactor = BlendFactor.One,
-                DstColorBlendFactor = BlendFactor.Zero,
-
-                AlphaBlendOp = BlendOp.Add,
-                SrcAlphaBlendFactor = BlendFactor.Zero,
-                DstAlphaBlendFactor = BlendFactor.One,
-            },
-        }.AddTo(disposables);
-
+        copyWorldPass = new CopyColorTexturePass(graphicsContext, resourceManager).AddTo(disposables);
         copyUiPass = new CopyColorTexturePass(graphicsContext, resourceManager).AddTo(disposables);
     }
 

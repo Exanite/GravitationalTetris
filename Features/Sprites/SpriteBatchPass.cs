@@ -61,8 +61,8 @@ public class SpriteBatchPass : ITrackedDisposable
                         DstColorBlendFactor = BlendFactor.OneMinusSrcAlpha,
 
                         AlphaBlendOp = BlendOp.Add,
-                        SrcAlphaBlendFactor = BlendFactor.Zero,
-                        DstAlphaBlendFactor = BlendFactor.One,
+                        SrcAlphaBlendFactor = BlendFactor.One,
+                        DstAlphaBlendFactor = BlendFactor.OneMinusSrcAlpha,
                     },
                 ],
 

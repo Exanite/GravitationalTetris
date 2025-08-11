@@ -50,8 +50,8 @@ public class ToneMapPass : ITrackedDisposable
                         DstColorBlendFactor = BlendFactor.Zero,
 
                         AlphaBlendOp = BlendOp.Add,
-                        SrcAlphaBlendFactor = BlendFactor.Zero,
-                        DstAlphaBlendFactor = BlendFactor.One,
+                        SrcAlphaBlendFactor = BlendFactor.One,
+                        DstAlphaBlendFactor = BlendFactor.Zero,
                     },
                 ],
             });
