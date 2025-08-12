@@ -85,8 +85,8 @@ public class GravitationalTetrisGameModule : GameModule
 
         scheduler.DefaultGroup.RegisterSystem<AudioSystem>();
 
+        scheduler.DefaultGroup.RegisterSystem<AcquireSwapchainSystem>();
         {
-            scheduler.DefaultGroup.RegisterSystem<AcquireSwapchainSystem>();
 
             // Update data
             scheduler.DefaultGroup.RegisterSystem<CameraProjectionSystem>();
@@ -96,7 +96,7 @@ public class GravitationalTetrisGameModule : GameModule
             scheduler.DefaultGroup.RegisterSystem<AvaloniaRendererSystem>();
             scheduler.DefaultGroup.RegisterSystem<RendererSystem>();
 
-            scheduler.DefaultGroup.RegisterSystem<PresentSwapchainSystem>();
         }
+        scheduler.DefaultGroup.RegisterSystem<PresentSwapchainSystem>();
     }
 }
