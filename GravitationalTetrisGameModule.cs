@@ -93,7 +93,6 @@ public class GravitationalTetrisGameModule : GameModule
             scheduler.DefaultGroup.RegisterSystem<TetrisUiSystem>();
 
             // Render
-            scheduler.DefaultGroup.RegisterSystem<AvaloniaRendererSystem>();
             scheduler.DefaultGroup.RegisterSystem<RendererSystem>();
 
         }
