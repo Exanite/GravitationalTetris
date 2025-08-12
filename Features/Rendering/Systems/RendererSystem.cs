@@ -25,8 +25,8 @@ namespace Exanite.GravitationalTetris.Features.Rendering.Systems;
 public partial class RendererSystem : GameSystem, IRenderSystem, IDisposable
 {
     // Array of size 2
-    private Texture2D[] worldColor = null!;
-    private Texture2D worldDepth = null!;
+    private Texture2D[] worldColor;
+    private Texture2D worldDepth;
 
     private Texture2D ActiveWorldColor => worldColor[0];
     private Texture2D InactiveWorldColor => worldColor[1];
