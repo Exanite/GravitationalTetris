@@ -22,7 +22,7 @@ using Silk.NET.Vulkan;
 
 namespace Exanite.GravitationalTetris.Features.Rendering.Systems;
 
-public partial class RendererSystem : GameSystem, ISetupSystem, IRenderSystem, ITeardownSystem
+public partial class RendererSystem : GameSystem, IRenderSystem, IDisposable
 {
     // Array of size 2
     private Texture2D[] worldColor = null!;
@@ -47,7 +47,6 @@ public partial class RendererSystem : GameSystem, ISetupSystem, IRenderSystem, I
 
     private DisposableCollection disposables = new();
 
-    private readonly GraphicsContext graphicsContext;
     private readonly Window window;
     private readonly Swapchain swapchain;
     private readonly TetrisUiSystem tetrisUiSystem;
@@ -63,7 +62,6 @@ public partial class RendererSystem : GameSystem, ISetupSystem, IRenderSystem, I
         GameTilemapData tilemap,
         ITime time)
     {
-        this.graphicsContext = graphicsContext;
         this.window = window;
         this.swapchain = swapchain;
         this.tetrisUiSystem = tetrisUiSystem;
@@ -82,10 +80,7 @@ public partial class RendererSystem : GameSystem, ISetupSystem, IRenderSystem, I
 
         copyWorldPass = new CopyColorTexturePass(graphicsContext, resourceManager).AddTo(disposables);
         copyUiPass = new CopyColorTexturePass(graphicsContext, resourceManager).AddTo(disposables);
-    }
 
-    public void Setup()
-    {
         worldColor = new Texture2D[2];
         for (var i = 0; i < worldColor.Length; i++)
         {
@@ -248,7 +243,7 @@ public partial class RendererSystem : GameSystem, ISetupSystem, IRenderSystem, I
         worldColor[1] = temp;
     }
 
-    public void Teardown()
+    public void Dispose()
     {
         disposables.Dispose();
     }
