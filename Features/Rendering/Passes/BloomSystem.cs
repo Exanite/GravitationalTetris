@@ -85,7 +85,7 @@ public class BloomPass : ITrackedDisposable
                 MapType = AllocationMapType.SequentialWrite,
             }, 1).AddTo(disposables);
 
-            downPipeline = new ReloadableHandle<ShaderPipeline>((List<IHandle> dependencies, out ShaderPipeline resource, out Action<ShaderPipeline> action) =>
+            downPipeline = new ReloadableHandle<ShaderPipeline>((List<IHandle> dependencies, out ShaderPipeline resource, out ResourceChangedAction<ShaderPipeline> changedAction) =>
             {
                 dependencies.Add(vertexModule);
                 dependencies.Add(downFragmentModule);
@@ -112,16 +112,24 @@ public class BloomPass : ITrackedDisposable
                     ],
                 });
 
-                downPipelineLayout = resource.Layout;
-                downUniformsVariable = downPipelineLayout.GetVariable("Uniforms");
-                downTextureVariable = downPipelineLayout.GetVariable("Texture");
-                downPipelineLayout.GetVariable("TextureSampler").SetSampler(sampler);
-
-                action = resource =>
+                changedAction = (previous, current) =>
                 {
-                    resource.Dispose();
-                    downUniformsVariable = null!;
-                    downTextureVariable = null!;
+                    previous?.Dispose();
+
+                    if (current != null)
+                    {
+                        downPipelineLayout = current.Layout;
+                        downPipelineLayout.GetVariable("TextureSampler").SetSampler(sampler);
+
+                        downUniformsVariable = downPipelineLayout.GetVariable("Uniforms");
+                        downTextureVariable = downPipelineLayout.GetVariable("Texture");
+                    }
+                    else
+                    {
+                        downPipelineLayout = null!;
+                        downUniformsVariable = null!;
+                        downTextureVariable = null!;
+                    }
                 };
             }).AddTo(disposables);
         }
@@ -133,7 +141,7 @@ public class BloomPass : ITrackedDisposable
                 MapType = AllocationMapType.SequentialWrite,
             }, 1).AddTo(disposables);
 
-            upPipeline = new ReloadableHandle<ShaderPipeline>((List<IHandle> dependencies, out ShaderPipeline resource, out Action<ShaderPipeline> action) =>
+            upPipeline = new ReloadableHandle<ShaderPipeline>((List<IHandle> dependencies, out ShaderPipeline resource, out ResourceChangedAction<ShaderPipeline> changedAction) =>
             {
                 dependencies.Add(vertexModule);
                 dependencies.Add(upFragmentModule);
@@ -160,16 +168,24 @@ public class BloomPass : ITrackedDisposable
                     ],
                 });
 
-                upPipelineLayout = resource.Layout;
-                upUniformsVariable = upPipelineLayout.GetVariable("Uniforms");
-                upTextureVariable = upPipelineLayout.GetVariable("Texture");
-                upPipelineLayout.GetVariable("TextureSampler").SetSampler(sampler);
-
-                action = resource =>
+                changedAction = (previous, current) =>
                 {
-                    resource.Dispose();
-                    upUniformsVariable = null!;
-                    upTextureVariable = null!;
+                    previous?.Dispose();
+
+                    if (current != null)
+                    {
+                        upPipelineLayout = current.Layout;
+                        upPipelineLayout.GetVariable("TextureSampler").SetSampler(sampler);
+
+                        upUniformsVariable = upPipelineLayout.GetVariable("Uniforms");
+                        upTextureVariable = upPipelineLayout.GetVariable("Texture");
+                    }
+                    else
+                    {
+                        upPipelineLayout = null!;
+                        upUniformsVariable = null!;
+                        upTextureVariable = null!;
+                    }
                 };
             }).AddTo(disposables);
         }

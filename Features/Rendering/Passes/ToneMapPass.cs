@@ -27,7 +27,7 @@ public class ToneMapPass : ITrackedDisposable
 
         var sampler = new TextureSampler(graphicsContext, new TextureSamplerDesc(Filter.Linear)).AddTo(disposables);
 
-        pipeline = new ReloadableHandle<ShaderPipeline>((List<IHandle> dependencies, out ShaderPipeline resource, out Action<ShaderPipeline> unloadAction) =>
+        pipeline = new ReloadableHandle<ShaderPipeline>((List<IHandle> dependencies, out ShaderPipeline resource, out ResourceChangedAction<ShaderPipeline> changedAction) =>
         {
             dependencies.Add(vertexModule);
             dependencies.Add(fragmentModule);
@@ -54,16 +54,22 @@ public class ToneMapPass : ITrackedDisposable
                 ],
             });
 
-            pipelineLayout = resource.Layout;
-
-            textureVariable = pipelineLayout.GetVariable("Texture");
-            pipelineLayout.GetVariable("TextureSampler").SetSampler(sampler);
-
-            unloadAction = resource =>
+            changedAction = (previous, current) =>
             {
-                resource.Dispose();
-                pipelineLayout = null!;
-                textureVariable = null!;
+                previous?.Dispose();
+
+                if (current != null)
+                {
+                    pipelineLayout = current.Layout;
+                    pipelineLayout.GetVariable("TextureSampler").SetSampler(sampler);
+
+                    textureVariable = pipelineLayout.GetVariable("Texture");
+                }
+                else
+                {
+                    pipelineLayout = null!;
+                    textureVariable = null!;
+                }
             };
         }).AddTo(disposables);
     }
