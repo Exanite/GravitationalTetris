@@ -601,7 +601,7 @@ public partial class TetrisSystem : GameSystem, ISetupSystem, IFrameUpdateSystem
         // This is different from normal tetris because tetris removes an entire row and everything always goes down by one row
         // This first marks all first row blocks and all of the connected blocks as rooted
         // Un-rooted blocks are then moved one position down
-        // If there were any movements, this will return true, meaning that this function should be ran again
+        // If there were any movements, this will return true, meaning that this function should be run again
         bool TryApplyBlockGravity()
         {
             if (isBlockRooted == null || isBlockRooted.GetLength(0) != tilemap.Tiles.GetLength(0) || isBlockRooted.GetLength(1) != tilemap.Tiles.GetLength(1))
