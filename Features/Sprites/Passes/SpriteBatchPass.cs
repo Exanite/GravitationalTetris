@@ -18,25 +18,10 @@ public class SpriteBatchPass : ITrackedDisposable
 
     private readonly ShaderPipelineCache<PipelineCacheKey, PipelineCacheState> pipelines;
 
-    private readonly CycledBuffer<SpriteUniformData> uniformBuffers;
-    private readonly CycledBuffer<SpriteInstanceData> instanceBuffers;
-
     private readonly DisposableCollection disposables = new();
 
     public SpriteBatchPass(GraphicsContext graphicsContext, IResourceManager resourceManager)
     {
-        uniformBuffers = new CycledBuffer<SpriteUniformData>(graphicsContext, new BufferDesc()
-        {
-            Usages = BufferUsageFlags.UniformBufferBit,
-            MapType = AllocationMapType.SequentialWrite,
-        }, 1).AddTo(disposables);
-
-        instanceBuffers = new CycledBuffer<SpriteInstanceData>(graphicsContext, new BufferDesc()
-        {
-            Usages = BufferUsageFlags.VertexBufferBit,
-            MapType = AllocationMapType.SequentialWrite,
-        }, MaxSpritesPerBatch).AddTo(disposables);
-
         var vertexModule = resourceManager.GetResource(BaseMod.SpriteVertexModule);
         var fragmentModule = resourceManager.GetResource(BaseMod.SpriteFragmentModule);
 
@@ -108,8 +93,8 @@ public class SpriteBatchPass : ITrackedDisposable
 
             commandBuffer.BindPipeline(pipeline.Pipeline);
 
-            uniformBuffers.Cycle();
-            using (uniformBuffers.Current.Map(out var data))
+            BufferBindingInfo uniformBuffer;
+            using (commandBuffer.AllocateTempUniformBuffer<SpriteUniformData>(out var data, out uniformBuffer))
             {
                 data[0] = new SpriteUniformData()
                 {
@@ -117,7 +102,7 @@ public class SpriteBatchPass : ITrackedDisposable
                     Projection = uniformSettings.Projection,
                 };
             }
-            pipeline.UniformsVariable.SetBuffer(uniformBuffers.Current);
+            pipeline.UniformsVariable.SetBuffer(uniformBuffer);
 
             foreach (var sprite in batch.Sprites)
             {
@@ -186,12 +171,12 @@ public class SpriteBatchPass : ITrackedDisposable
             return;
         }
 
-        instanceBuffers.Cycle();
-        using (instanceBuffers.Current.Map(out var data))
+        BufferBindingInfo instanceBuffer;
+        using (commandBuffer.AllocateTempVertexBuffer<SpriteInstanceData>(sprites.Count, out var data, out instanceBuffer))
         {
             sprites.AsSpan().CopyTo(data);
         }
-        commandBuffer.BindVertexBuffer(instanceBuffers.Current);
+        commandBuffer.BindVertexBuffer(instanceBuffer);
 
         pipeline.TexturesVariable.SetTextures(textures.AsSpan());
 

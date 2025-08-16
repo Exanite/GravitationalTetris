@@ -14,13 +14,11 @@ public class BloomPass : ITrackedDisposable
 {
     public bool IsDisposed { get; private set; }
 
-    private CycledBuffer<BloomDownUniformData> downUniformBuffer;
     private ReloadableHandle<ShaderPipeline> downPipeline;
     private ShaderPipelineLayout downPipelineLayout = null!;
     private ShaderPipelineVariable downUniformsVariable = null!;
     private ShaderPipelineVariable downTextureVariable = null!;
 
-    private CycledBuffer<BloomUpUniformData> upUniformBuffer;
     private ReloadableHandle<ShaderPipeline> upPipeline;
     private ShaderPipelineLayout upPipelineLayout = null!;
     private ShaderPipelineVariable upUniformsVariable = null!;
@@ -78,117 +76,101 @@ public class BloomPass : ITrackedDisposable
 
         var sampler = new TextureSampler(graphicsContext, new TextureSamplerDesc(Filter.Linear)).AddTo(disposables);
 
+        downPipeline = new ReloadableHandle<ShaderPipeline>((List<IHandle> dependencies, out ShaderPipeline resource, out ResourceChangedAction<ShaderPipeline> changedAction) =>
         {
-            downUniformBuffer = new CycledBuffer<BloomDownUniformData>(graphicsContext, new BufferDesc()
+            dependencies.Add(vertexModule);
+            dependencies.Add(downFragmentModule);
+
+            resource = new ShaderPipeline(graphicsContext, new ShaderPipelineDesc()
             {
-                Usages = BufferUsageFlags.UniformBufferBit,
-                MapType = AllocationMapType.SequentialWrite,
-            }, 1).AddTo(disposables);
+                ShaderModules = [vertexModule.Value, downFragmentModule.Value],
 
-            downPipeline = new ReloadableHandle<ShaderPipeline>((List<IHandle> dependencies, out ShaderPipeline resource, out ResourceChangedAction<ShaderPipeline> changedAction) =>
+                Topology = PrimitiveTopology.TriangleList,
+
+                ColorAttachmentFormats = [Format.R32G32B32A32Sfloat],
+                ColorAttachmentBlends =
+                [
+                    new ShaderPipelineColorAttachmentBlendDesc()
+                    {
+                        ColorBlendOp = BlendOp.Add,
+                        SrcColorBlendFactor = BlendFactor.One,
+                        DstColorBlendFactor = BlendFactor.Zero,
+
+                        AlphaBlendOp = BlendOp.Add,
+                        SrcAlphaBlendFactor = BlendFactor.One,
+                        DstAlphaBlendFactor = BlendFactor.Zero,
+                    },
+                ],
+            });
+
+            changedAction = (previous, current) =>
             {
-                dependencies.Add(vertexModule);
-                dependencies.Add(downFragmentModule);
+                previous?.Dispose();
 
-                resource = new ShaderPipeline(graphicsContext, new ShaderPipelineDesc()
+                if (current != null)
                 {
-                    ShaderModules = [vertexModule.Value, downFragmentModule.Value],
+                    downPipelineLayout = current.Layout;
+                    downPipelineLayout.GetVariable("TextureSampler").SetSampler(sampler);
 
-                    Topology = PrimitiveTopology.TriangleList,
-
-                    ColorAttachmentFormats = [Format.R32G32B32A32Sfloat],
-                    ColorAttachmentBlends =
-                    [
-                        new ShaderPipelineColorAttachmentBlendDesc()
-                        {
-                            ColorBlendOp = BlendOp.Add,
-                            SrcColorBlendFactor = BlendFactor.One,
-                            DstColorBlendFactor = BlendFactor.Zero,
-
-                            AlphaBlendOp = BlendOp.Add,
-                            SrcAlphaBlendFactor = BlendFactor.One,
-                            DstAlphaBlendFactor = BlendFactor.Zero,
-                        },
-                    ],
-                });
-
-                changedAction = (previous, current) =>
+                    downUniformsVariable = downPipelineLayout.GetVariable("Uniforms");
+                    downTextureVariable = downPipelineLayout.GetVariable("Texture");
+                }
+                else
                 {
-                    previous?.Dispose();
+                    downPipelineLayout = null!;
+                    downUniformsVariable = null!;
+                    downTextureVariable = null!;
+                }
+            };
+        }).AddTo(disposables);
 
-                    if (current != null)
-                    {
-                        downPipelineLayout = current.Layout;
-                        downPipelineLayout.GetVariable("TextureSampler").SetSampler(sampler);
-
-                        downUniformsVariable = downPipelineLayout.GetVariable("Uniforms");
-                        downTextureVariable = downPipelineLayout.GetVariable("Texture");
-                    }
-                    else
-                    {
-                        downPipelineLayout = null!;
-                        downUniformsVariable = null!;
-                        downTextureVariable = null!;
-                    }
-                };
-            }).AddTo(disposables);
-        }
-
+        upPipeline = new ReloadableHandle<ShaderPipeline>((List<IHandle> dependencies, out ShaderPipeline resource, out ResourceChangedAction<ShaderPipeline> changedAction) =>
         {
-            upUniformBuffer = new CycledBuffer<BloomUpUniformData>(graphicsContext, new BufferDesc()
+            dependencies.Add(vertexModule);
+            dependencies.Add(upFragmentModule);
+
+            resource = new ShaderPipeline(graphicsContext, new ShaderPipelineDesc()
             {
-                Usages = BufferUsageFlags.UniformBufferBit,
-                MapType = AllocationMapType.SequentialWrite,
-            }, 1).AddTo(disposables);
+                ShaderModules = [vertexModule.Value, upFragmentModule.Value],
 
-            upPipeline = new ReloadableHandle<ShaderPipeline>((List<IHandle> dependencies, out ShaderPipeline resource, out ResourceChangedAction<ShaderPipeline> changedAction) =>
+                Topology = PrimitiveTopology.TriangleList,
+
+                ColorAttachmentFormats = [Format.R32G32B32A32Sfloat],
+                ColorAttachmentBlends =
+                [
+                    new ShaderPipelineColorAttachmentBlendDesc()
+                    {
+                        ColorBlendOp = BlendOp.Add,
+                        SrcColorBlendFactor = BlendFactor.One,
+                        DstColorBlendFactor = BlendFactor.One,
+
+                        AlphaBlendOp = BlendOp.Add,
+                        SrcAlphaBlendFactor = BlendFactor.One,
+                        DstAlphaBlendFactor = BlendFactor.One,
+                    },
+                ],
+            });
+
+            changedAction = (previous, current) =>
             {
-                dependencies.Add(vertexModule);
-                dependencies.Add(upFragmentModule);
+                previous?.Dispose();
 
-                resource = new ShaderPipeline(graphicsContext, new ShaderPipelineDesc()
+                if (current != null)
                 {
-                    ShaderModules = [vertexModule.Value, upFragmentModule.Value],
+                    upPipelineLayout = current.Layout;
+                    upPipelineLayout.GetVariable("TextureSampler").SetSampler(sampler);
 
-                    Topology = PrimitiveTopology.TriangleList,
-
-                    ColorAttachmentFormats = [Format.R32G32B32A32Sfloat],
-                    ColorAttachmentBlends =
-                    [
-                        new ShaderPipelineColorAttachmentBlendDesc()
-                        {
-                            ColorBlendOp = BlendOp.Add,
-                            SrcColorBlendFactor = BlendFactor.One,
-                            DstColorBlendFactor = BlendFactor.One,
-
-                            AlphaBlendOp = BlendOp.Add,
-                            SrcAlphaBlendFactor = BlendFactor.One,
-                            DstAlphaBlendFactor = BlendFactor.One,
-                        },
-                    ],
-                });
-
-                changedAction = (previous, current) =>
+                    upUniformsVariable = upPipelineLayout.GetVariable("Uniforms");
+                    upTextureVariable = upPipelineLayout.GetVariable("Texture");
+                }
+                else
                 {
-                    previous?.Dispose();
-
-                    if (current != null)
-                    {
-                        upPipelineLayout = current.Layout;
-                        upPipelineLayout.GetVariable("TextureSampler").SetSampler(sampler);
-
-                        upUniformsVariable = upPipelineLayout.GetVariable("Uniforms");
-                        upTextureVariable = upPipelineLayout.GetVariable("Texture");
-                    }
-                    else
-                    {
-                        upPipelineLayout = null!;
-                        upUniformsVariable = null!;
-                        upTextureVariable = null!;
-                    }
-                };
-            }).AddTo(disposables);
-        }
+                    upPipelineLayout = null!;
+                    upUniformsVariable = null!;
+                    upTextureVariable = null!;
+                }
+            };
+        }).AddTo(disposables);
     }
 
     public void Render(GraphicsCommandBuffer commandBuffer, Texture2D colorSourceAndTarget)
@@ -233,14 +215,14 @@ public class BloomPass : ITrackedDisposable
 
                     commandBuffer.BindPipeline(downPipeline.Value);
 
-                    downUniformBuffer.Cycle();
-                    using (downUniformBuffer.Current.Map(out var downUniformData))
+                    BufferBindingInfo downUniformBuffer;
+                    using (commandBuffer.AllocateTempUniformBuffer<BloomDownUniformData>(out var data, out downUniformBuffer))
                     {
-                        downUniformData[0].FilterStep = Vector2.One / currentTarget.Desc.Size;
+                        data[0].FilterStep = Vector2.One / currentTarget.Desc.Size;
                     }
 
                     downTextureVariable.SetTexture(previousTarget);
-                    downUniformsVariable.SetBuffer(downUniformBuffer.Current);
+                    downUniformsVariable.SetBuffer(downUniformBuffer);
                     commandBuffer.BindPipelineLayout(PipelineBindPoint.Graphics, downPipelineLayout);
 
                     commandBuffer.Draw(new DrawDesc(3));
@@ -252,10 +234,10 @@ public class BloomPass : ITrackedDisposable
             var step = 0.005f;
             var upFilterStep = new Vector2(step / aspectRatio, step);
 
-            upUniformBuffer.Cycle();
-            using (upUniformBuffer.Current.Map(out var upUniformData))
+            BufferBindingInfo upUniformBuffer;
+            using (commandBuffer.AllocateTempUniformBuffer<BloomUpUniformData>(out var data, out upUniformBuffer))
             {
-                upUniformData[0] = new BloomUpUniformData
+                data[0] = new BloomUpUniformData
                 {
                     FilterStep = upFilterStep,
                     Alpha = 1,
@@ -296,7 +278,7 @@ public class BloomPass : ITrackedDisposable
                     commandBuffer.BindPipeline(upPipeline.Value);
 
                     upTextureVariable.SetTexture(previousTarget);
-                    upUniformsVariable.SetBuffer(upUniformBuffer.Current);
+                    upUniformsVariable.SetBuffer(upUniformBuffer);
                     commandBuffer.BindPipelineLayout(PipelineBindPoint.Graphics, upPipelineLayout);
 
                     commandBuffer.Draw(new DrawDesc(3));
@@ -332,10 +314,9 @@ public class BloomPass : ITrackedDisposable
             {
                 commandBuffer.BindPipeline(upPipeline.Value);
 
-                upUniformBuffer.Cycle();
-                using (upUniformBuffer.Current.Map(out var upUniformData))
+                using (commandBuffer.AllocateTempUniformBuffer<BloomUpUniformData>(out var data, out upUniformBuffer))
                 {
-                    upUniformData[0] = new BloomUpUniformData
+                    data[0] = new BloomUpUniformData
                     {
                         FilterStep = upFilterStep,
                         Alpha = BloomIntensity,
@@ -343,7 +324,7 @@ public class BloomPass : ITrackedDisposable
                 }
 
                 upTextureVariable.SetTexture(renderTextures[0]);
-                upUniformsVariable.SetBuffer(upUniformBuffer.Current);
+                upUniformsVariable.SetBuffer(upUniformBuffer);
                 commandBuffer.BindPipelineLayout(PipelineBindPoint.Graphics, upPipelineLayout);
 
                 commandBuffer.Draw(new DrawDesc(3));
