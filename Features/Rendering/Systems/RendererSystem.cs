@@ -42,8 +42,8 @@ public partial class RendererSystem : GameSystem, IRenderSystem, IDisposable
     private readonly BloomPass bloomPass;
     private readonly ToneMapPass toneMapPass;
 
-    private readonly CopyColorTexturePass copyWorldPass;
-    private readonly CopyColorTexturePass copyUiPass;
+    private readonly CopyColorPass copyWorldPass;
+    private readonly CopyColorPass copyUiPass;
 
     private DisposableCollection disposables = new();
 
@@ -78,8 +78,8 @@ public partial class RendererSystem : GameSystem, IRenderSystem, IDisposable
         bloomPass = new BloomPass(graphicsContext, resourceManager).AddTo(disposables);
         toneMapPass = new ToneMapPass(graphicsContext, resourceManager).AddTo(disposables);
 
-        copyWorldPass = new CopyColorTexturePass(graphicsContext, resourceManager).AddTo(disposables);
-        copyUiPass = new CopyColorTexturePass(graphicsContext, resourceManager).AddTo(disposables);
+        copyWorldPass = new CopyColorPass(graphicsContext, resourceManager).AddTo(disposables);
+        copyUiPass = new CopyColorPass(graphicsContext, resourceManager).AddTo(disposables);
 
         worldColor = new Texture2D[2];
         for (var i = 0; i < worldColor.Length; i++)
