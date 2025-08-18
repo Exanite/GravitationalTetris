@@ -39,7 +39,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <AvaloniaResource Include="Content/Base/FieryTurk.ttf"/>
+    <Folder Include="Content\Exanite.GravitationalTetris\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AvaloniaResource Include="Content\Exanite.GravitationalTetris\Base\FieryTurk.ttf" />
   </ItemGroup>
 
   <Import Project="..\Exanite.Engine.Building\LinkRawContent.targets"/>
