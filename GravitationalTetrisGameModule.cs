@@ -1,6 +1,5 @@
 ﻿using System;
 using Autofac;
-using Exanite.Engine.Avalonia.Systems;
 using Exanite.Engine.Ecs.Scheduling;
 using Exanite.Engine.Framework;
 using Exanite.Engine.Graphics;
