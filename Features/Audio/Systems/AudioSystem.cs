@@ -11,16 +11,15 @@ using SoundFlow.Abstracts.Devices;
 using SoundFlow.Backends.MiniAudio;
 using SoundFlow.Components;
 using SoundFlow.Enums;
-using SoundFlow.Providers;
 
 namespace Exanite.GravitationalTetris.Features.Audio.Systems;
 
 public partial class AudioSystem : GameSystem, IStartSystem, IStopSystem, IFrameUpdateSystem, IDisposable
 {
-    public const string SwitchGravity = "/Base/Audio/SwitchGravity.wav";
-    public const string RotateShape = "/Base/Audio/RotateShape.wav";
-    public const string ClearTile = "/Base/Audio/ClearTile.wav";
-    public const string Restart = "/Base/Audio/Restart.wav";
+    public const string SwitchGravity = "/Exanite.GravitationalTetris/Audio/SwitchGravity.wav";
+    public const string RotateShape = "/Exanite.GravitationalTetris/Audio/RotateShape.wav";
+    public const string ClearTile = "/Exanite.GravitationalTetris/Audio/ClearTile.wav";
+    public const string Restart = "/Exanite.GravitationalTetris/Audio/Restart.wav";
 
     private EcsCommandBuffer commandBuffer = null!;
     private readonly AudioPlaybackDevice playbackDevice;

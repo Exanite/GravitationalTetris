@@ -71,8 +71,8 @@ public class BloomPass : ITrackedDisposable
         this.graphicsContext = graphicsContext;
         
         var vertexModule = resourceManager.GetResource(EngineResources.ScreenTriVertexModule);
-        var downFragmentModule = resourceManager.GetResource(RenderingMod.BloomDownFragmentModule);
-        var upFragmentModule = resourceManager.GetResource(RenderingMod.BloomUpFragmentModule);
+        var downFragmentModule = resourceManager.GetResource(GravitationalTetrisResources.BloomDownFragmentModule);
+        var upFragmentModule = resourceManager.GetResource(GravitationalTetrisResources.BloomUpFragmentModule);
 
         var sampler = new TextureSampler(graphicsContext, new TextureSamplerDesc(Filter.Linear)).AddTo(disposables);
 

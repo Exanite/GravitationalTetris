@@ -68,8 +68,8 @@ public partial class RendererSystem : GameSystem, IRenderSystem, IDisposable
         this.tilemap = tilemap;
         this.time = time;
 
-        emptyTileTexture = resourceManager.GetResource(BaseMod.TileNone);
-        placeholderTileTexture = resourceManager.GetResource(BaseMod.TilePlaceholder);
+        emptyTileTexture = resourceManager.GetResource(GravitationalTetrisResources.TileNone);
+        placeholderTileTexture = resourceManager.GetResource(GravitationalTetrisResources.TilePlaceholder);
 
         clearPass = new ClearPass().AddTo(disposables);
 
@@ -171,7 +171,7 @@ public partial class RendererSystem : GameSystem, IRenderSystem, IDisposable
                 {
                     texture = tile.Shape.DefaultTexture;
 
-                    if (y + 1 == tilemap.Tiles.GetLength(1) || tilemap.Tiles[x, y + 1].Shape == null)
+                    if (GravitationalTetrisConstants.IsWinter && (y + 1 == tilemap.Tiles.GetLength(1) || tilemap.Tiles[x, y + 1].Shape == null))
                     {
                         texture = tile.Shape.SnowTexture;
                     }

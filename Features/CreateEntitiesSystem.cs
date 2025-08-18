@@ -58,7 +58,9 @@ public class CreateEntitiesSystem : GameSystem, IStartSystem
                 Position = new Vector2(4f, 0),
                 Size = new Vector2(1, 1),
             })
-            .Set(new ComponentSprite(resourceManager.GetResource(BaseMod.Player)))
+            .Set(new ComponentSprite(GravitationalTetrisConstants.IsWinter
+                ? resourceManager.GetResource(GravitationalTetrisResources.Winter.Player)
+                : resourceManager.GetResource(GravitationalTetrisResources.Player)))
             .Set(new ComponentRigidbody(playerBody))
             .Set(new ComponentVelocity())
             .Set(new ComponentMovementSpeed(5))

@@ -23,7 +23,7 @@ public class ToneMapPass : ITrackedDisposable
     public ToneMapPass(GraphicsContext graphicsContext, IResourceManager resourceManager)
     {
         var vertexModule = resourceManager.GetResource(EngineResources.ScreenTriVertexModule);
-        var fragmentModule = resourceManager.GetResource(RenderingMod.ToneMapFragmentModule);
+        var fragmentModule = resourceManager.GetResource(GravitationalTetrisResources.ToneMapFragmentModule);
 
         var sampler = new TextureSampler(graphicsContext, new TextureSamplerDesc(Filter.Linear)).AddTo(disposables);
 

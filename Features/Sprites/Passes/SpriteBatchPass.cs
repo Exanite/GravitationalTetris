@@ -22,8 +22,8 @@ public class SpriteBatchPass : ITrackedDisposable
 
     public SpriteBatchPass(GraphicsContext graphicsContext, IResourceManager resourceManager)
     {
-        var vertexModule = resourceManager.GetResource(BaseMod.SpriteVertexModule);
-        var fragmentModule = resourceManager.GetResource(BaseMod.SpriteFragmentModule);
+        var vertexModule = resourceManager.GetResource(GravitationalTetrisResources.SpriteVertexModule);
+        var fragmentModule = resourceManager.GetResource(GravitationalTetrisResources.SpriteFragmentModule);
 
         var sampler = new TextureSampler(graphicsContext, new TextureSamplerDesc(Filter.Nearest)).AddTo(disposables);
 

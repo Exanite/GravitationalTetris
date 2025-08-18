@@ -51,7 +51,7 @@ public class GravitationalTetrisGameModule : GameModule
             return new WindowSettings()
             {
                 Name = "Gravitational Tetris",
-                Icon = resourceManager.GetResource(BaseMod.WindowIcon).Value,
+                Icon = resourceManager.GetResource(GravitationalTetrisResources.WindowIcon).Value,
             };
         }).SingleInstance();
 
@@ -62,10 +62,7 @@ public class GravitationalTetrisGameModule : GameModule
         builder.RegisterType<PhysicsWorld>().SingleInstance();
 
         // Resources
-        builder.RegisterFolderFileSystem("GravitationalTetris", "/Base/", "Base");
-        builder.RegisterFolderFileSystem("GravitationalTetris", "/Winter/", "Winter/Content");
-        builder.RegisterFolderFileSystem("GravitationalTetris", "/Base/", "Winter/Overrides/Base");
-        builder.RegisterFolderFileSystem("GravitationalTetris", "/Rendering/", "Rendering");
+        builder.RegisterFolderFileSystem("GravitationalTetris", "/", "");
     }
 
     protected override void OnConfigureSystems(SystemScheduler scheduler)
