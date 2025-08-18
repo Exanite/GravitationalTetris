@@ -71,7 +71,7 @@ public partial class RendererSystem : GameSystem, IRenderSystem, IDisposable
         emptyTileTexture = resourceManager.GetResource(BaseMod.TileNone);
         placeholderTileTexture = resourceManager.GetResource(BaseMod.TilePlaceholder);
 
-        clearPass = new ClearPass();
+        clearPass = new ClearPass().AddTo(disposables);
 
         spriteBatchPass = new SpriteBatchPass(graphicsContext, resourceManager).AddTo(disposables);
 
