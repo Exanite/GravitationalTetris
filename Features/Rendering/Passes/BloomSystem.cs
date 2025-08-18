@@ -70,7 +70,7 @@ public class BloomPass : ITrackedDisposable
     {
         this.graphicsContext = graphicsContext;
         
-        var vertexModule = resourceManager.GetResource(EngineResources.ScreenTriVertexModule);
+        var vertexModule = resourceManager.GetResource(EngineResources.Rendering.ScreenTriVertexModule);
         var downFragmentModule = resourceManager.GetResource(GravitationalTetrisResources.BloomDownFragmentModule);
         var upFragmentModule = resourceManager.GetResource(GravitationalTetrisResources.BloomUpFragmentModule);
 
