@@ -7,33 +7,31 @@ struct UniformData
 struct Input
 {
     // Per vertex
-    uint VertexId : SV_VERTEXID;
+    uint VertexId : SV_VertexId;
 
     // Per instance
-    float4 WorldR1 : ATTRIB0;
-    float4 WorldR2 : ATTRIB1;
-    float4 WorldR3 : ATTRIB2;
-    float4 WorldR4 : ATTRIB3;
+    float4 WorldR1 : Attrib0;
+    float4 WorldR2 : Attrib1;
+    float4 WorldR3 : Attrib2;
+    float4 WorldR4 : Attrib3;
 
-    float4 Color : ATTRIB4;
-    float2 UvOffset : ATTRIB5;
-    float2 UvSize : ATTRIB6;
-    uint TextureIndex : ATTRIB7;
+    float4 Color : Attrib4;
+    float2 UvOffset : Attrib5;
+    float2 UvSize : Attrib6;
+    uint TextureIndex : Attrib7;
 };
 
 struct Output
 {
-    float4 Pos : SV_POSITION;
-    float2 Uv : TEX_COORD;
-    float4 Color: COLOR;
-    uint TextureIndex : TEX_INDEX;
+    float4 Pos : SV_Position;
+    float2 Uv : Uv;
+    float4 Color: Color;
+    uint TextureIndex : TexIndex;
 };
 
 [[vk::binding(0, 0)]] ConstantBuffer<UniformData> Uniforms;
 
-void main(
-    in Input input,
-    out Output output)
+void main(in Input input, out Output output)
 {
     // This is intentionally out of order for compatibility purposes
     float4 positionUvs[4];

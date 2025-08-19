@@ -10,19 +10,17 @@ struct UniformData
 
 struct Input
 {
-    float4 Pos : SV_POSITION;
-    float2 Uv : TEX_COORD;
+    float4 Pos : SV_Position;
+    float2 Uv : Uv;
 };
 
 struct Output
 {
-    float4 Color : SV_TARGET;
+    float4 Color : SV_Target;
 };
 
 // Based on https://learnopengl.com/Guest-Articles/2022/Phys.-Based-Bloom
-void main(
-    in Input input,
-    out Output output)
+void main(in Input input, out Output output)
 {
     float2 uv = float2(input.Uv.x, 1 - input.Uv.y);
 

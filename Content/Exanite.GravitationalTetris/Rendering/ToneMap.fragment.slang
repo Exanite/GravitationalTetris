@@ -3,12 +3,12 @@
 
 struct Input
 {
-    float2 Uv : TEX_COORD;
+    float2 Uv : Uv;
 };
 
 struct Output
 {
-    float4 Color : SV_TARGET;
+    float4 Color : SV_Target;
 };
 
 // From https://www.shadertoy.com/view/XsGfWV
@@ -31,9 +31,7 @@ float3 TonemapAces(float3 color)
     return mul(a / b, m2);
 }
 
-void main(
-    in Input input,
-    out Output output)
+void main(in Input input, out Output output)
 {
     float2 uv = float2(input.Uv.x, 1 - input.Uv.y);
     float4 color = Texture.Sample(TextureSampler, uv);
