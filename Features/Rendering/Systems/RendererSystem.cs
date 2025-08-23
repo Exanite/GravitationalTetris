@@ -111,8 +111,8 @@ public partial class RendererSystem : GameSystem, IRenderSystem, IDisposable
         var commandBuffer = swapchain.CommandBuffer;
 
         // Resize world render targets
-        ActiveWorldColor.Resize(window.Size);
-        worldDepth.Resize(window.Size);
+        ActiveWorldColor.SetSize(window.Size);
+        worldDepth.SetSize(window.Size);
 
         // Clear world render targets
         clearPass.Clear(commandBuffer, [ActiveWorldColor], worldDepth);
