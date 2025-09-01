@@ -205,7 +205,7 @@ public class BloomPass : ITrackedDisposable
                     DstStages = PipelineStageFlags2.FragmentShaderBit,
                     DstAccesses = AccessFlags2.ShaderReadBit,
 
-                    SrcLayout = previousTarget.Desc.Layout,
+                    SrcLayout = previousTarget.Layout,
                     DstLayout = ImageLayout.ReadOnlyOptimal,
                 });
 
@@ -257,7 +257,7 @@ public class BloomPass : ITrackedDisposable
                     DstStages = PipelineStageFlags2.ColorAttachmentOutputBit,
                     DstAccesses = AccessFlags2.ColorAttachmentReadBit | AccessFlags2.ColorAttachmentWriteBit,
 
-                    SrcLayout = currentTarget.Desc.Layout,
+                    SrcLayout = currentTarget.Layout,
                     DstLayout = ImageLayout.AttachmentOptimal,
                 });
 
@@ -269,7 +269,7 @@ public class BloomPass : ITrackedDisposable
                     DstStages = PipelineStageFlags2.FragmentShaderBit,
                     DstAccesses = AccessFlags2.ShaderReadBit,
 
-                    SrcLayout = previousTarget.Desc.Layout,
+                    SrcLayout = previousTarget.Layout,
                     DstLayout = ImageLayout.ReadOnlyOptimal,
                 });
 
@@ -294,7 +294,7 @@ public class BloomPass : ITrackedDisposable
                 DstStages = PipelineStageFlags2.ColorAttachmentOutputBit,
                 DstAccesses = AccessFlags2.ColorAttachmentReadBit | AccessFlags2.ColorAttachmentWriteBit,
 
-                SrcLayout = colorSourceAndTarget.Desc.Layout,
+                SrcLayout = colorSourceAndTarget.Layout,
                 DstLayout = ImageLayout.AttachmentOptimal,
             });
 
@@ -306,7 +306,7 @@ public class BloomPass : ITrackedDisposable
                 DstStages = PipelineStageFlags2.FragmentShaderBit,
                 DstAccesses = AccessFlags2.ShaderReadBit,
 
-                SrcLayout = renderTextures[0].Desc.Layout,
+                SrcLayout = renderTextures[0].Layout,
                 DstLayout = ImageLayout.ReadOnlyOptimal,
             });
 
