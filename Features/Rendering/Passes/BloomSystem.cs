@@ -185,10 +185,10 @@ public class BloomPass : ITrackedDisposable
                 var previousTarget = i > 0 ? renderTextures[i - 1] : colorSourceAndTarget;
                 var currentTarget = renderTextures[i];
 
-                commandBuffer.AddTransition(currentTarget, new TransitionDesc(currentTarget.State, ResourceState.Attachment));
-                commandBuffer.AddTransition(previousTarget, new TransitionDesc(previousTarget.State, ResourceState.FragmentShaderRead));
+                commandBuffer.AddTransition(currentTarget, ResourceState.Attachment);
+                commandBuffer.AddTransition(previousTarget, ResourceState.FragmentShaderRead);
 
-                using (commandBuffer.BeginRenderPass(new RenderPassDesc([currentTarget])))
+                using (commandBuffer.BeginRenderPass([currentTarget]))
                 {
                     commandBuffer.ClearColorAttachment(Vector4.Zero);
 
@@ -204,7 +204,7 @@ public class BloomPass : ITrackedDisposable
                     downUniformsVariable.SetBuffer(downUniformBuffer);
                     commandBuffer.BindPipelineLayout(PipelineBindPoint.Graphics, downPipelineLayout);
 
-                    commandBuffer.Draw(new DrawDesc(3));
+                    commandBuffer.Draw(3);
                 }
             }
 
@@ -228,10 +228,10 @@ public class BloomPass : ITrackedDisposable
                 var previousTarget = renderTextures[i + 1];
                 var currentTarget = renderTextures[i];
 
-                commandBuffer.AddTransition(currentTarget, new TransitionDesc(currentTarget.State, ResourceState.Attachment));
-                commandBuffer.AddTransition(previousTarget, new TransitionDesc(previousTarget.State, ResourceState.FragmentShaderRead));
+                commandBuffer.AddTransition(currentTarget, ResourceState.Attachment);
+                commandBuffer.AddTransition(previousTarget, ResourceState.FragmentShaderRead);
 
-                using (commandBuffer.BeginRenderPass(new RenderPassDesc([currentTarget])))
+                using (commandBuffer.BeginRenderPass([currentTarget]))
                 {
                     commandBuffer.BindPipeline(upPipeline.Value);
 
@@ -239,15 +239,15 @@ public class BloomPass : ITrackedDisposable
                     upUniformsVariable.SetBuffer(upUniformBuffer);
                     commandBuffer.BindPipelineLayout(PipelineBindPoint.Graphics, upPipelineLayout);
 
-                    commandBuffer.Draw(new DrawDesc(3));
+                    commandBuffer.Draw(3);
                 }
             }
 
             // Composite bloom with source
-            commandBuffer.AddTransition(colorSourceAndTarget, new TransitionDesc(colorSourceAndTarget.State, ResourceState.Attachment));
-            commandBuffer.AddTransition(renderTextures[0], new TransitionDesc(renderTextures[0].State, ResourceState.FragmentShaderRead));
+            commandBuffer.AddTransition(colorSourceAndTarget, ResourceState.Attachment);
+            commandBuffer.AddTransition(renderTextures[0], ResourceState.FragmentShaderRead);
 
-            using (commandBuffer.BeginRenderPass(new RenderPassDesc([colorSourceAndTarget])))
+            using (commandBuffer.BeginRenderPass([colorSourceAndTarget]))
             {
                 commandBuffer.BindPipeline(upPipeline.Value);
 
@@ -264,7 +264,7 @@ public class BloomPass : ITrackedDisposable
                 upUniformsVariable.SetBuffer(upUniformBuffer);
                 commandBuffer.BindPipelineLayout(PipelineBindPoint.Graphics, upPipelineLayout);
 
-                commandBuffer.Draw(new DrawDesc(3));
+                commandBuffer.Draw(3);
             }
         }
     }

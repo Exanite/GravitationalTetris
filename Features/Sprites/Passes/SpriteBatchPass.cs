@@ -68,10 +68,10 @@ public class SpriteBatchPass : ITrackedDisposable
 
         var pipeline = pipelines.GetPipeline(new PipelineCacheKey(colorTarget.Desc.Format, depthTarget.Desc.Format));
 
-        commandBuffer.AddTransition(colorTarget, new TransitionDesc(colorTarget.State, ResourceState.Attachment));
-        commandBuffer.AddTransition(depthTarget, new TransitionDesc(depthTarget.State, ResourceState.Attachment));
+        commandBuffer.AddTransition(colorTarget, ResourceState.Attachment);
+        commandBuffer.AddTransition(depthTarget, ResourceState.Attachment);
 
-        using (commandBuffer.BeginRenderPass(new RenderPassDesc([colorTarget], depthTarget)))
+        using (commandBuffer.BeginRenderPass([colorTarget], depthTarget))
         {
             using var _ = ListPool<Texture2D>.Acquire(out var textures);
             using var __ = ListPool<SpriteInstanceData>.Acquire(out var sprites);
@@ -167,7 +167,7 @@ public class SpriteBatchPass : ITrackedDisposable
 
         commandBuffer.BindPipelineLayout(PipelineBindPoint.Graphics, pipeline.Pipeline.Layout);
 
-        commandBuffer.Draw(new DrawDesc(4, sprites.Count));
+        commandBuffer.Draw(4, sprites.Count);
     }
 
     private void ReleaseResources()
