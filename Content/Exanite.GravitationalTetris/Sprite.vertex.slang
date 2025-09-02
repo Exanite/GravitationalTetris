@@ -23,7 +23,7 @@ struct Input
 
 struct Output
 {
-    float4 Pos : SV_Position;
+    float4 Position : SV_Position;
     float2 Uv : Uv;
     float4 Color: Color;
     uint TextureIndex : TexIndex;
@@ -45,10 +45,10 @@ void main(in Input input, out Output output)
 
     float4x4 world = float4x4(input.WorldR1, input.WorldR2, input.WorldR3, input.WorldR4);
 
-    output.Pos = position;
-    output.Pos = mul(output.Pos, world);
-    output.Pos = mul(output.Pos, Uniforms.View);
-    output.Pos = mul(output.Pos, Uniforms.Projection);
+    output.Position = position;
+    output.Position = mul(output.Position, world);
+    output.Position = mul(output.Position, Uniforms.View);
+    output.Position = mul(output.Position, Uniforms.Projection);
 
     output.Uv = float2(uv.x * input.UvSize.x + input.UvOffset.x, uv.y * input.UvSize.y + input.UvOffset.y);
     output.Color = input.Color;

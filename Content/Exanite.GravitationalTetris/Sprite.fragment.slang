@@ -3,7 +3,7 @@
 
 struct Input
 {
-    float4 Pos : SV_Position;
+    float4 Position : SV_Position;
     float2 Uv : Uv;
     float4 Color: Color;
     uint TextureIndex : TexIndex;
