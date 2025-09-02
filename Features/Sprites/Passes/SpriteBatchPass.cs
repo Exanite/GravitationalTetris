@@ -68,23 +68,8 @@ public class SpriteBatchPass : ITrackedDisposable
 
         var pipeline = pipelines.GetPipeline(new PipelineCacheKey(colorTarget.Desc.Format, depthTarget.Desc.Format));
 
-        commandBuffer.AddBarrier(new Barrier()
-        {
-            SrcStages = PipelineStageFlags2.ColorAttachmentOutputBit,
-            SrcAccesses = AccessFlags2.ColorAttachmentWriteBit,
-
-            DstStages = PipelineStageFlags2.ColorAttachmentOutputBit,
-            DstAccesses = AccessFlags2.ColorAttachmentWriteBit,
-        });
-
-        commandBuffer.AddBarrier(new Barrier()
-        {
-            SrcStages = PipelineStageFlags2.LateFragmentTestsBit,
-            SrcAccesses = AccessFlags2.DepthStencilAttachmentWriteBit,
-
-            DstStages = PipelineStageFlags2.EarlyFragmentTestsBit,
-            DstAccesses = AccessFlags2.DepthStencilAttachmentReadBit | AccessFlags2.DepthStencilAttachmentWriteBit,
-        });
+        commandBuffer.AddTransition(colorTarget, new TransitionDesc(colorTarget.State, ResourceState.Attachment));
+        commandBuffer.AddTransition(depthTarget, new TransitionDesc(depthTarget.State, ResourceState.Attachment));
 
         using (commandBuffer.BeginRenderPass(new RenderPassDesc([colorTarget], depthTarget)))
         {

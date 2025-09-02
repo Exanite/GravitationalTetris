@@ -185,29 +185,8 @@ public class BloomPass : ITrackedDisposable
                 var previousTarget = i > 0 ? renderTextures[i - 1] : colorSourceAndTarget;
                 var currentTarget = renderTextures[i];
 
-                commandBuffer.AddBarrier(new TextureBarrier(currentTarget)
-                {
-                    SrcStages = PipelineStageFlags2.FragmentShaderBit,
-                    SrcAccesses = AccessFlags2.ShaderReadBit,
-
-                    DstStages = PipelineStageFlags2.ColorAttachmentOutputBit,
-                    DstAccesses = AccessFlags2.ColorAttachmentReadBit | AccessFlags2.ColorAttachmentWriteBit,
-
-                    SrcLayout = ImageLayout.Undefined,
-                    DstLayout = ImageLayout.AttachmentOptimal,
-                });
-
-                commandBuffer.AddBarrier(new TextureBarrier(previousTarget)
-                {
-                    SrcStages = PipelineStageFlags2.ColorAttachmentOutputBit,
-                    SrcAccesses = AccessFlags2.ColorAttachmentWriteBit,
-
-                    DstStages = PipelineStageFlags2.FragmentShaderBit,
-                    DstAccesses = AccessFlags2.ShaderReadBit,
-
-                    SrcLayout = previousTarget.Layout,
-                    DstLayout = ImageLayout.ReadOnlyOptimal,
-                });
+                commandBuffer.AddTransition(currentTarget, new TransitionDesc(currentTarget.State, ResourceState.Attachment));
+                commandBuffer.AddTransition(previousTarget, new TransitionDesc(previousTarget.State, ResourceState.FragmentShaderRead));
 
                 using (commandBuffer.BeginRenderPass(new RenderPassDesc([currentTarget])))
                 {
@@ -249,29 +228,8 @@ public class BloomPass : ITrackedDisposable
                 var previousTarget = renderTextures[i + 1];
                 var currentTarget = renderTextures[i];
 
-                commandBuffer.AddBarrier(new TextureBarrier(currentTarget)
-                {
-                    SrcStages = PipelineStageFlags2.FragmentShaderBit,
-                    SrcAccesses = AccessFlags2.ShaderReadBit,
-
-                    DstStages = PipelineStageFlags2.ColorAttachmentOutputBit,
-                    DstAccesses = AccessFlags2.ColorAttachmentReadBit | AccessFlags2.ColorAttachmentWriteBit,
-
-                    SrcLayout = currentTarget.Layout,
-                    DstLayout = ImageLayout.AttachmentOptimal,
-                });
-
-                commandBuffer.AddBarrier(new TextureBarrier(previousTarget)
-                {
-                    SrcStages = PipelineStageFlags2.ColorAttachmentOutputBit,
-                    SrcAccesses = AccessFlags2.ColorAttachmentWriteBit,
-
-                    DstStages = PipelineStageFlags2.FragmentShaderBit,
-                    DstAccesses = AccessFlags2.ShaderReadBit,
-
-                    SrcLayout = previousTarget.Layout,
-                    DstLayout = ImageLayout.ReadOnlyOptimal,
-                });
+                commandBuffer.AddTransition(currentTarget, new TransitionDesc(currentTarget.State, ResourceState.Attachment));
+                commandBuffer.AddTransition(previousTarget, new TransitionDesc(previousTarget.State, ResourceState.FragmentShaderRead));
 
                 using (commandBuffer.BeginRenderPass(new RenderPassDesc([currentTarget])))
                 {
@@ -286,29 +244,8 @@ public class BloomPass : ITrackedDisposable
             }
 
             // Composite bloom with source
-            commandBuffer.AddBarrier(new TextureBarrier(colorSourceAndTarget)
-            {
-                SrcStages = PipelineStageFlags2.FragmentShaderBit,
-                SrcAccesses = AccessFlags2.ShaderReadBit,
-
-                DstStages = PipelineStageFlags2.ColorAttachmentOutputBit,
-                DstAccesses = AccessFlags2.ColorAttachmentReadBit | AccessFlags2.ColorAttachmentWriteBit,
-
-                SrcLayout = colorSourceAndTarget.Layout,
-                DstLayout = ImageLayout.AttachmentOptimal,
-            });
-
-            commandBuffer.AddBarrier(new TextureBarrier(renderTextures[0])
-            {
-                SrcStages = PipelineStageFlags2.ColorAttachmentOutputBit,
-                SrcAccesses = AccessFlags2.ColorAttachmentWriteBit,
-
-                DstStages = PipelineStageFlags2.FragmentShaderBit,
-                DstAccesses = AccessFlags2.ShaderReadBit,
-
-                SrcLayout = renderTextures[0].Layout,
-                DstLayout = ImageLayout.ReadOnlyOptimal,
-            });
+            commandBuffer.AddTransition(colorSourceAndTarget, new TransitionDesc(colorSourceAndTarget.State, ResourceState.Attachment));
+            commandBuffer.AddTransition(renderTextures[0], new TransitionDesc(renderTextures[0].State, ResourceState.FragmentShaderRead));
 
             using (commandBuffer.BeginRenderPass(new RenderPassDesc([colorSourceAndTarget])))
             {

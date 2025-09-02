@@ -76,23 +76,8 @@ public class ToneMapPass : ITrackedDisposable
 
     public void Render(GraphicsCommandBuffer commandBuffer, Texture2D colorSource, Texture2D colorTarget)
     {
-        commandBuffer.AddBarrier(new TextureBarrier(colorSource)
-        {
-            SrcStages = PipelineStageFlags2.ColorAttachmentOutputBit,
-            SrcAccesses = AccessFlags2.ColorAttachmentWriteBit,
-
-            DstStages = PipelineStageFlags2.FragmentShaderBit,
-            DstAccesses = AccessFlags2.ShaderReadBit,
-        });
-
-        commandBuffer.AddBarrier(new TextureBarrier(colorTarget)
-        {
-            SrcStages = PipelineStageFlags2.FragmentShaderBit,
-            SrcAccesses = AccessFlags2.None,
-
-            DstStages = PipelineStageFlags2.ColorAttachmentOutputBit,
-            DstAccesses = AccessFlags2.ColorAttachmentWriteBit,
-        });
+        commandBuffer.AddTransition(colorSource, new TransitionDesc(colorSource.State, ResourceState.FragmentShaderRead));
+        commandBuffer.AddTransition(colorTarget, new TransitionDesc(colorTarget.State, ResourceState.Attachment));
 
         using (commandBuffer.BeginRenderPass(new RenderPassDesc([colorTarget])))
         {
