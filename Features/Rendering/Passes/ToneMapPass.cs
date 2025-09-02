@@ -110,6 +110,6 @@ public class ToneMapPass : ITrackedDisposable
 
     ~ToneMapPass()
     {
-        ReleaseResources();
+        Dispose();
     }
 }

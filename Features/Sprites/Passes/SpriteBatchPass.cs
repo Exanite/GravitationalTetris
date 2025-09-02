@@ -190,7 +190,7 @@ public class SpriteBatchPass : ITrackedDisposable
 
     ~SpriteBatchPass()
     {
-        ReleaseResources();
+        Dispose();
     }
 
     private record struct PipelineCacheKey(Format ColorFormat, Format DepthFormat);

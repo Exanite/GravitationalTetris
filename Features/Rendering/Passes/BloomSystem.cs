@@ -354,6 +354,6 @@ public class BloomPass : ITrackedDisposable
 
     ~BloomPass()
     {
-        ReleaseResources();
+        Dispose();
     }
 }
