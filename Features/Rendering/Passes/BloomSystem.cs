@@ -186,7 +186,7 @@ public class BloomPass : ITrackedDisposable
                 var currentTarget = renderTextures[i];
 
                 commandBuffer.AddTransition(currentTarget, ResourceState.Attachment);
-                commandBuffer.AddTransition(previousTarget, ResourceState.FragmentShaderRead);
+                commandBuffer.AddTransition(previousTarget, ResourceState.ShaderRead);
 
                 using (commandBuffer.BeginRenderPass([currentTarget]))
                 {
@@ -229,7 +229,7 @@ public class BloomPass : ITrackedDisposable
                 var currentTarget = renderTextures[i];
 
                 commandBuffer.AddTransition(currentTarget, ResourceState.Attachment);
-                commandBuffer.AddTransition(previousTarget, ResourceState.FragmentShaderRead);
+                commandBuffer.AddTransition(previousTarget, ResourceState.ShaderRead);
 
                 using (commandBuffer.BeginRenderPass([currentTarget]))
                 {
@@ -245,7 +245,7 @@ public class BloomPass : ITrackedDisposable
 
             // Composite bloom with source
             commandBuffer.AddTransition(colorSourceAndTarget, ResourceState.Attachment);
-            commandBuffer.AddTransition(renderTextures[0], ResourceState.FragmentShaderRead);
+            commandBuffer.AddTransition(renderTextures[0], ResourceState.ShaderRead);
 
             using (commandBuffer.BeginRenderPass([colorSourceAndTarget]))
             {

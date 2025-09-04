@@ -76,7 +76,7 @@ public class ToneMapPass : ITrackedDisposable
 
     public void Render(GraphicsCommandBuffer commandBuffer, Texture2D colorSource, Texture2D colorTarget)
     {
-        commandBuffer.AddTransition(colorSource, ResourceState.FragmentShaderRead);
+        commandBuffer.AddTransition(colorSource, ResourceState.ShaderRead);
         commandBuffer.AddTransition(colorTarget, ResourceState.Attachment);
 
         using (commandBuffer.BeginRenderPass([colorTarget]))
