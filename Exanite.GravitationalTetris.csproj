@@ -17,11 +17,6 @@
     <ExaniteEngine_HasContentFolder/>
   </PropertyGroup>
   <PropertyGroup>
-    <AnalysisLevel>latest</AnalysisLevel>
-    <EnableNETAnalyzers>true</EnableNETAnalyzers>
-    <EnableTrimAnalzyer>true</EnableTrimAnalzyer>
-    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
-
     <NoWarn>$(NoWarn);CS0067;</NoWarn> <!-- False positive: Event is never used -->
     <NoWarn>$(NoWarn);CS9192;</NoWarn> <!-- Minor issue and doesn't show up in the IDE for some reason: Argument should be passed with 'ref' or 'in' -->
     <NoWarn>$(NoWarn);CS9195;</NoWarn> <!-- Minor issue and doesn't show up in the IDE for some reason: Argument should be passed with 'in' -->
