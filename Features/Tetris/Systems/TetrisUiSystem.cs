@@ -22,7 +22,7 @@ public class TetrisUiSystem : GameSystem, IRenderSystem, IDisposable
 
     private readonly DisposableCollection disposables = new();
 
-    public PaperDisplay Display { get; private set; }
+    public PaperDisplay Display { get; }
 
     public TetrisUiSystem(TetrisSystem tetrisSystem, Swapchain swapchain, ResourceManager resourceManager, GraphicsContext graphicsContext, Input input, SdlContext sdlContext, ITime time)
     {
@@ -78,7 +78,7 @@ public class TetrisUiSystem : GameSystem, IRenderSystem, IDisposable
                 }
 
                 paper.Box("Leaderboard")
-                    .Text($"Leaderboard:", font.Value)
+                    .Text("Leaderboard:", font.Value)
                     .FontSize(16 * contentScale)
                     .Height(20 * contentScale);
 
