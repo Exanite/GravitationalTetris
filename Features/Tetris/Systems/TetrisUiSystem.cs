@@ -1,5 +1,4 @@
 using System;
-using System.Drawing;
 using Exanite.Core.Runtime;
 using Exanite.Engine.Ecs.Systems;
 using Exanite.Engine.Graphics;
@@ -10,7 +9,6 @@ using Exanite.Engine.Windowing.Sdl;
 using Exanite.ResourceManagement;
 using Prowl.PaperUI.LayoutEngine;
 using Prowl.Scribe;
-using TextAlignment = Prowl.PaperUI.TextAlignment;
 
 namespace Exanite.GravitationalTetris.Features.Tetris.Systems;
 
