@@ -39,12 +39,12 @@ public class TetrisUiSystem : GameSystem, IRenderSystem, IDisposable
         var contentScale = 1.5f;
         if (swapchain.Texture.Desc.Size.X > 1920)
         {
-            contentScale *= 1.5f;
+            contentScale *= 1.25f;
         }
 
         if (swapchain.Texture.Desc.Size.X > 2560)
         {
-            contentScale *= 2f;
+            contentScale *= 1.5f;
         }
 
         using (Display.BeginFrame(swapchain.CommandBuffer, time.DeltaTime, swapchain.Texture.Desc.Size))
