@@ -175,7 +175,7 @@ public class BloomPass : ITrackedDisposable
 
     public void Render(GraphicsCommandBuffer commandBuffer, Texture2D colorSourceAndTarget)
     {
-        ResizeRenderTextures(colorSourceAndTarget.Desc.Size);
+        ResizeRenderTextures(colorSourceAndTarget.Size);
 
         if (renderTextures.Count != 0)
         {
@@ -197,7 +197,7 @@ public class BloomPass : ITrackedDisposable
                     BufferBindingInfo downUniformBuffer;
                     using (commandBuffer.AllocateTempUniformBuffer<BloomDownUniformData>(out var data, out downUniformBuffer))
                     {
-                        data[0].FilterStep = Vector2.One / currentTarget.Desc.Size;
+                        data[0].FilterStep = Vector2.One / currentTarget.Size;
                     }
 
                     downTextureVariable.SetTexture(previousTarget);
@@ -209,7 +209,7 @@ public class BloomPass : ITrackedDisposable
             }
 
             // Up sample
-            var aspectRatio = (float)colorSourceAndTarget.Desc.Size.X / colorSourceAndTarget.Desc.Size.Y;
+            var aspectRatio = (float)colorSourceAndTarget.Size.X / colorSourceAndTarget.Size.Y;
             var step = 0.005f;
             var upFilterStep = new Vector2(step / aspectRatio, step);
 

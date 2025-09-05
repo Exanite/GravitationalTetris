@@ -37,17 +37,17 @@ public class TetrisUiSystem : GameSystem, IRenderSystem, IDisposable
     public void Render()
     {
         var contentScale = 1.5f;
-        if (swapchain.Texture.Desc.Size.X > 1920)
+        if (swapchain.Size.X > 1920)
         {
             contentScale *= 1.25f;
         }
 
-        if (swapchain.Texture.Desc.Size.X > 2560)
+        if (swapchain.Size.X > 2560)
         {
             contentScale *= 1.5f;
         }
 
-        using (Display.BeginFrame(swapchain.CommandBuffer, time.DeltaTime, swapchain.Texture.Desc.Size))
+        using (Display.BeginFrame(swapchain.CommandBuffer, time.DeltaTime, swapchain.Size))
         {
             var paper = Display.Paper;
 
