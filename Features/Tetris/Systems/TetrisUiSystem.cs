@@ -63,7 +63,8 @@ public class TetrisUiSystem : GameSystem, IRenderSystem, IDisposable
                 paper.Box("PreviousScore")
                     .Text($"Previous Score: {(int)tetrisSystem.PreviousScore}", font.Value)
                     .FontSize(12 * contentScale)
-                    .Height(16 * contentScale);
+                    .Height(16 * contentScale)
+                    .Margin(0, 0, 0, 4 * contentScale);
 
                 var leaderboardContentText = string.Empty;
                 for (var i = 0; i < 10; i++)
