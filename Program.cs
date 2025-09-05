@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Avalonia;
 using Exanite.Engine.Framework;
 
 namespace Exanite.GravitationalTetris;
@@ -18,10 +17,5 @@ public static class Program
     public static Task Main(string[] args)
     {
         return Host.Run(args);
-    }
-
-    public static AppBuilder BuildAvaloniaApp()
-    {
-        return Host.BuildAvaloniaApp();
     }
 }

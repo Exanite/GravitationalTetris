@@ -83,7 +83,6 @@ public class GravitationalTetrisGameModule : GameModule
 
         scheduler.DefaultGroup.RegisterSystem<AcquireSwapchainSystem>();
         {
-
             // Update data
             scheduler.DefaultGroup.RegisterSystem<CameraProjectionSystem>();
             scheduler.DefaultGroup.RegisterSystem<TetrisUiSystem>();

@@ -141,7 +141,7 @@ public partial class RendererSystem : GameSystem, IRenderSystem, IDisposable
         copyWorldPass.Copy(commandBuffer, ActiveWorldColor, swapchain.Texture);
 
         // Copy UI to swapchain
-        copyUiPass.Copy(commandBuffer, tetrisUiSystem.UiRoot.Texture, swapchain.Texture);
+        copyUiPass.Copy(commandBuffer, tetrisUiSystem.Display.Texture, swapchain.Texture);
      }
 
     [Query]

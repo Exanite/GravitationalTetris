@@ -33,9 +33,5 @@
     <PackageReference Include="SoundFlow" Version="1.2.0"/>
   </ItemGroup>
 
-  <ItemGroup>
-    <AvaloniaResource Include="Content\Exanite.GravitationalTetris\FieryTurk.ttf" />
-  </ItemGroup>
-
   <Import Project="..\Exanite.Engine.Building\LinkRawContent.targets"/>
 </Project>

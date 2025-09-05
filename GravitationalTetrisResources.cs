@@ -1,12 +1,15 @@
 using Exanite.Core.Properties;
 using Exanite.Engine.Graphics;
 using Exanite.Engine.Windowing;
+using Prowl.Scribe;
 
 namespace Exanite.GravitationalTetris;
 
 public static class GravitationalTetrisResources
 {
     public static PropertyDefinition<WindowIcon> WindowIcon = new("/Exanite.GravitationalTetris/Icon.png");
+
+    public static PropertyDefinition<FontFile> Font = new("/Exanite.GravitationalTetris/FieryTurk.ttf");
 
     public static PropertyDefinition<ShaderModule> SpriteVertexModule = new("/Exanite.GravitationalTetris/Sprite.vertex.slang");
     public static PropertyDefinition<ShaderModule> SpriteFragmentModule = new("/Exanite.GravitationalTetris/Sprite.fragment.slang");
