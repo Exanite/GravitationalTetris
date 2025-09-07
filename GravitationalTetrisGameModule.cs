@@ -2,8 +2,6 @@
 using Autofac;
 using Exanite.Engine.Ecs.Scheduling;
 using Exanite.Engine.Framework;
-using Exanite.Engine.Graphics;
-using Exanite.Engine.Graphics.Systems;
 using Exanite.Engine.Modding;
 using Exanite.Engine.Resources.Systems;
 using Exanite.Engine.Timing.Systems;
@@ -40,9 +38,6 @@ public class GravitationalTetrisGameModule : GameModule
         builder.RegisterType<Random>().InstancePerDependency();
 
         // Windowing
-        builder.RegisterType<Window>().SingleInstance();
-        builder.RegisterType<Swapchain>().AsSelf().As<IGraphicsCommandBufferProvider>().SingleInstance();
-        builder.Register(_ => new SwapchainDesc()).SingleInstance();
         builder.Register(ctx =>
         {
             var resourceManager = ctx.Resolve<IResourceManager>();
@@ -81,7 +76,7 @@ public class GravitationalTetrisGameModule : GameModule
 
         scheduler.DefaultGroup.RegisterSystem<AudioSystem>();
 
-        scheduler.DefaultGroup.RegisterSystem<AcquireSwapchainSystem>();
+        // Rendering
         {
             // Update data
             scheduler.DefaultGroup.RegisterSystem<CameraProjectionSystem>();
@@ -89,8 +84,6 @@ public class GravitationalTetrisGameModule : GameModule
 
             // Render
             scheduler.DefaultGroup.RegisterSystem<RendererSystem>();
-
         }
-        scheduler.DefaultGroup.RegisterSystem<PresentSwapchainSystem>();
     }
 }
