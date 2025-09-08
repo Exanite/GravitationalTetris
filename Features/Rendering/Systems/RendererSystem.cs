@@ -197,7 +197,7 @@ public partial class RendererSystem : GameSystem, IRenderSystem, IDisposable
 
             var maxAlpha = 0.8f;
             var minAlpha = 0.1f;
-            var alpha = MathUtility.Remap(EaseInOutCubic(time.Time / 1.5f), 0, 1, minAlpha, maxAlpha);
+            var alpha = M.Remap(EaseInOutCubic(time.Time / 1.5f), 0, 1, minAlpha, maxAlpha);
 
             var model = Matrix4x4.CreateTranslation(blockPosition.X, blockPosition.Y, 0);
 
@@ -213,7 +213,7 @@ public partial class RendererSystem : GameSystem, IRenderSystem, IDisposable
 
         static float EaseInOutCubic(float t)
         {
-            t = MathUtility.Wrap(t, 0, 2);
+            t = M.Wrap(t, 0, 2);
             if (t > 1)
             {
                 t = 2 - t;

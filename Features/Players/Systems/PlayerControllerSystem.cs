@@ -68,7 +68,7 @@ public partial class PlayerControllerSystem : GameSystem, ISetupSystem, IFrameUp
     [Include<ComponentPlayer>]
     private void UpdateMovement(ref ComponentVelocity velocity, ref ComponentPlayerMovement movement, ref ComponentMovementSpeed movementSpeed)
     {
-        velocity.Velocity.X = MathUtility.SmoothDamp(velocity.Velocity.X, movementAction.CurrentValue * movementSpeed.MovementSpeed, movement.SmoothTime, time.DeltaTime, ref movement.SmoothVelocity.X);
+        velocity.Velocity.X = M.SmoothDamp(velocity.Velocity.X, movementAction.CurrentValue * movementSpeed.MovementSpeed, movement.SmoothTime, time.DeltaTime, ref movement.SmoothVelocity.X);
     }
 
     [Query]
