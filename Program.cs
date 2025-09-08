@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Exanite.Engine.Framework;
+﻿using Exanite.Engine.Framework;
 
 namespace Exanite.GravitationalTetris;
 
@@ -14,8 +13,8 @@ public static class Program
         return new EngineGame(settings, [new GravitationalTetrisGameModule()]);
     });
 
-    public static Task Main(string[] args)
+    public static void Main(string[] args)
     {
-        return Host.Run(args);
+        Host.Run(args);
     }
 }
