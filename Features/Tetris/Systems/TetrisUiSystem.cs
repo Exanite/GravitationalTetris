@@ -12,7 +12,7 @@ using Prowl.Scribe;
 
 namespace Exanite.GravitationalTetris.Features.Tetris.Systems;
 
-public class TetrisUiSystem : GameSystem, IRenderSystem, IDisposable
+public class TetrisUiSystem : GameSystem, IRenderUpdateSystem, IDisposable
 {
     private readonly IHandle<FontFile> font;
 
@@ -34,7 +34,7 @@ public class TetrisUiSystem : GameSystem, IRenderSystem, IDisposable
         font = resourceManager.GetResource(GravitationalTetrisResources.Font);
     }
 
-    public void Render()
+    public void RenderUpdate()
     {
         var contentScale = 1.5f;
         if (swapchain.Size.X > 1920)

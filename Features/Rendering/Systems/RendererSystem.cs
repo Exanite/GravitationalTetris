@@ -22,7 +22,7 @@ using Silk.NET.Vulkan;
 
 namespace Exanite.GravitationalTetris.Features.Rendering.Systems;
 
-public partial class RendererSystem : GameSystem, IRenderSystem, IDisposable
+public partial class RendererSystem : GameSystem, IRenderUpdateSystem, IDisposable
 {
     // Array of size 2
     private Texture2D[] worldColor;
@@ -106,7 +106,7 @@ public partial class RendererSystem : GameSystem, IRenderSystem, IDisposable
         }).AddTo(disposables);
     }
 
-    public void Render()
+    public void RenderUpdate()
     {
         var commandBuffer = swapchain.CommandBuffer;
 
