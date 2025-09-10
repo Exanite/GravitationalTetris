@@ -2,10 +2,8 @@ using System;
 using Exanite.Core.Runtime;
 using Exanite.Engine.Ecs.Systems;
 using Exanite.Engine.Graphics;
-using Exanite.Engine.Inputs;
 using Exanite.Engine.PaperUi;
 using Exanite.Engine.Timing;
-using Exanite.Engine.Windowing.Sdl;
 using Exanite.ResourceManagement;
 using Prowl.PaperUI.LayoutEngine;
 using Prowl.Scribe;
@@ -24,13 +22,13 @@ public class TetrisUiSystem : GameSystem, IRenderUpdateSystem, IDisposable
 
     public PaperDisplay Display { get; }
 
-    public TetrisUiSystem(TetrisSystem tetrisSystem, Swapchain swapchain, ResourceManager resourceManager, GraphicsContext graphicsContext, Input input, SdlContext sdlContext, ITime time)
+    public TetrisUiSystem(TetrisSystem tetrisSystem, Swapchain swapchain, ResourceManager resourceManager, GraphicsContext graphicsContext, PaperContext paperContext, ITime time)
     {
         this.tetrisSystem = tetrisSystem;
         this.swapchain = swapchain;
         this.time = time;
 
-        Display = new PaperDisplay(graphicsContext, resourceManager, input, sdlContext).AddTo(disposables);
+        Display = new PaperDisplay(paperContext).AddTo(disposables);
         font = resourceManager.GetResource(GravitationalTetrisResources.Font);
     }
 
