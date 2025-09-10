@@ -14,7 +14,7 @@ public class ToneMapPass : ITrackedDisposable
 
     private const Format ColorTargetFormat = Format.R32G32B32A32Sfloat;
 
-    private readonly ReloadableHandle<ShaderPipeline> pipeline;
+    private readonly Reloadable<ShaderPipeline> pipeline;
     private ShaderPipelineLayout pipelineLayout = null!;
     private ShaderPipelineVariable textureVariable = null!;
 
@@ -27,7 +27,7 @@ public class ToneMapPass : ITrackedDisposable
 
         var sampler = new TextureSampler(graphicsContext, new TextureSamplerDesc(Filter.Linear)).AddTo(disposables);
 
-        pipeline = new ReloadableHandle<ShaderPipeline>((List<IHandle> dependencies, out ShaderPipeline resource, out ResourceChangedAction<ShaderPipeline> changedAction) =>
+        pipeline = new Reloadable<ShaderPipeline>((dependencies, out resource, out changedAction) =>
         {
             dependencies.Add(vertexModule);
             dependencies.Add(fragmentModule);

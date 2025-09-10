@@ -14,12 +14,12 @@ public class BloomPass : ITrackedDisposable
 {
     public bool IsDisposed { get; private set; }
 
-    private ReloadableHandle<ShaderPipeline> downPipeline;
+    private Reloadable<ShaderPipeline> downPipeline;
     private ShaderPipelineLayout downPipelineLayout = null!;
     private ShaderPipelineVariable downUniformsVariable = null!;
     private ShaderPipelineVariable downTextureVariable = null!;
 
-    private ReloadableHandle<ShaderPipeline> upPipeline;
+    private Reloadable<ShaderPipeline> upPipeline;
     private ShaderPipelineLayout upPipelineLayout = null!;
     private ShaderPipelineVariable upUniformsVariable = null!;
     private ShaderPipelineVariable upTextureVariable = null!;
@@ -76,7 +76,7 @@ public class BloomPass : ITrackedDisposable
 
         var sampler = new TextureSampler(graphicsContext, new TextureSamplerDesc(Filter.Linear)).AddTo(disposables);
 
-        downPipeline = new ReloadableHandle<ShaderPipeline>((List<IHandle> dependencies, out ShaderPipeline resource, out ResourceChangedAction<ShaderPipeline> changedAction) =>
+        downPipeline = new Reloadable<ShaderPipeline>((dependencies, out resource, out changedAction) =>
         {
             dependencies.Add(vertexModule);
             dependencies.Add(downFragmentModule);
@@ -124,7 +124,7 @@ public class BloomPass : ITrackedDisposable
             };
         }).AddTo(disposables);
 
-        upPipeline = new ReloadableHandle<ShaderPipeline>((List<IHandle> dependencies, out ShaderPipeline resource, out ResourceChangedAction<ShaderPipeline> changedAction) =>
+        upPipeline = new Reloadable<ShaderPipeline>((dependencies, out resource, out changedAction) =>
         {
             dependencies.Add(vertexModule);
             dependencies.Add(upFragmentModule);
