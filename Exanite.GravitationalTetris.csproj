@@ -27,12 +27,12 @@
   <ItemGroup>
     <ProjectReference Include="..\Aether.Physics2D\Aether.Physics2D.csproj"/>
     <ProjectReference Include="..\Exanite.Engine.Analyzers\Exanite.Engine.Analyzers.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false"/>
-    <ProjectReference Include="..\Exanite.Engine.Building\Exanite.Engine.Building.csproj"/>
+    <ProjectReference Include="..\Exanite.Engine.BuildTasks\Exanite.Engine.BuildTasks.csproj"/>
     <ProjectReference Include="..\Exanite.Engine\Exanite.Engine.csproj"/>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="SoundFlow" Version="1.2.0"/>
   </ItemGroup>
 
-  <Import Project="..\Exanite.Engine.Building\LinkRawContent.targets"/>
+  <Import Project="..\Exanite.Engine.BuildTasks\LinkRawContent.targets"/>
 </Project>
