@@ -18,14 +18,14 @@ public class SpriteBatchPass : ITrackedDisposable
 
     private readonly ShaderPipelineCache<PipelineCacheKey, PipelineCacheState> pipelines;
 
-    private readonly DisposableCollection disposables = new();
+    private readonly Lifetime lifetime = new();
 
     public SpriteBatchPass(GraphicsContext graphicsContext, IResourceManager resourceManager)
     {
         var vertexModule = resourceManager.GetResource(GravitationalTetrisResources.SpriteVertexModule);
         var fragmentModule = resourceManager.GetResource(GravitationalTetrisResources.SpriteFragmentModule);
 
-        var sampler = new TextureSampler(graphicsContext, new TextureSamplerDesc(Filter.Nearest)).AddTo(disposables);
+        var sampler = new TextureSampler(graphicsContext, new TextureSamplerDesc(Filter.Nearest)).DisposeWith(lifetime);
 
         pipelines = new ShaderPipelineCache<PipelineCacheKey, PipelineCacheState>(key =>
         {
@@ -57,7 +57,7 @@ public class SpriteBatchPass : ITrackedDisposable
             pipeline.Layout.GetVariable("TextureSampler").SetSampler(sampler);
 
             return new PipelineCacheState(pipeline);
-        }).AddTo(disposables);
+        }).DisposeWith(lifetime);
     }
 
     public void Render(SpriteBatch batch, SpriteUniformDrawSettings uniformSettings)
@@ -172,7 +172,7 @@ public class SpriteBatchPass : ITrackedDisposable
 
     private void ReleaseResources()
     {
-        disposables.Dispose();
+        lifetime.Dispose();
     }
 
     public void Dispose()

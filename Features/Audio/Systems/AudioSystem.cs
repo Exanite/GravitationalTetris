@@ -23,7 +23,7 @@ public partial class AudioSystem : GameSystem, IStartSystem, IStopSystem, IFrame
 
     private EcsCommandBuffer commandBuffer = null!;
     private readonly AudioPlaybackDevice playbackDevice;
-    private readonly DisposableCollection disposables = new();
+    private readonly Lifetime lifetime = new();
 
     private readonly ResourceManager resourceManager;
     private readonly MiniAudioEngine engine;
@@ -34,7 +34,7 @@ public partial class AudioSystem : GameSystem, IStartSystem, IStopSystem, IFrame
         this.engine = engine;
 
         var device = engine.PlaybackDevices.FirstOrDefault(d => d.IsDefault);
-        playbackDevice = engine.InitializePlaybackDevice(device, AudioConstants.DefaultFormat).AddTo(disposables);
+        playbackDevice = engine.InitializePlaybackDevice(device, AudioConstants.DefaultFormat).DisposeWith(lifetime);
     }
 
     public void Start()
@@ -81,6 +81,6 @@ public partial class AudioSystem : GameSystem, IStartSystem, IStopSystem, IFrame
 
     public void Dispose()
     {
-        disposables.Dispose();
+        lifetime.Dispose();
     }
 }

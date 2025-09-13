@@ -45,7 +45,7 @@ public partial class RendererSystem : GameSystem, IRenderUpdateSystem, IDisposab
     private readonly CopyColorPass copyWorldPass;
     private readonly CopyColorPass copyUiPass;
 
-    private DisposableCollection disposables = new();
+    private readonly Lifetime lifetime = new();
 
     private readonly Window window;
     private readonly Swapchain swapchain;
@@ -71,15 +71,15 @@ public partial class RendererSystem : GameSystem, IRenderUpdateSystem, IDisposab
         emptyTileTexture = resourceManager.GetResource(GravitationalTetrisResources.TileNone);
         placeholderTileTexture = resourceManager.GetResource(GravitationalTetrisResources.TilePlaceholder);
 
-        clearPass = new ClearPass().AddTo(disposables);
+        clearPass = new ClearPass().DisposeWith(lifetime);
 
-        spriteBatchPass = new SpriteBatchPass(graphicsContext, resourceManager).AddTo(disposables);
+        spriteBatchPass = new SpriteBatchPass(graphicsContext, resourceManager).DisposeWith(lifetime);
 
-        bloomPass = new BloomPass(graphicsContext, resourceManager).AddTo(disposables);
-        toneMapPass = new ToneMapPass(graphicsContext, resourceManager).AddTo(disposables);
+        bloomPass = new BloomPass(graphicsContext, resourceManager).DisposeWith(lifetime);
+        toneMapPass = new ToneMapPass(graphicsContext, resourceManager).DisposeWith(lifetime);
 
-        copyWorldPass = new CopyColorPass(graphicsContext, resourceManager).AddTo(disposables);
-        copyUiPass = new CopyColorPass(graphicsContext, resourceManager).AddTo(disposables);
+        copyWorldPass = new CopyColorPass(graphicsContext, resourceManager).DisposeWith(lifetime);
+        copyUiPass = new CopyColorPass(graphicsContext, resourceManager).DisposeWith(lifetime);
 
         worldColor = new Texture2D[2];
         for (var i = 0; i < worldColor.Length; i++)
@@ -92,7 +92,7 @@ public partial class RendererSystem : GameSystem, IRenderUpdateSystem, IDisposab
             }, new TextureViewDesc()
             {
                 Aspects = ImageAspectFlags.ColorBit,
-            }).AddTo(disposables);
+            }).DisposeWith(lifetime);
         }
 
         worldDepth = new Texture2D(graphicsContext, new TextureDesc2D()
@@ -103,7 +103,7 @@ public partial class RendererSystem : GameSystem, IRenderUpdateSystem, IDisposab
         }, new TextureViewDesc()
         {
             Aspects = ImageAspectFlags.DepthBit,
-        }).AddTo(disposables);
+        }).DisposeWith(lifetime);
     }
 
     public void RenderUpdate()
@@ -235,7 +235,7 @@ public partial class RendererSystem : GameSystem, IRenderUpdateSystem, IDisposab
             Model = model,
         });
     }
-    
+
     private void SwapWorldColor()
     {
         var temp = worldColor[0];
@@ -245,6 +245,6 @@ public partial class RendererSystem : GameSystem, IRenderUpdateSystem, IDisposab
 
     public void Dispose()
     {
-        disposables.Dispose();
+        lifetime.Dispose();
     }
 }

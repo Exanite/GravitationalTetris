@@ -17,14 +17,14 @@ public class ToneMapPass : ITrackedDisposable
     private ShaderPipelineLayout pipelineLayout = null!;
     private ShaderPipelineVariable textureVariable = null!;
 
-    private readonly DisposableCollection disposables = new();
+    private readonly Lifetime lifetime = new();
 
     public ToneMapPass(GraphicsContext graphicsContext, IResourceManager resourceManager)
     {
         var vertexModule = resourceManager.GetResource(EngineResources.Rendering.ScreenTriVertexModule);
         var fragmentModule = resourceManager.GetResource(GravitationalTetrisResources.ToneMapFragmentModule);
 
-        var sampler = new TextureSampler(graphicsContext, new TextureSamplerDesc(Filter.Linear)).AddTo(disposables);
+        var sampler = new TextureSampler(graphicsContext, new TextureSamplerDesc(Filter.Linear)).DisposeWith(lifetime);
 
         pipeline = new Reloadable<ShaderPipeline>((dependencies, out resource, out changedAction) =>
         {
@@ -70,7 +70,7 @@ public class ToneMapPass : ITrackedDisposable
                     textureVariable = null!;
                 }
             };
-        }).AddTo(disposables);
+        }).DisposeWith(lifetime);
     }
 
     public void Render(GraphicsCommandBuffer commandBuffer, Texture2D colorSource, Texture2D colorTarget)
@@ -91,7 +91,7 @@ public class ToneMapPass : ITrackedDisposable
 
     private void ReleaseResources()
     {
-        disposables.Dispose();
+        lifetime.Dispose();
     }
 
     public void Dispose()

@@ -27,7 +27,7 @@ public class BloomPass : ITrackedDisposable
     private Vector2Int currentSize;
     private readonly List<Texture2D> renderTextures = new();
 
-    private readonly DisposableCollection disposables = new();
+    private readonly Lifetime lifetime = new();
 
     private readonly GraphicsContext graphicsContext;
 
@@ -43,7 +43,7 @@ public class BloomPass : ITrackedDisposable
             {
                 return;
             }
-            
+
             referenceResolutionHeight = value;
             RecreateRenderTextures(currentSize);
         }
@@ -58,7 +58,7 @@ public class BloomPass : ITrackedDisposable
             {
                 return;
             }
-            
+
             maxIterationCount = value;
             RecreateRenderTextures(currentSize);
         }
@@ -69,12 +69,12 @@ public class BloomPass : ITrackedDisposable
     public BloomPass(GraphicsContext graphicsContext, IResourceManager resourceManager)
     {
         this.graphicsContext = graphicsContext;
-        
+
         var vertexModule = resourceManager.GetResource(EngineResources.Rendering.ScreenTriVertexModule);
         var downFragmentModule = resourceManager.GetResource(GravitationalTetrisResources.BloomDownFragmentModule);
         var upFragmentModule = resourceManager.GetResource(GravitationalTetrisResources.BloomUpFragmentModule);
 
-        var sampler = new TextureSampler(graphicsContext, new TextureSamplerDesc(Filter.Linear)).AddTo(disposables);
+        var sampler = new TextureSampler(graphicsContext, new TextureSamplerDesc(Filter.Linear)).DisposeWith(lifetime);
 
         downPipeline = new Reloadable<ShaderPipeline>((dependencies, out resource, out changedAction) =>
         {
@@ -122,7 +122,7 @@ public class BloomPass : ITrackedDisposable
                     downTextureVariable = null!;
                 }
             };
-        }).AddTo(disposables);
+        }).DisposeWith(lifetime);
 
         upPipeline = new Reloadable<ShaderPipeline>((dependencies, out resource, out changedAction) =>
         {
@@ -170,7 +170,7 @@ public class BloomPass : ITrackedDisposable
                     upTextureVariable = null!;
                 }
             };
-        }).AddTo(disposables);
+        }).DisposeWith(lifetime);
     }
 
     public void Render(GraphicsCommandBuffer commandBuffer, Texture2D colorSourceAndTarget)
@@ -331,7 +331,7 @@ public class BloomPass : ITrackedDisposable
 
     private void ReleaseResources()
     {
-        disposables.Dispose();
+        lifetime.Dispose();
 
         foreach (var texture in renderTextures)
         {

@@ -18,7 +18,7 @@ public class TetrisUiSystem : GameSystem, IRenderUpdateSystem, IDisposable
     private readonly Swapchain swapchain;
     private readonly ITime time;
 
-    private readonly DisposableCollection disposables = new();
+    private readonly Lifetime lifetime = new();
 
     public PaperDisplay Display { get; }
 
@@ -28,7 +28,7 @@ public class TetrisUiSystem : GameSystem, IRenderUpdateSystem, IDisposable
         this.swapchain = swapchain;
         this.time = time;
 
-        Display = new PaperDisplay(paperContext).AddTo(disposables);
+        Display = new PaperDisplay(paperContext).DisposeWith(lifetime);
         font = resourceManager.GetResource(GravitationalTetrisResources.Font);
     }
 
@@ -102,6 +102,6 @@ public class TetrisUiSystem : GameSystem, IRenderUpdateSystem, IDisposable
 
     public void Dispose()
     {
-        disposables.Dispose();
+        lifetime.Dispose();
     }
 }
