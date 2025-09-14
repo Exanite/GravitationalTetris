@@ -19,10 +19,10 @@ public partial class PlayerControllerSystem : GameSystem, ISetupSystem, IFrameUp
     private IInputAction<float> movementAction = null!;
 
     private readonly PhysicsWorld physicsWorld;
-    private readonly InputActionManager input;
+    private readonly Input input;
     private readonly ITime time;
 
-    public PlayerControllerSystem(PhysicsWorld physicsWorld, InputActionManager input, ITime time)
+    public PlayerControllerSystem(PhysicsWorld physicsWorld, Input input, ITime time)
     {
         this.physicsWorld = physicsWorld;
         this.input = input;
