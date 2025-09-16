@@ -7,7 +7,7 @@ public class AudioDataLoader : SimpleResourceLoader<AudioData>
 {
     public override void Load(IResourceLoadOperation<AudioData> loadOperation)
     {
-        var bytes = loadOperation.OpenFile(loadOperation.Key).ReadAsBytesAndDispose();
+        var bytes = loadOperation.OpenFile(loadOperation.Key.Path).ReadAsBytesAndDispose();
         var data = new AudioData(bytes);
 
         loadOperation.Fulfill(data);
