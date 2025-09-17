@@ -45,22 +45,22 @@ public class TetrisUiSystem : GameSystem, IRenderUpdateSystem, IDisposable
             contentScale *= 1.5f;
         }
 
-        using (Display.BeginFrame(swapchain.CommandBuffer, time.DeltaTime, swapchain.Size))
+        using (Display.BeginFrame(swapchain.CommandBuffer, time.DeltaTime, swapchain.Size, contentScale))
         {
             var paper = Display.Paper;
 
-            using (paper.Box("Container").Margin(4 * contentScale).Enter())
+            using (paper.Box("Container").Margin(4).Enter())
             {
                 paper.Box("Score")
                     .Text($"Score: {(int)tetrisSystem.Score}", font.Value)
-                    .FontSize(20 * contentScale)
-                    .Height(24 * contentScale);
+                    .FontSize(20)
+                    .Height(24);
 
                 paper.Box("PreviousScore")
                     .Text($"Previous Score: {(int)tetrisSystem.PreviousScore}", font.Value)
-                    .FontSize(12 * contentScale)
-                    .Height(16 * contentScale)
-                    .Margin(0, 0, 0, 4 * contentScale);
+                    .FontSize(12)
+                    .Height(16)
+                    .Margin(0, 0, 0, 4);
 
                 var leaderboardContentText = string.Empty;
                 for (var i = 0; i < 10; i++)
@@ -77,25 +77,25 @@ public class TetrisUiSystem : GameSystem, IRenderUpdateSystem, IDisposable
 
                 paper.Box("Leaderboard")
                     .Text("Leaderboard:", font.Value)
-                    .FontSize(16 * contentScale)
-                    .Height(20 * contentScale);
+                    .FontSize(16)
+                    .Height(20);
 
                 paper.Box("LeaderboardContent")
                     .Text($"{leaderboardContentText}", font.Value)
-                    .FontSize(12 * contentScale)
-                    .Height(16 * contentScale);
+                    .FontSize(12)
+                    .Height(16);
 
                 paper.Box("Spacing").Size(UnitValue.Stretch());
 
                 paper.Box("Speed")
                     .Text($"Speed: {tetrisSystem.SpeedMultiplier:F2}x", font.Value)
-                    .FontSize(12 * contentScale)
-                    .Height(16 * contentScale);
+                    .FontSize(12)
+                    .Height(16);
 
                 paper.Box("ScoreMultiplier")
                     .Text($"Score Multiplier: {tetrisSystem.ScoreMultiplier:F1}x", font.Value)
-                    .FontSize(12 * contentScale)
-                    .Height(16 * contentScale);
+                    .FontSize(12)
+                    .Height(16);
             }
         }
     }
