@@ -1,9 +1,7 @@
 using System;
 using Exanite.Core.Runtime;
 using Exanite.Engine.Ecs.Systems;
-using Exanite.Engine.Graphics;
 using Exanite.Engine.PaperUi;
-using Exanite.Engine.Timing;
 using Exanite.ResourceManagement;
 using Prowl.PaperUI.LayoutEngine;
 using Prowl.Scribe;
@@ -15,88 +13,68 @@ public class TetrisUiSystem : GameSystem, IRenderUpdateSystem, IDisposable
     private readonly IHandle<FontFile> font;
 
     private readonly TetrisSystem tetrisSystem;
-    private readonly Swapchain swapchain;
-    private readonly ITime time;
+    private readonly PaperDisplay display;
 
     private readonly Lifetime lifetime = new();
 
-    public PaperDisplay Display { get; }
-
-    public TetrisUiSystem(TetrisSystem tetrisSystem, Swapchain swapchain, ResourceManager resourceManager, GraphicsContext graphicsContext, PaperContext paperContext, ITime time)
+    public TetrisUiSystem(TetrisSystem tetrisSystem, ResourceManager resourceManager, PaperDisplay display)
     {
         this.tetrisSystem = tetrisSystem;
-        this.swapchain = swapchain;
-        this.time = time;
+        this.display = display;
 
-        Display = new PaperDisplay(paperContext).DisposeWith(lifetime);
         font = resourceManager.GetResource(GravitationalTetrisResources.Font);
     }
 
     public void RenderUpdate()
     {
-        var contentScale = 1.5f;
-        if (swapchain.Size.X > 1920)
+        var paper = display.Paper;
+        using (paper.Box("Container").Margin(4).Enter())
         {
-            contentScale *= 1.25f;
-        }
+            paper.Box("Score")
+                .Text($"Score: {(int)tetrisSystem.Score}", font.Value)
+                .FontSize(20)
+                .Height(24);
 
-        if (swapchain.Size.X > 2560)
-        {
-            contentScale *= 1.5f;
-        }
+            paper.Box("PreviousScore")
+                .Text($"Previous Score: {(int)tetrisSystem.PreviousScore}", font.Value)
+                .FontSize(12)
+                .Height(16)
+                .Margin(0, 0, 0, 4);
 
-        using (Display.BeginFrame(swapchain.CommandBuffer, time.DeltaTime, swapchain.Size, contentScale))
-        {
-            var paper = Display.Paper;
-
-            using (paper.Box("Container").Margin(4).Enter())
+            var leaderboardContentText = string.Empty;
+            for (var i = 0; i < 10; i++)
             {
-                paper.Box("Score")
-                    .Text($"Score: {(int)tetrisSystem.Score}", font.Value)
-                    .FontSize(20)
-                    .Height(24);
-
-                paper.Box("PreviousScore")
-                    .Text($"Previous Score: {(int)tetrisSystem.PreviousScore}", font.Value)
-                    .FontSize(12)
-                    .Height(16)
-                    .Margin(0, 0, 0, 4);
-
-                var leaderboardContentText = string.Empty;
-                for (var i = 0; i < 10; i++)
+                if (i != 0)
                 {
-                    if (i != 0)
-                    {
-                        leaderboardContentText += "\n";
-                    }
-
-                    var score = tetrisSystem.HighScores.Count > i ? tetrisSystem.HighScores[i] : 0;
-
-                    leaderboardContentText += $"{i + 1}. {(int)score}";
+                    leaderboardContentText += "\n";
                 }
 
-                paper.Box("Leaderboard")
-                    .Text("Leaderboard:", font.Value)
-                    .FontSize(16)
-                    .Height(20);
+                var score = tetrisSystem.HighScores.Count > i ? tetrisSystem.HighScores[i] : 0;
 
-                paper.Box("LeaderboardContent")
-                    .Text($"{leaderboardContentText}", font.Value)
-                    .FontSize(12)
-                    .Height(16);
-
-                paper.Box("Spacing").Size(UnitValue.Stretch());
-
-                paper.Box("Speed")
-                    .Text($"Speed: {tetrisSystem.SpeedMultiplier:F2}x", font.Value)
-                    .FontSize(12)
-                    .Height(16);
-
-                paper.Box("ScoreMultiplier")
-                    .Text($"Score Multiplier: {tetrisSystem.ScoreMultiplier:F1}x", font.Value)
-                    .FontSize(12)
-                    .Height(16);
+                leaderboardContentText += $"{i + 1}. {(int)score}";
             }
+
+            paper.Box("Leaderboard")
+                .Text("Leaderboard:", font.Value)
+                .FontSize(16)
+                .Height(20);
+
+            paper.Box("LeaderboardContent")
+                .Text($"{leaderboardContentText}", font.Value)
+                .FontSize(12)
+                .Height(16);
+
+            paper.Box("Spacing").Size(UnitValue.Stretch());
+
+            paper.Box("Speed")
+                .Text($"Speed: {tetrisSystem.SpeedMultiplier:F2}x", font.Value)
+                .FontSize(12)
+                .Height(16);
+
+            paper.Box("ScoreMultiplier")
+                .Text($"Score Multiplier: {tetrisSystem.ScoreMultiplier:F1}x", font.Value)
+                .FontSize(12)
+                .Height(16);
         }
     }
 

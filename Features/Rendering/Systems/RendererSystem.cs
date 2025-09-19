@@ -25,14 +25,14 @@ namespace Exanite.GravitationalTetris.Features.Rendering.Systems;
 public partial class RendererSystem : GameSystem, IRenderUpdateSystem, IDisposable
 {
     // Array of size 2
-    private Texture2D[] worldColor;
-    private Texture2D worldDepth;
+    private readonly Texture2D[] worldColor;
+    private readonly Texture2D worldDepth;
 
     private Texture2D ActiveWorldColor => worldColor[0];
     private Texture2D InactiveWorldColor => worldColor[1];
 
-    private IResourceHandle<Texture2D> emptyTileTexture;
-    private IResourceHandle<Texture2D> placeholderTileTexture;
+    private readonly IResourceHandle<Texture2D> emptyTileTexture;
+    private readonly IResourceHandle<Texture2D> placeholderTileTexture;
 
     private readonly ClearPass clearPass;
 
@@ -42,14 +42,12 @@ public partial class RendererSystem : GameSystem, IRenderUpdateSystem, IDisposab
     private readonly BloomPass bloomPass;
     private readonly ToneMapPass toneMapPass;
 
-    private readonly CopyColorPass copyWorldPass;
-    private readonly CopyColorPass copyUiPass;
+    private readonly CopyColorPass copyPass;
 
     private readonly Lifetime lifetime = new();
 
     private readonly Window window;
     private readonly Swapchain swapchain;
-    private readonly TetrisUiSystem tetrisUiSystem;
     private readonly GameTilemapData tilemap;
     private readonly ITime time;
 
@@ -64,7 +62,6 @@ public partial class RendererSystem : GameSystem, IRenderUpdateSystem, IDisposab
     {
         this.window = window;
         this.swapchain = swapchain;
-        this.tetrisUiSystem = tetrisUiSystem;
         this.tilemap = tilemap;
         this.time = time;
 
@@ -78,8 +75,7 @@ public partial class RendererSystem : GameSystem, IRenderUpdateSystem, IDisposab
         bloomPass = new BloomPass(graphicsContext, resourceManager).DisposeWith(lifetime);
         toneMapPass = new ToneMapPass(graphicsContext, resourceManager).DisposeWith(lifetime);
 
-        copyWorldPass = new CopyColorPass(graphicsContext, resourceManager).DisposeWith(lifetime);
-        copyUiPass = new CopyColorPass(graphicsContext, resourceManager).DisposeWith(lifetime);
+        copyPass = new CopyColorPass(graphicsContext, resourceManager).DisposeWith(lifetime);
 
         worldColor = new Texture2D[2];
         for (var i = 0; i < worldColor.Length; i++)
@@ -138,10 +134,7 @@ public partial class RendererSystem : GameSystem, IRenderUpdateSystem, IDisposab
         SwapWorldColor();
 
         // Copy world to swapchain
-        copyWorldPass.Copy(commandBuffer, ActiveWorldColor, swapchain.Texture);
-
-        // Copy UI to swapchain
-        copyUiPass.Copy(commandBuffer, tetrisUiSystem.Display.Texture, swapchain.Texture);
+        copyPass.Copy(commandBuffer, ActiveWorldColor, swapchain.Texture);
      }
 
     [Query]
