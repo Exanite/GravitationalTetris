@@ -21,17 +21,18 @@ public partial class AudioSystem : GameSystem, IStartSystem, IStopSystem, IFrame
     public const string ClearTile = "/Exanite.GravitationalTetris/Audio/ClearTile.wav";
     public const string Restart = "/Exanite.GravitationalTetris/Audio/Restart.wav";
 
-    private EcsCommandBuffer commandBuffer = null!;
     private readonly AudioPlaybackDevice playbackDevice;
     private readonly Lifetime lifetime = new();
 
     private readonly ResourceManager resourceManager;
     private readonly MiniAudioEngine engine;
+    private readonly EcsCommandBuffer commandBuffer;
 
-    public AudioSystem(ResourceManager resourceManager, MiniAudioEngine engine)
+    public AudioSystem(ResourceManager resourceManager, MiniAudioEngine engine, EcsCommandBuffer commandBuffer)
     {
         this.resourceManager = resourceManager;
         this.engine = engine;
+        this.commandBuffer = commandBuffer;
 
         var device = engine.PlaybackDevices.FirstOrDefault(d => d.IsDefault);
         playbackDevice = engine.InitializePlaybackDevice(device, AudioConstants.DefaultFormat).DisposeWith(lifetime);
@@ -39,7 +40,6 @@ public partial class AudioSystem : GameSystem, IStartSystem, IStopSystem, IFrame
 
     public void Start()
     {
-        commandBuffer = new EcsCommandBuffer(World);
         playbackDevice.Start();
     }
 

@@ -45,8 +45,6 @@ public partial class TetrisSystem : GameSystem, ISetupSystem, IFrameUpdateSystem
     private readonly float blockHorizontalSpeed = 2f;
     private Entity currentShapeRoot;
 
-    private EcsCommandBuffer commandBuffer = null!;
-
     private IInputAction<bool> placeShapeAction = null!;
     private IInputAction<bool> rotateLeftAction = null!;
     private IInputAction<bool> rotateRightAction = null!;
@@ -61,6 +59,7 @@ public partial class TetrisSystem : GameSystem, ISetupSystem, IFrameUpdateSystem
     private readonly PlayerControllerSystem playerControllerSystem;
     private readonly AudioSystem audioSystem;
     private readonly EnginePaths paths;
+    private readonly EcsCommandBuffer commandBuffer;
 
     private string ScoresFilePath => Path.Join(paths.PersistentDataFolder, "Scores.txt");
 
@@ -72,7 +71,8 @@ public partial class TetrisSystem : GameSystem, ISetupSystem, IFrameUpdateSystem
         PlayerControllerSystem playerControllerSystem,
         GameTilemapData tilemap,
         AudioSystem audioSystem,
-        EnginePaths paths)
+        EnginePaths paths,
+        EcsCommandBuffer commandBuffer)
     {
         this.resourceManager = resourceManager;
         this.random = random;
@@ -82,12 +82,11 @@ public partial class TetrisSystem : GameSystem, ISetupSystem, IFrameUpdateSystem
         this.tilemap = tilemap;
         this.audioSystem = audioSystem;
         this.paths = paths;
+        this.commandBuffer = commandBuffer;
     }
 
     public void Setup()
     {
-        commandBuffer = new EcsCommandBuffer(World);
-
         placeShapeAction = input.RegisterAction(new OrInputAction([
             new ButtonInputAction(KeyCode.Space),
             new ButtonInputAction(KeyCode.LeftMouse),

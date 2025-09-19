@@ -14,16 +14,16 @@ namespace Exanite.GravitationalTetris.Features;
 public class CreateEntitiesSystem : GameSystem, IStartSystem
 {
     private readonly ResourceManager resourceManager;
+    private readonly EcsCommandBuffer commandBuffer;
 
-    public CreateEntitiesSystem(ResourceManager resourceManager)
+    public CreateEntitiesSystem(ResourceManager resourceManager, EcsCommandBuffer commandBuffer)
     {
         this.resourceManager = resourceManager;
+        this.commandBuffer = commandBuffer;
     }
 
     public void Start()
     {
-        var commandBuffer = new EcsCommandBuffer(World);
-
         // Camera
         commandBuffer.Create()
             .Set(new ComponentCamera(20))

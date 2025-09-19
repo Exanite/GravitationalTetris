@@ -15,19 +15,17 @@ namespace Exanite.GravitationalTetris.Features.Tiles.Systems;
 
 public partial class TilemapColliderSystem : GameSystem, IStartSystem, IFrameUpdateSystem
 {
-    private EcsCommandBuffer commandBuffer = null!;
-
     private readonly GameTilemapData tilemap;
+    private readonly EcsCommandBuffer commandBuffer;
 
-    public TilemapColliderSystem(GameTilemapData tilemap)
+    public TilemapColliderSystem(GameTilemapData tilemap, EcsCommandBuffer commandBuffer)
     {
         this.tilemap = tilemap;
+        this.commandBuffer = commandBuffer;
     }
 
     public void Start()
     {
-        commandBuffer = new EcsCommandBuffer(World);
-
         commandBuffer.Create().Set(new ComponentUpdateTilemapCollidersEvent());
         commandBuffer.Execute();
     }
