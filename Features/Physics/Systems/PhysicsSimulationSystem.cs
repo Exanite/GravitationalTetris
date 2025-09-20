@@ -99,7 +99,7 @@ public partial class PhysicsSimulationSystem : GameSystem, IStartSystem, IFrameU
     }
 
     [Query]
-    [Include<ComponentDestroyed>]
+    [QueryInclude<ComponentDestroyed>]
     private void RemoveRigidbodies(ref ComponentRigidbody rigidbody)
     {
         var body = rigidbody.Body;

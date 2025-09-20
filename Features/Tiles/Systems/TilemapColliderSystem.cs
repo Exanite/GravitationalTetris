@@ -44,14 +44,14 @@ public partial class TilemapColliderSystem : GameSystem, IStartSystem, IFrameUpd
     }
 
     [Query]
-    [Include<ComponentUpdateTilemapCollidersEvent>]
+    [QueryInclude<ComponentUpdateTilemapCollidersEvent>]
     private void RemoveUpdateTilemapCollidersEvent(Entity entity)
     {
         commandBuffer.Set(entity, new ComponentDestroyed());
     }
 
     [Query]
-    [Include<ComponentTilemapCollider>]
+    [QueryInclude<ComponentTilemapCollider>]
     private void RemoveTilemapColliders(Entity entity)
     {
         commandBuffer.Set(entity, new ComponentDestroyed());

@@ -340,11 +340,11 @@ public partial class TetrisSystem : GameSystem, ISetupSystem, IFrameUpdateSystem
     }
 
     [Query]
-    [Include<ComponentShouldPlaceTetrisEvent>]
+    [QueryInclude<ComponentShouldPlaceTetrisEvent>]
     private void ShouldShouldPlaceTetris() {}
 
     [Query]
-    [Include<ComponentPlayer>]
+    [QueryInclude<ComponentPlayer>]
     private void UpdateRootPositions(ref ComponentTransform playerTransform)
     {
         UpdateRootPositions2Query(World, ref playerTransform);
@@ -671,7 +671,7 @@ public partial class TetrisSystem : GameSystem, ISetupSystem, IFrameUpdateSystem
     }
 
     [Query]
-    [Include<ComponentPlayer>]
+    [QueryInclude<ComponentPlayer>]
     private void MovePlayerOutOfTile(ref ComponentTransform transform)
     {
         var position = new TetrisVector2Int((int)MathF.Round(transform.Position.X), (int)MathF.Round(transform.Position.Y));
@@ -696,7 +696,7 @@ public partial class TetrisSystem : GameSystem, ISetupSystem, IFrameUpdateSystem
     }
 
     [Query]
-    [Include<ComponentPlayer>]
+    [QueryInclude<ComponentPlayer>]
     private void ResetIfPlayerOutOfBounds(ref ComponentTransform transform)
     {
         if (!(transform.Position.Y < -1f) && !(transform.Position.Y > 20.5f))
@@ -708,7 +708,7 @@ public partial class TetrisSystem : GameSystem, ISetupSystem, IFrameUpdateSystem
     }
 
     [Query]
-    [Include<ComponentPlayer>]
+    [QueryInclude<ComponentPlayer>]
     private void ResetGame(ref ComponentTransform playerTransform, ref ComponentVelocity velocity)
     {
         audioSystem.Play(AudioSystem.Restart);
@@ -748,7 +748,7 @@ public partial class TetrisSystem : GameSystem, ISetupSystem, IFrameUpdateSystem
     }
 
     [Query]
-    [AtLeastOneOf<ComponentTetrisRoot, ComponentTetrisBlock>]
+    [QueryAtLeastOneOf<ComponentTetrisRoot, ComponentTetrisBlock>]
     private void RemoveAllTetrisBlocks(Entity entity)
     {
         if (!entity.HasComponent<ComponentDestroyed>())
