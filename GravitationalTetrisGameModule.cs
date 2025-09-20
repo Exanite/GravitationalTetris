@@ -63,7 +63,7 @@ public class GravitationalTetrisGameModule : GameModule
     {
         base.OnConfigureSystems(scheduler);
 
-        scheduler.DefaultGroup.RegisterSystem<FpsCounterSystem>();
+        scheduler.DefaultGroup.RegisterSystem<FpsCounterLogSystem>();
         scheduler.DefaultGroup.RegisterSystem<ResourceHotReloadSystem>();
 
         scheduler.DefaultGroup.RegisterSystem<CreateEntitiesSystem>();
