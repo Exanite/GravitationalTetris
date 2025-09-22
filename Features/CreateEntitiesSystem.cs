@@ -1,4 +1,5 @@
 using System.Numerics;
+using Exanite.Engine.Ecs.Components;
 using Exanite.Engine.Ecs.Systems;
 using Exanite.GravitationalTetris.Features.Cameras.Components;
 using Exanite.GravitationalTetris.Features.Physics.Components;
@@ -26,6 +27,7 @@ public class CreateEntitiesSystem : GameSystem, IStartSystem
     {
         // Camera
         commandBuffer.Create()
+            .Set(new ComponentName("Camera"))
             .Set(new ComponentCamera(20))
             .Set(new ComponentTransform
             {
@@ -52,6 +54,7 @@ public class CreateEntitiesSystem : GameSystem, IStartSystem
         feet.Restitution = 0;
 
         commandBuffer.Create()
+            .Set(new ComponentName("Player"))
             .Set(new ComponentPlayer())
             .Set(new ComponentTransform
             {
@@ -76,7 +79,9 @@ public class CreateEntitiesSystem : GameSystem, IStartSystem
         wallBody.CreateRectangle(1, 60, 1, new Vector2(-2, 15));
         wallBody.CreateRectangle(1, 60, 1, new Vector2(11, 15));
 
-        commandBuffer.Create().Set(new ComponentRigidbody(wallBody));
+        commandBuffer.Create()
+            .Set(new ComponentName("Wall"))
+            .Set(new ComponentRigidbody(wallBody));
 
         commandBuffer.Execute();
     }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Numerics;
+using Exanite.Engine.Ecs.Components;
 using Exanite.Engine.Ecs.Queries;
 using Exanite.Engine.Ecs.Systems;
 using Exanite.Engine.Framework;
@@ -289,6 +290,7 @@ public partial class TetrisSystem : GameSystem, ISetupSystem, IFrameUpdateSystem
         var shape = shapes[random.Next(0, shapes.Count)];
 
         var currentShapeRootEntity = commandBuffer.Create()
+            .Set(new ComponentName("TetrisRoot"))
             .Set(new ComponentTetrisRoot
             {
                 Shape = shape,
@@ -319,6 +321,7 @@ public partial class TetrisSystem : GameSystem, ISetupSystem, IFrameUpdateSystem
                 fixture.Restitution = 0;
 
                 commandBuffer.Create()
+                    .Set(new ComponentName("TetrisBlock"))
                     .Set(new ComponentTetrisBlock
                     {
                         Root = currentShapeRoot,
@@ -508,7 +511,8 @@ public partial class TetrisSystem : GameSystem, ISetupSystem, IFrameUpdateSystem
             tile.Shape = root.Shape;
         }
 
-        commandBuffer.Create().Set(new ComponentUpdateTilemapCollidersEvent());
+        commandBuffer.Create()
+            .Set(new ComponentUpdateTilemapCollidersEvent());
 
         RemoveAllTetrisBlocksQuery(World);
         RemoveMatchingBlockTiles(ref root);

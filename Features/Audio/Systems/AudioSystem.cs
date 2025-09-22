@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Exanite.Core.Runtime;
+using Exanite.Engine.Ecs.Components;
 using Exanite.Engine.Ecs.Queries;
 using Exanite.Engine.Ecs.Systems;
 using Exanite.GravitationalTetris.Features.Audio.Components;
@@ -64,6 +65,7 @@ public partial class AudioSystem : GameSystem, IStartSystem, IStopSystem, IFrame
         player.Play();
 
         commandBuffer.Create()
+            .Set(new ComponentName("AudioSource"))
             .Set(new ComponentAudioSource(player));
     }
 

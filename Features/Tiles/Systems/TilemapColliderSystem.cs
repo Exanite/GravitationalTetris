@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Numerics;
+using Exanite.Engine.Ecs.Components;
 using Exanite.Engine.Ecs.Queries;
 using Exanite.Engine.Ecs.Systems;
 using Exanite.Engine.Lifecycles.Components;
@@ -88,6 +89,7 @@ public partial class TilemapColliderSystem : GameSystem, IStartSystem, IFrameUpd
         body.CreateCompoundPolygon(polygons, 1);
 
         commandBuffer.Create()
+            .Set(new ComponentName("TilemapCollider"))
             .Set(new ComponentTransform())
             .Set(new ComponentRigidbody(body))
             .Set(new ComponentTilemapCollider());
