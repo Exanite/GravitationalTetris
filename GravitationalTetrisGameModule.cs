@@ -23,11 +23,11 @@ namespace Exanite.GravitationalTetris;
 
 public class GravitationalTetrisGameModule : GameModule
 {
-    protected override void OnRegisterSubModules(IRegisterGameModules gameModules)
+    protected override void OnDeclareRelations(GameModuleRelations relations)
     {
-        base.OnRegisterSubModules(gameModules);
+        base.OnDeclareRelations(relations);
 
-        gameModules.RegisterGameModule<AudioModule>();
+        relations.RegisterSubmodule<AudioModule>();
     }
 
     protected override void OnConfigureContainer(ContainerBuilder builder)
