@@ -256,7 +256,7 @@ public partial class TetrisSystem : GameSystem, ISetupSystem, IFrameUpdateSystem
         {
             PlaceShape();
         }
-        else if (placeShapeAction.IsPressed() || ShouldShouldPlaceTetrisQueryDescription(World).Count() > 0)
+        else if (placeShapeAction.IsPressed() || ShouldShouldPlaceTetrisQueryDescription.Count() > 0)
         {
             playerControllerSystem.FlipGravity();
             audioSystem.Play(AudioSystem.SwitchGravity);
@@ -264,19 +264,19 @@ public partial class TetrisSystem : GameSystem, ISetupSystem, IFrameUpdateSystem
             PlaceShape();
         }
 
-        UpdateRootPositionsQuery(World);
-        UpdateRootBlockPositionsQuery(World);
+        UpdateRootPositionsQuery();
+        UpdateRootBlockPositionsQuery();
 
-        UpdateBlockPositionsQuery(World);
+        UpdateBlockPositionsQuery();
 
-        MovePlayerOutOfTileQuery(World);
+        MovePlayerOutOfTileQuery();
 
-        ResetIfPlayerOutOfBoundsQuery(World);
+        ResetIfPlayerOutOfBoundsQuery();
         for (var x = 0; x < tilemap.Tiles.GetLength(0); x++)
         {
             if (tilemap.Tiles[x, tilemap.Tiles.GetLength(1) - 1].IsWall)
             {
-                ResetGameQuery(World);
+                ResetGameQuery();
             }
         }
 
@@ -285,7 +285,7 @@ public partial class TetrisSystem : GameSystem, ISetupSystem, IFrameUpdateSystem
 
     private void PlaceShape()
     {
-        PlaceBlocksQuery(World);
+        PlaceBlocksQuery();
 
         var shape = shapes[random.Next(0, shapes.Count)];
 
@@ -350,7 +350,7 @@ public partial class TetrisSystem : GameSystem, ISetupSystem, IFrameUpdateSystem
     [QueryInclude<ComponentPlayer>]
     private void UpdateRootPositions(ref ComponentTransform playerTransform)
     {
-        UpdateRootPositions2Query(World, ref playerTransform);
+        UpdateRootPositions2Query(ref playerTransform);
     }
 
     [Query]
@@ -514,7 +514,7 @@ public partial class TetrisSystem : GameSystem, ISetupSystem, IFrameUpdateSystem
         commandBuffer.Create()
             .Set(new ComponentUpdateTilemapCollidersEvent());
 
-        RemoveAllTetrisBlocksQuery(World);
+        RemoveAllTetrisBlocksQuery();
         RemoveMatchingBlockTiles(ref root);
     }
 
@@ -708,7 +708,7 @@ public partial class TetrisSystem : GameSystem, ISetupSystem, IFrameUpdateSystem
             return;
         }
 
-        ResetGameQuery(World);
+        ResetGameQuery();
     }
 
     [Query]
@@ -721,7 +721,7 @@ public partial class TetrisSystem : GameSystem, ISetupSystem, IFrameUpdateSystem
         velocity.Velocity = Vector2.Zero;
         playerControllerSystem.SetIsGravityDown(true);
 
-        RemoveAllTetrisBlocksQuery(World);
+        RemoveAllTetrisBlocksQuery();
 
         for (var x = 0; x < tilemap.Tiles.GetLength(0); x++)
         {

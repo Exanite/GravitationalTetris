@@ -117,11 +117,11 @@ public partial class RendererSystem : GameSystem, IRenderUpdateSystem, IDisposab
         {
             // Gather data
             DrawTiles();
-            DrawPlaceholdersQuery(World);
-            DrawSpritesQuery(World);
+            DrawPlaceholdersQuery();
+            DrawSpritesQuery();
 
             // Render
-            RenderCameraQuery(World, commandBuffer);
+            RenderCameraQuery(commandBuffer);
 
             // Reset
             spriteBatch.Clear();

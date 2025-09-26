@@ -18,7 +18,7 @@ public partial class CameraProjectionSystem : GameSystem, IRenderUpdateSystem
 
     public void RenderUpdate()
     {
-        UpdateQuery(World);
+        UpdateQuery();
     }
 
     [Query]

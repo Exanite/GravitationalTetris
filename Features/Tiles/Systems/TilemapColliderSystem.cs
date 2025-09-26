@@ -33,10 +33,10 @@ public partial class TilemapColliderSystem : GameSystem, IStartSystem, IFrameUpd
 
     public void FrameUpdate()
     {
-        if (RemoveUpdateTilemapCollidersEventQueryDescription(World).Count() > 0)
+        if (RemoveUpdateTilemapCollidersEventQueryDescription.Count() > 0)
         {
-            RemoveUpdateTilemapCollidersEventQuery(World);
-            RemoveTilemapCollidersQuery(World);
+            RemoveUpdateTilemapCollidersEventQuery();
+            RemoveTilemapCollidersQuery();
 
             UpdateTilemapColliders();
 

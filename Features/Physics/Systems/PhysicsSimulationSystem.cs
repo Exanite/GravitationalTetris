@@ -29,20 +29,20 @@ public partial class PhysicsSimulationSystem : GameSystem, IStartSystem, IFrameU
 
     public void FrameUpdate()
     {
-        AddRigidbodiesQuery(World);
+        AddRigidbodiesQuery();
 
-        SyncTransformsToPhysicsQuery(World);
-        SyncVelocitiesToPhysicsQuery(World);
+        SyncTransformsToPhysicsQuery();
+        SyncVelocitiesToPhysicsQuery();
         {
             SimulatePhysicsWorld();
         }
-        SyncTransformsFromPhysicsQuery(World);
-        SyncVelocitiesFromPhysicsQuery(World);
+        SyncTransformsFromPhysicsQuery();
+        SyncVelocitiesFromPhysicsQuery();
     }
 
     public void FrameCleanup()
     {
-        RemoveRigidbodiesQuery(World);
+        RemoveRigidbodiesQuery();
     }
 
     private void SimulatePhysicsWorld()

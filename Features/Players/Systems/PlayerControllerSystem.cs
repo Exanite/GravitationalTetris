@@ -43,8 +43,8 @@ public partial class PlayerControllerSystem : GameSystem, ISetupSystem, IFrameUp
 
     public void FrameUpdate()
     {
-        UpdateMovementQuery(World);
-        ClampPlayerVelocityQuery(World);
+        UpdateMovementQuery();
+        ClampPlayerVelocityQuery();
     }
 
     public void FlipGravity()
@@ -60,8 +60,8 @@ public partial class PlayerControllerSystem : GameSystem, ISetupSystem, IFrameUp
         gravity.Y = Math.Abs(gravity.Y) * (isGravityDown ? 1 : -1);
         physicsWorld.Gravity = gravity;
 
-        ZeroVelocityYQuery(World);
-        SetPlayerRotationQuery(World);
+        ZeroVelocityYQuery();
+        SetPlayerRotationQuery();
     }
 
     [Query]

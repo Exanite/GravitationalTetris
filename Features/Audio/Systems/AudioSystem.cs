@@ -52,7 +52,7 @@ public partial class AudioSystem : GameSystem, IStartSystem, IStopSystem, IFrame
     public void FrameUpdate()
     {
         commandBuffer.Execute();
-        DestroyCompletedAudioSourcesQuery(World);
+        DestroyCompletedAudioSourcesQuery();
         commandBuffer.Execute();
     }
 
