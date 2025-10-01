@@ -34,8 +34,8 @@ public partial class PlayerControllerSystem : GameSystem, ISetupSystem, IFrameUp
         movementAction = input.RegisterAction(() =>
         {
             var action = new CompositeFloatInputAction();
-            action.AddPositive(new ButtonInputAction(KeyCode.D));
-            action.AddNegative(new ButtonInputAction(KeyCode.A));
+            action.AddPositive(new KeyInputAction(KeyCode.D));
+            action.AddNegative(new KeyInputAction(KeyCode.A));
 
             return action;
         });
