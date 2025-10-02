@@ -74,7 +74,7 @@ public class BloomPass : ITrackedDisposable
         var downFragmentModule = resourceManager.GetResource(GravitationalTetrisResources.BloomDownFragmentModule);
         var upFragmentModule = resourceManager.GetResource(GravitationalTetrisResources.BloomUpFragmentModule);
 
-        var sampler = new TextureSampler(graphicsContext, new TextureSamplerDesc(Filter.Linear)).DisposeWith(lifetime);
+        var sampler = new TextureSampler("Bloom", graphicsContext, new TextureSamplerDesc(Filter.Linear)).DisposeWith(lifetime);
 
         downPipeline = new Reloadable<ShaderPipeline>((dependencies, out resource, out changedAction) =>
         {

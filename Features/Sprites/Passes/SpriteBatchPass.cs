@@ -25,7 +25,7 @@ public class SpriteBatchPass : ITrackedDisposable
         var vertexModule = resourceManager.GetResource(GravitationalTetrisResources.SpriteVertexModule);
         var fragmentModule = resourceManager.GetResource(GravitationalTetrisResources.SpriteFragmentModule);
 
-        var sampler = new TextureSampler(graphicsContext, new TextureSamplerDesc(Filter.Nearest)).DisposeWith(lifetime);
+        var sampler = new TextureSampler("Sprite Batch", graphicsContext, new TextureSamplerDesc(Filter.Nearest)).DisposeWith(lifetime);
 
         pipelines = new ShaderPipelineCache<PipelineCacheKey, PipelineCacheState>(key =>
         {
