@@ -81,7 +81,7 @@ public class BloomPass : ITrackedDisposable
             dependencies.Add(vertexModule);
             dependencies.Add(downFragmentModule);
 
-            resource = new ShaderPipeline(graphicsContext, new ShaderPipelineDesc()
+            resource = new ShaderPipeline("Bloom", graphicsContext, new ShaderPipelineDesc()
             {
                 ShaderModules = [vertexModule.Value, downFragmentModule.Value],
 
@@ -129,7 +129,7 @@ public class BloomPass : ITrackedDisposable
             dependencies.Add(vertexModule);
             dependencies.Add(upFragmentModule);
 
-            resource = new ShaderPipeline(graphicsContext, new ShaderPipelineDesc()
+            resource = new ShaderPipeline("Bloom", graphicsContext, new ShaderPipelineDesc()
             {
                 ShaderModules = [vertexModule.Value, upFragmentModule.Value],
 

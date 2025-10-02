@@ -24,14 +24,14 @@ public class ToneMapPass : ITrackedDisposable
         var vertexModule = resourceManager.GetResource(EngineResources.Rendering.ScreenTriVertexModule);
         var fragmentModule = resourceManager.GetResource(GravitationalTetrisResources.ToneMapFragmentModule);
 
-        var sampler = new TextureSampler("Tone Map", graphicsContext, new TextureSamplerDesc(Filter.Linear)).DisposeWith(lifetime);
+        var sampler = new TextureSampler("ToneMap", graphicsContext, new TextureSamplerDesc(Filter.Linear)).DisposeWith(lifetime);
 
         pipeline = new Reloadable<ShaderPipeline>((dependencies, out resource, out changedAction) =>
         {
             dependencies.Add(vertexModule);
             dependencies.Add(fragmentModule);
 
-            resource = new ShaderPipeline(graphicsContext, new ShaderPipelineDesc()
+            resource = new ShaderPipeline("ToneMap", graphicsContext, new ShaderPipelineDesc()
             {
                 ShaderModules = [vertexModule.Value, fragmentModule.Value],
 
