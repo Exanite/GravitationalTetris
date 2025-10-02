@@ -752,7 +752,7 @@ public partial class TetrisSystem : GameSystem, ISetupSystem, IFrameUpdateSystem
     }
 
     [Query]
-    [QueryAtLeastOneOf<ComponentTetrisRoot, ComponentTetrisBlock>]
+    [QueryAtLeastOne<ComponentTetrisRoot, ComponentTetrisBlock>]
     private void RemoveAllTetrisBlocks(Entity entity)
     {
         if (!entity.HasComponent<ComponentDestroyed>())
