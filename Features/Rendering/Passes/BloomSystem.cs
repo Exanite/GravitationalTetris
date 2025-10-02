@@ -311,7 +311,7 @@ public class BloomPass : ITrackedDisposable
                 return;
             }
 
-            renderTextures.Add(new Texture2D(graphicsContext, new TextureDesc2D()
+            renderTextures.Add(new Texture2D($"Bloom {i}", graphicsContext, new TextureDesc2D()
             {
                 Size = new Vector2Int(iWidth, iHeight),
                 Format = Format.R32G32B32A32Sfloat,

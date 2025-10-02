@@ -80,7 +80,7 @@ public partial class RendererSystem : GameSystem, IRenderUpdateSystem, IDisposab
         worldColor = new Texture2D[2];
         for (var i = 0; i < worldColor.Length; i++)
         {
-            worldColor[i] = new Texture2D(graphicsContext, new TextureDesc2D()
+            worldColor[i] = new Texture2D($"World Color {i}", graphicsContext, new TextureDesc2D()
             {
                 Format = Format.R32G32B32A32Sfloat,
                 Size = swapchain.Size,
@@ -91,7 +91,7 @@ public partial class RendererSystem : GameSystem, IRenderUpdateSystem, IDisposab
             }).DisposeWith(lifetime);
         }
 
-        worldDepth = new Texture2D(graphicsContext, new TextureDesc2D()
+        worldDepth = new Texture2D("World Depth", graphicsContext, new TextureDesc2D()
         {
             Format = Format.D32Sfloat,
             Size = swapchain.Size,
