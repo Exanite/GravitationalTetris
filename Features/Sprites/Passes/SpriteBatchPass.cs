@@ -37,7 +37,7 @@ public class SpriteBatchPass : ITrackedDisposable
                 InstanceLayout = SpriteInstanceData.Layout,
 
                 ColorAttachmentFormats = [key.ColorFormat],
-                ColorAttachmentBlends = [ShaderPipelineBlendDesc.Blend2],
+                ColorAttachmentBlends = [ShaderPipelineBlendDesc.PreservingAlphaBlend],
 
                 DepthAttachmentFormat = key.DepthFormat,
             });
