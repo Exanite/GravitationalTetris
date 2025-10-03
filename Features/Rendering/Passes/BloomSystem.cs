@@ -88,7 +88,7 @@ public class BloomPass : ITrackedDisposable
                 Topology = PrimitiveTopology.TriangleList,
 
                 ColorAttachmentFormats = [Format.R32G32B32A32Sfloat],
-                ColorAttachmentBlends = [ShaderPipelineBlendDesc.Blend4],
+                ColorAttachmentBlends = [ShaderPipelineBlendDesc.Opaque],
             });
 
             changedAction = (previous, current) =>
@@ -124,7 +124,7 @@ public class BloomPass : ITrackedDisposable
                 Topology = PrimitiveTopology.TriangleList,
 
                 ColorAttachmentFormats = [Format.R32G32B32A32Sfloat],
-                ColorAttachmentBlends = [ShaderPipelineBlendDesc.Blend5],
+                ColorAttachmentBlends = [ShaderPipelineBlendDesc.Additive],
             });
 
             changedAction = (previous, current) =>
