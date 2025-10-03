@@ -40,7 +40,7 @@ public class ToneMapPass : ITrackedDisposable
                 ColorAttachmentFormats = [ColorTargetFormat],
                 ColorAttachmentBlends =
                 [
-                    new ShaderPipelineColorAttachmentBlendDesc()
+                    new ShaderPipelineBlendDesc()
                     {
                         ColorBlendOp = BlendOp.Add,
                         SrcColorBlendFactor = BlendFactor.One,

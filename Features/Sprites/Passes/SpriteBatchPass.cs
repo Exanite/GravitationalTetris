@@ -39,7 +39,7 @@ public class SpriteBatchPass : ITrackedDisposable
                 ColorAttachmentFormats = [key.ColorFormat],
                 ColorAttachmentBlends =
                 [
-                    new ShaderPipelineColorAttachmentBlendDesc()
+                    new ShaderPipelineBlendDesc()
                     {
                         ColorBlendOp = BlendOp.Add,
                         SrcColorBlendFactor = BlendFactor.SrcAlpha,

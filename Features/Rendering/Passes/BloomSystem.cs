@@ -90,7 +90,7 @@ public class BloomPass : ITrackedDisposable
                 ColorAttachmentFormats = [Format.R32G32B32A32Sfloat],
                 ColorAttachmentBlends =
                 [
-                    new ShaderPipelineColorAttachmentBlendDesc()
+                    new ShaderPipelineBlendDesc()
                     {
                         ColorBlendOp = BlendOp.Add,
                         SrcColorBlendFactor = BlendFactor.One,
@@ -138,7 +138,7 @@ public class BloomPass : ITrackedDisposable
                 ColorAttachmentFormats = [Format.R32G32B32A32Sfloat],
                 ColorAttachmentBlends =
                 [
-                    new ShaderPipelineColorAttachmentBlendDesc()
+                    new ShaderPipelineBlendDesc()
                     {
                         ColorBlendOp = BlendOp.Add,
                         SrcColorBlendFactor = BlendFactor.One,
