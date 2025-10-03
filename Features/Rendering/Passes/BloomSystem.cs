@@ -88,19 +88,7 @@ public class BloomPass : ITrackedDisposable
                 Topology = PrimitiveTopology.TriangleList,
 
                 ColorAttachmentFormats = [Format.R32G32B32A32Sfloat],
-                ColorAttachmentBlends =
-                [
-                    new ShaderPipelineBlendDesc()
-                    {
-                        ColorBlendOp = BlendOp.Add,
-                        SrcColorBlendFactor = BlendFactor.One,
-                        DstColorBlendFactor = BlendFactor.Zero,
-
-                        AlphaBlendOp = BlendOp.Add,
-                        SrcAlphaBlendFactor = BlendFactor.One,
-                        DstAlphaBlendFactor = BlendFactor.Zero,
-                    },
-                ],
+                ColorAttachmentBlends = [ShaderPipelineBlendDesc.Blend4],
             });
 
             changedAction = (previous, current) =>
@@ -136,19 +124,7 @@ public class BloomPass : ITrackedDisposable
                 Topology = PrimitiveTopology.TriangleList,
 
                 ColorAttachmentFormats = [Format.R32G32B32A32Sfloat],
-                ColorAttachmentBlends =
-                [
-                    new ShaderPipelineBlendDesc()
-                    {
-                        ColorBlendOp = BlendOp.Add,
-                        SrcColorBlendFactor = BlendFactor.One,
-                        DstColorBlendFactor = BlendFactor.One,
-
-                        AlphaBlendOp = BlendOp.Add,
-                        SrcAlphaBlendFactor = BlendFactor.One,
-                        DstAlphaBlendFactor = BlendFactor.One,
-                    },
-                ],
+                ColorAttachmentBlends = [ShaderPipelineBlendDesc.Blend5],
             });
 
             changedAction = (previous, current) =>

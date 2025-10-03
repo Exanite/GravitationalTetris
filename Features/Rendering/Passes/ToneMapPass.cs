@@ -38,19 +38,7 @@ public class ToneMapPass : ITrackedDisposable
                 Topology = PrimitiveTopology.TriangleList,
 
                 ColorAttachmentFormats = [ColorTargetFormat],
-                ColorAttachmentBlends =
-                [
-                    new ShaderPipelineBlendDesc()
-                    {
-                        ColorBlendOp = BlendOp.Add,
-                        SrcColorBlendFactor = BlendFactor.One,
-                        DstColorBlendFactor = BlendFactor.Zero,
-
-                        AlphaBlendOp = BlendOp.Add,
-                        SrcAlphaBlendFactor = BlendFactor.One,
-                        DstAlphaBlendFactor = BlendFactor.Zero,
-                    },
-                ],
+                ColorAttachmentBlends = [ShaderPipelineBlendDesc.Blend4],
             });
 
             changedAction = (previous, current) =>
