@@ -59,7 +59,7 @@ public class SpriteBatchPass : ITrackedDisposable
         commandBuffer.AddTransition(colorTarget, ResourceState.Attachment);
         commandBuffer.AddTransition(depthTarget, ResourceState.Attachment);
 
-        using (commandBuffer.BeginRenderPass([colorTarget], depthTarget))
+        using (commandBuffer.BeginRenderPass("SpriteBatch", [colorTarget], depthTarget))
         {
             using var _ = ListPool<Texture2D>.Acquire(out var textures);
             using var __ = ListPool<SpriteInstanceData>.Acquire(out var sprites);

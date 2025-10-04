@@ -66,7 +66,7 @@ public class ToneMapPass : ITrackedDisposable
         commandBuffer.AddTransition(colorSource, ResourceState.ShaderRead);
         commandBuffer.AddTransition(colorTarget, ResourceState.Attachment);
 
-        using (commandBuffer.BeginRenderPass([colorTarget]))
+        using (commandBuffer.BeginRenderPass("ToneMap", [colorTarget]))
         {
             commandBuffer.BindPipeline(pipeline.Value);
 

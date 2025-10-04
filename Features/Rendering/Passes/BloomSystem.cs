@@ -164,7 +164,7 @@ public class BloomPass : ITrackedDisposable
                 commandBuffer.AddTransition(currentTarget, ResourceState.Attachment);
                 commandBuffer.AddTransition(previousTarget, ResourceState.ShaderRead);
 
-                using (commandBuffer.BeginRenderPass([currentTarget]))
+                using (commandBuffer.BeginRenderPass("BloomDown", [currentTarget]))
                 {
                     commandBuffer.ClearColorAttachment(Vector4.Zero);
 
@@ -207,7 +207,7 @@ public class BloomPass : ITrackedDisposable
                 commandBuffer.AddTransition(currentTarget, ResourceState.Attachment);
                 commandBuffer.AddTransition(previousTarget, ResourceState.ShaderRead);
 
-                using (commandBuffer.BeginRenderPass([currentTarget]))
+                using (commandBuffer.BeginRenderPass("BloomUp", [currentTarget]))
                 {
                     commandBuffer.BindPipeline(upPipeline.Value);
 
@@ -223,7 +223,7 @@ public class BloomPass : ITrackedDisposable
             commandBuffer.AddTransition(colorSourceAndTarget, ResourceState.Attachment);
             commandBuffer.AddTransition(renderTextures[0], ResourceState.ShaderRead);
 
-            using (commandBuffer.BeginRenderPass([colorSourceAndTarget]))
+            using (commandBuffer.BeginRenderPass("BloomComposite", [colorSourceAndTarget]))
             {
                 commandBuffer.BindPipeline(upPipeline.Value);
 
