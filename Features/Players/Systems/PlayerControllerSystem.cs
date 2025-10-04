@@ -20,9 +20,9 @@ public partial class PlayerControllerSystem : GameSystem, ISetupSystem, IFrameUp
 
     private readonly PhysicsWorld physicsWorld;
     private readonly Input input;
-    private readonly ITime time;
+    private readonly Time time;
 
-    public PlayerControllerSystem(PhysicsWorld physicsWorld, Input input, ITime time)
+    public PlayerControllerSystem(PhysicsWorld physicsWorld, Input input, Time time)
     {
         this.physicsWorld = physicsWorld;
         this.input = input;

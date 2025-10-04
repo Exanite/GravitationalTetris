@@ -14,9 +14,9 @@ namespace Exanite.GravitationalTetris.Features.Physics.Systems;
 public partial class PhysicsSimulationSystem : GameSystem, IStartSystem, IFrameUpdateSystem, IFrameCleanupSystem
 {
     private readonly World physicsWorld;
-    private readonly ITime time;
+    private readonly Time time;
 
-    public PhysicsSimulationSystem(World physicsWorld, ITime time)
+    public PhysicsSimulationSystem(World physicsWorld, Time time)
     {
         this.physicsWorld = physicsWorld;
         this.time = time;

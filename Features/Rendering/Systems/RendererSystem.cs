@@ -49,7 +49,7 @@ public partial class RendererSystem : GameSystem, IRenderUpdateSystem, IDisposab
     private readonly Window window;
     private readonly Swapchain swapchain;
     private readonly GameTilemapData tilemap;
-    private readonly ITime time;
+    private readonly Time time;
 
     public RendererSystem(
         GraphicsContext graphicsContext,
@@ -58,7 +58,7 @@ public partial class RendererSystem : GameSystem, IRenderUpdateSystem, IDisposab
         Swapchain swapchain,
         TetrisUiSystem tetrisUiSystem,
         GameTilemapData tilemap,
-        ITime time)
+        Time time)
     {
         this.window = window;
         this.swapchain = swapchain;
@@ -190,7 +190,7 @@ public partial class RendererSystem : GameSystem, IRenderUpdateSystem, IDisposab
 
             var maxAlpha = 0.8f;
             var minAlpha = 0.1f;
-            var alpha = M.Remap(EaseInOutCubic(time.Time / 1.5f), 0, 1, minAlpha, maxAlpha);
+            var alpha = M.Remap(EaseInOutCubic(time.ElapsedTime / 1.5f), 0, 1, minAlpha, maxAlpha);
 
             var model = Matrix4x4.CreateTranslation(blockPosition.X, blockPosition.Y, 0);
 

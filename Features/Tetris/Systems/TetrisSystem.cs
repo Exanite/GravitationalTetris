@@ -54,7 +54,7 @@ public partial class TetrisSystem : GameSystem, ISetupSystem, IFrameUpdateSystem
 
     private readonly ResourceManager resourceManager;
     private readonly Random random;
-    private readonly ITime time;
+    private readonly Time time;
     private readonly Input input;
     private readonly GameTilemapData tilemap;
     private readonly PlayerControllerSystem playerControllerSystem;
@@ -67,7 +67,7 @@ public partial class TetrisSystem : GameSystem, ISetupSystem, IFrameUpdateSystem
     public TetrisSystem(
         ResourceManager resourceManager,
         Random random,
-        ITime time,
+        Time time,
         Input input,
         PlayerControllerSystem playerControllerSystem,
         GameTilemapData tilemap,
