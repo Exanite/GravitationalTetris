@@ -30,9 +30,6 @@
     <ProjectReference Include="..\Exanite.Engine.BuildTasks\Exanite.Engine.BuildTasks.csproj"/>
     <ProjectReference Include="..\Exanite.Engine\Exanite.Engine.csproj"/>
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="SoundFlow" Version="1.2.0"/>
-  </ItemGroup>
 
   <Import Project="..\Exanite.Engine.BuildTasks\LinkRawContent.targets"/>
 </Project>
