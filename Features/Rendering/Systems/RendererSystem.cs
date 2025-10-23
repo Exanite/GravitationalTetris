@@ -22,7 +22,7 @@ using Silk.NET.Vulkan;
 
 namespace Exanite.GravitationalTetris.Features.Rendering.Systems;
 
-public partial class RendererSystem : GameSystem, IRenderUpdateSystem, IDisposable
+public partial class RendererSystem : EngineSystem, IRenderUpdateSystem, IDisposable
 {
     // Array of size 2
     private readonly Texture2D[] worldColor;

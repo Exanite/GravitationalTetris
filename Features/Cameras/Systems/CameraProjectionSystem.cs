@@ -7,7 +7,7 @@ using Exanite.GravitationalTetris.Features.Transforms.Components;
 
 namespace Exanite.GravitationalTetris.Features.Cameras.Systems;
 
-public partial class CameraProjectionSystem : GameSystem, IRenderUpdateSystem
+public partial class CameraProjectionSystem : EngineSystem, IRenderUpdateSystem
 {
     private readonly Window window;
 

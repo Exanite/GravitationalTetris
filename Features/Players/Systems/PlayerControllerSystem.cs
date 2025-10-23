@@ -12,7 +12,7 @@ using PhysicsWorld = nkast.Aether.Physics2D.Dynamics.World;
 
 namespace Exanite.GravitationalTetris.Features.Players.Systems;
 
-public partial class PlayerControllerSystem : GameSystem, ISetupSystem, IFrameUpdateSystem
+public partial class PlayerControllerSystem : EngineSystem, ISetupSystem, IFrameUpdateSystem
 {
     private bool isGravityDown = true;
 

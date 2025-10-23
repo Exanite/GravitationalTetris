@@ -7,7 +7,7 @@ using Prowl.Scribe;
 
 namespace Exanite.GravitationalTetris.Features.Tetris.Systems;
 
-public class TetrisUiSystem : GameSystem, IRenderUpdateSystem, IDisposable
+public class TetrisUiSystem : EngineSystem, IRenderUpdateSystem, IDisposable
 {
     private readonly IHandle<FontFile> font;
 

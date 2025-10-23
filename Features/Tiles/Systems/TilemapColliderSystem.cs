@@ -14,7 +14,7 @@ using nkast.Aether.Physics2D.Dynamics;
 
 namespace Exanite.GravitationalTetris.Features.Tiles.Systems;
 
-public partial class TilemapColliderSystem : GameSystem, IStartSystem, IFrameUpdateSystem
+public partial class TilemapColliderSystem : EngineSystem, IStartSystem, IFrameUpdateSystem
 {
     private readonly GameTilemapData tilemap;
     private readonly EcsCommandBuffer commandBuffer;

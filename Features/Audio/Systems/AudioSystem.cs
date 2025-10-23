@@ -15,7 +15,7 @@ using SoundFlow.Enums;
 
 namespace Exanite.GravitationalTetris.Features.Audio.Systems;
 
-public partial class AudioSystem : GameSystem, IStartSystem, IStopSystem, IFrameUpdateSystem, IDisposable
+public partial class AudioSystem : EngineSystem, IStartSystem, IStopSystem, IFrameUpdateSystem, IDisposable
 {
     public const string SwitchGravity = "/Exanite.GravitationalTetris/Audio/SwitchGravity.wav";
     public const string RotateShape = "/Exanite.GravitationalTetris/Audio/RotateShape.wav";
