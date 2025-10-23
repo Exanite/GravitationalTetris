@@ -1,5 +1,5 @@
 using Autofac;
-using Exanite.Engine.Modding;
+using Exanite.Engine.Framework;
 using Exanite.GravitationalTetris.Features.Audio.Loaders;
 using SoundFlow.Backends.MiniAudio;
 

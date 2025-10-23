@@ -2,7 +2,6 @@
 using Autofac;
 using Exanite.Engine.Ecs.Scheduling;
 using Exanite.Engine.Framework;
-using Exanite.Engine.Modding;
 using Exanite.Engine.Resources.Systems;
 using Exanite.Engine.Timing.Systems;
 using Exanite.Engine.Windowing;
