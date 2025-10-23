@@ -5,7 +5,7 @@ using SoundFlow.Backends.MiniAudio;
 
 namespace Exanite.GravitationalTetris.Features.Audio.Modules;
 
-public class AudioModule : GameModule
+public class AudioModule : EngineModule
 {
     protected override void OnConfigureContainer(ContainerBuilder builder)
     {

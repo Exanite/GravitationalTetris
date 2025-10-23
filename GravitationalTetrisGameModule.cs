@@ -20,9 +20,9 @@ using PhysicsWorld = nkast.Aether.Physics2D.Dynamics.World;
 
 namespace Exanite.GravitationalTetris;
 
-public class GravitationalTetrisGameModule : GameModule
+public class GravitationalTetrisGameModule : EngineModule
 {
-    protected override void OnDeclareRelations(GameModuleRelations relations)
+    protected override void OnDeclareRelations(EngineModuleRelations relations)
     {
         base.OnDeclareRelations(relations);
 
