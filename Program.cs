@@ -10,6 +10,6 @@ public static class Program
     public static void Main(string[] args)
     {
         var settings = new EngineSettings(CompanyName, GameName);
-        new EngineHost(settings, [new GravitationalTetrisGameModule()]).Launch();
+        new EngineHost(settings, [new GravitationalTetrisGameModule()]).Launch(args);
     }
 }
