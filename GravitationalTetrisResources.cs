@@ -1,5 +1,4 @@
 using Exanite.Engine.Graphics;
-using Exanite.Engine.Windowing;
 using Exanite.ResourceManagement;
 using Prowl.Scribe;
 
@@ -7,8 +6,6 @@ namespace Exanite.GravitationalTetris;
 
 public static class GravitationalTetrisResources
 {
-    public static ResourceDefinition<WindowIcon> WindowIcon = new("/Exanite.GravitationalTetris/Icon.png");
-
     public static ResourceDefinition<FontFile> Font = new("/Exanite.GravitationalTetris/FieryTurk.ttf");
 
     public static ResourceDefinition<ShaderModule> SpriteVertexModule = new("/Exanite.GravitationalTetris/Sprite.vertex.slang");

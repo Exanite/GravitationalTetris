@@ -4,7 +4,7 @@ using Exanite.Engine.Ecs.Scheduling;
 using Exanite.Engine.Framework;
 using Exanite.Engine.Resources.Systems;
 using Exanite.Engine.Timing.Systems;
-using Exanite.Engine.Windowing;
+using Exanite.Engine.Windowing.Modules;
 using Exanite.GravitationalTetris.Features;
 using Exanite.GravitationalTetris.Features.Audio.Modules;
 using Exanite.GravitationalTetris.Features.Audio.Systems;
@@ -15,7 +15,6 @@ using Exanite.GravitationalTetris.Features.Rendering.Systems;
 using Exanite.GravitationalTetris.Features.Tetris.Systems;
 using Exanite.GravitationalTetris.Features.Tiles;
 using Exanite.GravitationalTetris.Features.Tiles.Systems;
-using Exanite.ResourceManagement;
 using PhysicsWorld = nkast.Aether.Physics2D.Dynamics.World;
 
 namespace Exanite.GravitationalTetris;
@@ -37,16 +36,10 @@ public class GravitationalTetrisGameModule : EngineModule
         builder.RegisterType<Random>().InstancePerDependency();
 
         // Windowing
-        builder.Register(ctx =>
+        builder.ConfigureDefaultWindow((window, _) =>
         {
-            var resourceManager = ctx.Resolve<IResourceManager>();
-
-            return new WindowSettings()
-            {
-                Name = "Gravitational Tetris",
-                Icon = resourceManager.GetResource(GravitationalTetrisResources.WindowIcon).Value,
-            };
-        }).SingleInstance();
+            window.Name = "Gravitational Tetris";
+        });
 
         // Shared data
         builder.RegisterType<GameTilemapData>().SingleInstance();
