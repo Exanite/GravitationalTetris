@@ -31,6 +31,7 @@ struct Output
 
 [[vk::binding(0, 0)]] ConstantBuffer<UniformData> Uniforms;
 
+[shader("vertex")]
 void main(in Input input, out Output output)
 {
     // This is intentionally out of order for compatibility purposes

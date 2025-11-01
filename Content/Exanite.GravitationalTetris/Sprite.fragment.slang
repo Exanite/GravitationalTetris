@@ -14,6 +14,7 @@ struct Output
     float4 Color : SV_Target;
 };
 
+[shader("fragment")]
 void main(in Input input, out Output output)
 {
     output.Color = Textures[input.TextureIndex].Sample(TextureSampler, input.Uv) * input.Color;

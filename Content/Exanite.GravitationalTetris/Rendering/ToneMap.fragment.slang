@@ -31,6 +31,7 @@ float3 TonemapAces(float3 color)
     return mul(a / b, m2);
 }
 
+[shader("fragment")]
 void main(in Input input, out Output output)
 {
     float2 uv = float2(input.Uv.x, 1 - input.Uv.y);

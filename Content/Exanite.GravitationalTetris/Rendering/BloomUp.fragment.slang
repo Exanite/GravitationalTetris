@@ -20,6 +20,7 @@ struct Output
 };
 
 // Based on https://learnopengl.com/Guest-Articles/2022/Phys.-Based-Bloom
+[shader("fragment")]
 void main(in Input input, out Output output)
 {
     float2 uv = float2(input.Uv.x, 1 - input.Uv.y);
