@@ -16,7 +16,7 @@ public class SpriteBatchPass : ITrackedDisposable
     private const int MaxSpritesPerBatch = 1024;
     private const int MaxTexturesPerBatch = 64;
 
-    private readonly ShaderPipelineCache<PipelineCacheKey, PipelineCacheState> pipelines;
+    private readonly ShaderPipelineFamily<PipelineCacheKey, PipelineFamilyEntry> pipelines;
 
     private readonly Lifetime lifetime = new();
 
@@ -27,7 +27,7 @@ public class SpriteBatchPass : ITrackedDisposable
 
         var sampler = new TextureSampler("SpriteBatch", graphicsContext, new TextureSamplerDesc(Filter.Nearest)).DisposeWith(lifetime);
 
-        pipelines = new ShaderPipelineCache<PipelineCacheKey, PipelineCacheState>(key =>
+        pipelines = new ShaderPipelineFamily<PipelineCacheKey, PipelineFamilyEntry>(key =>
         {
             var pipeline = new ShaderPipeline("SpriteBatch", graphicsContext, new ShaderPipelineDesc()
             {
@@ -44,7 +44,7 @@ public class SpriteBatchPass : ITrackedDisposable
 
             pipeline.Layout.GetVariable("TextureSampler").SetSampler(sampler);
 
-            return new PipelineCacheState(pipeline);
+            return new PipelineFamilyEntry(pipeline);
         }).DisposeWith(lifetime);
     }
 
@@ -137,7 +137,7 @@ public class SpriteBatchPass : ITrackedDisposable
         }
     }
 
-    private void Submit(GraphicsCommandBuffer commandBuffer, PipelineCacheState pipeline, List<SpriteInstanceData> sprites, List<Texture2D> textures)
+    private void Submit(GraphicsCommandBuffer commandBuffer, PipelineFamilyEntry pipeline, List<SpriteInstanceData> sprites, List<Texture2D> textures)
     {
         if (sprites.Count == 0)
         {
@@ -183,12 +183,12 @@ public class SpriteBatchPass : ITrackedDisposable
 
     private record struct PipelineCacheKey(Format ColorFormat, Format DepthFormat);
 
-    private class PipelineCacheState : ShaderPipelineCacheState
+    private class PipelineFamilyEntry : ShaderPipelineFamilyEntry
     {
         public readonly ShaderPipelineVariable UniformsVariable;
         public readonly ShaderPipelineVariable TexturesVariable;
 
-        public PipelineCacheState(ShaderPipeline pipeline) : base(pipeline)
+        public PipelineFamilyEntry(ShaderPipeline pipeline) : base(pipeline)
         {
             UniformsVariable = pipeline.Layout.GetVariable("Uniforms");
             TexturesVariable = pipeline.Layout.GetVariable("Textures");
