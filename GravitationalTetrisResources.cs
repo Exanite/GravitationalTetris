@@ -1,6 +1,6 @@
 using Exanite.Engine.Graphics;
+using Exanite.Prowl.Paper.Scribe;
 using Exanite.ResourceManagement;
-using Prowl.Scribe;
 
 namespace Exanite.GravitationalTetris;
 

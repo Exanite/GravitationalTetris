@@ -2,8 +2,8 @@ using System;
 using Exanite.Core.Runtime;
 using Exanite.Engine.Ecs.Systems;
 using Exanite.Engine.PaperUi;
+using Exanite.Prowl.Paper.Scribe;
 using Exanite.ResourceManagement;
-using Prowl.Scribe;
 
 namespace Exanite.GravitationalTetris.Features.Tetris.Systems;
 
