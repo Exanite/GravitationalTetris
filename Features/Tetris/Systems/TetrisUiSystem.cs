@@ -2,6 +2,7 @@ using System;
 using Exanite.Core.Runtime;
 using Exanite.Engine.Ecs.Systems;
 using Exanite.Engine.PaperUi;
+using Exanite.Prowl.Paper;
 using Exanite.Prowl.Paper.Scribe;
 using Exanite.ResourceManagement;
 
