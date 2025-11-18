@@ -135,7 +135,7 @@ public partial class RendererSystem : EngineSystem, IRenderUpdateSystem, IDispos
 
         // Copy world to swapchain
         copyPass.Copy(commandBuffer, ActiveWorldColor, swapchain.Texture);
-     }
+    }
 
     [Query]
     private void RenderCamera([Data] GraphicsCommandBuffer commandBuffer, ref ComponentCameraProjection cameraProjection)
