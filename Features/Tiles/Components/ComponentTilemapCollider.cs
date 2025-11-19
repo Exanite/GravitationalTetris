@@ -2,4 +2,4 @@ using Exanite.Myriad.Ecs;
 
 namespace Exanite.GravitationalTetris.Features.Tiles.Components;
 
-public struct ComponentTilemapCollider : IComponent {}
+public struct ComponentTilemapCollider : IComponent;
