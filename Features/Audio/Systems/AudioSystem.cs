@@ -65,12 +65,12 @@ public partial class AudioSystem : EngineSystem, IStartSystem, IStopSystem, IFra
         player.Play();
 
         commandBuffer.Create()
-            .Set(new ComponentName("AudioSource"))
-            .Set(new ComponentAudioSource(player));
+            .Set(new CName("AudioSource"))
+            .Set(new CAudioSource(player));
     }
 
     [Query]
-    private void DestroyCompletedAudioSources(Entity entity, ref ComponentAudioSource audioSource)
+    private void DestroyCompletedAudioSources(Entity entity, ref CAudioSource audioSource)
     {
         if (audioSource.Player.State == PlaybackState.Stopped)
         {

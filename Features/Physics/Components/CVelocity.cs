@@ -3,13 +3,13 @@ using Exanite.Myriad.Ecs;
 
 namespace Exanite.GravitationalTetris.Features.Physics.Components;
 
-public struct ComponentVelocity : IComponent
+public struct CVelocity : IComponent
 {
     public Vector2 Velocity;
 
-    public ComponentVelocity() : this(Vector2.Zero) {}
+    public CVelocity() : this(Vector2.Zero) {}
 
-    public ComponentVelocity(Vector2 velocity)
+    public CVelocity(Vector2 velocity)
     {
         Velocity = velocity;
     }

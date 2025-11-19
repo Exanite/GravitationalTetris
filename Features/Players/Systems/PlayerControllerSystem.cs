@@ -65,29 +65,29 @@ public partial class PlayerControllerSystem : EngineSystem, ISetupSystem, IFrame
     }
 
     [Query]
-    [QueryInclude<ComponentPlayer>]
-    private void UpdateMovement(ref ComponentVelocity velocity, ref ComponentPlayerMovement movement, ref ComponentMovementSpeed movementSpeed)
+    [QueryInclude<CPlayer>]
+    private void UpdateMovement(ref CVelocity velocity, ref CPlayerMovement movement, ref CMovementSpeed movementSpeed)
     {
         velocity.Velocity.X = M.SmoothDamp(velocity.Velocity.X, movementAction.CurrentValue * movementSpeed.MovementSpeed, movement.SmoothTime, time.DeltaTime, ref movement.SmoothVelocity.X);
     }
 
     [Query]
-    [QueryInclude<ComponentPlayer>]
-    private void ZeroVelocityY(ref ComponentVelocity velocity)
+    [QueryInclude<CPlayer>]
+    private void ZeroVelocityY(ref CVelocity velocity)
     {
         velocity.Velocity.Y = 0;
     }
 
     [Query]
-    [QueryInclude<ComponentPlayer>]
-    private void SetPlayerRotation(ref ComponentTransform transform)
+    [QueryInclude<CPlayer>]
+    private void SetPlayerRotation(ref CTransform transform)
     {
         transform.Rotation = isGravityDown ? 0 : float.Pi;
     }
 
     [Query]
-    [QueryInclude<ComponentPlayer>]
-    private void ClampPlayerVelocity(ref ComponentVelocity velocity)
+    [QueryInclude<CPlayer>]
+    private void ClampPlayerVelocity(ref CVelocity velocity)
     {
         velocity.Velocity.Y = Math.Clamp(velocity.Velocity.Y, -4, 4);
     }

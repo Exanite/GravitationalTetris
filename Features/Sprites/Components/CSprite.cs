@@ -5,12 +5,12 @@ using Exanite.ResourceManagement;
 
 namespace Exanite.GravitationalTetris.Features.Sprites.Components;
 
-public struct ComponentSprite : IComponent
+public struct CSprite : IComponent
 {
     public required IResourceHandle<Texture2D> Texture;
 
     [SetsRequiredMembers]
-    public ComponentSprite(IResourceHandle<Texture2D> texture)
+    public CSprite(IResourceHandle<Texture2D> texture)
     {
         Texture = texture;
     }

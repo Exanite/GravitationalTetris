@@ -3,12 +3,12 @@ using Exanite.Myriad.Ecs;
 
 namespace Exanite.GravitationalTetris.Features.Cameras.Components;
 
-public struct ComponentCameraProjection : IComponent
+public struct CCameraProjection : IComponent
 {
     public Matrix4x4 View;
     public Matrix4x4 Projection;
 
-    public ComponentCameraProjection()
+    public CCameraProjection()
     {
         View = Matrix4x4.Identity;
         Projection = Matrix4x4.Identity;

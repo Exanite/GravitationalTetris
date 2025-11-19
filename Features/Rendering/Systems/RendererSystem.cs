@@ -138,7 +138,7 @@ public partial class RendererSystem : EngineSystem, IRenderUpdateSystem, IDispos
     }
 
     [Query]
-    private void RenderCamera([Data] GraphicsCommandBuffer commandBuffer, ref ComponentCameraProjection cameraProjection)
+    private void RenderCamera([Data] GraphicsCommandBuffer commandBuffer, ref CCameraProjection cameraProjection)
     {
         spriteBatchPass.Render(spriteBatch, new SpriteUniformDrawSettings()
         {
@@ -182,7 +182,7 @@ public partial class RendererSystem : EngineSystem, IRenderUpdateSystem, IDispos
     }
 
     [Query]
-    private void DrawPlaceholders(ref ComponentTetrisRoot tetrisRoot)
+    private void DrawPlaceholders(ref CTetrisRoot tetrisRoot)
     {
         foreach (var blockPosition in tetrisRoot.PredictedBlockPositions)
         {
@@ -217,7 +217,7 @@ public partial class RendererSystem : EngineSystem, IRenderUpdateSystem, IDispos
     }
 
     [Query]
-    private void DrawSprites(ref ComponentSprite sprite, ref ComponentTransform transform)
+    private void DrawSprites(ref CSprite sprite, ref CTransform transform)
     {
         var texture = sprite.Texture.Value;
         var model = Matrix4x4.CreateRotationZ(transform.Rotation) * Matrix4x4.CreateTranslation(transform.Position.X, transform.Position.Y, 0);

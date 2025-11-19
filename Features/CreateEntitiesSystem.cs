@@ -27,13 +27,13 @@ public class CreateEntitiesSystem : EngineSystem, IStartSystem
     {
         // Camera
         commandBuffer.Create()
-            .Set(new ComponentName("Camera"))
-            .Set(new ComponentCamera(20))
-            .Set(new ComponentTransform
+            .Set(new CName("Camera"))
+            .Set(new CCamera(20))
+            .Set(new CTransform
             {
                 Position = new Vector2(5f - 0.5f, 10f - 0.5f),
             })
-            .Set(new ComponentCameraProjection());
+            .Set(new CCameraProjection());
 
         // Player
         var playerBody = new Body();
@@ -54,20 +54,20 @@ public class CreateEntitiesSystem : EngineSystem, IStartSystem
         feet.Restitution = 0;
 
         commandBuffer.Create()
-            .Set(new ComponentName("Player"))
-            .Set(new ComponentPlayer())
-            .Set(new ComponentTransform
+            .Set(new CName("Player"))
+            .Set(new CPlayer())
+            .Set(new CTransform
             {
                 Position = new Vector2(4f, 0),
                 Size = new Vector2(1, 1),
             })
-            .Set(new ComponentSprite(GravitationalTetrisConstants.IsWinter
+            .Set(new CSprite(GravitationalTetrisConstants.IsWinter
                 ? resourceManager.GetResource(GravitationalTetrisResources.Winter.Player)
                 : resourceManager.GetResource(GravitationalTetrisResources.Player)))
-            .Set(new ComponentRigidbody(playerBody))
-            .Set(new ComponentVelocity())
-            .Set(new ComponentMovementSpeed(5))
-            .Set(new ComponentPlayerMovement
+            .Set(new CRigidbody(playerBody))
+            .Set(new CVelocity())
+            .Set(new CMovementSpeed(5))
+            .Set(new CPlayerMovement
             {
                 SmoothTime = 0.05f,
             });
@@ -80,8 +80,8 @@ public class CreateEntitiesSystem : EngineSystem, IStartSystem
         wallBody.CreateRectangle(1, 60, 1, new Vector2(11, 15));
 
         commandBuffer.Create()
-            .Set(new ComponentName("Wall"))
-            .Set(new ComponentRigidbody(wallBody));
+            .Set(new CName("Wall"))
+            .Set(new CRigidbody(wallBody));
 
         commandBuffer.Execute();
     }

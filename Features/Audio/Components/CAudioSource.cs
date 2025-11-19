@@ -4,12 +4,12 @@ using SoundFlow.Components;
 
 namespace Exanite.GravitationalTetris.Features.Audio.Components;
 
-public struct ComponentAudioSource : IComponent
+public struct CAudioSource : IComponent
 {
     public required SoundPlayer Player;
 
     [SetsRequiredMembers]
-    public ComponentAudioSource(SoundPlayer player)
+    public CAudioSource(SoundPlayer player)
     {
         Player = player;
     }
