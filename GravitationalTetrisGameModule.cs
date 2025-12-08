@@ -32,23 +32,15 @@ public class GravitationalTetrisGameModule : EngineModule
     {
         base.OnConfigureContainer(builder);
 
-        // Misc
-        builder.RegisterType<Random>().InstancePerDependency();
-
-        // Windowing
+        builder.RegisterFolderFileSystem("GravitationalTetris", "/", "");
         builder.ConfigureDefaultWindow((window, _) =>
         {
             window.Name = "Gravitational Tetris";
         });
 
-        // Shared data
+        builder.RegisterType<Random>().InstancePerDependency();
         builder.RegisterType<GameTilemapData>().SingleInstance();
-
-        // Physics
         builder.RegisterType<PhysicsWorld>().SingleInstance();
-
-        // Resources
-        builder.RegisterFolderFileSystem("GravitationalTetris", "/", "");
     }
 
     protected override void OnConfigureSystems(SystemScheduler scheduler)
