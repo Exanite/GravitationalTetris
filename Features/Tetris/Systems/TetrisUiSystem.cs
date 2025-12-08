@@ -1,7 +1,7 @@
 using System;
 using Exanite.Core.Runtime;
 using Exanite.Engine.Ecs.Systems;
-using Exanite.Engine.PaperUi;
+using Exanite.Engine.UserInterfaces;
 using Exanite.Prowl.Paper;
 using Exanite.ResourceManagement;
 
