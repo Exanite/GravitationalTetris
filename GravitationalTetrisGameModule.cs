@@ -25,7 +25,7 @@ public class GravitationalTetrisGameModule : EngineModule
     {
         base.OnDeclareRelations(relations);
 
-        relations.RegisterSubmodule<AudioModule>();
+        relations.Submodule<AudioModule>();
     }
 
     protected override void OnConfigureContainer(ContainerBuilder builder)
