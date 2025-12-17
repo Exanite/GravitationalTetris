@@ -10,7 +10,7 @@ public static class Program
     public static int Main(string[] args)
     {
         var settings = new EngineSettings(CompanyName, GameName);
-        var engine = new EngineRoot(settings, [new GravitationalTetrisGameModule()]);
+        var engine = EngineRoot.Create(settings, [new GravitationalTetrisGameModule()]);
 
         return engine.Launch(args);
     }
