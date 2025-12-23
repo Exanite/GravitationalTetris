@@ -1,5 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="..\Exanite.Engine\ExeProject.props"/>
+  <Import Project="..\Exanite.Engine\EngineSdk.props"/>
 
   <PropertyGroup>
     <AssemblyName>GravitationalTetris</AssemblyName>
