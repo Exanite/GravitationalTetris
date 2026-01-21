@@ -3,7 +3,7 @@ using Exanite.ResourceManagement;
 
 namespace Exanite.GravitationalTetris.Features.Audio.Loaders;
 
-public class AudioDataLoader : SimpleResourceLoader<AudioData>
+public class AudioDataLoader : ResourceLoader<AudioData>
 {
     public override void Load(IResourceLoadOperation<AudioData> loadOperation)
     {
