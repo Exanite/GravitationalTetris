@@ -32,7 +32,6 @@ public class GravitationalTetrisGameModule : EngineModule
     {
         base.OnConfigureContainer(builder);
 
-        builder.RegisterFolderFileSystem("GravitationalTetris", "/", "");
         builder.ConfigureDefaultWindow((window, _) =>
         {
             window.Name = "Gravitational Tetris";
