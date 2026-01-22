@@ -1,6 +1,6 @@
 using System;
 using Exanite.Core.Runtime;
-using Exanite.Engine.Framework;
+using Exanite.Engine;
 using Exanite.Engine.Graphics;
 using Exanite.ResourceManagement;
 using Silk.NET.Vulkan;
@@ -21,7 +21,7 @@ public class ToneMapPass : ITrackedDisposable
 
     public ToneMapPass(GraphicsContext graphicsContext, IResourceManager resourceManager)
     {
-        var vertexModule = resourceManager.GetResource(EngineResources.Rendering.ScreenTriVertexModule);
+        var vertexModule = resourceManager.GetResource(EngineResources.ExaniteEngine.Rendering.ScreenTriVertexModule);
         var fragmentModule = resourceManager.GetResource(GravitationalTetrisResources.ToneMapFragmentModule);
 
         var sampler = new TextureSampler("ToneMap", graphicsContext, new TextureSamplerDesc(Filter.Linear)).DisposeWith(lifetime);

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using Exanite.Core.Numerics;
 using Exanite.Core.Runtime;
-using Exanite.Engine.Framework;
+using Exanite.Engine;
 using Exanite.Engine.Graphics;
 using Exanite.ResourceManagement;
 using Silk.NET.Vulkan;
@@ -70,7 +70,7 @@ public class BloomPass : ITrackedDisposable
     {
         this.graphicsContext = graphicsContext;
 
-        var vertexModule = resourceManager.GetResource(EngineResources.Rendering.ScreenTriVertexModule);
+        var vertexModule = resourceManager.GetResource(EngineResources.ExaniteEngine.Rendering.ScreenTriVertexModule);
         var downFragmentModule = resourceManager.GetResource(GravitationalTetrisResources.BloomDownFragmentModule);
         var upFragmentModule = resourceManager.GetResource(GravitationalTetrisResources.BloomUpFragmentModule);
 
