@@ -62,8 +62,8 @@ public class CreateEntitiesSystem : EngineSystem, IStartSystem
                 Size = new Vector2(1, 1),
             })
             .Set(new CSprite(GravitationalTetrisConstants.IsWinter
-                ? resourceManager.GetResource(GravitationalTetrisResources.Winter.Player)
-                : resourceManager.GetResource(GravitationalTetrisResources.Player)))
+                ? resourceManager.GetResource(GravitationalTetrisResources.ExaniteGravitationalTetrisWinter.PlayerTexture)
+                : resourceManager.GetResource(GravitationalTetrisResources.ExaniteGravitationalTetris.PlayerTexture)))
             .Set(new CRigidbody(playerBody))
             .Set(new CVelocity())
             .Set(new CMovementSpeed(5))

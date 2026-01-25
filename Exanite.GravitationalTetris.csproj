@@ -2,7 +2,7 @@
   <Import Project="..\Exanite.Engine\EngineSdk.props"/>
 
   <PropertyGroup>
-    <AssemblyName>GravitationalTetris</AssemblyName>
+    <AssemblyName>Exanite.GravitationalTetris</AssemblyName>
     <RootNamespace>Exanite.GravitationalTetris</RootNamespace>
 
     <OutputType>Exe</OutputType>

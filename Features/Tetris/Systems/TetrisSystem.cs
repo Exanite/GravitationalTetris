@@ -131,8 +131,8 @@ public partial class TetrisSystem : EngineSystem, ISetupSystem, IFrameUpdateSyst
             PivotX = 0,
             PivotY = 1,
 
-            DefaultTexture = resourceManager.GetResource(GravitationalTetrisResources.TileCyan),
-            SnowTexture = resourceManager.GetResource(GravitationalTetrisResources.Winter.TileCyan),
+            DefaultTexture = resourceManager.GetResource(GravitationalTetrisResources.ExaniteGravitationalTetris.TileCyanTexture),
+            SnowTexture = resourceManager.GetResource(GravitationalTetrisResources.ExaniteGravitationalTetrisWinter.TileCyanTexture),
         });
 
         shapes.Add(new TetrisShapeDefinition
@@ -146,8 +146,8 @@ public partial class TetrisSystem : EngineSystem, ISetupSystem, IFrameUpdateSyst
             PivotX = 1,
             PivotY = 1,
 
-            DefaultTexture = resourceManager.GetResource(GravitationalTetrisResources.TileBlue),
-            SnowTexture = resourceManager.GetResource(GravitationalTetrisResources.Winter.TileBlue),
+            DefaultTexture = resourceManager.GetResource(GravitationalTetrisResources.ExaniteGravitationalTetris.TileBlueTexture),
+            SnowTexture = resourceManager.GetResource(GravitationalTetrisResources.ExaniteGravitationalTetrisWinter.TileBlueTexture),
         });
 
         shapes.Add(new TetrisShapeDefinition
@@ -161,8 +161,8 @@ public partial class TetrisSystem : EngineSystem, ISetupSystem, IFrameUpdateSyst
             PivotX = 1,
             PivotY = 1,
 
-            DefaultTexture = resourceManager.GetResource(GravitationalTetrisResources.TileOrange),
-            SnowTexture = resourceManager.GetResource(GravitationalTetrisResources.Winter.TileOrange),
+            DefaultTexture = resourceManager.GetResource(GravitationalTetrisResources.ExaniteGravitationalTetris.TileOrangeTexture),
+            SnowTexture = resourceManager.GetResource(GravitationalTetrisResources.ExaniteGravitationalTetrisWinter.TileOrangeTexture),
         });
 
         shapes.Add(new TetrisShapeDefinition
@@ -176,8 +176,8 @@ public partial class TetrisSystem : EngineSystem, ISetupSystem, IFrameUpdateSyst
             PivotX = 0,
             PivotY = 0,
 
-            DefaultTexture = resourceManager.GetResource(GravitationalTetrisResources.TileYellow),
-            SnowTexture = resourceManager.GetResource(GravitationalTetrisResources.Winter.TileYellow),
+            DefaultTexture = resourceManager.GetResource(GravitationalTetrisResources.ExaniteGravitationalTetris.TileYellowTexture),
+            SnowTexture = resourceManager.GetResource(GravitationalTetrisResources.ExaniteGravitationalTetrisWinter.TileYellowTexture),
         });
 
         shapes.Add(new TetrisShapeDefinition
@@ -191,8 +191,8 @@ public partial class TetrisSystem : EngineSystem, ISetupSystem, IFrameUpdateSyst
             PivotX = 1,
             PivotY = 1,
 
-            DefaultTexture = resourceManager.GetResource(GravitationalTetrisResources.TileGreen),
-            SnowTexture = resourceManager.GetResource(GravitationalTetrisResources.Winter.TileGreen),
+            DefaultTexture = resourceManager.GetResource(GravitationalTetrisResources.ExaniteGravitationalTetris.TileGreenTexture),
+            SnowTexture = resourceManager.GetResource(GravitationalTetrisResources.ExaniteGravitationalTetrisWinter.TileGreenTexture),
         });
 
         shapes.Add(new TetrisShapeDefinition
@@ -206,8 +206,8 @@ public partial class TetrisSystem : EngineSystem, ISetupSystem, IFrameUpdateSyst
             PivotX = 1,
             PivotY = 1,
 
-            DefaultTexture = resourceManager.GetResource(GravitationalTetrisResources.TilePurple),
-            SnowTexture = resourceManager.GetResource(GravitationalTetrisResources.Winter.TilePurple),
+            DefaultTexture = resourceManager.GetResource(GravitationalTetrisResources.ExaniteGravitationalTetris.TilePurpleTexture),
+            SnowTexture = resourceManager.GetResource(GravitationalTetrisResources.ExaniteGravitationalTetrisWinter.TilePurpleTexture),
         });
 
         shapes.Add(new TetrisShapeDefinition
@@ -221,8 +221,8 @@ public partial class TetrisSystem : EngineSystem, ISetupSystem, IFrameUpdateSyst
             PivotX = 1,
             PivotY = 1,
 
-            DefaultTexture = resourceManager.GetResource(GravitationalTetrisResources.TileRed),
-            SnowTexture = resourceManager.GetResource(GravitationalTetrisResources.Winter.TileRed),
+            DefaultTexture = resourceManager.GetResource(GravitationalTetrisResources.ExaniteGravitationalTetris.TileRedTexture),
+            SnowTexture = resourceManager.GetResource(GravitationalTetrisResources.ExaniteGravitationalTetrisWinter.TileRedTexture),
         });
     }
 

@@ -63,8 +63,8 @@ public partial class RendererSystem : EngineSystem, IRenderUpdateSystem, IDispos
         this.tilemap = tilemap;
         this.time = time;
 
-        emptyTileTexture = resourceManager.GetResource(GravitationalTetrisResources.TileNone);
-        placeholderTileTexture = resourceManager.GetResource(GravitationalTetrisResources.TilePlaceholder);
+        emptyTileTexture = resourceManager.GetResource(GravitationalTetrisResources.ExaniteGravitationalTetris.TileNoneTexture);
+        placeholderTileTexture = resourceManager.GetResource(GravitationalTetrisResources.ExaniteGravitationalTetris.TilePlaceholderTexture);
 
         clearPass = new ClearPass().DisposeWith(lifetime);
 

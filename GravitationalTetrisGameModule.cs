@@ -2,6 +2,7 @@
 using Autofac;
 using Exanite.Engine.Ecs.Scheduling;
 using Exanite.Engine.Framework;
+using Exanite.Engine.Resources;
 using Exanite.Engine.Resources.Systems;
 using Exanite.Engine.Timing.Systems;
 using Exanite.Engine.Windowing.Modules;
@@ -32,6 +33,7 @@ public class GravitationalTetrisGameModule : EngineModule
     {
         base.OnConfigureContainer(builder);
 
+        builder.RegisterInstance(new ResourceClassGeneratorSettings("Exanite.GravitationalTetris")).SingleInstance();
         builder.ConfigureDefaultWindow((window, _) =>
         {
             window.Name = "Gravitational Tetris";
