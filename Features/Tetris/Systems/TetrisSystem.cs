@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Numerics;
+using Exanite.Engine.Audio.Systems;
 using Exanite.Engine.Ecs.Components;
 using Exanite.Engine.Ecs.Queries;
 using Exanite.Engine.Ecs.Systems;
@@ -11,7 +12,6 @@ using Exanite.Engine.Inputs.Actions;
 using Exanite.Engine.Lifecycles.Components;
 using Exanite.Engine.Sprites.Components;
 using Exanite.Engine.Timing;
-using Exanite.GravitationalTetris.Features.Audio.Systems;
 using Exanite.GravitationalTetris.Features.Physics.Components;
 using Exanite.GravitationalTetris.Features.Players.Components;
 using Exanite.GravitationalTetris.Features.Players.Systems;
@@ -241,13 +241,13 @@ public partial class TetrisSystem : EngineSystem, ISetupSystem, IFrameUpdateSyst
         {
             if (rotateLeftAction.IsPressed())
             {
-                audioSystem.Play(AudioSystem.RotateShape);
+                audioSystem.Play(GravitationalTetrisResources.ExaniteGravitationalTetris.Audio.RotateShapeAudio);
                 tetrisRoot.Value.Rotation = (TetrisRotation)(((int)tetrisRoot.Value.Rotation + 3) % 4);
             }
 
             if (rotateRightAction.IsPressed())
             {
-                audioSystem.Play(AudioSystem.RotateShape);
+                audioSystem.Play(GravitationalTetrisResources.ExaniteGravitationalTetris.Audio.RotateShapeAudio);
                 tetrisRoot.Value.Rotation = (TetrisRotation)(((int)tetrisRoot.Value.Rotation + 1) % 4);
             }
         }
@@ -259,7 +259,7 @@ public partial class TetrisSystem : EngineSystem, ISetupSystem, IFrameUpdateSyst
         else if (placeShapeAction.IsPressed() || ShouldShouldPlaceTetrisQueryDescription.Count() > 0)
         {
             playerControllerSystem.FlipGravity();
-            audioSystem.Play(AudioSystem.SwitchGravity);
+            audioSystem.Play(GravitationalTetrisResources.ExaniteGravitationalTetris.Audio.SwitchGravityAudio);
 
             PlaceShape();
         }
@@ -542,7 +542,7 @@ public partial class TetrisSystem : EngineSystem, ISetupSystem, IFrameUpdateSyst
 
                     while (TryApplyBlockGravity()) {}
 
-                    audioSystem.Play(AudioSystem.ClearTile);
+                    audioSystem.Play(GravitationalTetrisResources.ExaniteGravitationalTetris.Audio.ClearTileAudio);
 
                     return;
                 }
@@ -715,7 +715,7 @@ public partial class TetrisSystem : EngineSystem, ISetupSystem, IFrameUpdateSyst
     [QueryInclude<CPlayer>]
     private void ResetGame(ref CTransform playerTransform, ref CVelocity velocity)
     {
-        audioSystem.Play(AudioSystem.Restart);
+        audioSystem.Play(GravitationalTetrisResources.ExaniteGravitationalTetris.Audio.RestartAudio);
 
         playerTransform.Position = new Vector2(4f, 0);
         velocity.Velocity = Vector2.Zero;

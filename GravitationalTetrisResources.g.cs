@@ -33,6 +33,14 @@ public partial class GravitationalTetrisResources
         public static readonly ResourceDefinition<global::Exanite.Engine.Graphics.Texture2D> TileRedTexture = new("/Exanite.GravitationalTetris/TileRed.png");
         public static readonly ResourceDefinition<global::Exanite.Engine.Graphics.Texture2D> TileYellowTexture = new("/Exanite.GravitationalTetris/TileYellow.png");
         public static readonly ResourceDefinition<global::Exanite.Engine.Graphics.Texture2D> WhiteTexture = new("/Exanite.GravitationalTetris/White.png");
+
+        public partial class Audio
+        {
+            public static readonly ResourceDefinition<global::Exanite.Engine.Audio.AudioData> ClearTileAudio = new("/Exanite.GravitationalTetris/Audio/ClearTile.wav");
+            public static readonly ResourceDefinition<global::Exanite.Engine.Audio.AudioData> RestartAudio = new("/Exanite.GravitationalTetris/Audio/Restart.wav");
+            public static readonly ResourceDefinition<global::Exanite.Engine.Audio.AudioData> RotateShapeAudio = new("/Exanite.GravitationalTetris/Audio/RotateShape.wav");
+            public static readonly ResourceDefinition<global::Exanite.Engine.Audio.AudioData> SwitchGravityAudio = new("/Exanite.GravitationalTetris/Audio/SwitchGravity.wav");
+        }
     }
 
     public partial class ExaniteGravitationalTetrisWinter

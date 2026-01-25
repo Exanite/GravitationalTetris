@@ -1,5 +1,7 @@
 ﻿using System;
 using Autofac;
+using Exanite.Engine.Audio.Modules;
+using Exanite.Engine.Audio.Systems;
 using Exanite.Engine.Ecs.Scheduling;
 using Exanite.Engine.Framework;
 using Exanite.Engine.Resources;
@@ -7,8 +9,6 @@ using Exanite.Engine.Resources.Systems;
 using Exanite.Engine.Timing.Systems;
 using Exanite.Engine.Windowing.Modules;
 using Exanite.GravitationalTetris.Features;
-using Exanite.GravitationalTetris.Features.Audio.Modules;
-using Exanite.GravitationalTetris.Features.Audio.Systems;
 using Exanite.GravitationalTetris.Features.Cameras.Systems;
 using Exanite.GravitationalTetris.Features.Physics.Systems;
 using Exanite.GravitationalTetris.Features.Players.Systems;
