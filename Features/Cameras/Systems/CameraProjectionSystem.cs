@@ -25,6 +25,6 @@ public partial class CameraProjectionSystem : EngineSystem, IRenderUpdateSystem
     private void Update(ref CCamera camera, ref CTransform transform, ref CCameraProjection cameraProjection)
     {
         cameraProjection.View = Matrix4x4.CreateRotationZ(transform.Rotation) * Matrix4x4.CreateTranslation(-transform.Position.X, -transform.Position.Y, -10);
-        cameraProjection.Projection = Matrix4x4.CreateOrthographic(camera.VerticalHeight * window.AspectRatio, camera.VerticalHeight, 0.001f, 1000f) * Matrix4x4.CreateRotationZ(float.Pi) * Matrix4x4.CreateScale(-1, 1, 1);
+        cameraProjection.Projection = Matrix4x4.CreateOrthographic(camera.VerticalHeight * window.AspectRatio, camera.VerticalHeight, 1000f, 0.001f) * Matrix4x4.CreateRotationZ(float.Pi) * Matrix4x4.CreateScale(1, 1, 1);
     }
 }

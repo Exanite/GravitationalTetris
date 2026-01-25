@@ -6,15 +6,14 @@ using Exanite.Engine.Ecs.Queries;
 using Exanite.Engine.Ecs.Systems;
 using Exanite.Engine.Graphics;
 using Exanite.Engine.Graphics.Passes;
+using Exanite.Engine.PostProcessing.Passes;
+using Exanite.Engine.Sprites;
+using Exanite.Engine.Sprites.Components;
+using Exanite.Engine.Sprites.Passes;
 using Exanite.Engine.Timing;
 using Exanite.Engine.Windowing;
 using Exanite.GravitationalTetris.Features.Cameras.Components;
-using Exanite.GravitationalTetris.Features.Rendering.Passes;
-using Exanite.GravitationalTetris.Features.Sprites;
-using Exanite.GravitationalTetris.Features.Sprites.Components;
-using Exanite.GravitationalTetris.Features.Sprites.Passes;
 using Exanite.GravitationalTetris.Features.Tetris.Components;
-using Exanite.GravitationalTetris.Features.Tetris.Systems;
 using Exanite.GravitationalTetris.Features.Tiles;
 using Exanite.GravitationalTetris.Features.Transforms.Components;
 using Exanite.ResourceManagement;
@@ -56,7 +55,6 @@ public partial class RendererSystem : EngineSystem, IRenderUpdateSystem, IDispos
         ResourceManager resourceManager,
         Window window,
         Swapchain swapchain,
-        TetrisUiSystem tetrisUiSystem,
         GameTilemapData tilemap,
         Time time)
     {
@@ -140,7 +138,15 @@ public partial class RendererSystem : EngineSystem, IRenderUpdateSystem, IDispos
     [Query]
     private void RenderCamera([Data] GraphicsCommandBuffer commandBuffer, ref CCameraProjection cameraProjection)
     {
-        spriteBatchPass.Render(spriteBatch, new SpriteUniformDrawSettings()
+        var instances = spriteBatch.GetInstances();
+
+        foreach (ref var instance in instances.AsSpan())
+        {
+            // This is because Gravitational Tetris uses a different coordinate system from the rest of the engine (legacy code)
+            instance.FlipMode = SpriteFlipMode.FlipXy;
+        }
+
+        spriteBatchPass.Render(new SpriteUniformDrawSettings()
         {
             CommandBuffer = commandBuffer,
             ColorTarget = ActiveWorldColor,
@@ -148,7 +154,7 @@ public partial class RendererSystem : EngineSystem, IRenderUpdateSystem, IDispos
 
             View = cameraProjection.View,
             Projection = cameraProjection.Projection,
-        });
+        }, instances);
     }
 
     private void DrawTiles()
