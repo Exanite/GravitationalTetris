@@ -73,7 +73,7 @@ public partial class RendererSystem : EngineSystem, IRenderUpdateSystem, IDispos
         bloomPass = new BloomPass(graphicsContext, resourceManager).DisposeWith(lifetime);
         toneMapPass = new ToneMapPass(graphicsContext, resourceManager).DisposeWith(lifetime);
 
-        copyPass = new CopyColorPass(graphicsContext, resourceManager).DisposeWith(lifetime);
+        copyPass = new CopyColorPass(graphicsContext, resourceManager, new CopyColorPassDesc()).DisposeWith(lifetime);
 
         worldColor = new Texture2D[2];
         for (var i = 0; i < worldColor.Length; i++)
