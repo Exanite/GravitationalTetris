@@ -56,7 +56,7 @@ public partial class PhysicsSimulationSystem : EngineSystem, IStartSystem, IFram
         if (rigidbody.Body.World == null)
         {
             physicsWorld.Add(rigidbody.Body);
-            rigidbody.Body.Tag = new VBox<Entity>(entity);
+            rigidbody.Body.Tag = new Box<Entity>(entity);
         }
     }
 
