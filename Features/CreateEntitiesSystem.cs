@@ -27,13 +27,13 @@ public class CreateEntitiesSystem : EngineSystem, IStartSystem
     {
         // Camera
         commandBuffer.Create()
-            .Set(new CName("Camera"))
-            .Set(new CCamera(20))
-            .Set(new CTransform
+            .Set(new EcsName("Camera"))
+            .Set(new EcsCamera(20))
+            .Set(new EcsTransform
             {
                 Position = new Vector2(5f - 0.5f, 10f - 0.5f),
             })
-            .Set(new CCameraProjection());
+            .Set(new EcsCameraProjection());
 
         // Player
         var playerBody = new Body();
@@ -54,20 +54,20 @@ public class CreateEntitiesSystem : EngineSystem, IStartSystem
         feet.Restitution = 0;
 
         commandBuffer.Create()
-            .Set(new CName("Player"))
-            .Set(new CPlayer())
-            .Set(new CTransform
+            .Set(new EcsName("Player"))
+            .Set(new EcsPlayer())
+            .Set(new EcsTransform
             {
                 Position = new Vector2(4f, 0),
                 Size = new Vector2(1, 1),
             })
-            .Set(new CSprite(GravitationalTetrisConstants.IsWinter
+            .Set(new EcsSprite(GravitationalTetrisConstants.IsWinter
                 ? resourceManager.GetResource(GravitationalTetrisResources.ExaniteGravitationalTetrisWinter.PlayerTexture)
                 : resourceManager.GetResource(GravitationalTetrisResources.ExaniteGravitationalTetris.PlayerTexture)))
-            .Set(new CRigidbody(playerBody))
-            .Set(new CVelocity())
-            .Set(new CMovementSpeed(5))
-            .Set(new CPlayerMovement
+            .Set(new EcsRigidbody(playerBody))
+            .Set(new EcsVelocity())
+            .Set(new EcsMovementSpeed(5))
+            .Set(new EcsPlayerMovement
             {
                 SmoothTime = 0.05f,
             });
@@ -80,8 +80,8 @@ public class CreateEntitiesSystem : EngineSystem, IStartSystem
         wallBody.CreateRectangle(1, 60, 1, new Vector2(11, 15));
 
         commandBuffer.Create()
-            .Set(new CName("Wall"))
-            .Set(new CRigidbody(wallBody));
+            .Set(new EcsName("Wall"))
+            .Set(new EcsRigidbody(wallBody));
 
         commandBuffer.Execute();
     }

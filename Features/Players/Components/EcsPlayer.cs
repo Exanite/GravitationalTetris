@@ -2,4 +2,4 @@ using Exanite.Myriad.Ecs;
 
 namespace Exanite.GravitationalTetris.Features.Players.Components;
 
-public struct CPlayer : IComponent;
+public struct EcsPlayer : IComponent;

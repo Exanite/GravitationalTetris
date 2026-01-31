@@ -51,7 +51,7 @@ public partial class PhysicsSimulationSystem : EngineSystem, IStartSystem, IFram
     }
 
     [Query]
-    private void AddRigidbodies(Entity entity, ref CRigidbody rigidbody)
+    private void AddRigidbodies(Entity entity, ref EcsRigidbody rigidbody)
     {
         if (rigidbody.Body.World == null)
         {
@@ -61,46 +61,46 @@ public partial class PhysicsSimulationSystem : EngineSystem, IStartSystem, IFram
     }
 
     [Query]
-    private void SyncTransformsToPhysics(ref CTransform transform, ref CRigidbody rigidbody)
+    private void SyncTransformsToPhysics(ref EcsTransform transform, ref EcsRigidbody rigidbody)
     {
         rigidbody.Body.Position = transform.Position;
         rigidbody.Body.Rotation = transform.Rotation;
     }
 
     [Query]
-    private void SyncVelocitiesToPhysics(ref CVelocity velocity, ref CRigidbody rigidbody)
+    private void SyncVelocitiesToPhysics(ref EcsVelocity velocity, ref EcsRigidbody rigidbody)
     {
         rigidbody.Body.LinearVelocity = velocity.Velocity;
     }
 
     [Query]
-    private void SyncAngularVelocitiesToPhysics(ref CAngularVelocity angularVelocity, ref CRigidbody rigidbody)
+    private void SyncAngularVelocitiesToPhysics(ref EcsAngularVelocity angularVelocity, ref EcsRigidbody rigidbody)
     {
         rigidbody.Body.AngularVelocity = angularVelocity.AngularVelocity;
     }
 
     [Query]
-    private void SyncTransformsFromPhysics(ref CTransform transform, ref CRigidbody rigidbody)
+    private void SyncTransformsFromPhysics(ref EcsTransform transform, ref EcsRigidbody rigidbody)
     {
         transform.Position = rigidbody.Body.Position;
         transform.Rotation = rigidbody.Body.Rotation;
     }
 
     [Query]
-    private void SyncVelocitiesFromPhysics(ref CVelocity velocity, ref CRigidbody rigidbody)
+    private void SyncVelocitiesFromPhysics(ref EcsVelocity velocity, ref EcsRigidbody rigidbody)
     {
         velocity.Velocity = rigidbody.Body.LinearVelocity;
     }
 
     [Query]
-    private void SyncAngularVelocitiesFromPhysics(ref CAngularVelocity angularVelocity, ref CRigidbody rigidbody)
+    private void SyncAngularVelocitiesFromPhysics(ref EcsAngularVelocity angularVelocity, ref EcsRigidbody rigidbody)
     {
         angularVelocity.AngularVelocity = rigidbody.Body.AngularVelocity;
     }
 
     [Query]
-    [QueryInclude<CDestroyed>]
-    private void RemoveRigidbodies(ref CRigidbody rigidbody)
+    [QueryInclude<EcsDestroyed>]
+    private void RemoveRigidbodies(ref EcsRigidbody rigidbody)
     {
         var body = rigidbody.Body;
         if (body.World != null)

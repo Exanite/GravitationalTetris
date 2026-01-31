@@ -27,7 +27,7 @@ public partial class TilemapColliderSystem : EngineSystem, IStartSystem, IFrameU
 
     public void Start()
     {
-        commandBuffer.Create().Set(new CUpdateTilemapCollidersEvent());
+        commandBuffer.Create().Set(new EcsUpdateTilemapCollidersEvent());
         commandBuffer.Execute();
     }
 
@@ -45,17 +45,17 @@ public partial class TilemapColliderSystem : EngineSystem, IStartSystem, IFrameU
     }
 
     [Query]
-    [QueryInclude<CUpdateTilemapCollidersEvent>]
+    [QueryInclude<EcsUpdateTilemapCollidersEvent>]
     private void RemoveUpdateTilemapCollidersEvent(Entity entity)
     {
-        commandBuffer.Set(entity, new CDestroyed());
+        commandBuffer.Set(entity, new EcsDestroyed());
     }
 
     [Query]
-    [QueryInclude<CTilemapCollider>]
+    [QueryInclude<EcsTilemapCollider>]
     private void RemoveTilemapColliders(Entity entity)
     {
-        commandBuffer.Set(entity, new CDestroyed());
+        commandBuffer.Set(entity, new EcsDestroyed());
     }
 
     private void UpdateTilemapColliders()
@@ -89,9 +89,9 @@ public partial class TilemapColliderSystem : EngineSystem, IStartSystem, IFrameU
         body.CreateCompoundPolygon(polygons, 1);
 
         commandBuffer.Create()
-            .Set(new CName("TilemapCollider"))
-            .Set(new CTransform())
-            .Set(new CRigidbody(body))
-            .Set(new CTilemapCollider());
+            .Set(new EcsName("TilemapCollider"))
+            .Set(new EcsTransform())
+            .Set(new EcsRigidbody(body))
+            .Set(new EcsTilemapCollider());
     }
 }

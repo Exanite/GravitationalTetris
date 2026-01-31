@@ -237,7 +237,7 @@ public partial class TetrisSystem : EngineSystem, ISetupSystem, IFrameUpdateSyst
 
         Score += ScorePerSecond * ScoreMultiplier * time.DeltaTime;
 
-        if (currentShapeRoot.IsAlive && currentShapeRoot.TryGetComponent<CTetrisRoot>(out var tetrisRoot))
+        if (currentShapeRoot.IsAlive && currentShapeRoot.TryGetComponent<EcsTetrisRoot>(out var tetrisRoot))
         {
             if (rotateLeftAction.IsPressed())
             {
@@ -290,13 +290,13 @@ public partial class TetrisSystem : EngineSystem, ISetupSystem, IFrameUpdateSyst
         var shape = shapes[random.Next(0, shapes.Count)];
 
         var currentShapeRootEntity = commandBuffer.Create()
-            .Set(new CName("TetrisRoot"))
-            .Set(new CTetrisRoot
+            .Set(new EcsName("TetrisRoot"))
+            .Set(new EcsTetrisRoot
             {
                 Shape = shape,
                 Rotation = (TetrisRotation)random.Next(0, 4),
             })
-            .Set(new CTransform
+            .Set(new EcsTransform
             {
                 Position = new Vector2(5, 20),
             });
@@ -321,8 +321,8 @@ public partial class TetrisSystem : EngineSystem, ISetupSystem, IFrameUpdateSyst
                 fixture.Restitution = 0;
 
                 commandBuffer.Create()
-                    .Set(new CName("TetrisBlock"))
-                    .Set(new CTetrisBlock
+                    .Set(new EcsName("TetrisBlock"))
+                    .Set(new EcsTetrisBlock
                     {
                         Root = currentShapeRoot,
 
@@ -330,9 +330,9 @@ public partial class TetrisSystem : EngineSystem, ISetupSystem, IFrameUpdateSyst
                         LocalX = x - shape.PivotX,
                         LocalY = y - shape.PivotY,
                     })
-                    .Set(new CTransform())
-                    .Set(new CRigidbody(body))
-                    .Set(new CSprite
+                    .Set(new EcsTransform())
+                    .Set(new EcsRigidbody(body))
+                    .Set(new EcsSprite
                     {
                         Texture = shape.DefaultTexture,
                     });
@@ -343,18 +343,18 @@ public partial class TetrisSystem : EngineSystem, ISetupSystem, IFrameUpdateSyst
     }
 
     [Query]
-    [QueryInclude<CShouldPlaceTetrisEvent>]
+    [QueryInclude<EcsShouldPlaceTetrisEvent>]
     private void ShouldShouldPlaceTetris() {}
 
     [Query]
-    [QueryInclude<CPlayer>]
-    private void UpdateRootPositions(ref CTransform playerTransform)
+    [QueryInclude<EcsPlayer>]
+    private void UpdateRootPositions(ref EcsTransform playerTransform)
     {
         UpdateRootPositions2Query(ref playerTransform);
     }
 
     [Query]
-    private void UpdateRootPositions2([Data] ref CTransform playerTransform, ref CTetrisRoot root, ref CTransform transform)
+    private void UpdateRootPositions2([Data] ref EcsTransform playerTransform, ref EcsTetrisRoot root, ref EcsTransform transform)
     {
         var minX = 0;
         var maxX = 9;
@@ -404,7 +404,7 @@ public partial class TetrisSystem : EngineSystem, ISetupSystem, IFrameUpdateSyst
     }
 
     [Query]
-    private void UpdateRootBlockPositions(Entity entity, ref CTetrisRoot root, ref CTransform transform)
+    private void UpdateRootBlockPositions(Entity entity, ref EcsTetrisRoot root, ref EcsTransform transform)
     {
         // Update logical world position of blocks
         var actualY = (int)MathF.Ceiling(transform.Position.Y);
@@ -474,14 +474,14 @@ public partial class TetrisSystem : EngineSystem, ISetupSystem, IFrameUpdateSyst
 
         if (actualY == predictedY)
         {
-            commandBuffer.Set(entity, new CShouldPlaceTetrisEvent());
+            commandBuffer.Set(entity, new EcsShouldPlaceTetrisEvent());
         }
 
         root.PredictedBlockPositions.RemoveAll(position => position.Y >= tilemap.Tiles.GetLength(1));
     }
 
     [Query]
-    private void UpdateBlockPositions(ref CTetrisBlock block, ref CTransform transform)
+    private void UpdateBlockPositions(ref EcsTetrisBlock block, ref EcsTransform transform)
     {
         if (!block.Root.IsAlive)
         {
@@ -489,20 +489,20 @@ public partial class TetrisSystem : EngineSystem, ISetupSystem, IFrameUpdateSyst
         }
 
         var rootEntity = block.Root;
-        if (!rootEntity.HasComponent<CTetrisRoot>() || !rootEntity.HasComponent<CTransform>())
+        if (!rootEntity.HasComponent<EcsTetrisRoot>() || !rootEntity.HasComponent<EcsTransform>())
         {
             return;
         }
 
-        ref var root = ref rootEntity.GetComponent<CTetrisRoot>();
-        ref var rootTransform = ref rootEntity.GetComponent<CTransform>();
+        ref var root = ref rootEntity.GetComponent<EcsTetrisRoot>();
+        ref var rootTransform = ref rootEntity.GetComponent<EcsTransform>();
 
         var localPosition = new Vector2(block.LocalX, block.LocalY);
         transform.Position = Vector2.Transform(localPosition, Matrix4x4.CreateRotationZ(float.Pi / 2 * (int)root.Rotation) * Matrix4x4.CreateTranslation(rootTransform.Position.X, rootTransform.Position.Y, 0));
     }
 
     [Query]
-    private void PlaceBlocks(ref CTetrisRoot root)
+    private void PlaceBlocks(ref EcsTetrisRoot root)
     {
         foreach (var (x, y) in root.PredictedBlockPositions)
         {
@@ -512,7 +512,7 @@ public partial class TetrisSystem : EngineSystem, ISetupSystem, IFrameUpdateSyst
         }
 
         commandBuffer.Create()
-            .Set(new CUpdateTilemapCollidersEvent());
+            .Set(new EcsUpdateTilemapCollidersEvent());
 
         RemoveAllTetrisBlocksQuery();
         RemoveMatchingBlockTiles(ref root);
@@ -528,7 +528,7 @@ public partial class TetrisSystem : EngineSystem, ISetupSystem, IFrameUpdateSyst
 
     private bool[,]? isBlockRooted;
 
-    private void RemoveMatchingBlockTiles(ref CTetrisRoot root)
+    private void RemoveMatchingBlockTiles(ref EcsTetrisRoot root)
     {
         foreach (var position in root.PredictedBlockPositions)
         {
@@ -538,7 +538,7 @@ public partial class TetrisSystem : EngineSystem, ISetupSystem, IFrameUpdateSyst
                 if (IsMatchingTileAndNotPartOfSelf(targetPosition, ref root))
                 {
                     RecursiveRemove(targetPosition, root.Shape);
-                    commandBuffer.Create().Set(new CUpdateTilemapCollidersEvent());
+                    commandBuffer.Create().Set(new EcsUpdateTilemapCollidersEvent());
 
                     while (TryApplyBlockGravity()) {}
 
@@ -551,7 +551,7 @@ public partial class TetrisSystem : EngineSystem, ISetupSystem, IFrameUpdateSyst
 
         return;
 
-        bool IsMatchingTileAndNotPartOfSelf(TetrisVector2Int position, ref CTetrisRoot root)
+        bool IsMatchingTileAndNotPartOfSelf(TetrisVector2Int position, ref EcsTetrisRoot root)
         {
             if (root.PredictedBlockPositions.Contains(position))
             {
@@ -675,8 +675,8 @@ public partial class TetrisSystem : EngineSystem, ISetupSystem, IFrameUpdateSyst
     }
 
     [Query]
-    [QueryInclude<CPlayer>]
-    private void MovePlayerOutOfTile(ref CTransform transform)
+    [QueryInclude<EcsPlayer>]
+    private void MovePlayerOutOfTile(ref EcsTransform transform)
     {
         var position = new TetrisVector2Int((int)MathF.Round(transform.Position.X), (int)MathF.Round(transform.Position.Y));
         if (position.X < 0
@@ -700,8 +700,8 @@ public partial class TetrisSystem : EngineSystem, ISetupSystem, IFrameUpdateSyst
     }
 
     [Query]
-    [QueryInclude<CPlayer>]
-    private void ResetIfPlayerOutOfBounds(ref CTransform transform)
+    [QueryInclude<EcsPlayer>]
+    private void ResetIfPlayerOutOfBounds(ref EcsTransform transform)
     {
         if (!(transform.Position.Y < -1f) && !(transform.Position.Y > 20.5f))
         {
@@ -712,8 +712,8 @@ public partial class TetrisSystem : EngineSystem, ISetupSystem, IFrameUpdateSyst
     }
 
     [Query]
-    [QueryInclude<CPlayer>]
-    private void ResetGame(ref CTransform playerTransform, ref CVelocity velocity)
+    [QueryInclude<EcsPlayer>]
+    private void ResetGame(ref EcsTransform playerTransform, ref EcsVelocity velocity)
     {
         audioSystem.Play(GravitationalTetrisResources.ExaniteGravitationalTetris.Audio.RestartAudio);
 
@@ -739,7 +739,7 @@ public partial class TetrisSystem : EngineSystem, ISetupSystem, IFrameUpdateSyst
         SpeedMultiplier = 1;
         DifficultyIncreaseTimer = 0;
 
-        commandBuffer.Create().Set(new CUpdateTilemapCollidersEvent());
+        commandBuffer.Create().Set(new EcsUpdateTilemapCollidersEvent());
 
         Directory.CreateDirectory(paths.PersistentDataFolder);
         using (var stream = new FileStream(ScoresFilePath, FileMode.Append))
@@ -752,12 +752,12 @@ public partial class TetrisSystem : EngineSystem, ISetupSystem, IFrameUpdateSyst
     }
 
     [Query]
-    [QueryAtLeastOne<CTetrisRoot, CTetrisBlock>]
+    [QueryAtLeastOne<EcsTetrisRoot, EcsTetrisBlock>]
     private void RemoveAllTetrisBlocks(Entity entity)
     {
-        if (!entity.HasComponent<CDestroyed>())
+        if (!entity.HasComponent<EcsDestroyed>())
         {
-            commandBuffer.Set(entity, new CDestroyed());
+            commandBuffer.Set(entity, new EcsDestroyed());
         }
     }
 }
