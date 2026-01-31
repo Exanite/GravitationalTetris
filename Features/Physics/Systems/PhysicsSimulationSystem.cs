@@ -7,16 +7,16 @@ using Exanite.Engine.Timing;
 using Exanite.GravitationalTetris.Features.Physics.Components;
 using Exanite.GravitationalTetris.Features.Transforms.Components;
 using Exanite.Myriad.Ecs;
-using World = nkast.Aether.Physics2D.Dynamics.World;
+using nkast.Aether.Physics2D.Dynamics;
 
 namespace Exanite.GravitationalTetris.Features.Physics.Systems;
 
 public partial class PhysicsSimulationSystem : EngineSystem, IStartSystem, IFrameUpdateSystem, IFrameCleanupSystem
 {
-    private readonly World physicsWorld;
+    private readonly PhysicsWorld physicsWorld;
     private readonly Time time;
 
-    public PhysicsSimulationSystem(World physicsWorld, Time time)
+    public PhysicsSimulationSystem(PhysicsWorld physicsWorld, Time time)
     {
         this.physicsWorld = physicsWorld;
         this.time = time;

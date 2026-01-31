@@ -16,7 +16,7 @@ using Exanite.GravitationalTetris.Features.Rendering.Systems;
 using Exanite.GravitationalTetris.Features.Tetris.Systems;
 using Exanite.GravitationalTetris.Features.Tiles;
 using Exanite.GravitationalTetris.Features.Tiles.Systems;
-using PhysicsWorld = nkast.Aether.Physics2D.Dynamics.World;
+using nkast.Aether.Physics2D.Dynamics;
 
 namespace Exanite.GravitationalTetris;
 

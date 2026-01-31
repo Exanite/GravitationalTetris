@@ -8,7 +8,7 @@ using Exanite.Engine.Timing;
 using Exanite.GravitationalTetris.Features.Physics.Components;
 using Exanite.GravitationalTetris.Features.Players.Components;
 using Exanite.GravitationalTetris.Features.Transforms.Components;
-using PhysicsWorld = nkast.Aether.Physics2D.Dynamics.World;
+using nkast.Aether.Physics2D.Dynamics;
 
 namespace Exanite.GravitationalTetris.Features.Players.Systems;
 
