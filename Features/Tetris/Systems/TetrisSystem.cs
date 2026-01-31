@@ -256,7 +256,7 @@ public partial class TetrisSystem : EngineSystem, ISetupSystem, IFrameUpdateSyst
         {
             PlaceShape();
         }
-        else if (placeShapeAction.IsPressed() || ShouldShouldPlaceTetrisQueryDescription.Count() > 0)
+        else if (placeShapeAction.IsPressed() || ShouldShouldPlaceTetrisQueryView.Count() > 0)
         {
             playerControllerSystem.FlipGravity();
             audioSystem.Play(GravitationalTetrisResources.ExaniteGravitationalTetris.Audio.SwitchGravityAudio);
