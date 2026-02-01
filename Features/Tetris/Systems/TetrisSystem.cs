@@ -289,7 +289,7 @@ public partial class TetrisSystem : EngineSystem, ISetupSystem, IFrameUpdateSyst
 
         var shape = shapes[random.Next(0, shapes.Count)];
 
-        var currentShapeRootEntity = commandBuffer.Create()
+        currentShapeRoot = commandBuffer.Create()
             .Set(new EcsName("TetrisRoot"))
             .Set(new EcsTetrisRoot
             {
@@ -302,7 +302,6 @@ public partial class TetrisSystem : EngineSystem, ISetupSystem, IFrameUpdateSyst
             });
 
         commandBuffer.Execute();
-        currentShapeRoot = currentShapeRootEntity.Resolve();
 
         for (var x = 0; x < shape.Shape.GetLength(0); x++)
         {
