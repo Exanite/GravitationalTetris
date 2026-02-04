@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Numerics;
+using Exanite.Core.Runtime;
 using Exanite.Engine.Audio.Systems;
 using Exanite.Engine.Ecs.Components;
 using Exanite.Engine.Ecs.Queries;
@@ -237,7 +238,7 @@ public partial class TetrisSystem : EngineSystem, ISetupSystem, IFrameUpdateSyst
 
         Score += ScorePerSecond * ScoreMultiplier * time.DeltaTime;
 
-        if (currentShapeRoot.IsAlive && currentShapeRoot.TryGetComponent<EcsTetrisRoot>(out var tetrisRoot))
+        if (currentShapeRoot.IsAlive && currentShapeRoot.TryGet(out Ref<EcsTetrisRoot> tetrisRoot))
         {
             if (rotateLeftAction.IsPressed())
             {
@@ -488,13 +489,13 @@ public partial class TetrisSystem : EngineSystem, ISetupSystem, IFrameUpdateSyst
         }
 
         var rootEntity = block.Root;
-        if (!rootEntity.HasComponent<EcsTetrisRoot>() || !rootEntity.HasComponent<EcsTransform>())
+        if (!rootEntity.Has<EcsTetrisRoot>() || !rootEntity.Has<EcsTransform>())
         {
             return;
         }
 
-        ref var root = ref rootEntity.GetComponent<EcsTetrisRoot>();
-        ref var rootTransform = ref rootEntity.GetComponent<EcsTransform>();
+        ref var root = ref rootEntity.Get<EcsTetrisRoot>();
+        ref var rootTransform = ref rootEntity.Get<EcsTransform>();
 
         var localPosition = new Vector2(block.LocalX, block.LocalY);
         transform.Position = Vector2.Transform(localPosition, Matrix4x4.CreateRotationZ(float.Pi / 2 * (int)root.Rotation) * Matrix4x4.CreateTranslation(rootTransform.Position.X, rootTransform.Position.Y, 0));
@@ -754,7 +755,7 @@ public partial class TetrisSystem : EngineSystem, ISetupSystem, IFrameUpdateSyst
     [QueryAtLeastOne<EcsTetrisRoot, EcsTetrisBlock>]
     private void RemoveAllTetrisBlocks(Entity entity)
     {
-        if (!entity.HasComponent<EcsDestroyed>())
+        if (!entity.Has<EcsDestroyed>())
         {
             commandBuffer.Set(entity, new EcsDestroyed());
         }
