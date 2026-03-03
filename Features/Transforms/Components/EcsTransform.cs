@@ -3,7 +3,7 @@ using Exanite.Myriad.Ecs;
 
 namespace Exanite.GravitationalTetris.Features.Transforms.Components;
 
-public struct EcsTransform : IComponent
+public struct EcsTransform : IEcsComponent
 {
     public Vector2 Position;
     public Vector2 Size;

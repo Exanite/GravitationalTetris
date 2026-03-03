@@ -3,7 +3,7 @@ using Exanite.Myriad.Ecs;
 
 namespace Exanite.GravitationalTetris.Features.Cameras.Components;
 
-public struct EcsCameraProjection : IComponent
+public struct EcsCameraProjection : IEcsComponent
 {
     public Matrix4x4 View;
     public Matrix4x4 Projection;

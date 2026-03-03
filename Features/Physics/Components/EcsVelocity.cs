@@ -3,7 +3,7 @@ using Exanite.Myriad.Ecs;
 
 namespace Exanite.GravitationalTetris.Features.Physics.Components;
 
-public struct EcsVelocity : IComponent
+public struct EcsVelocity : IEcsComponent
 {
     public Vector2 Velocity;
 

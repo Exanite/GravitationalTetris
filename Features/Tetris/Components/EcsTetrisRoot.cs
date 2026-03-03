@@ -3,7 +3,7 @@ using Exanite.Myriad.Ecs;
 
 namespace Exanite.GravitationalTetris.Features.Tetris.Components;
 
-public struct EcsTetrisRoot : IComponent
+public struct EcsTetrisRoot : IEcsComponent
 {
     public required TetrisShapeDefinition Shape;
     public required TetrisRotation Rotation;

@@ -3,7 +3,7 @@ using nkast.Aether.Physics2D.Dynamics;
 
 namespace Exanite.GravitationalTetris.Features.Physics.Components;
 
-public struct EcsRigidbody : IComponent
+public struct EcsRigidbody : IEcsComponent
 {
     public Body Body;
 

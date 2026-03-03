@@ -2,7 +2,7 @@ using Exanite.Myriad.Ecs;
 
 namespace Exanite.GravitationalTetris.Features.Players.Components;
 
-public struct EcsMovementSpeed : IComponent
+public struct EcsMovementSpeed : IEcsComponent
 {
     public float MovementSpeed;
 

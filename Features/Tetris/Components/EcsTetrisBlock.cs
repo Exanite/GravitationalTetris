@@ -2,7 +2,7 @@ using Exanite.Myriad.Ecs;
 
 namespace Exanite.GravitationalTetris.Features.Tetris.Components;
 
-public struct EcsTetrisBlock : IComponent
+public struct EcsTetrisBlock : IEcsComponent
 {
     public required Entity Root;
 
