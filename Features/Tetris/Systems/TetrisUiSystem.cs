@@ -21,7 +21,7 @@ public class TetrisUiSystem : EngineSystem, IRenderUpdateSystem, IDisposable
         this.tetrisSystem = tetrisSystem;
         this.display = display;
 
-        font = resourceManager.GetResource(GravitationalTetrisResources.ExaniteGravitationalTetris.FieryTurkFont);
+        font = resourceManager.GetResource(GravitationalTetrisResources.ExaniteGravitationalTetris_FieryTurkFont);
     }
 
     public void RenderUpdate()

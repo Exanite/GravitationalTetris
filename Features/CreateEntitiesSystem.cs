@@ -62,8 +62,8 @@ public class CreateEntitiesSystem : EngineSystem, IStartSystem
                 Size = new Vector2(1, 1),
             })
             .Set(new EcsSprite(GravitationalTetrisConstants.IsWinter
-                ? resourceManager.GetResource(GravitationalTetrisResources.ExaniteGravitationalTetrisWinter.PlayerTexture)
-                : resourceManager.GetResource(GravitationalTetrisResources.ExaniteGravitationalTetris.PlayerTexture)))
+                ? resourceManager.GetResource(GravitationalTetrisResources.ExaniteGravitationalTetrisWinter_PlayerTexture)
+                : resourceManager.GetResource(GravitationalTetrisResources.ExaniteGravitationalTetris_PlayerTexture)))
             .Set(new EcsRigidbody(playerBody))
             .Set(new EcsVelocity())
             .Set(new EcsMovementSpeed(5))

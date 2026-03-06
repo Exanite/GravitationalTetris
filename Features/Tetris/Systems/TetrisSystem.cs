@@ -132,8 +132,8 @@ public partial class TetrisSystem : EngineSystem, ISetupSystem, IFrameUpdateSyst
             PivotX = 0,
             PivotY = 1,
 
-            DefaultTexture = resourceManager.GetResource(GravitationalTetrisResources.ExaniteGravitationalTetris.TileCyanTexture),
-            SnowTexture = resourceManager.GetResource(GravitationalTetrisResources.ExaniteGravitationalTetrisWinter.TileCyanTexture),
+            DefaultTexture = resourceManager.GetResource(GravitationalTetrisResources.ExaniteGravitationalTetris_TileCyanTexture),
+            SnowTexture = resourceManager.GetResource(GravitationalTetrisResources.ExaniteGravitationalTetrisWinter_TileCyanTexture),
         });
 
         shapes.Add(new TetrisShapeDefinition
@@ -147,8 +147,8 @@ public partial class TetrisSystem : EngineSystem, ISetupSystem, IFrameUpdateSyst
             PivotX = 1,
             PivotY = 1,
 
-            DefaultTexture = resourceManager.GetResource(GravitationalTetrisResources.ExaniteGravitationalTetris.TileBlueTexture),
-            SnowTexture = resourceManager.GetResource(GravitationalTetrisResources.ExaniteGravitationalTetrisWinter.TileBlueTexture),
+            DefaultTexture = resourceManager.GetResource(GravitationalTetrisResources.ExaniteGravitationalTetris_TileBlueTexture),
+            SnowTexture = resourceManager.GetResource(GravitationalTetrisResources.ExaniteGravitationalTetrisWinter_TileBlueTexture),
         });
 
         shapes.Add(new TetrisShapeDefinition
@@ -162,8 +162,8 @@ public partial class TetrisSystem : EngineSystem, ISetupSystem, IFrameUpdateSyst
             PivotX = 1,
             PivotY = 1,
 
-            DefaultTexture = resourceManager.GetResource(GravitationalTetrisResources.ExaniteGravitationalTetris.TileOrangeTexture),
-            SnowTexture = resourceManager.GetResource(GravitationalTetrisResources.ExaniteGravitationalTetrisWinter.TileOrangeTexture),
+            DefaultTexture = resourceManager.GetResource(GravitationalTetrisResources.ExaniteGravitationalTetris_TileOrangeTexture),
+            SnowTexture = resourceManager.GetResource(GravitationalTetrisResources.ExaniteGravitationalTetrisWinter_TileOrangeTexture),
         });
 
         shapes.Add(new TetrisShapeDefinition
@@ -177,8 +177,8 @@ public partial class TetrisSystem : EngineSystem, ISetupSystem, IFrameUpdateSyst
             PivotX = 0,
             PivotY = 0,
 
-            DefaultTexture = resourceManager.GetResource(GravitationalTetrisResources.ExaniteGravitationalTetris.TileYellowTexture),
-            SnowTexture = resourceManager.GetResource(GravitationalTetrisResources.ExaniteGravitationalTetrisWinter.TileYellowTexture),
+            DefaultTexture = resourceManager.GetResource(GravitationalTetrisResources.ExaniteGravitationalTetris_TileYellowTexture),
+            SnowTexture = resourceManager.GetResource(GravitationalTetrisResources.ExaniteGravitationalTetrisWinter_TileYellowTexture),
         });
 
         shapes.Add(new TetrisShapeDefinition
@@ -192,8 +192,8 @@ public partial class TetrisSystem : EngineSystem, ISetupSystem, IFrameUpdateSyst
             PivotX = 1,
             PivotY = 1,
 
-            DefaultTexture = resourceManager.GetResource(GravitationalTetrisResources.ExaniteGravitationalTetris.TileGreenTexture),
-            SnowTexture = resourceManager.GetResource(GravitationalTetrisResources.ExaniteGravitationalTetrisWinter.TileGreenTexture),
+            DefaultTexture = resourceManager.GetResource(GravitationalTetrisResources.ExaniteGravitationalTetris_TileGreenTexture),
+            SnowTexture = resourceManager.GetResource(GravitationalTetrisResources.ExaniteGravitationalTetrisWinter_TileGreenTexture),
         });
 
         shapes.Add(new TetrisShapeDefinition
@@ -207,8 +207,8 @@ public partial class TetrisSystem : EngineSystem, ISetupSystem, IFrameUpdateSyst
             PivotX = 1,
             PivotY = 1,
 
-            DefaultTexture = resourceManager.GetResource(GravitationalTetrisResources.ExaniteGravitationalTetris.TilePurpleTexture),
-            SnowTexture = resourceManager.GetResource(GravitationalTetrisResources.ExaniteGravitationalTetrisWinter.TilePurpleTexture),
+            DefaultTexture = resourceManager.GetResource(GravitationalTetrisResources.ExaniteGravitationalTetris_TilePurpleTexture),
+            SnowTexture = resourceManager.GetResource(GravitationalTetrisResources.ExaniteGravitationalTetrisWinter_TilePurpleTexture),
         });
 
         shapes.Add(new TetrisShapeDefinition
@@ -222,8 +222,8 @@ public partial class TetrisSystem : EngineSystem, ISetupSystem, IFrameUpdateSyst
             PivotX = 1,
             PivotY = 1,
 
-            DefaultTexture = resourceManager.GetResource(GravitationalTetrisResources.ExaniteGravitationalTetris.TileRedTexture),
-            SnowTexture = resourceManager.GetResource(GravitationalTetrisResources.ExaniteGravitationalTetrisWinter.TileRedTexture),
+            DefaultTexture = resourceManager.GetResource(GravitationalTetrisResources.ExaniteGravitationalTetris_TileRedTexture),
+            SnowTexture = resourceManager.GetResource(GravitationalTetrisResources.ExaniteGravitationalTetrisWinter_TileRedTexture),
         });
     }
 
@@ -242,13 +242,13 @@ public partial class TetrisSystem : EngineSystem, ISetupSystem, IFrameUpdateSyst
         {
             if (rotateLeftAction.IsPressed())
             {
-                audioSystem.Play(GravitationalTetrisResources.ExaniteGravitationalTetris.Audio.RotateShapeAudio);
+                audioSystem.Play(GravitationalTetrisResources.ExaniteGravitationalTetris_Audio_RotateShapeAudio);
                 tetrisRoot.Value.Rotation = (TetrisRotation)(((int)tetrisRoot.Value.Rotation + 3) % 4);
             }
 
             if (rotateRightAction.IsPressed())
             {
-                audioSystem.Play(GravitationalTetrisResources.ExaniteGravitationalTetris.Audio.RotateShapeAudio);
+                audioSystem.Play(GravitationalTetrisResources.ExaniteGravitationalTetris_Audio_RotateShapeAudio);
                 tetrisRoot.Value.Rotation = (TetrisRotation)(((int)tetrisRoot.Value.Rotation + 1) % 4);
             }
         }
@@ -260,7 +260,7 @@ public partial class TetrisSystem : EngineSystem, ISetupSystem, IFrameUpdateSyst
         else if (placeShapeAction.IsPressed() || ShouldShouldPlaceTetrisQueryView.Count() > 0)
         {
             playerControllerSystem.FlipGravity();
-            audioSystem.Play(GravitationalTetrisResources.ExaniteGravitationalTetris.Audio.SwitchGravityAudio);
+            audioSystem.Play(GravitationalTetrisResources.ExaniteGravitationalTetris_Audio_SwitchGravityAudio);
 
             PlaceShape();
         }
@@ -542,7 +542,7 @@ public partial class TetrisSystem : EngineSystem, ISetupSystem, IFrameUpdateSyst
 
                     while (TryApplyBlockGravity()) {}
 
-                    audioSystem.Play(GravitationalTetrisResources.ExaniteGravitationalTetris.Audio.ClearTileAudio);
+                    audioSystem.Play(GravitationalTetrisResources.ExaniteGravitationalTetris_Audio_ClearTileAudio);
 
                     return;
                 }
@@ -715,7 +715,7 @@ public partial class TetrisSystem : EngineSystem, ISetupSystem, IFrameUpdateSyst
     [QueryInclude<EcsPlayer>]
     private void ResetGame(ref EcsTransform playerTransform, ref EcsVelocity velocity)
     {
-        audioSystem.Play(GravitationalTetrisResources.ExaniteGravitationalTetris.Audio.RestartAudio);
+        audioSystem.Play(GravitationalTetrisResources.ExaniteGravitationalTetris_Audio_RestartAudio);
 
         playerTransform.Position = new Vector2(4f, 0);
         velocity.Velocity = Vector2.Zero;
