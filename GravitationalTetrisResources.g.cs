@@ -1,9 +1,11 @@
 #nullable enable
 
+using Exanite.Engine.Resources;
 using Exanite.ResourceManagement;
 
 namespace Exanite.GravitationalTetris;
 
+[GeneratedResourceClass]
 public partial class GravitationalTetrisResources
 {
     // Path: Exanite.GravitationalTetris
