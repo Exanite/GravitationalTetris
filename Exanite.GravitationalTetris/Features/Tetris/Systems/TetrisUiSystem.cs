@@ -12,11 +12,11 @@ public class TetrisUiSystem : EngineSystem, IRenderUpdateSystem, IDisposable
     private readonly IHandle<FontFile> font;
 
     private readonly TetrisSystem tetrisSystem;
-    private readonly PaperDisplay display;
+    private readonly UiDisplay display;
 
     private readonly Lifetime lifetime = new();
 
-    public TetrisUiSystem(TetrisSystem tetrisSystem, ResourceManager resourceManager, PaperDisplay display)
+    public TetrisUiSystem(TetrisSystem tetrisSystem, ResourceManager resourceManager, UiDisplay display)
     {
         this.tetrisSystem = tetrisSystem;
         this.display = display;
