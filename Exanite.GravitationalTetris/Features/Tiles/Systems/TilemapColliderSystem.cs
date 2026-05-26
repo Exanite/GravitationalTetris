@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Numerics;
+using Exanite.Ecs;
+using Exanite.Ecs.CommandBuffers;
 using Exanite.Engine.Ecs.Components;
 using Exanite.Engine.Ecs.Queries;
 using Exanite.Engine.Ecs.Systems;
@@ -7,8 +9,6 @@ using Exanite.Engine.Lifecycles.Components;
 using Exanite.GravitationalTetris.Features.Physics.Components;
 using Exanite.GravitationalTetris.Features.Tiles.Components;
 using Exanite.GravitationalTetris.Features.Transforms.Components;
-using Exanite.Myriad.Ecs;
-using Exanite.Myriad.Ecs.CommandBuffers;
 using nkast.Aether.Physics2D.Common;
 using nkast.Aether.Physics2D.Dynamics;
 

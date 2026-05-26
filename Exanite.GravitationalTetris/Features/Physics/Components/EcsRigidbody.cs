@@ -1,4 +1,4 @@
-using Exanite.Myriad.Ecs;
+using Exanite.Ecs;
 using nkast.Aether.Physics2D.Dynamics;
 
 namespace Exanite.GravitationalTetris.Features.Physics.Components;

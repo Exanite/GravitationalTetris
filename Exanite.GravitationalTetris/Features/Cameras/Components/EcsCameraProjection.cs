@@ -1,5 +1,5 @@
 using System.Numerics;
-using Exanite.Myriad.Ecs;
+using Exanite.Ecs;
 
 namespace Exanite.GravitationalTetris.Features.Cameras.Components;
 

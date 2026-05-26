@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Exanite.Myriad.Ecs;
+using Exanite.Ecs;
 
 namespace Exanite.GravitationalTetris.Features.Tetris.Components;
 

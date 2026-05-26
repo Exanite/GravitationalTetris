@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Numerics;
 using Exanite.Core.Runtime;
+using Exanite.Ecs;
+using Exanite.Ecs.CommandBuffers;
 using Exanite.Engine.Audio.Systems;
 using Exanite.Engine.Ecs.Components;
 using Exanite.Engine.Ecs.Queries;
@@ -20,8 +22,6 @@ using Exanite.GravitationalTetris.Features.Tetris.Components;
 using Exanite.GravitationalTetris.Features.Tiles;
 using Exanite.GravitationalTetris.Features.Tiles.Components;
 using Exanite.GravitationalTetris.Features.Transforms.Components;
-using Exanite.Myriad.Ecs;
-using Exanite.Myriad.Ecs.CommandBuffers;
 using Exanite.ResourceManagement;
 using nkast.Aether.Physics2D.Dynamics;
 
