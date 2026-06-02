@@ -33,7 +33,6 @@ public class GravitationalTetrisGameModule : EngineModule
     {
         base.OnConfigureContainer(builder);
 
-        builder.RegisterInstance(new ResourceClassGeneratorSettings("Exanite.GravitationalTetris")).SingleInstance();
         builder.ConfigureDefaultWindow((window, _) =>
         {
             window.Name = "Gravitational Tetris";
