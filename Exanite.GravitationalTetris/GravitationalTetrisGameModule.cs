@@ -4,7 +4,6 @@ using Exanite.Engine.Audio.Modules;
 using Exanite.Engine.Audio.Systems;
 using Exanite.Engine.Ecs.Scheduling;
 using Exanite.Engine.Framework;
-using Exanite.Engine.ResourceManagement;
 using Exanite.Engine.ResourceManagement.Systems;
 using Exanite.Engine.Timing.Systems;
 using Exanite.Engine.Windowing.Modules;
