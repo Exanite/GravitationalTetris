@@ -1,0 +1,5 @@
+# Automatically handle line endings for text files
+* text=auto
+
+# Explicitly use Unix line endings for specified files
+*.cs text eol=lf
