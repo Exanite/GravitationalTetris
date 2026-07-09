@@ -6,6 +6,17 @@ using Exanite.ResourceManagement;
 
 namespace Exanite.GravitationalTetris;
 
+/// <summary>
+/// Automatically generated resources definitions
+/// based on the files contained in this project's Content folder
+/// and the Content folders of this project's dependencies.
+/// This generation occurs when the project is rebuilt.
+/// </summary>
+/// <remarks>
+/// Changes made to this file will be lost.
+/// However, you may need to manually edit this file at times
+/// if it is blocking the project from being rebuilt.
+/// </remarks>
 [GeneratedResourceClass]
 internal partial class Resources
 {
